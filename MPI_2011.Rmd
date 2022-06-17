@@ -1,0 +1,50 @@
+---
+title: "MPI_2011"
+author: "JBN"
+date: '2022-06-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###This Script will be used to read In MPI data from 2011 & 2017 
+
+Imports 
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+```
+
+read in the MPI Excel
+```{r}
+MPI_2011 <- read_excel("C:/Users/josue/Documents/Training/MPI_Pull_Down_zim/MPI_Pull_Down/2011_MPI_excerpt data.xlsx")
+```
+
+```{r}
+head(MPI_2011)
+```
+
+Import Shape file into r (Change district 91 --> district 61)
+```{r}
+#file name: 0=boundary, 1=province, 2=district 
+zim_boundary <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_0.shp") 
+zim_province <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_1.shp")
+zim_district <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_2.shp")  
+```
+plot boundary, province, district 
+```{r}
+plot(zim_boundary)
+plot(zim_province)
+plot(zim_district)
+
+```
+Read Excel
+```{r}
+
+```
+
