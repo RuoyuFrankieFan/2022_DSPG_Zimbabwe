@@ -43,8 +43,9 @@ plot(zim_province)
 plot(zim_district)
 
 ```
-Read Excel
+Merge data: MPI and District level data
 ```{r}
+joined_zim <-  
 
 ```
 
