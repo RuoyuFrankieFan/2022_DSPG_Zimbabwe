@@ -542,6 +542,8 @@ long_Min <- gather(wide_min, Year, MinPrecipitation, MinPPT2000:MinPPT2021) %>%
 ```{r}
 LongNDVI <- union(long_max, long_mean)
 LongNDVI <- union(LongNDVI, long_Min)
+
+write.csv(LongNDVI,"./Data/NDVI2000-2021.csv", row.names = FALSE)
 ```
 
   
