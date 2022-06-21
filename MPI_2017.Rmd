@@ -1,0 +1,87 @@
+---
+title: "MPI_2017"
+author: "Ari"
+date: '2022-06-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###This Script will be used to read In MPI data from 2011 & 2017 
+
+Imports 
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+```
+
+read in the MPI Excel
+```{r}
+MPI_2017 <- read_excel("./2017_MPI_excerpt data.xlsx")
+```
+
+```{r}
+head(MPI_2017)
+```
+
+Import Shape file into r (Change district 91 --> district 61)
+```{r}
+#file name: 0=boundary, 1=province, 2=district 
+zim_boundary <- st_read("./shape60/gadm36_ZWE_0.shp.shp") 
+zim_province <- st_read("./shape60/gadm36_ZWE_1.shp")
+zim_district <- st_read("./shape60/gadm36_ZWE_2.shp")  
+```
+plot boundary, province, district 
+```{r}
+plot(zim_boundary)
+plot(zim_province)
+plot(zim_district)
+
+```
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District_name = "NAME_2")
+```
+
+
+Get the IDs to match 
+```{r}
+zim_district <- zim_district %>% 
+  arrange(District_name) %>% 
+  mutate(District_ID = c(1:60))
+
+joined_zim <-  full_join (MPI_2017,zim_district, by = "District_ID")
+  
+```
+
+
+Mapping M_0
+```{r}
+#ggplot() + 
+  #geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
+
+#ggplot() +
+#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+#ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
+#coord_sf()
+class(joined_zim)
+
+
+  
+#plot(joined_zim, col= joined_zim$M0_k3, bg="skyblue", lwd=0.25,ylim = c(0,50), xlim = c(0,50))
+
+#zim_2011 <- st_read(joined_zim)
+
+#plot(joined_zim['M0_k3'])
+#plot(joined_zim)
+
+#mapping_m0 <- plot(joined_zim, )
+
+```
+
