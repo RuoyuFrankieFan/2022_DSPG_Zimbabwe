@@ -19,6 +19,7 @@ library(dplyr)
 library(tidyverse)
 library(sf)
 library(ggplot2)
+library(rgdal)
 ```
 
 read in the MPI Excel
@@ -30,7 +31,7 @@ MPI_2011 <- read_excel("./2011_MPI_excerpt data.xlsx")
 head(MPI_2011)
 ```
 
-Import Shape file into r (Change district 91 --> district 61)
+Import Shape file into r (Change district 90 --> district 60)
 ```{r}
 #file name: 0=boundary, 1=province, 2=district 
 zim_boundary <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_0.shp") 
@@ -56,32 +57,17 @@ zim_district <- zim_district %>%
   arrange(District_name) %>% 
   mutate(District_ID = c(1:60))
 
-joined_zim <-  full_join (MPI_2011,zim_district, by = "District_ID")
+joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
   
 ```
 
 
 Mapping M_0
 ```{r}
-#ggplot() + 
-  #geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
-
-#ggplot() +
-#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
-#ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
-#coord_sf()
-class(joined_zim)
-
-
-  
-#plot(joined_zim, col= joined_zim$M0_k3, bg="skyblue", lwd=0.25,ylim = c(0,50), xlim = c(0,50))
-
-#zim_2011 <- st_read(joined_zim)
-
-#plot(joined_zim['M0_k3'])
-#plot(joined_zim)
-
-#mapping_m0 <- plot(joined_zim, )
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M0_k3)) +
+ggtitle("Population at Severe Risk of Food Insecurity in Zimbabwe - 2011") + scale_fill_viridis_c()+
+coord_sf()
 
 ```
 
