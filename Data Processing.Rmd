@@ -21,11 +21,7 @@ NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
 
 ```
 
-
-
-
 ## Goal: find the mean, max and min value for precipitation for each month
-
 
 1. Drop some unessential columns 
 ```{r}
@@ -47,7 +43,7 @@ NDVI_2000 <- NDVI_2000_long %>%
   mutate(AveragePPT2000 = mean(Precipitation, na.rm=TRUE),   # Find the mean, max, min by district
          MaxPPT2000 = max(Precipitation, na.rm=TRUE),
          MinPPT2000 = min(Precipitation, na.rm=TRUE)) %>% 
-# Only keep the distinct rows, as there will be duplicated rows for the same sets of mean, max, min for the same districts
+# Only keep the distinct rows, as there will be duplicated rows of the same sets of mean, max, min for the same districts
   select(NAME_2, AveragePPT2000, MaxPPT2000, MinPPT2000) %>%  
   distinct(NAME_2, AveragePPT2000, MaxPPT2000, MinPPT2000, .keep_all = FALSE) %>% 
   rename(District = NAME_2)
@@ -494,4 +490,11 @@ NDVI_2021 <- NDVI_2021_long %>%
 ProcessedNDVI <- ProcessedNDVI %>% 
   inner_join(NDVI_2021, by = "District")
 ```
+
+
+
+Monthly data for 2011 and 2017;
+put them in a shapefile;
+  transform the polygon to long, lat format
+visualization
 

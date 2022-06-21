@@ -1,0 +1,26 @@
+---
+title: "Monthly NDVI"
+author: "Frankie Fan"
+date: '2022-06-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+
+# load package for shapefile
+```
+
+## Read in the files
+```{r}
+NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
+
+```
+
