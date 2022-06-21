@@ -537,17 +537,11 @@ long_Min <- gather(wide_min, Year, MinPrecipitation, MinPPT2000:MinPPT2021) %>%
 
 ```
 
+
+## Merge all three dataframes 
 ```{r}
-### Here I tried to merge all three dataframes but havent figured out a way yet
-
-LongNDVI <- long_max %>% 
-  inner_join(long_mean, by = "District")
-
-
-NewDataframe <- merge(long_max, long_mean, by=0, all.x=TRUE)
-
-wide_1 <- ProcessedNDVI %>% 
-  select(District, AveragePPT2000:MinPPT2021)
+LongNDVI <- union(long_max, long_mean)
+LongNDVI <- union(LongNDVI, long_Min)
 ```
 
   
