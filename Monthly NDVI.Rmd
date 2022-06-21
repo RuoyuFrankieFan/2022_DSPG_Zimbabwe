@@ -24,3 +24,288 @@ NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
 
 ```
 
+## 2011 NDVI
+```{r}
+
+NDVI_2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_01_01_NDVI`:`2011_12_31_NDVI`)
+```
+
+```{r}
+# Jan
+Jan2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_01_01_NDVI`:`2011_01_31_NDVI`)
+Jan2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_01_01_NDVI`:`2011_01_31_NDVI`)
+
+Jan_2011 <- Jan2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Jan = mean(Precipitation, na.rm=TRUE),
+         Max_Jan = max(Precipitation, na.rm=TRUE),
+         Min_Jan = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Jan, Max_Jan, Min_Jan) %>%  
+  distinct(NAME_2, Average_Jan, Max_Jan, Min_Jan, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+
+# Feb
+Feb2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_02_01_NDVI`:`2011_02_28_NDVI`)
+Feb2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_02_01_NDVI`:`2011_02_28_NDVI`)
+
+Feb_2011 <- Feb2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Feb = mean(Precipitation, na.rm=TRUE),
+         Max_Feb = max(Precipitation, na.rm=TRUE),
+         Min_Feb = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Feb, Max_Feb, Min_Feb) %>%  
+  distinct(NAME_2, Average_Feb, Max_Feb, Min_Feb, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- Jan_2011 %>% 
+  inner_join(Feb_2011, by = "District")
+
+
+
+# March
+Mar2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_03_01_NDVI`:`2011_03_31_NDVI`)
+Mar2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_03_01_NDVI`:`2011_03_31_NDVI`)
+
+Mar_2011 <- Mar2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Mar = mean(Precipitation, na.rm=TRUE),
+         Max_Mar = max(Precipitation, na.rm=TRUE),
+         Min_Mar = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Mar, Max_Mar, Min_Mar) %>%  
+  distinct(NAME_2, Average_Mar, Max_Mar, Min_Mar, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Mar_2011, by = "District")
+
+
+
+# April
+Apr2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_04_01_NDVI`:`2011_04_30_NDVI`)
+Apr2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_04_01_NDVI`:`2011_04_30_NDVI`)
+
+Apr_2011 <- Apr2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Apr = mean(Precipitation, na.rm=TRUE),
+         Max_Apr = max(Precipitation, na.rm=TRUE),
+         Min_Apr = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Apr, Max_Apr, Min_Apr) %>%  
+  distinct(NAME_2, Average_Apr, Max_Apr, Min_Apr, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Apr_2011, by = "District")
+
+
+
+# May
+May2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_05_01_NDVI`:`2011_05_31_NDVI`)
+May2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_05_01_NDVI`:`2011_05_31_NDVI`)
+
+May_2011 <- May2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_May = mean(Precipitation, na.rm=TRUE),
+         Max_May = max(Precipitation, na.rm=TRUE),
+         Min_May = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_May, Max_May, Min_May) %>%  
+  distinct(NAME_2, Average_May, Max_May, Min_May, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(May_2011, by = "District")
+
+
+# June
+Jun2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_06_01_NDVI`:`2011_06_30_NDVI`)
+Jun2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_06_01_NDVI`:`2011_06_30_NDVI`)
+
+Jun_2011 <- Jun2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Jun = mean(Precipitation, na.rm=TRUE),
+         Max_Jun = max(Precipitation, na.rm=TRUE),
+         Min_Jun = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Jun, Max_Jun, Min_Jun) %>%  
+  distinct(NAME_2, Average_Jun, Max_Jun, Min_Jun, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Jun_2011, by = "District")
+
+
+
+# July
+Jul2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_07_01_NDVI`:`2011_07_31_NDVI`)
+Jul2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_07_01_NDVI`:`2011_07_31_NDVI`)
+
+Jul_2011 <- Jul2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Jul = mean(Precipitation, na.rm=TRUE),
+         Max_Jul = max(Precipitation, na.rm=TRUE),
+         Min_Jul = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Jul, Max_Jul, Min_Jul) %>%  
+  distinct(NAME_2, Average_Jul, Max_Jul, Min_Jul, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Jul_2011, by = "District")
+
+
+
+# August
+Aug2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_08_01_NDVI`:`2011_08_31_NDVI`)
+Aug2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_08_01_NDVI`:`2011_08_31_NDVI`)
+
+Aug_2011 <- Aug2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Aug = mean(Precipitation, na.rm=TRUE),
+         Max_Aug = max(Precipitation, na.rm=TRUE),
+         Min_Aug = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Aug, Max_Aug, Min_Aug) %>%  
+  distinct(NAME_2, Average_Aug, Max_Aug, Min_Aug, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Aug_2011, by = "District")
+
+
+
+# September
+Sep2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_09_01_NDVI`:`2011_09_30_NDVI`)
+Sep2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_09_01_NDVI`:`2011_09_30_NDVI`)
+
+Sep_2011 <- Sep2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Sep = mean(Precipitation, na.rm=TRUE),
+         Max_Sep = max(Precipitation, na.rm=TRUE),
+         Min_Sep = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Sep, Max_Sep, Min_Sep) %>%  
+  distinct(NAME_2, Average_Sep, Max_Sep, Min_Sep, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Sep_2011, by = "District")
+
+
+
+# October
+Oct2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_10_01_NDVI`:`2011_10_31_NDVI`)
+Oct2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_10_01_NDVI`:`2011_10_31_NDVI`)
+
+Oct_2011 <- Oct2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Oct = mean(Precipitation, na.rm=TRUE),
+         Max_Oct = max(Precipitation, na.rm=TRUE),
+         Min_Oct = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Oct, Max_Oct, Min_Oct) %>%  
+  distinct(NAME_2, Average_Oct, Max_Oct, Min_Oct, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Oct_2011, by = "District")
+
+
+
+# November
+Nov2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_11_01_NDVI`:`2011_11_30_NDVI`)
+Nov2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_11_01_NDVI`:`2011_11_30_NDVI`)
+
+Nov_2011 <- Nov2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Nov = mean(Precipitation, na.rm=TRUE),
+         Max_Nov = max(Precipitation, na.rm=TRUE),
+         Min_Nov = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Nov, Max_Nov, Min_Nov) %>%  
+  distinct(NAME_2, Average_Nov, Max_Nov, Min_Nov, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Nov_2011, by = "District")
+
+
+
+
+# December
+Dec2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_12_01_NDVI`:`2011_12_31_NDVI`)
+Dec2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_12_01_NDVI`:`2011_12_31_NDVI`)
+
+Dec_2011 <- Dec2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(Average_Dec = mean(Precipitation, na.rm=TRUE),
+         Max_Dec = max(Precipitation, na.rm=TRUE),
+         Min_Dec = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, Average_Dec, Max_Dec, Min_Dec) %>%  
+  distinct(NAME_2, Average_Dec, Max_Dec, Min_Dec, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+MonthlyNDVI <- MonthlyNDVI %>% 
+  inner_join(Dec_2011, by = "District")
+
+```
+
+
+## Tidy up the data into long format
+```{r}
+# Mean
+wide_mean2011 <- MonthlyNDVI %>% 
+  select(District, Average_Jan, Average_Feb, Average_Mar, Average_Apr, Average_May, 
+         Average_Jun, Average_Jul, Average_Aug, Average_Sep, Average_Oct, Average_Nov,
+         Average_Dec)
+
+long_mean2011 <- gather(wide_mean2011, Year, AvgPrecipitation, Average_Jan:Average_Dec) %>% 
+  separate(Year, c("Average", "Jan"),"_") %>% 
+  rename(Type = Average,
+         Year = `Jan`,
+         NDVI = AvgPrecipitation)
+
+
+# Max_
+wide_Max2011 <- MonthlyNDVI %>% 
+  select(District, Max_Jan, Max_Feb, Max_Mar, Max_Apr, Max_May, 
+         Max_Jun, Max_Jul, Max_Aug, Max_Sep, Max_Oct, Max_Nov,
+         Max_Dec)
+
+long_Max_2011 <- gather(wide_Max2011, Year, Max_Precipitation, Max_Jan:Max_Dec) %>% 
+  separate(Year, c("Max", "Jan"), "_") %>% 
+  rename(Type = Max,
+         Year = `Jan`,
+         NDVI = Max_Precipitation)
+
+
+# Min_
+wide_Min2011 <- MonthlyNDVI %>% 
+  select(District, Min_Jan, Min_Feb, Min_Mar, Min_Apr, Min_May, 
+         Min_Jun, Min_Jul, Min_Aug, Min_Sep, Min_Oct, Min_Nov,
+         Min_Dec)
+
+long_Min_2011 <- gather(wide_Min2011, Year, Min_Precipitation, Min_Jan:Min_Dec) %>% 
+  separate(Year, c("Min_", "Jan"), "_") %>% 
+  rename(Type = Min_,
+         Year = `Jan`,
+         NDVI = Min_Precipitation)
+
+```
+
+
+## Merge all three dataframes 
+```{r}
+LongMonthlyNDVI <- union(long_mean2011, long_Max_2011)
+LongMonthlyNDVI <- union(LongMonthlyNDVI, long_Min_2011)
+
+write.csv(LongMonthlyNDVI,"./Data/2011Monthly.csv", row.names = FALSE)
+```
+
+
