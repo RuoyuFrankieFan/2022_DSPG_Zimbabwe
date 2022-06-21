@@ -18,11 +18,12 @@ library(readxl)
 library(dplyr)
 library(tidyverse)
 library(sf)
+library(ggplot2)
 ```
 
 read in the MPI Excel
 ```{r}
-MPI_2011 <- read_excel("C:/Users/josue/Documents/Training/MPI_Pull_Down_zim/MPI_Pull_Down/2011_MPI_excerpt data.xlsx")
+MPI_2011 <- read_excel("./2011_MPI_excerpt data.xlsx")
 ```
 
 ```{r}
@@ -43,9 +44,44 @@ plot(zim_province)
 plot(zim_district)
 
 ```
-Merge data: MPI and District level data
+Rename cols to match
 ```{r}
-joined_zim <-  
+zim_district <- rename(zim_district, District_name = "NAME_2")
+```
+
+
+Get the IDs to match 
+```{r}
+zim_district <- zim_district %>% 
+  arrange(District_name) %>% 
+  mutate(District_ID = c(1:60))
+
+joined_zim <-  full_join (MPI_2011,zim_district, by = "District_ID")
+  
+```
+
+
+Mapping M_0
+```{r}
+#ggplot() + 
+  #geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
+
+#ggplot() +
+#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+#ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
+#coord_sf()
+class(joined_zim)
+
+
+  
+#plot(joined_zim, col= joined_zim$M0_k3, bg="skyblue", lwd=0.25,ylim = c(0,50), xlim = c(0,50))
+
+#zim_2011 <- st_read(joined_zim)
+
+#plot(joined_zim['M0_k3'])
+#plot(joined_zim)
+
+#mapping_m0 <- plot(joined_zim, )
 
 ```
 
