@@ -1,0 +1,497 @@
+---
+title: "Data Processing"
+author: "Frankie Fan"
+date: '2022-06-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+```
+## Read in the files
+```{r}
+NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
+
+```
+
+
+
+
+## Goal: find the mean, max and min value for precipitation for each month
+
+
+1. Drop some unessential columns 
+```{r}
+#This is in wide format
+NDVI_2000_wide <- NDVI_source %>% 
+  select(NAME_2, NAME_1, `2000_03_12_NDVI`:`2000_12_31_NDVI`)
+```
+
+2. Transform it to long format
+```{r}
+NDVI_2000_long <- gather(NDVI_2000_wide, Date, Precipitation, `2000_03_12_NDVI`:`2000_12_31_NDVI`)
+```
+
+3. Find the average, max, and min precipitation
+```{r}
+
+NDVI_2000 <- NDVI_2000_long %>% 
+  group_by(NAME_2) %>%    # group by district
+  mutate(AveragePPT2000 = mean(Precipitation, na.rm=TRUE),   # Find the mean, max, min by district
+         MaxPPT2000 = max(Precipitation, na.rm=TRUE),
+         MinPPT2000 = min(Precipitation, na.rm=TRUE)) %>% 
+# Only keep the distinct rows, as there will be duplicated rows for the same sets of mean, max, min for the same districts
+  select(NAME_2, AveragePPT2000, MaxPPT2000, MinPPT2000) %>%  
+  distinct(NAME_2, AveragePPT2000, MaxPPT2000, MinPPT2000, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+```
+
+4. Repeat the process for other years
+```{r}
+# 2001
+NDVI_2001_wide <- NDVI_source %>% 
+  select(NAME_2, `2001_01_01_NDVI`:`2001_12_31_NDVI`)
+
+NDVI_2001_long <- gather(NDVI_2001_wide, Date, Precipitation, `2001_01_01_NDVI`:`2001_12_31_NDVI`)
+
+NDVI_2001 <- NDVI_2001_long %>% 
+  group_by(NAME_2) %>%  
+  mutate(AveragePPT2001 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2001 = max(Precipitation, na.rm=TRUE),
+         MinPPT2001 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2001, MaxPPT2001, MinPPT2001) %>%  
+  distinct(NAME_2, AveragePPT2001, MaxPPT2001, MinPPT2001, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- NDVI_2000 %>% 
+  inner_join(NDVI_2001, by = "District")
+```
+
+
+```{r}
+# 2002
+NDVI_2002_wide <- NDVI_source %>% 
+  select(NAME_2, `2002_01_01_NDVI`:`2002_12_31_NDVI`)
+
+NDVI_2002_long <- gather(NDVI_2002_wide, Date, Precipitation, `2002_01_01_NDVI`:`2002_12_31_NDVI`)
+
+NDVI_2002 <- NDVI_2002_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2002 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2002 = max(Precipitation, na.rm=TRUE),
+         MinPPT2002 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2002, MaxPPT2002, MinPPT2002) %>%  
+  distinct(NAME_2, AveragePPT2002, MaxPPT2002, MinPPT2002, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2002, by = "District")
+```
+
+
+```{r}
+# 2003
+NDVI_2003_wide <- NDVI_source %>% 
+  select(NAME_2, `2003_01_01_NDVI`:`2003_12_31_NDVI`)
+
+NDVI_2003_long <- gather(NDVI_2003_wide, Date, Precipitation, `2003_01_01_NDVI`:`2003_12_31_NDVI`)
+
+NDVI_2003 <- NDVI_2003_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2003 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2003 = max(Precipitation, na.rm=TRUE),
+         MinPPT2003 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2003, MaxPPT2003, MinPPT2003) %>%  
+  distinct(NAME_2, AveragePPT2003, MaxPPT2003, MinPPT2003, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2003, by = "District")
+```
+
+
+```{r}
+# 2004
+NDVI_2004_wide <- NDVI_source %>% 
+  select(NAME_2, `2004_01_01_NDVI`:`2004_12_31_NDVI`)
+
+NDVI_2004_long <- gather(NDVI_2004_wide, Date, Precipitation, `2004_01_01_NDVI`:`2004_12_31_NDVI`)
+
+NDVI_2004 <- NDVI_2004_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2004 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2004 = max(Precipitation, na.rm=TRUE),
+         MinPPT2004 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2004, MaxPPT2004, MinPPT2004) %>%  
+  distinct(NAME_2, AveragePPT2004, MaxPPT2004, MinPPT2004, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2004, by = "District")
+```
+
+
+```{r}
+# 2005
+NDVI_2005_wide <- NDVI_source %>% 
+  select(NAME_2, `2005_01_01_NDVI`:`2005_12_31_NDVI`)
+
+NDVI_2005_long <- gather(NDVI_2005_wide, Date, Precipitation, `2005_01_01_NDVI`:`2005_12_31_NDVI`)
+
+NDVI_2005 <- NDVI_2005_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2005 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2005 = max(Precipitation, na.rm=TRUE),
+         MinPPT2005 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2005, MaxPPT2005, MinPPT2005) %>%  
+  distinct(NAME_2, AveragePPT2005, MaxPPT2005, MinPPT2005, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2005, by = "District")
+```
+
+
+```{r}
+# 2006
+NDVI_2006_wide <- NDVI_source %>% 
+  select(NAME_2, `2006_01_01_NDVI`:`2006_12_31_NDVI`)
+
+NDVI_2006_long <- gather(NDVI_2006_wide, Date, Precipitation, `2006_01_01_NDVI`:`2006_12_31_NDVI`)
+
+NDVI_2006 <- NDVI_2006_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2006 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2006 = max(Precipitation, na.rm=TRUE),
+         MinPPT2006 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2006, MaxPPT2006, MinPPT2006) %>%  
+  distinct(NAME_2, AveragePPT2006, MaxPPT2006, MinPPT2006, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2006, by = "District")
+```
+
+
+```{r}
+# 2007
+NDVI_2007_wide <- NDVI_source %>% 
+  select(NAME_2, `2007_01_01_NDVI`:`2007_12_31_NDVI`)
+
+NDVI_2007_long <- gather(NDVI_2007_wide, Date, Precipitation, `2007_01_01_NDVI`:`2007_12_31_NDVI`)
+
+NDVI_2007 <- NDVI_2007_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2007 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2007 = max(Precipitation, na.rm=TRUE),
+         MinPPT2007 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2007, MaxPPT2007, MinPPT2007) %>%  
+  distinct(NAME_2, AveragePPT2007, MaxPPT2007, MinPPT2007, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2007, by = "District")
+```
+
+
+```{r}
+# 2008
+NDVI_2008_wide <- NDVI_source %>% 
+  select(NAME_2, `2008_01_01_NDVI`:`2008_12_31_NDVI`)
+
+NDVI_2008_long <- gather(NDVI_2008_wide, Date, Precipitation, `2008_01_01_NDVI`:`2008_12_31_NDVI`)
+
+NDVI_2008 <- NDVI_2008_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2008 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2008 = max(Precipitation, na.rm=TRUE),
+         MinPPT2008 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2008, MaxPPT2008, MinPPT2008) %>%  
+  distinct(NAME_2, AveragePPT2008, MaxPPT2008, MinPPT2008, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2008, by = "District")
+```
+
+
+```{r}
+# 2009
+NDVI_2009_wide <- NDVI_source %>% 
+  select(NAME_2, `2009_01_01_NDVI`:`2009_12_31_NDVI`)
+
+NDVI_2009_long <- gather(NDVI_2009_wide, Date, Precipitation, `2009_01_01_NDVI`:`2009_12_31_NDVI`)
+
+NDVI_2009 <- NDVI_2009_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2009 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2009 = max(Precipitation, na.rm=TRUE),
+         MinPPT2009 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2009, MaxPPT2009, MinPPT2009) %>%  
+  distinct(NAME_2, AveragePPT2009, MaxPPT2009, MinPPT2009, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2009, by = "District")
+```
+
+
+```{r}
+# 2010
+NDVI_2010_wide <- NDVI_source %>% 
+  select(NAME_2, `2010_01_01_NDVI`:`2010_12_31_NDVI`)
+
+NDVI_2010_long <- gather(NDVI_2010_wide, Date, Precipitation, `2010_01_01_NDVI`:`2010_12_31_NDVI`)
+
+NDVI_2010 <- NDVI_2010_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2010 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2010 = max(Precipitation, na.rm=TRUE),
+         MinPPT2010 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2010, MaxPPT2010, MinPPT2010) %>%  
+  distinct(NAME_2, AveragePPT2010, MaxPPT2010, MinPPT2010, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2010, by = "District")
+```
+
+
+```{r}
+# 2011
+NDVI_2011_wide <- NDVI_source %>% 
+  select(NAME_2, `2011_01_01_NDVI`:`2011_12_31_NDVI`)
+
+NDVI_2011_long <- gather(NDVI_2011_wide, Date, Precipitation, `2011_01_01_NDVI`:`2011_12_31_NDVI`)
+
+NDVI_2011 <- NDVI_2011_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2011 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2011 = max(Precipitation, na.rm=TRUE),
+         MinPPT2011 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2011, MaxPPT2011, MinPPT2011) %>%  
+  distinct(NAME_2, AveragePPT2011, MaxPPT2011, MinPPT2011, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2011, by = "District")
+```
+
+
+```{r}
+# 2012
+NDVI_2012_wide <- NDVI_source %>% 
+  select(NAME_2, `2012_01_01_NDVI`:`2012_12_31_NDVI`)
+
+NDVI_2012_long <- gather(NDVI_2012_wide, Date, Precipitation, `2012_01_01_NDVI`:`2012_12_31_NDVI`)
+
+NDVI_2012 <- NDVI_2012_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2012 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2012 = max(Precipitation, na.rm=TRUE),
+         MinPPT2012 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2012, MaxPPT2012, MinPPT2012) %>%  
+  distinct(NAME_2, AveragePPT2012, MaxPPT2012, MinPPT2012, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2012, by = "District")
+```
+
+
+```{r}
+# 2013
+NDVI_2013_wide <- NDVI_source %>% 
+  select(NAME_2, `2013_01_01_NDVI`:`2013_12_31_NDVI`)
+
+NDVI_2013_long <- gather(NDVI_2013_wide, Date, Precipitation, `2013_01_01_NDVI`:`2013_12_31_NDVI`)
+
+NDVI_2013 <- NDVI_2013_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2013 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2013 = max(Precipitation, na.rm=TRUE),
+         MinPPT2013 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2013, MaxPPT2013, MinPPT2013) %>%  
+  distinct(NAME_2, AveragePPT2013, MaxPPT2013, MinPPT2013, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2013, by = "District")
+```
+
+
+```{r}
+# 2014
+NDVI_2014_wide <- NDVI_source %>% 
+  select(NAME_2, `2014_01_01_NDVI`:`2014_12_31_NDVI`)
+
+NDVI_2014_long <- gather(NDVI_2014_wide, Date, Precipitation, `2014_01_01_NDVI`:`2014_12_31_NDVI`)
+
+NDVI_2014 <- NDVI_2014_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2014 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2014 = max(Precipitation, na.rm=TRUE),
+         MinPPT2014 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2014, MaxPPT2014, MinPPT2014) %>%  
+  distinct(NAME_2, AveragePPT2014, MaxPPT2014, MinPPT2014, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2014, by = "District")
+```
+
+
+```{r}
+# 2015
+NDVI_2015_wide <- NDVI_source %>% 
+  select(NAME_2, `2015_01_01_NDVI`:`2015_12_31_NDVI`)
+
+NDVI_2015_long <- gather(NDVI_2015_wide, Date, Precipitation, `2015_01_01_NDVI`:`2015_12_31_NDVI`)
+
+NDVI_2015 <- NDVI_2015_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2015 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2015 = max(Precipitation, na.rm=TRUE),
+         MinPPT2015 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2015, MaxPPT2015, MinPPT2015) %>%  
+  distinct(NAME_2, AveragePPT2015, MaxPPT2015, MinPPT2015, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2015, by = "District")
+```
+
+
+```{r}
+# 2016
+NDVI_2016_wide <- NDVI_source %>% 
+  select(NAME_2, `2016_01_01_NDVI`:`2016_12_31_NDVI`)
+
+NDVI_2016_long <- gather(NDVI_2016_wide, Date, Precipitation, `2016_01_01_NDVI`:`2016_12_31_NDVI`)
+
+NDVI_2016 <- NDVI_2016_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2016 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2016 = max(Precipitation, na.rm=TRUE),
+         MinPPT2016 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2016, MaxPPT2016, MinPPT2016) %>%  
+  distinct(NAME_2, AveragePPT2016, MaxPPT2016, MinPPT2016, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2016, by = "District")
+```
+
+
+```{r}
+# 2017
+NDVI_2017_wide <- NDVI_source %>% 
+  select(NAME_2, `2017_01_01_NDVI`:`2017_12_31_NDVI`)
+
+NDVI_2017_long <- gather(NDVI_2017_wide, Date, Precipitation, `2017_01_01_NDVI`:`2017_12_31_NDVI`)
+
+NDVI_2017 <- NDVI_2017_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2017 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2017 = max(Precipitation, na.rm=TRUE),
+         MinPPT2017 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2017, MaxPPT2017, MinPPT2017) %>%  
+  distinct(NAME_2, AveragePPT2017, MaxPPT2017, MinPPT2017, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2017, by = "District")
+```
+
+
+```{r}
+# 2018
+NDVI_2018_wide <- NDVI_source %>% 
+  select(NAME_2, `2018_01_01_NDVI`:`2018_12_31_NDVI`)
+
+NDVI_2018_long <- gather(NDVI_2018_wide, Date, Precipitation, `2018_01_01_NDVI`:`2018_12_31_NDVI`)
+
+NDVI_2018 <- NDVI_2018_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2018 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2018 = max(Precipitation, na.rm=TRUE),
+         MinPPT2018 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2018, MaxPPT2018, MinPPT2018) %>%  
+  distinct(NAME_2, AveragePPT2018, MaxPPT2018, MinPPT2018, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2018, by = "District")
+```
+
+
+```{r}
+# 2019
+NDVI_2019_wide <- NDVI_source %>% 
+  select(NAME_2, `2019_01_01_NDVI`:`2019_12_31_NDVI`)
+
+NDVI_2019_long <- gather(NDVI_2019_wide, Date, Precipitation, `2019_01_01_NDVI`:`2019_12_31_NDVI`)
+
+NDVI_2019 <- NDVI_2019_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2019 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2019 = max(Precipitation, na.rm=TRUE),
+         MinPPT2019 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2019, MaxPPT2019, MinPPT2019) %>%  
+  distinct(NAME_2, AveragePPT2019, MaxPPT2019, MinPPT2019, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2019, by = "District")
+```
+
+
+```{r}
+# 2020
+NDVI_2020_wide <- NDVI_source %>% 
+  select(NAME_2, `2020_01_01_NDVI`:`2020_12_31_NDVI`)
+
+NDVI_2020_long <- gather(NDVI_2020_wide, Date, Precipitation, `2020_01_01_NDVI`:`2020_12_31_NDVI`)
+
+NDVI_2020 <- NDVI_2020_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2020 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2020 = max(Precipitation, na.rm=TRUE),
+         MinPPT2020 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2020, MaxPPT2020, MinPPT2020) %>%  
+  distinct(NAME_2, AveragePPT2020, MaxPPT2020, MinPPT2020, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2020, by = "District")
+```
+
+
+```{r}
+# 2021
+NDVI_2021_wide <- NDVI_source %>% 
+  select(NAME_2, `2021_01_01_NDVI`:`2021_12_30_NDVI`)
+
+NDVI_2021_long <- gather(NDVI_2021_wide, Date, Precipitation, `2021_01_01_NDVI`:`2021_12_30_NDVI`)
+
+NDVI_2021 <- NDVI_2021_long %>% 
+  group_by(NAME_2) %>%    
+  mutate(AveragePPT2021 = mean(Precipitation, na.rm=TRUE),
+         MaxPPT2021 = max(Precipitation, na.rm=TRUE),
+         MinPPT2021 = min(Precipitation, na.rm=TRUE)) %>% 
+  select(NAME_2, AveragePPT2021, MaxPPT2021, MinPPT2021) %>%  
+  distinct(NAME_2, AveragePPT2021, MaxPPT2021, MinPPT2021, .keep_all = FALSE) %>% 
+  rename(District = NAME_2)
+
+ProcessedNDVI <- ProcessedNDVI %>% 
+  inner_join(NDVI_2021, by = "District")
+```
+
