@@ -492,9 +492,69 @@ ProcessedNDVI <- ProcessedNDVI %>%
 ```
 
 
+## Tidy up the data into long format
+```{r}
+# Mean
+wide_mean <- ProcessedNDVI %>% 
+  select(District, AveragePPT2000, AveragePPT2001, AveragePPT2002, AveragePPT2003, AveragePPT2004, 
+         AveragePPT2005, AveragePPT2006, AveragePPT2007, AveragePPT2008, AveragePPT2009, AveragePPT2010,
+         AveragePPT2011, AveragePPT2012, AveragePPT2013, AveragePPT2014, AveragePPT2015, AveragePPT2016,
+         AveragePPT2017, AveragePPT2018, AveragePPT2019, AveragePPT2020, AveragePPT2021)
 
-Monthly data for 2011 and 2017;
-put them in a shapefile;
-  transform the polygon to long, lat format
-visualization
+long_mean <- gather(wide_mean, Year, AvgPrecipitation, AveragePPT2000:AveragePPT2021) %>% 
+  separate(Year, c("Average", "2000"), "PPT") %>% 
+  rename(Type = Average,
+         Year = `2000`,
+         Precipitation = AvgPrecipitation)
+
+
+# Max
+wide_max <- ProcessedNDVI %>% 
+  select(District, MaxPPT2000, MaxPPT2001, MaxPPT2002, MaxPPT2003, MaxPPT2004, 
+         MaxPPT2005, MaxPPT2006, MaxPPT2007, MaxPPT2008, MaxPPT2009, MaxPPT2010,
+         MaxPPT2011, MaxPPT2012, MaxPPT2013, MaxPPT2014, MaxPPT2015, MaxPPT2016,
+         MaxPPT2017, MaxPPT2018, MaxPPT2019, MaxPPT2020, MaxPPT2021)
+
+long_max <- gather(wide_max, Year, MaxPrecipitation, MaxPPT2000:MaxPPT2021) %>% 
+  separate(Year, c("Max", "2000"), "PPT") %>% 
+  rename(Type = Max,
+         Year = `2000`,
+         Precipitation = MaxPrecipitation)
+
+
+# Min
+wide_min <- ProcessedNDVI %>% 
+  select(District, MinPPT2000, MinPPT2001, MinPPT2002, MinPPT2003, MinPPT2004, 
+         MinPPT2005, MinPPT2006, MinPPT2007, MinPPT2008, MinPPT2009, MinPPT2010,
+         MinPPT2011, MinPPT2012, MinPPT2013, MinPPT2014, MinPPT2015, MinPPT2016,
+         MinPPT2017, MinPPT2018, MinPPT2019, MinPPT2020, MinPPT2021)
+
+long_Min <- gather(wide_min, Year, MinPrecipitation, MinPPT2000:MinPPT2021) %>% 
+  separate(Year, c("Min", "2000"), "PPT") %>% 
+  rename(Type = Min,
+         Year = `2000`,
+         Precipitation = MinPrecipitation)
+
+```
+
+```{r}
+### Here I tried to merge all three dataframes but havent figured out a way yet
+
+LongNDVI <- long_max %>% 
+  inner_join(long_mean, by = "District")
+
+
+NewDataframe <- merge(long_max, long_mean, by=0, all.x=TRUE)
+
+wide_1 <- ProcessedNDVI %>% 
+  select(District, AveragePPT2000:MinPPT2021)
+```
+
+  
+  
+## Visualization
+
+```{r}
+
+```
 
