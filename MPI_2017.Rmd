@@ -33,7 +33,7 @@ head(MPI_2017)
 Import Shape file into r (Change district 91 --> district 61)
 ```{r}
 #file name: 0=boundary, 1=province, 2=district 
-zim_boundary <- st_read("./shape60/gadm36_ZWE_0.shp.shp") 
+zim_boundary <- st_read("./shape60/gadm36_ZWE_0.shp") 
 zim_province <- st_read("./shape60/gadm36_ZWE_1.shp")
 zim_district <- st_read("./shape60/gadm36_ZWE_2.shp")  
 ```
@@ -56,21 +56,26 @@ zim_district <- zim_district %>%
   arrange(District_name) %>% 
   mutate(District_ID = c(1:60))
 
-joined_zim <-  full_join (MPI_2017,zim_district, by = "District_ID")
+joined_zim <-  full_join (zim_district,MPI_2017, by = "District_ID")
   
 ```
 
 
 Mapping M_0
 ```{r}
-#ggplot() + 
-  #geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
+plot(joined_zim["M0_k3"]) 
+#ggplot(data = joined_zim) + geom_sf(aes(fill= "M0_k3", geometry = "geometry")) 
+#ggplot(data = joined_zim)+ geom_polygon(aes(alpha = 50), x= "District_ID", y = "District_name.x", fill = "M0_k3")
+
+
+#  geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
+
 
 #ggplot() +
 #geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
 #ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
 #coord_sf()
-class(joined_zim)
+#class(joined_zim)
 
 
   
