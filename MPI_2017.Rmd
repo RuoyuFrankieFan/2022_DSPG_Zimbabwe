@@ -60,22 +60,26 @@ joined_zim <-  full_join (zim_district,MPI_2017, by = "District_ID")
   
 ```
 
+```{r}
+ggplot() +
+geom_polygon(data = joined_zim, aes(fill = M0_k3), colour = "black") + theme_void()
 
-Mapping M_0
+```
+
 ```{r}
 plot(joined_zim["M0_k3"]) 
+
 #ggplot(data = joined_zim) + geom_sf(aes(fill= "M0_k3", geometry = "geometry")) 
 #ggplot(data = joined_zim)+ geom_polygon(aes(alpha = 50), x= "District_ID", y = "District_name.x", fill = "M0_k3")
 
 
-#  geom_polygon(data = joined_zim, aes(x = long, y = lat, fill = M0_k3), colour = "black") + theme_void()
 
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
+coord_sf()
 
-#ggplot() +
-#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
-#ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
-#coord_sf()
-#class(joined_zim)
+class(joined_zim)
 
 
   
@@ -89,4 +93,29 @@ plot(joined_zim["M0_k3"])
 #mapping_m0 <- plot(joined_zim, )
 
 ```
+map m0
+```{r}
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+ggtitle("adjusted headcount ratio 2017") + scale_fill_viridis_c()+
+coord_sf()
+```
+map m1
+```{r}
+#tmp <- getOtmp <- getOption("ggplot2.continuous.fill") # store current setting
+#options(ggplot2.continuous.fill = scale_fill_continuous(type = "tmp <- getOption("ggplot2.continuous.fill") # store current setting
+#options(ggplot2.continuous.fill = scale_fill_continuous(type = "",breaks= c(0.00,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40)))
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M1_k3)) +
+ggtitle("adjusted poverty gap 2017") + scale_fill_viridis_c()+
+coord_sf()
+```
+map m2
+```{r}
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M2_k3)) +
+ggtitle("adjusted poverty gap squared 2017") + scale_fill_viridis_c()+
+coord_sf()
+```
+
 
