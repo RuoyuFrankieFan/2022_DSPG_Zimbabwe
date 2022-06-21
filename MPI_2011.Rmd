@@ -61,13 +61,67 @@ joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
   
 ```
 
-
-Mapping M_0
+ 
+Mapping M0_k3 Adjusted Headcount Ratio
 ```{r}
 ggplot() +
 geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M0_k3)) +
-ggtitle("Population at Severe Risk of Food Insecurity in Zimbabwe - 2011") + scale_fill_viridis_c()+
+ggtitle("Adjusted Headcount in Zimbabwe - 2011") + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40))+
+coord_sf() 
+```
+
+Mapping M1_k3 Adjusted Poverty Gap
+```{r}
+ggplot() +
+  geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M1_k3)) +
+  coord_sf()+ 
+  scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)) +
+  ggtitle("Adjusted Poverty Gap in Zimbabwe - 2011")
+
+```
+
+Mapping M2_k3 Adjusted Poverty Severity.
+```{r}
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M2_k3)) +
+ggtitle("Adjusted Poverty Severity in Zimbabwe - 2011") + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)) +
 coord_sf()
 
 ```
+
+
+Horizontal Bar Chart - M0_k3 Adjusted Headcount Ratio
+```{r}
+joined_zim %>% 
+  arrange(desc(M0_k3))  %>% 
+  ggplot(aes(x=reorder(District_name.x , M0_k3), y = M0_k3, fill = M0_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Headcount Ratio per district", 
+         x="District Name", y = "Adjusted HeadCount Ratio") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="AHR"))
+
+```
+
+
+Horizontal Bar Chart - M1_k3 change later
+```{r}
+joined_zim %>% 
+  arrange(desc(M0_k3))  %>% 
+  ggplot(aes(x=reorder(District_name.x , M1_k3), y = M0_k3, fill = M0_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Headcount Ratio per district", 
+         x="District Name", y = "Adjusted HeadCount Ratio") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="AHR"))
+
+```
+
+
+Horizontal Bar Chart - M2_k3 change later
+```{r}
+joined_zim %>% 
+  arrange(desc(M0_k3))  %>% 
+  ggplot(aes(x=reorder(District_name.x , M2_k3), y = M0_k3, fill = M0_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Headcount Ratio per district", 
+         x="District Name", y = "Adjusted HeadCount Ratio") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="AHR"))
+
+```
+
+
+
 
