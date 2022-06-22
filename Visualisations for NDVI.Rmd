@@ -1,0 +1,121 @@
+---
+title: "Visualisations for NDVI"
+author: "Frankie Fan"
+date: '2022-06-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+library(ggsn)
+library(ggspatial)
+```
+
+read in the files
+```{r}
+MPI_2011 <- read_excel("./Data/2011_MPI_source.xlsx")
+MonthlyNDVI2011 <- read_csv("./Data/2011Monthly.csv")
+AnnualNDVI <- read_csv("./Data/NDVI2000-2021.csv")
+zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+```
+
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+```{r}
+zim_district <- zim_district %>% 
+  select(District)
+
+MonthlyNDVI2011 <- MonthlyNDVI2011 %>% 
+  rename(Month = Year)
+ 
+NDVI_district <-  full_join (zim_district, MonthlyNDVI2011, by = "District")
+```
+
+
+Mapping NDVI
+```{r}
+
+# LongMonthlyNDVI$Month <- str_replace(df$conference, "West", "Western")
+
+
+NDVI_district$Month[which(NDVI_district$Month=="Jan")] <- "1"
+NDVI_district$Month[which(NDVI_district$Month=="Feb")] <- "2"
+NDVI_district$Month[which(NDVI_district$Month=="Mar")] <- "3"
+NDVI_district$Month[which(NDVI_district$Month=="Apr")] <- "4"
+NDVI_district$Month[which(NDVI_district$Month=="May")] <- "5"
+NDVI_district$Month[which(NDVI_district$Month=="Jun")] <- "6"
+NDVI_district$Month[which(NDVI_district$Month=="Jul")] <- "7"
+NDVI_district$Month[which(NDVI_district$Month=="Aug")] <- "8"
+NDVI_district$Month[which(NDVI_district$Month=="Sep")] <- "9"
+NDVI_district$Month[which(NDVI_district$Month=="Oct")] <- "10"
+NDVI_district$Month[which(NDVI_district$Month=="Nov")] <- "11"
+NDVI_district$Month[which(NDVI_district$Month=="Dec")] <- "12"
+
+NDVI_district$Month <- as.numeric(as.character(NDVI_district$Month))
+
+# Average NDVI by month
+AvgMonthlyNDVI <- NDVI_district %>% 
+  filter(Type == "Average") %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = NDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Average NDVI in Zimbabwe - 2011")
+AvgMonthlyNDVI
+
+
+jpeg(filename = "AvgMonthlyNDVI.jpeg", 
+    res = 500,
+     bg = "white")
+AvgMonthlyNDVI
+dev.off()
+
+
+BySeasonAvg <- NDVI_district %>% 
+  filter(Type == "Average") 
+
+```
+
+```{r}
+# Annual NDVI
+
+AnnualNDVI <- read_csv("./Data/NDVI2000-2021.csv")
+
+AnnualNDVI %>% 
+  ggplot(aes(x = Year, y=Precipitation, fill=Type)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_smooth(color="#006000")+
+  scale_fill_brewer(palette = "Set2")+
+  labs(title = "NDVI, Year 2000-2021") +
+    xlab("Year") +
+    ylab("NDVI")
+
+AnnualNDVI %>% 
+  filter( Year == 2011|Year == 2017) %>% 
+  ggplot(aes(x = Type, y = Precipitation)) + 
+  facet_wrap(~Year)+
+  geom_boxplot() +
+  labs(title = "Distribution of NDVI, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("NDVI")
+
+```
+
