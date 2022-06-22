@@ -17,7 +17,7 @@ library(tidyr)
 ```
 ## Read in the files
 ```{r}
-NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
+NDVI_source <- read_csv("./Data/NDVI_ts_Zimb.csv")
 
 ```
 
@@ -551,6 +551,9 @@ write.csv(LongNDVI,"./Data/NDVI2000-2021.csv", row.names = FALSE)
 ## Visualization
 
 ```{r}
+LongNDVI %>% 
+  ggplot(aes(x=Year, y=Precipitation, fill=Type)) +
+  geom_bar(stat="identity", position=position_dodge())
 
 ```
 

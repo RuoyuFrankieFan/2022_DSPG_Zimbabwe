@@ -20,7 +20,7 @@ library(tidyr)
 
 ## Read in the files
 ```{r}
-NDVI_source <- read_csv("NDVI_ts_Zimb.csv")
+NDVI_source <- read_csv("./Data/NDVI_ts_Zimb.csv")
 
 ```
 
@@ -305,7 +305,34 @@ long_Min_2011 <- gather(wide_Min2011, Year, Min_Precipitation, Min_Jan:Min_Dec) 
 LongMonthlyNDVI <- union(long_mean2011, long_Max_2011)
 LongMonthlyNDVI <- union(LongMonthlyNDVI, long_Min_2011)
 
+LongMonthlyNDVI <- LongMonthlyNDVI %>% 
+  rename(Month = Year)
+ 
+
 write.csv(LongMonthlyNDVI,"./Data/2011Monthly.csv", row.names = FALSE)
 ```
 
+
+## If needed, transform the month abbreviations to numbers, so could be arranged according to numeric order
+```{r}
+match(LongMonthlyNDVI$Month,month.abb)
+
+
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Jan")] <- "1"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Feb")] <- "2"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Mar")] <- "3"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Apr")] <- "4"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="May")] <- "5"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Jun")] <- "6"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Jul")] <- "7"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Aug")] <- "8"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Sep")] <- "9"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Oct")] <- "10"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Nov")] <- "11"
+LongMonthlyNDVI$Month[which(LongMonthlyNDVI$Month=="Dec")] <- "12"
+LongMonthlyNDVI$Month <- as.numeric(LongMonthlyNDVI$Month)
+
+LongMonthlyNDVI$Month <- str_replace(LongMonthlyNDVI$Month, "Jan", "1")
+
+```
 
