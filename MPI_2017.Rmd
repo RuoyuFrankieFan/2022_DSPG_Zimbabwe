@@ -19,6 +19,9 @@ library(dplyr)
 library(tidyverse)
 library(sf)
 library(ggplot2)
+library(rgdal)
+library(ggsn)
+library(grid)
 ```
 
 read in the MPI Excel
@@ -60,26 +63,93 @@ joined_zim <-  full_join (zim_district,MPI_2017, by = "District_ID")
   
 ```
 
+ 
+Mapping M0_k3
+Adjusted Headcount Ratio -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population. 
+
 ```{r}
 ggplot() +
-geom_polygon(data = joined_zim, aes(fill = M0_k3), colour = "black") + theme_void()
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M0_k3)) +
+ggtitle("Adjusted Headcount Ratio in Zimbabwe - 2017") + guides(fill=guide_legend(title="AHR (M0_k3)")) + 
+scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "plasma", direction = -1)+
+coord_sf() + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
+```
+
+Mapping M1_k3 
+Adjusted Poverty Gap -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population
+
+```{r}
+ggplot() +
+  geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M1_k3)) +
+  coord_sf()+ 
+  scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "inferno", direction = -1) +
+  ggtitle("Adjusted Poverty Gap in Zimbabwe - 2017") + guides(fill=guide_legend(title="APG (M1_k3)"))  + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
 
 ```
 
+Mapping M2_k3 
+Adjusted Poverty Severity - This is simply the square of the distance between a poor individual and the poverty threshold,  k .
 ```{r}
-plot(joined_zim["M0_k3"]) 
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M2_k3)) +
+ggtitle("Adjusted Poverty Severity in Zimbabwe - 2017")+ guides(fill=guide_legend(title="APS (M2_k3)")) + 
+scale_fill_viridis_b(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "E", direction = -1) +
+coord_sf() + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
+
+```
+
+Horizontal Bar Chart - M0_k3 Adjusted Headcount Ratio
+```{r}
+joined_zim %>% 
+  arrange(desc(M0_k3))  %>% 
+  ggplot(aes(x=reorder(District_name.x , M0_k3), y = M0_k3, fill = M0_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Headcount Ratio per District", 
+         x="District Name", y = "Adjusted HeadCount Ratio") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="AHR")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "plasma", direction = -1)
+```
+Horizontal Bar Chart - M1_k3 Adjusted Poverty Gap
+```{r}
+
+joined_zim %>% 
+  arrange(desc(M1_k3))  %>%
+  ggplot(aes(x=reorder(District_name.x , M1_k3), y = M1_k3, fill = M1_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Poverty Gap per District", 
+         x="District Name", y = "Adjusted Poverty Gap") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="APG")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "inferno", direction = -1)
+
+```
+
+
+
+
+Horizontal Bar Chart - M2_k3 Adjusted Poverty Severity
+```{r}
+
+joined_zim %>% 
+  arrange(desc(M2_k3))  %>%
+  ggplot(aes(x=reorder(District_name.x , M2_k3), y = M2_k3, fill = M2_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Poverty Severity per District", 
+         x="District Name", y = "Adjusted Poverty Severity") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="APS")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "E", direction = -1)
+
+```
+```{r}
+#plot(joined_zim["M0_k3"]) 
 
 #ggplot(data = joined_zim) + geom_sf(aes(fill= "M0_k3", geometry = "geometry")) 
 #ggplot(data = joined_zim)+ geom_polygon(aes(alpha = 50), x= "District_ID", y = "District_name.x", fill = "M0_k3")
 
 
 
-ggplot() +
-geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
-ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
-coord_sf()
+#ggplot() +
+#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+#ggtitle("Population at Severe Risk of Food Insecurity in Niger - 2015") + scale_fill_viridis_c()+
+#coord_sf()
 
-class(joined_zim)
+#class(joined_zim)
 
 
   
@@ -95,27 +165,27 @@ class(joined_zim)
 ```
 map m0
 ```{r}
-ggplot() +
-geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
-ggtitle("adjusted headcount ratio 2017") + scale_fill_viridis_c()+
-coord_sf()
+#ggplot() +
+#(data = joined_zim, size = 1, color = "black", aes(fill=M0_k3)) +
+#ggtitle("adjusted headcount ratio 2017") + scale_fill_viridis_c()+
+#coord_sf()
 ```
 map m1
 ```{r}
 #tmp <- getOtmp <- getOption("ggplot2.continuous.fill") # store current setting
 #options(ggplot2.continuous.fill = scale_fill_continuous(type = "tmp <- getOption("ggplot2.continuous.fill") # store current setting
 #options(ggplot2.continuous.fill = scale_fill_continuous(type = "",breaks= c(0.00,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40)))
-ggplot() +
-geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M1_k3)) +
-ggtitle("adjusted poverty gap 2017") + scale_fill_viridis_c()+
-coord_sf()
+#ggplot() +
+#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M1_k3)) +
+#ggtitle("adjusted poverty gap 2017") + scale_fill_viridis_c()+
+#coord_sf()
 ```
 map m2
 ```{r}
-ggplot() +
-geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M2_k3)) +
-ggtitle("adjusted poverty gap squared 2017") + scale_fill_viridis_c()+
-coord_sf()
+#ggplot() +
+#geom_sf(data = joined_zim, size = 1, color = "black", aes(fill=M2_k3)) +
+#ggtitle("adjusted poverty gap squared 2017") + scale_fill_viridis_c()+
+#coord_sf()
 ```
 
 
