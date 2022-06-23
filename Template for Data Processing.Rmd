@@ -27,16 +27,17 @@ NDVI_source <- read_csv("./Data/NDVI_ts_Zimb.csv")
 ```{r}
 #This is in wide format
 NDVI_wide <- NDVI_source %>% 
-  select(NAME_2, `2000_03_12_NDVI`:`2021_12_30_NDVI`) %>% 
-  rename(District = NAME_2)
+  select(NAME_2, `2000_03_12_NDVI`:`2021_12_30_NDVI`) %>% #select needed columns--Districts and observations
+  rename(District = NAME_2) #rename column
 ```
 
 2. Transform it to long format
 ```{r}
 # Parsed through the date with "_". Might need to change the code when it comes with different format
+# Here the format for observation is yyyy_mm_dd_NDVI. Modify it if your observation comes with a different format.
 NDVI_long <- gather(NDVI_wide, Date, NDVI, `2000_03_12_NDVI`:`2021_12_30_NDVI`)%>% 
-  separate( col=Date, into=c('Year', 'Month', "Day", "NDVI11"), sep='_') %>% 
-  select(-NDVI11)
+  separate( col=Date, into=c('Year', 'Month', "Day", "NDVI11"), sep='_') %>% # Parsed it into Year/Month/Day
+  select(-NDVI11) #drop the _NDVI string segment
 
 ```
 
@@ -47,7 +48,7 @@ NDVI_annual <- NDVI_long %>%
   group_by(District, Year) %>%    # group by district and year
   summarise(AverageNDVI = mean(NDVI, na.rm=TRUE),   # Find the mean, max, min by district
          MaxNDVI = max(NDVI, na.rm=TRUE),
-         MinNDVI = min(NDVI, na.rm=TRUE))
+         MinNDVI = min(NDVI, na.rm=TRUE))   # could also find median, standard deviation, z-score if needed
 
 write.csv(NDVI_annual,"./Data/NDVI_annual.csv", row.names = FALSE)
 
@@ -58,14 +59,22 @@ write.csv(NDVI_annual,"./Data/NDVI_annual.csv", row.names = FALSE)
 ```{r}
 NDVI_monthly <- NDVI_long %>% 
   select(-Day) %>% 
-  group_by(District, Year, Month) %>%    # group by district and year
-  summarise(AverageNDVI = mean(NDVI, na.rm=TRUE),   # Find the mean, max, min by district
+  group_by(District, Year, Month) %>%   # Group by district, year and month
+  summarise(AverageNDVI = mean(NDVI, na.rm=TRUE),   
          MaxNDVI = max(NDVI, na.rm=TRUE),
          MinNDVI = min(NDVI, na.rm=TRUE))
 
 write.csv(NDVI_monthly,"./Data/NDVI_monthly.csv", row.names = FALSE)
 
-
 ```
 
+
+5. Subset of Monthly Data- 2011-2017
+```{r}
+`NDVI_monthly_2011-2017` <- NDVI_monthly %>% 
+  filter(Year == 2011:2017) %>% 
+  arrange(Year, Month)
+
+write.csv(NDVI_monthly,"./Data/NDVI_monthly_2011-2017.csv", row.names = FALSE)
+```
 
