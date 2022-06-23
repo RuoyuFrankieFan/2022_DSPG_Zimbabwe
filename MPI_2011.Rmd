@@ -64,7 +64,9 @@ joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
 ```
 
  
-Mapping M0_k3 Adjusted Headcount Ratio
+Mapping M0_k3
+Adjusted Headcount Ratio -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population. 
+
 ```{r}
 ggplot() +
 geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M0_k3)) +
@@ -75,7 +77,9 @@ north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") +
 scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
 ```
 
-Mapping M1_k3 Adjusted Poverty Gap
+Mapping M1_k3 
+Adjusted Poverty Gap -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population
+
 ```{r}
 ggplot() +
   geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M1_k3)) +
@@ -87,7 +91,8 @@ scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.
 
 ```
 
-Mapping M2_k3 Adjusted Poverty Severity.
+Mapping M2_k3 
+Adjusted Poverty Severity - This is simply the square of the distance between a poor individual and the poverty threshold,  k .
 ```{r}
 ggplot() +
 geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M2_k3)) +
