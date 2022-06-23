@@ -107,7 +107,12 @@ AnnualNDVI %>%
   labs(title = "NDVI, Year 2000-2021") +
     xlab("Year") +
     ylab("NDVI")
+```
 
+
+
+## Distribution of NDVI in 2011 and 2017
+```{r}
 AnnualNDVI %>% 
   filter( Year == 2011|Year == 2017) %>% 
   ggplot(aes(x = Type, y = Precipitation)) + 
@@ -119,6 +124,9 @@ AnnualNDVI %>%
 
 ```
 
+#### Description
+
+This graphics shows the distribution of NDVI across 60 districts in 2011 and 2017. Compared to the statistics in 2011, there is a clear pattern of higher NDVI values in 2017. 
 
 
 ## 06/23/2022 Visualization for NDVI-March2011, March2017
@@ -147,4 +155,4 @@ AvgMarch <- NDVI_monthly_district %>%
   ggtitle("Average NDVI in Zimbabwe - March")
 AvgMarch
 ```
-
+The above maps presents the change of NDVI values in year 2011 and 2017.
