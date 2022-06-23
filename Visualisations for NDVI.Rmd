@@ -119,3 +119,32 @@ AnnualNDVI %>%
 
 ```
 
+
+
+## 06/23/2022 Visualization for NDVI-March2011, March2017
+```{r, visualization for March}
+NDVI_monthly <- read_csv("./Data/NDVI_monthly.csv") 
+NDVI_monthly_district <- full_join (zim_district, NDVI_monthly, by = "District")
+
+AvgMarch2011 <- NDVI_monthly_district %>% 
+  filter(Year == 2011, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average NDVI in Zimbabwe - March 2011")
+AvgMarch2011
+
+
+
+AvgMarch <- NDVI_monthly_district %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average NDVI in Zimbabwe - March")
+AvgMarch
+```
+
