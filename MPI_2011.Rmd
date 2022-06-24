@@ -78,7 +78,7 @@ scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.
 ```
 
 Mapping M1_k3 
-Adjusted Poverty Gap -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population
+Adjusted Poverty Gap -  This examines the distance between the prescribed threshold,  k , and an individual ' s true number of deprivations. This helps examine the subset of poor individuals to efficiently assess which individuals are the poorest in the country.
 
 ```{r}
 ggplot() +
