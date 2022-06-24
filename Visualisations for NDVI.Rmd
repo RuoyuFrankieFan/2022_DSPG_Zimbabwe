@@ -110,6 +110,22 @@ AnnualNDVI %>%
 ```
 
 
+## Distribution of NDVI from 2011--2017
+```{r}
+NDVI_long <- read_csv("./Data/NDVI_long.csv") 
+NDVI_long %>% 
+  filter(Year == 2011:2017) %>% 
+  ggplot(aes(x = Year, y = NDVI, fill = as.factor(Year))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set2", name = "Year") +
+  labs(title = "Distribution of NDVI in Zimbabwe, Year 2011-2017") 
+
+```
+
+
+
 
 ## Distribution of NDVI in 2011 and 2017
 ```{r}
@@ -129,24 +145,8 @@ AnnualNDVI %>%
 This graphics shows the distribution of NDVI across 60 districts in 2011 and 2017. Compared to the statistics in 2011, there is a clear pattern of higher NDVI values in 2017. 
 
 
-```{r}
-NDVI_long <- read_csv("./Data/NDVI_long.csv") 
-NDVI_long %>% 
-  filter(Year == 2011:2017) %>% 
-  ggplot(aes(x = Year, y = NDVI, fill = as.factor(Year))) + 
-  geom_boxplot() +
-  stat_summary(fun = "mean", geom = "point", shape = 8,
-               size = 2, color = "white") +
-  scale_fill_brewer(palette="Set2", name = "Year") +
-  labs(title = "Distribution of NDVI in Zimbabwe, Year 2011-2017") 
 
-```
-
-
-
-
-
-## 06/23/2022 Visualization for NDVI-March2011, March2017
+## Average NDVI March2011 & March2017 (Map)
 ```{r, visualization for March}
 NDVI_monthly <- read_csv("./Data/NDVI_monthly.csv") 
 NDVI_monthly_district <- full_join (zim_district, NDVI_monthly, by = "District")
@@ -161,7 +161,6 @@ AvgMarch2011 <- NDVI_monthly_district %>%
 AvgMarch2011
 
 
-
 AvgMarch <- NDVI_monthly_district %>% 
   filter(Year == 2011|Year == 2017, Month == "03") %>% 
   ggplot() +
@@ -173,3 +172,50 @@ AvgMarch <- NDVI_monthly_district %>%
 AvgMarch
 ```
 The above maps presents the change of NDVI values in year 2011 and 2017.
+
+
+
+
+## Focusing on 2017 (Map by season)
+
+```{r}
+Season2017 <- NDVI_monthly_district %>% 
+  filter(Year == 2016|Year == 2017, Month == "03"|Month == "10") %>% 
+  filter(!(Year == 2016 & Month == "03"))
+
+bySeason2017 <- Season2017 %>%
+  unite("YM", Year:Month)
+
+`2017Seg1` <- Season2017 %>% 
+  filter(Year == 2016 & Month == "10") %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average NDVI in Zimbabwe - 2017 Seg 1")
+
+`2017Seg2` <- Season2017 %>% 
+  filter(Year == 2017 & Month == "03") %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average NDVI in Zimbabwe - 2017 Seg 2")
+
+`2017Seg3` <- Season2017 %>% 
+  filter(Year == 2017 & Month == "10") %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average NDVI in Zimbabwe - 2017 Seg 3")
+
+
+`2017Seg1`
+`2017Seg2`
+`2017Seg3`
+
+
+
+```
+
