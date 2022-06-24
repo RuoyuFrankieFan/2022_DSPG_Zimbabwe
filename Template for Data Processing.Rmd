@@ -39,6 +39,8 @@ NDVI_long <- gather(NDVI_wide, Date, NDVI, `2000_03_12_NDVI`:`2021_12_30_NDVI`)%
   separate( col=Date, into=c('Year', 'Month', "Day", "NDVI11"), sep='_') %>% # Parsed it into Year/Month/Day
   select(-NDVI11) #drop the _NDVI string segment
 
+
+# write.csv(NDVI_long,"./Data/NDVI_long.csv", row.names = FALSE)
 ```
 
 3. Find the average, max, and min precipitation for annual level
@@ -50,7 +52,7 @@ NDVI_annual <- NDVI_long %>%
          MaxNDVI = max(NDVI, na.rm=TRUE),
          MinNDVI = min(NDVI, na.rm=TRUE))   # could also find median, standard deviation, z-score if needed
 
-write.csv(NDVI_annual,"./Data/NDVI_annual.csv", row.names = FALSE)
+# write.csv(NDVI_annual,"./Data/NDVI_annual.csv", row.names = FALSE)
 
 
 ```
@@ -64,7 +66,7 @@ NDVI_monthly <- NDVI_long %>%
          MaxNDVI = max(NDVI, na.rm=TRUE),
          MinNDVI = min(NDVI, na.rm=TRUE))
 
-write.csv(NDVI_monthly,"./Data/NDVI_monthly.csv", row.names = FALSE)
+# write.csv(NDVI_monthly,"./Data/NDVI_monthly.csv", row.names = FALSE)
 
 ```
 
@@ -75,6 +77,6 @@ write.csv(NDVI_monthly,"./Data/NDVI_monthly.csv", row.names = FALSE)
   filter(Year == 2011:2017) %>% 
   arrange(Year, Month)
 
-write.csv(NDVI_monthly,"./Data/NDVI_monthly_2011-2017.csv", row.names = FALSE)
+# write.csv(NDVI_monthly,"./Data/NDVI_monthly_2011-2017.csv", row.names = FALSE)
 ```
 
