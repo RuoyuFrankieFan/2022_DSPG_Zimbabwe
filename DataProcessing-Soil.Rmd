@@ -1,0 +1,106 @@
+---
+title: "Processing SoilM"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+```
+
+## Read in the files
+```{r}
+soil_source <- read_csv("./Data/soil_ts_Zimb.csv")
+
+```
+
+## Goal: find the mean, max and min value for precipitation for each month
+
+1. Drop some unessential columns 
+```{r}
+#This is in wide format
+soil_wide <- soil_source %>% 
+  select(NAME_2, `NASA_USDA_SMAP_SM20150502_20150504_ssm`:`NASA_USDA_SMAP_SM20211229_20211231_ssm`) %>% #select needed columns--Districts and observations
+  rename(District = NAME_2) #rename column
+```
+
+2. Transform it to long format
+```{r}
+# Parsed through the date with "_". Might need to change the code when it comes with different format
+# Here the format for observation is yyyy_mm_dd_soil. Modify it if your observation comes with a different format.
+soil_long <- gather(soil_wide, Date, SoilMoisture, `NASA_USDA_SMAP_SM20150502_20150504_ssm`:`NASA_USDA_SMAP_SM20211229_20211231_ssm`)%>% 
+  separate( col=Date, into=c('NASA', 'USDA', "SMAP", "DateBegin", "DateEnd", "ssm"), sep='_') %>% # Parsed it into Year/Month/Day
+  select(-c(NASA, USDA, SMAP, ssm)) #drop the string segment
+
+
+# write.csv(soil_long,"./Data/soil_long.csv", row.names = FALSE)
+```
+
+2.1 Take out the sm prefix on DateBegin
+```{r}
+
+soilDated <- soil_long%>%
+  separate( col=DateBegin, into=c('s', 'DateBegin'), sep='M')%>% 
+  select(-s) 
+```
+
+2.2 Convert character dates into date format using lubridate package
+```{r}
+soilDated$DateBegin <- ymd(soilDated$DateBegin)
+soilDated$DateEnd <- ymd(soilDated$DateEnd)
+
+```
+
+2.3 seperate date into year, month and day collumns
+```{r}
+soilDated <- soilDated%>%
+  separate( col=DateBegin, into=c('YearBegin', 'MonthBegin', "DayBegin"), sep='-') %>% # Parsed it into Year/Month/Day
+  separate( col=DateEnd, into=c('YearEnd', 'MonthEnd', "DayEnd"), sep='-')  # Parsed it into Year/Month/Day
+
+```
+
+
+3. Find the average, max, and min precipitation for annual level
+```{r}
+soil_annual <- soilDated %>% 
+  select(-MonthBegin, -DayBegin,-MonthEnd,- DayEnd, -YearEnd) %>% 
+  group_by(District, YearBegin) %>%    # group by district and year
+  summarise(AverageSoilMoisture = mean(SoilMoisture, na.rm=TRUE),   # Find the mean, max, min by district
+         MaxSoilMoisture = max(SoilMoisture, na.rm=TRUE),
+         MinSoilMoisture = min(SoilMoisture, na.rm=TRUE))   # could also find median, standard deviation, z-score if needed
+
+# write.csv(SoilMoisture_annual,"./Data/SoilMoisture_annual.csv", row.names = FALSE)
+
+
+```
+
+4. Monthly Data
+```{r}
+soil_monthly <- soilDated %>% 
+  select(-DayBegin,-MonthEnd,- DayEnd, -YearEnd) %>% 
+  group_by(District, YearBegin, MonthBegin) %>%   # Group by district, year and month
+  summarise(AverageSoilMoisture = mean(SoilMoisture, na.rm=TRUE),   
+         MaxSoilMoisture = max(SoilMoisture, na.rm=TRUE),
+         MinSoilMoisture = min(SoilMoisture, na.rm=TRUE))
+
+# write.csv(SoilMoisture_monthly,"./Data/SoilMoisture_monthly.csv", row.names = FALSE)
+
+```
+
+
+5. Subset of Monthly Data- 2011-2017
+```{r}
+`soil_monthly_2015-2017` <- soil_monthly %>% 
+  filter(YearBegin == 2015:2017) %>% 
+  arrange(YearBegin, MonthBegin)
+
+# write.csv(soil_monthly,"./Data/soil_monthly_2011-2017.csv", row.names = FALSE)
+```
+
