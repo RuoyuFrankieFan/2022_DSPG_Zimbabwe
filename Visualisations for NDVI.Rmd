@@ -82,6 +82,20 @@ AvgMonthlyNDVI <- NDVI_district %>%
 AvgMonthlyNDVI
 
 
+# Maximum NDVI by month
+MaxMonthlyNDVI <- NDVI_district %>% 
+  filter(Type == "Max") %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = NDVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max NDVI in Zimbabwe - 2011")
+MaxMonthlyNDVI
+
+
+
 jpeg(filename = "AvgMonthlyNDVI.jpeg", 
     res = 500,
      bg = "white")
@@ -173,6 +187,22 @@ AvgMarch
 ```
 The above maps presents the change of NDVI values in year 2011 and 2017.
 
+## Max NDVI March2011 & March2017 (Map)
+```{r, visualization for March}
+NDVI_monthly <- read_csv("./Data/NDVI_monthly.csv") 
+NDVI_monthly_district <- full_join (zim_district, NDVI_monthly, by = "District")
+
+
+MaxMarch <- NDVI_monthly_district %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum NDVI in Zimbabwe - March")
+MaxMarch
+```
 
 
 
