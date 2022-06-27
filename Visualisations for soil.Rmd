@@ -1,0 +1,175 @@
+---
+title: "Visualisations for soil"
+author: "Ari"
+date: '2022-06-22'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+library(ggsn)
+library(ggspatial)
+```
+
+read in the files
+```{r}
+soil_2011 <- read_excel("./Data/2011_MPI_source.xlsx")
+Monthlysoil2011 <- read_csv("./Data/2011Monthly.csv")
+Annualsoil <- read_csv("./Data/soil2000-2021.csv")
+zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+```
+
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+```{r}
+zim_district <- zim_district %>% 
+  select(District)
+
+Monthlysoil2011 <- Monthlysoil2011 %>% 
+  rename(Month = Year)
+ 
+soil_district <-  full_join (zim_district, Monthlysoil2011, by = "District")
+```
+
+
+Mapping soil
+```{r}
+
+# LongMonthlysoil$Month <- str_replace(df$conference, "West", "Western")
+
+
+soil_district$Month[which(soil_district$Month=="Jan")] <- "1"
+soil_district$Month[which(soil_district$Month=="Feb")] <- "2"
+soil_district$Month[which(soil_district$Month=="Mar")] <- "3"
+soil_district$Month[which(soil_district$Month=="Apr")] <- "4"
+soil_district$Month[which(soil_district$Month=="May")] <- "5"
+soil_district$Month[which(soil_district$Month=="Jun")] <- "6"
+soil_district$Month[which(soil_district$Month=="Jul")] <- "7"
+soil_district$Month[which(soil_district$Month=="Aug")] <- "8"
+soil_district$Month[which(soil_district$Month=="Sep")] <- "9"
+soil_district$Month[which(soil_district$Month=="Oct")] <- "10"
+soil_district$Month[which(soil_district$Month=="Nov")] <- "11"
+soil_district$Month[which(soil_district$Month=="Dec")] <- "12"
+
+soil_district$Month <- as.numeric(as.character(soil_district$Month))
+
+# Average soil by month
+AvgMonthlysoil <- soil_district %>% 
+  filter(Type == "Average") %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = soil)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Average soil in Zimbabwe - 2011")
+AvgMonthlysoil
+
+
+jpeg(filename = "AvgMonthlysoil.jpeg", 
+    res = 500,
+     bg = "white")
+AvgMonthlysoil
+dev.off()
+
+
+BySeasonAvg <- soil_district %>% 
+  filter(Type == "Average") 
+
+```
+
+```{r}
+# Annual soil
+
+Annualsoil <- read_csv("./Data/soil2000-2021.csv")
+
+Annualsoil %>% 
+  ggplot(aes(x = Year, y=Precipitation, fill=Type)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_smooth(color="#006000")+
+  scale_fill_brewer(palette = "Set2")+
+  labs(title = "soil, Year 2000-2021") +
+    xlab("Year") +
+    ylab("soil")
+```
+
+
+
+## Distribution of soil in 2011 and 2017
+```{r}
+Annualsoil %>% 
+  filter( Year == 2011|Year == 2017) %>% 
+  ggplot(aes(x = Type, y = Precipitation)) + 
+  facet_wrap(~Year)+
+  geom_boxplot() +
+  labs(title = "Distribution of soil, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("soil")
+
+```
+
+#### Description
+
+This graphics shows the distribution of soil across 60 districts in 2011 and 2017. Compared to the statistics in 2011, there is a clear pattern of higher soil values in 2017. 
+
+
+```{r}
+soil_long <- read_csv("./Data/soil_long.csv") 
+soil_long %>% 
+  filter(Year == 2011:2017) %>% 
+  ggplot(aes(x = Year, y = soil, fill = as.factor(Year))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set2", name = "Year") +
+  labs(title = "Distribution of soil in Zimbabwe, Year 2011-2017") 
+
+```
+
+
+
+
+
+## 06/23/2022 Visualization for soil-March2011, March2017
+```{r, visualization for March}
+soil_monthly <- read_csv("./Data/soil_monthly.csv") 
+soil_monthly_district <- full_join (zim_district, soil_monthly, by = "District")
+
+AvgMarch2011 <- soil_monthly_district %>% 
+  filter(Year == 2011, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = Averagesoil)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average soil in Zimbabwe - March 2011")
+AvgMarch2011
+
+
+
+AvgMarch <- soil_monthly_district %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = Averagesoil)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average soil in Zimbabwe - March")
+AvgMarch
+```
+The above maps presents the change of soil values in year 2011 and 2017.
