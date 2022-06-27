@@ -1,0 +1,113 @@
+---
+title: "Visualizations for soil2"
+author: "Frankie Fan"
+date: '2022-06-27'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+library(ggsn)
+library(ggspatial)
+```
+
+read in the files #variables already loaded from dataProcessing-Soil.rmd
+```{r}
+soil_monthly <- read_csv("./Data/soil_monthly.csv")
+soil_annual <- read_csv("./Data/soil_annual.csv")
+zim_district <- st_read("./shape60/gadm36_ZWE_2.shp")  
+soilDated <- read_csv("./Data/soilDated.csv") 
+```
+
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+```{r}
+zim_district <- zim_district %>% 
+  select(District)
+
+MonthlysoilbyDis <-full_join (zim_district, soil_monthly, by = "District")
+```
+
+## 1. Monthly map for YearBegin 2011 and 2017
+```{r}
+# Maximum soil by month
+MaxMonthlysoil2017 <- MonthlysoilbyDis %>% 
+  filter(YearBegin == 2017) %>% 
+  arrange(MonthBegin) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxSoilMoisture)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~MonthBegin) +
+  ggtitle("Max soil in Zimbabwe - 2011")
+MaxMonthlysoil2017
+```
+
+
+
+## 2a. Distribution of soil from 2011-2017
+
+```{r}
+
+soilDated %>% 
+  filter( YearBegin == 2015: 2017) %>% 
+  ggplot(aes(x = YearBegin, y = SoilMoisture, fill = as.factor(YearBegin))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set1", name = "YearBegin") +
+  labs(title = "Distribution of soil in Zimbabwe, Year 2015 - 2017") 
+
+```
+
+
+## 2b. Distribution of NDVI in 2011 and 2017
+```{r}
+soil_annual %>% 
+  filter( YearBegin == 2015|YearBegin == 2017) %>% 
+  gather(Type, SoilMoisture, AverageSoilMoisture:MinSoilMoisture) %>% 
+  ggplot(aes(x = Type, y = SoilMoisture, fill = Type)) +
+  scale_fill_brewer(palette="Set3", name = "Type") +
+  facet_wrap(~YearBegin)+
+  geom_boxplot() +
+  labs(title = "Distribution of soil, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("soil")
+
+```
+
+
+## 3. map for soil in March in 2011 and 2017
+
+```{r, visualization for March}
+
+MaxMarch <- MonthlysoilbyDis %>% 
+  filter(YearBegin == 2016|YearBegin == 2017, MonthBegin == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxSoilMoisture)) +
+  facet_wrap(~YearBegin) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum soil moisture in Zimbabwe - March")
+MaxMarch
+```
+
+
+

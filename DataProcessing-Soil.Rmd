@@ -39,8 +39,10 @@ soil_long <- gather(soil_wide, Date, SoilMoisture, `NASA_USDA_SMAP_SM20150502_20
   separate( col=Date, into=c('NASA', 'USDA', "SMAP", "DateBegin", "DateEnd", "ssm"), sep='_') %>% # Parsed it into Year/Month/Day
   select(-c(NASA, USDA, SMAP, ssm)) #drop the string segment
 
-
-# write.csv(soil_long,"./Data/soil_long.csv", row.names = FALSE)
+```
+2.0 write csv
+```{r}
+write.csv(soil_long,"./Data/soil_long.csv", row.names = FALSE)
 ```
 
 2.1 Take out the sm prefix on DateBegin
@@ -76,10 +78,15 @@ soil_annual <- soilDated %>%
          MaxSoilMoisture = max(SoilMoisture, na.rm=TRUE),
          MinSoilMoisture = min(SoilMoisture, na.rm=TRUE))   # could also find median, standard deviation, z-score if needed
 
-# write.csv(SoilMoisture_annual,"./Data/SoilMoisture_annual.csv", row.names = FALSE)
-
 
 ```
+
+3.0 write csv
+```{r}
+write.csv(soil_annual,"./Data/soil_annual.csv", row.names = FALSE)
+```
+
+
 
 4. Monthly Data
 ```{r}
@@ -90,17 +97,33 @@ soil_monthly <- soilDated %>%
          MaxSoilMoisture = max(SoilMoisture, na.rm=TRUE),
          MinSoilMoisture = min(SoilMoisture, na.rm=TRUE))
 
-# write.csv(SoilMoisture_monthly,"./Data/SoilMoisture_monthly.csv", row.names = FALSE)
+```
 
+4.0 write csv
+```{r}
+write.csv(soil_monthly,"./Data/soil_monthly.csv", row.names = FALSE)
 ```
 
 
 5. Subset of Monthly Data- 2011-2017
 ```{r}
-`soil_monthly_2015-2017` <- soil_monthly %>% 
+`soil_monthly_2015_2017` <- soil_monthly %>% 
   filter(YearBegin == 2015:2017) %>% 
   arrange(YearBegin, MonthBegin)
 
 # write.csv(soil_monthly,"./Data/soil_monthly_2011-2017.csv", row.names = FALSE)
 ```
 
+5.0 write csv
+```{r}
+write.csv(soil_monthly_2015_2017,"./Data/soil_monthly_2015_2017.csv", row.names = FALSE)
+```
+
+5. Subset of Monthly Data- 2017
+```{r}
+`soil_monthly_2017` <- soil_monthly %>% 
+  filter(YearBegin == 2017) %>% 
+  arrange(YearBegin, MonthBegin)
+
+write.csv(soil_monthly_2017,"./Data/soil_monthly_2017.csv", row.names = FALSE)
+```
