@@ -74,10 +74,10 @@ write.csv(EVI_monthly,"./Data/EVI_monthly.csv", row.names = FALSE)
 
 5. Subset of Monthly Data- 2011-2017
 ```{r}
-`NDVI_monthly_2011-2017` <- NDVI_monthly %>% 
+`EVI_monthly_2011-2017` <- EVI_monthly %>% 
   filter(Year == 2011:2017) %>% 
   arrange(Year, Month)
 
-# write.csv(NDVI_monthly,"./Data/NDVI_monthly_2011-2017.csv", row.names = FALSE)
+write.csv(`EVI_monthly_2011-2017`,"./Data/EVI_monthly_2011-2017.csv", row.names = FALSE)
 ```
 
