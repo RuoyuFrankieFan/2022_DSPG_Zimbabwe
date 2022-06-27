@@ -25,9 +25,9 @@ library(ggspatial)
 
 read in the files
 ```{r}
-soil_2011 <- read_excel("./Data/2011_MPI_source.xlsx")
-Monthlysoil2011 <- read_csv("./Data/2011Monthly.csv")
-Annualsoil <- read_csv("./Data/soil2000-2021.csv")
+#soil_2011 <- read_excel("./Data/2011_MPI_source.xlsx")
+#Monthlysoil2011 <- read_csv("./Data/2011Monthly.csv")
+#Annualsoil <- read_csv("./Data/soil2000-2021.csv")
 zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
 ```
 
