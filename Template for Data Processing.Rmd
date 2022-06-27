@@ -25,7 +25,7 @@ Precipitation_source <- read_csv("./PRECIP_ts_Zimb.csv")
 
 ## Goal: find the mean, max and min value for precipitation for each month
 
-1. Drop some unessential columns [Not needed in the precipitation data]
+1. Drop some unessential columns [Not needed in the precipitation data] [Frankie code]
 ```{r}
 #This is in wide format
 NDVI_wide <- Precipitation_source %>% 
@@ -76,7 +76,7 @@ write.csv(PRECIP_annual, "./PRECIP_annual.csv", row.names = FALSE)
 ```
 
 
-3. Find the average, max, and min precipitation for annual level
+3. Find the average, max, and min precipitation for annual level [Frankie code]
 ```{r}
 NDVI_annual <- NDVI_long %>% 
   select(-Month, -Day) %>% 
@@ -102,7 +102,7 @@ PRECIP_monthly <- Precipitation_long %>%
 write.csv(PRECIP_monthly,"./PRECIP_monthly.csv", row.names = FALSE)
 ```
 
-4. Monthly Data
+4. Monthly Data [Frankie code]
 ```{r}
 NDVI_monthly <- NDVI_long %>% 
   select(-Day) %>% 
@@ -127,12 +127,28 @@ write.csv(PRECIP_monthly, "./PRECIP_monthly_2011-2017.csv", row.names = FALSE)
 
 
 
-5. Subset of Monthly Data- 2011-2017
+5. Subset of Monthly Data- 2011-2017 [Frankie code]
 ```{r}
 `NDVI_monthly_2011-2017` <- NDVI_monthly %>% 
   filter(Year == 2011:2017) %>% 
   arrange(Year, Month)
 
 write.csv(NDVI_monthly,"./Data/NDVI_monthly_2011-2017.csv", row.names = FALSE)
+```
+
+6. Monthly for 2011 and 2017
+```{r}
+PRECIP_monthly_2011 <- PRECIP_monthly %>% 
+  filter(Year == 2011) %>% 
+  arrange(Year, Month)
+
+write.csv(PRECIP_monthly, "./PRECIP_monthly_2011.csv", row.names = FALSE)
+
+
+PRECIP_monthly_2017 <- PRECIP_monthly %>% 
+  filter(Year == 2017) %>% 
+  arrange(Year, Month)
+
+write.csv(PRECIP_monthly, "./PRECIP_monthly_2017.csv", row.names = FALSE)
 ```
 
