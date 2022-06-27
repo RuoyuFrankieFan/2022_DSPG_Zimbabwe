@@ -196,7 +196,7 @@ NDVI_monthly_district <- full_join (zim_district, NDVI_monthly, by = "District")
 MaxMarch <- NDVI_monthly_district %>% 
   filter(Year == 2011|Year == 2017, Month == "03") %>% 
   ggplot() +
-  geom_sf(size = 1, color = "black", aes(fill = AverageNDVI)) +
+  geom_sf(size = 1, color = "black", aes(fill = MaxNDVI)) +
   facet_wrap(~Year) +
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
