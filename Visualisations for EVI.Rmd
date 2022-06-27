@@ -2,7 +2,9 @@
 title: "Visualizations for EVI"
 author: "Frankie Fan"
 date: '2022-06-27'
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
