@@ -1,0 +1,124 @@
+---
+title: "Visualizations for EVI"
+author: "Frankie Fan"
+date: '2022-06-27'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+library(ggsn)
+library(ggspatial)
+```
+
+read in the files
+```{r}
+`EVI_monthly` <- read_csv("./Data/EVI_monthly.csv")
+AnnualEVI <- read_csv("./Data/EVI_annual.csv")
+zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+EVI_long <- read_csv("./Data/EVI_long.csv") 
+```
+
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+```{r}
+zim_district <- zim_district %>% 
+  select(District)
+
+MonthlyEVIbyDis <-full_join (zim_district, `EVI_monthly`, by = "District")
+```
+
+## 1. Monthly map for Year 2011 and 2017
+```{r}
+# Maximum evi by month
+MaxMonthlyEVI2011 <- MonthlyEVIbyDis %>% 
+  filter(Year == 2011) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - 2011")
+MaxMonthlyEVI2011
+
+
+
+MaxMonthlyEVI2017 <- MonthlyEVIbyDis %>% 
+  filter(Year == 2017) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - 2011")
+MaxMonthlyEVI2017
+```
+
+
+
+## 2a. Distribution of EVI from 2011-2017
+
+```{r}
+
+EVI_long %>% 
+  filter(Year == 2011:2017) %>% 
+  ggplot(aes(x = Year, y = EVI, fill = as.factor(Year))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set1", name = "Year") +
+  labs(title = "Distribution of EVI in Zimbabwe, Year 2011-2017") 
+
+```
+
+
+## 2b. Distribution of NDVI in 2011 and 2017
+```{r}
+AnnualEVI %>% 
+  filter( Year == 2011|Year == 2017) %>% 
+  gather(Type, EVI, AverageEVI:MedianEVI) %>% 
+  ggplot(aes(x = Type, y = EVI, fill = Type)) +
+  scale_fill_brewer(palette="Set3", name = "Type") +
+  facet_wrap(~Year)+
+  geom_boxplot() +
+  labs(title = "Distribution of EVI, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("EVI")
+
+```
+
+
+## 3. map for EVI in March in 2011 and 2017
+
+```{r, visualization for March}
+
+MaxMarch <- MonthlyEVIbyDis %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe - March")
+MaxMarch
+```
+
+
+
