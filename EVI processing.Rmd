@@ -65,19 +65,13 @@ EVI_monthly <- EVI_long %>%
   summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
          MaxEVI = max(EVI, na.rm=TRUE),
          MinEVI = min(EVI, na.rm=TRUE),
-         MedianEVI = median(EVI, na.rm=TRUE))
+         MedianEVI = median(EVI, na.rm=TRUE),
+         zScore = scale(EVI, center = TRUE, scale = TRUE))
 
 write.csv(EVI_monthly,"./Data/EVI_monthly.csv", row.names = FALSE)
 
 ```
 
 
-5. Subset of Monthly Data- 2011-2017
-```{r}
-`EVI_monthly_2011-2017` <- EVI_monthly %>% 
-  filter(Year == 2011:2017) %>% 
-  arrange(Year, Month)
 
-write.csv(`EVI_monthly_2011-2017`,"./Data/EVI_monthly_2011-2017.csv", row.names = FALSE)
-```
 

@@ -1,0 +1,176 @@
+---
+title: "Futher processing for EVI"
+author: "Frankie Fan"
+date: '2022-06-28'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+```
+
+### read in the files
+
+```{r, echo=FALSE, include=FALSE}
+EVI_monthly <- read_csv("./Data/EVI_monthly.csv")
+AnnualEVI <- read_csv("./Data/EVI_annual.csv")
+zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+EVI_long <- read_csv("./Data/EVI_long.csv") 
+```
+
+### Selected Years
+```{r}
+EVISelectedYears <- EVI_monthly %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2010|Year == 2011|Year == 2016|Year == 2017) %>% 
+  filter(!(Year == 2010 & Month == "03")) %>% 
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>% 
+  filter(!(Year == 2010 & Month == "01")) %>% 
+  filter(!(Year == 2011 & Month == "10")) %>% 
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12")) %>% 
+  
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>%
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12"))
+  
+EVISelectedYears$YM <- paste(EVISelectedYears$Year, EVISelectedYears$Month, sep="-")
+
+
+
+
+
+EVI2011 <- EVI_monthly %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2010|Year == 2011) %>% 
+  filter(!(Year == 2010 & Month == "03")) %>% 
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>% 
+  filter(!(Year == 2010 & Month == "01")) %>% 
+  filter(!(Year == 2011 & Month == "10")) %>% 
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12"))
+EVI2011$YM <- paste(EVI2011$Year, EVI2011$Month, sep="-")
+
+EVI2017 <- EVI_monthly %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2016|Year == 2017) %>% 
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>%
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12"))
+EVI2017$YM <- paste(EVI2017$Year, EVI2017$Month, sep="-")
+```
+
+
+
+## Time Series Scatter Plot
+
+```{r}
+`2011&2017` <- EVISelectedYears %>% 
+  filter(District == "Hwange") %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1), color = "blue")+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum NDVI in Hwange During Growing Season--2011 & 2017")+
+  xlab("Time")+
+  ylab("Maximum EVI")
+
+
+badVis <- EVISelectedYears %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1), color = "blue")+
+  geom_point(aes(color = factor(District))) +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum NDVI in Hwange During Growing Season--2011 & 2017")+
+  xlab("Time")+
+  ylab("Maximum EVI")
+
+
+MaxEVI2011 <- EVI2011 %>% 
+  filter(District == "Hwange") %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1), color = "blue")+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum NDVI in Hwange During Growing Season--2011")+
+  xlab("Time")+
+  ylab("Maximum EVI")
+
+
+MaxEVI2017 <- EVI2017 %>% 
+  filter(District == "Hwange") %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1), color = "blue")+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum NDVI in Hwange During Growing Season--2017")+
+  xlab("Time")+
+  ylab("Maximum EVI")
+
+`2011&2017`
+MaxEVI2011
+MaxEVI2017
+badVis
+```
+Here I chose the district "Hwange", and plotted a graph to show the variation in its EVI across the growing seasons in 2011 and 2017.\
+\
+This would only show one district in Zim because having 60 districts add another layer to the graph, which could be very unclear for visualization if trying to graph them all at once (see `badVis`).
+
+
+## Spatial Visulization
+
+```{r, echo=FALSE, include=FALSE}
+zim_district <- rename(zim_district, District = NAME_2) %>% 
+  select(District)
+
+GrowingSsonEVIbyDis2017 <-full_join (zim_district, `EVI2017`, by = "District")
+GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
+```
+
+```{r}
+GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - Growing Seaon 2011")
+
+
+GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - Growing Seaon 2017")
+
+GrowEVI2011
+GrowEVI2017
+```
+
+
