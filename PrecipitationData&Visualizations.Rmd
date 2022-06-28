@@ -1,0 +1,190 @@
+---
+title: "PrecipitationData"
+author: "JBN"
+date: '2022-06-28'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+
+library(ggsn)
+library(ggspatial)
+```
+
+```{r}
+Precipitation_source <- read_csv("./PRECIP_ts_Zimb.csv")
+zim_district <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_2.shp")
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+Transform it to long format (Adapted from Frankie)
+```{r}
+# Parsed through the date with "_". Might need to change the code when it comes with different format
+# Here the format for observation is yyyy_mm_dd_NDVI. Modify it if your observation comes with a different format.
+
+Precipitation_long <- gather(Precipitation_source, Date, Precipitation, `3B43_20000301_7A_precipitation`:`3B43_20191201_7_precipitation`) %>% 
+  select(NAME_2, Date, Precipitation) %>% 
+  separate( col=Date, into=c('useless', 'Date','useless2', "Pre"), sep='_') %>% 
+  select(-Pre, -useless,-useless2) #drop the _NDVI string segment
+
+```
+
+Separate date col into year, month, & day col
+
+```{r}
+Precipitation_long$Date <- ymd(Precipitation_long$Date)
+
+Precipitation_long <- Precipitation_long %>% 
+  select(Date, Precipitation, NAME_2 ) %>% 
+  separate(col = Date, into = c("Year","Month","Day"))
+
+Precipitation_long <- Precipitation_long  %>% rename(District = NAME_2)
+
+```
+
+Find the average, max, and min precipitation for annual level  
+```{r}
+PRECIP_annual <- Precipitation_long %>%
+  select(-Month,-Day) %>% 
+  group_by(District, Year) %>% 
+  summarise(AveragePRECIP = mean(Precipitation, na.rm=TRUE),
+            MaxPRECIP = max(Precipitation, na.rm=TRUE),
+            MinPRECIP = min(Precipitation, na.rm=TRUE))
+write.csv(PRECIP_annual, "./PRECIP_annual.csv", row.names = FALSE)
+
+```
+
+Monthly Data
+```{r}
+PRECIP_monthly <- Precipitation_long %>% 
+  select(-Day) %>% 
+  group_by(District, Year, Month) %>% 
+  summarise(AveragePRECIP = mean(Precipitation, na.rm=TRUE),
+            MaxPRECIP = max(Precipitation, na.rm=TRUE),
+            MinPRECIP = min(Precipitation, na.rm = TRUE))
+
+write.csv(PRECIP_monthly,"./PRECIP_monthly.csv", row.names = FALSE)
+```
+
+
+Subset of Monthly Data- 2011-2017
+```{r}
+'PRECIP_monthly_2011-2019' <- PRECIP_monthly %>% 
+  filter(Year == 2011:2017) %>% 
+  arrange(Year, Month)
+
+write.csv(PRECIP_monthly, "./PRECIP_monthly_2011-2017.csv", row.names = FALSE)
+```
+
+ Monthly for 2011 and 2017
+```{r}
+PRECIP_monthly_2011 <- PRECIP_monthly %>% 
+  filter(Year == 2011) %>% 
+  arrange(Year, Month)
+
+write.csv(PRECIP_monthly, "./PRECIP_monthly_2011.csv", row.names = FALSE)
+
+
+PRECIP_monthly_2017 <- PRECIP_monthly %>% 
+  filter(Year == 2017) %>% 
+  arrange(Year, Month)
+
+write.csv(PRECIP_monthly, "./PRECIP_monthly_2017.csv", row.names = FALSE)
+```
+
+
+
+```{r}
+zim_district <- zim_district %>% select(District)
+ 
+PRECIP_district_2011 <-  full_join (zim_district, PRECIP_monthly_2011, by = "District")
+
+PRECIP_district_2017 <-  full_join (zim_district, PRECIP_monthly_2017, by = "District")
+```
+
+
+2011: January - April & Nov - Dec (Raining)
+2017: January - April & Nov - Dec (Raining)
+```{r}
+# Maximum PRECIP by month
+#2011
+MaxMonthlyPRECIP_2011 <- PRECIP_district_2011 %>% 
+  filter(Year == 2011) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max PRECIP in Zimbabwe - 2011")
+MaxMonthlyPRECIP_2011
+
+#2017
+MaxMonthlyPRECIP_2017 <- PRECIP_district_2017 %>% 
+  filter(Year == 2017) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max PRECIP in Zimbabwe - 2017")
+MaxMonthlyPRECIP_2017
+```
+
+```{r}
+Precipitation_long %>% 
+  filter(Year == 2011:2017) %>% 
+  ggplot(aes(x = Year, y = Precipitation, fill = as.factor(Year))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set1", name = "Year") +
+  labs(title = "Distribution of PRECIP in Zimbabwe, Year 2011-2017") 
+
+```
+
+```{r}
+PRECIP_monthly %>% 
+  filter( Year == 2011|Year == 2017) %>% 
+  gather(Type, Precipitation, AveragePRECIP:MinPRECIP) %>% 
+  ggplot(aes(x = Type, y = Precipitation, fill = Type)) +
+  scale_fill_brewer(palette="Set3", name = "Type") +
+  facet_wrap(~Year)+
+  geom_boxplot() +
+  labs(title = "Distribution of PRECIP, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("Precipitation")
+
+```
+
+```{r, visualization for March}
+PRECIP_district <-  full_join (zim_district, PRECIP_monthly, by = "District")
+
+MaxMarch <- PRECIP_district %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxPRECIP)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum PRECIP in Zimbabwe - March")
+MaxMarch
+```
+
