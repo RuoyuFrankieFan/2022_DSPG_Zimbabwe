@@ -56,7 +56,7 @@ MaxMonthlysoil2017 <- MonthlysoilbyDis %>%
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~MonthBegin) +
-  ggtitle("Max soil in Zimbabwe - 2011")
+  ggtitle("Max soil moisture in Zimbabwe - 2017")
 MaxMonthlysoil2017
 ```
 
@@ -73,12 +73,12 @@ soilDated %>%
   stat_summary(fun = "mean", geom = "point", shape = 8,
                size = 2, color = "white") +
   scale_fill_brewer(palette="Set1", name = "YearBegin") +
-  labs(title = "Distribution of soil in Zimbabwe, Year 2015 - 2017") 
+  labs(title = "Distribution of soil moisture in Zimbabwe, Year 2015 - 2017") 
 
 ```
 
 
-## 2b. Distribution of NDVI in 2011 and 2017
+## 2b. Distribution of NDVI in 2015 and 2017
 ```{r}
 soil_annual %>% 
   filter( YearBegin == 2015|YearBegin == 2017) %>% 
@@ -87,14 +87,14 @@ soil_annual %>%
   scale_fill_brewer(palette="Set3", name = "Type") +
   facet_wrap(~YearBegin)+
   geom_boxplot() +
-  labs(title = "Distribution of soil, Year 2011 & 2017") +
+  labs(title = "Distribution of soil moisture, Year 2015 & 2017") +
     xlab("Statistics") +
     ylab("soil")
 
 ```
 
 
-## 3. map for soil in March in 2011 and 2017
+## 3. map for soil in March in 2016 and 2017
 
 ```{r, visualization for March}
 
