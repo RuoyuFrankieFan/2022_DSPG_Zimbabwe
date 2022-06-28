@@ -1,0 +1,29 @@
+---
+title: "Leaflet_Precipitation"
+author: "JBN"
+date: '2022-06-28'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(leaflet)
+library(ggplot2)
+library(rgdal)
+library(dplyr)
+library(sf)
+library(gpclib)
+library(maptools)
+library(ggpolypath)
+```
+
+```{r}
+m <- leaflet() %>%
+  addTiles() %>%
+  get_polygon(zim_district)
+m  
+```
+

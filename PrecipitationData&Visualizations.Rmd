@@ -75,17 +75,78 @@ Monthly Data
 PRECIP_monthly <- Precipitation_long %>% 
   select(-Day) %>% 
   group_by(District, Year, Month) %>% 
-  summarise(AveragePRECIP = mean(Precipitation, na.rm=TRUE),
+  summarise(MeanPRECIP = mean(Precipitation, na.rm=TRUE),
             MaxPRECIP = max(Precipitation, na.rm=TRUE),
             MinPRECIP = min(Precipitation, na.rm = TRUE))
 
 write.csv(PRECIP_monthly,"./PRECIP_monthly.csv", row.names = FALSE)
 ```
+Oct 2010 - May 2011 [mean, min, max] [INCOMPLETE- make sure that the correct year and month for the summer planting season] [-06,-07,-08,-09] [2011: 01,02,03,04,05    2010: 10,11,12]
+```{r}
+PRECIP_Summer_2010_2011 <- PRECIP_monthly %>% 
+  filter(Year == 2010| Year == 2011) %>% 
+  
+  filter(!(Year == 2010 & Month == "01")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>%
+  filter(!(Year == 2010 & Month == "03")) %>%
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "06")) %>%
+  filter(!(Year == 2010 & Month == "07")) %>%
+  filter(!(Year == 2010 & Month == "08")) %>%
+  filter(!(Year == 2010 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2011 & Month == "06")) %>%
+  filter(!(Year == 2011 & Month == "07")) %>%
+  filter(!(Year == 2011 & Month == "08")) %>%
+  filter(!(Year == 2011 & Month == "09")) %>%
+  filter(!(Year == 2011 & Month == "10")) %>%
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12")) %>%
+  
+  
+  arrange(Year, Month)
+
+#write.csv(PRECIP_monthly, "./PRECIP_monthly_2011-2017.csv", row.names = FALSE)
+```
+
+Oct 2016 - May 2017 [mean, min, max]
+```{r}
+
+PRECIP_Summer_2016_2017 <- PRECIP_monthly %>% 
+  filter(Year == 2016 | Year == 2017) %>% 
+  
+  filter(!(Year == 2016 & Month == "01")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>%
+  filter(!(Year == 2016 & Month == "03")) %>%
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "06")) %>%
+  filter(!(Year == 2016 & Month == "07")) %>%
+  filter(!(Year == 2016 & Month == "08")) %>%
+  filter(!(Year == 2016 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2017 & Month == "06")) %>%
+  filter(!(Year == 2017 & Month == "07")) %>%
+  filter(!(Year == 2017 & Month == "08")) %>%
+  filter(!(Year == 2017 & Month == "09")) %>%
+  filter(!(Year == 2017 & Month == "10")) %>%
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12")) %>%
+  
+  
+  arrange(Year, Month)
+
+```
+
+
 
 
 Subset of Monthly Data- 2011-2017
 ```{r}
-'PRECIP_monthly_2011-2019' <- PRECIP_monthly %>% 
+'PRECIP_monthly_2011-2017' <- PRECIP_monthly %>% 
   filter(Year == 2011:2017) %>% 
   arrange(Year, Month)
 
@@ -119,8 +180,6 @@ PRECIP_district_2017 <-  full_join (zim_district, PRECIP_monthly_2017, by = "Dis
 ```
 
 
-2011: January - April & Nov - Dec (Raining)
-2017: January - April & Nov - Dec (Raining)
 ```{r}
 # Maximum PRECIP by month
 #2011
@@ -187,4 +246,118 @@ MaxMarch <- PRECIP_district %>%
   ggtitle("Maximum PRECIP in Zimbabwe - March")
 MaxMarch
 ```
+Necessary data: Add geometry 
+```{r}
+PRECIP_Summer_2010_2011 <-  full_join (zim_district, PRECIP_Summer_2010_2011, by = "District")
+PRECIP_Summer_2016_2017 <-  full_join (zim_district, PRECIP_Summer_2016_2017, by = "District")
+```
 
+
+
+
+ 
+```{r}
+#Visualization:                Growing season Oct 2010 -> May 2011 [Mean] 
+
+
+
+#2010-2011
+SummerPRECIP_2010_2011_MeanMap <- PRECIP_Summer_2010_2011 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MeanPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2010 - May 2011")
+
+SummerPRECIP_2010_2011_MeanMap
+
+
+#-------------------------------------------------------------------------------
+#Visualization:                Growing season Oct 2016 -> May 2017 [Mean] 
+
+
+
+#2016-2017
+SummerPRECIP_2016_2017_MeanMap <- PRECIP_Summer_2016_2017 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MeanPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2016 - May 2017")
+
+SummerPRECIP_2016_2017_MeanMap
+
+```
+
+```{r}
+#Visualization:                Growing season Oct 2010 -> May 2011 [Min] 
+
+
+
+#2010-2011
+SummerPRECIP_2010_2011_MinMap <- PRECIP_Summer_2010_2011 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MinPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2010 - May 2011")
+
+SummerPRECIP_2010_2011_MinMap
+
+
+#-------------------------------------------------------------------------------
+#Visualization:                Growing season Oct 2016 -> May 2017 [Mean] 
+
+
+
+#2016-2017
+SummerPRECIP_2016_2017_MinMap <- PRECIP_Summer_2016_2017 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MinPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2016 - May 2017")
+
+SummerPRECIP_2016_2017_MinMap
+
+```
+
+
+```{r}
+#Visualization:                Growing season Oct 2010 -> May 2011 [Max] 
+
+
+
+#2010-2011
+SummerPRECIP_2010_2011_MaxMap <- PRECIP_Summer_2010_2011 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2010 - May 2011")
+
+SummerPRECIP_2010_2011_MaxMap
+
+
+#-------------------------------------------------------------------------------
+#Visualization:                Growing season Oct 2016 -> May 2017 [Max] 
+
+
+
+#2016-2017
+SummerPRECIP_2016_2017_MaxMap <- PRECIP_Summer_2016_2017 %>% 
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MaxPRECIP)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Summer Growing Season: Oct 2016 - May 2017")
+
+SummerPRECIP_2016_2017_MaxMap
+
+```
