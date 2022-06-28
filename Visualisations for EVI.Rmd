@@ -7,12 +7,12 @@ output:
   html_document: default
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -25,7 +25,7 @@ library(ggspatial)
 ```
 
 read in the files
-```{r}
+```{r, echo=FALSE, include=FALSE}
 `EVI_monthly` <- read_csv("./Data/EVI_monthly.csv")
 AnnualEVI <- read_csv("./Data/EVI_annual.csv")
 zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
@@ -33,12 +33,12 @@ EVI_long <- read_csv("./Data/EVI_long.csv")
 ```
 
 Rename cols to match
-```{r}
+```{r, echo=FALSE, include=FALSE}
 zim_district <- rename(zim_district, District = NAME_2)
 ```
 
 
-```{r}
+```{r, echo=FALSE, include=FALSE}
 zim_district <- zim_district %>% 
   select(District)
 
@@ -46,7 +46,7 @@ MonthlyEVIbyDis <-full_join (zim_district, `EVI_monthly`, by = "District")
 ```
 
 ## 1. Monthly map for Year 2011 and 2017
-```{r}
+```{r, echo=FALSE}
 # Maximum evi by month
 MaxMonthlyEVI2011 <- MonthlyEVIbyDis %>% 
   filter(Year == 2011) %>% 
@@ -69,7 +69,7 @@ MaxMonthlyEVI2017 <- MonthlyEVIbyDis %>%
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~Month) +
-  ggtitle("Max EVI in Zimbabwe - 2011")
+  ggtitle("Max EVI in Zimbabwe - 2017")
 MaxMonthlyEVI2017
 ```
 
@@ -77,7 +77,7 @@ MaxMonthlyEVI2017
 
 ## 2a. Distribution of EVI from 2011-2017
 
-```{r}
+```{r, echo=FALSE}
 
 EVI_long %>% 
   filter(Year == 2011:2017) %>% 
@@ -91,8 +91,8 @@ EVI_long %>%
 ```
 
 
-## 2b. Distribution of NDVI in 2011 and 2017
-```{r}
+## 2b. Distribution of EVI in 2011 and 2017
+```{r, echo=FALSE}
 AnnualEVI %>% 
   filter( Year == 2011|Year == 2017) %>% 
   gather(Type, EVI, AverageEVI:MedianEVI) %>% 
@@ -109,7 +109,7 @@ AnnualEVI %>%
 
 ## 3. map for EVI in March in 2011 and 2017
 
-```{r, visualization for March}
+```{r, visualization for March, echo=FALSE}
 
 MaxMarch <- MonthlyEVIbyDis %>% 
   filter(Year == 2011|Year == 2017, Month == "03") %>% 
