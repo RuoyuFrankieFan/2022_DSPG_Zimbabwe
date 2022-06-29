@@ -50,18 +50,17 @@ Perc_MonthlysoilbyDis <-full_join (zim_district, perc_soil_monthly, by = "Distri
 ```
 
 
-
-
 ```{r}
-grows <- list(Surface_MonthlysoilbyDis,Sub_MonthlysoilbyDis,Perc_MonthlysoilbyDis)
+SSM <- list(Surface_MonthlysoilbyDis,"Surface Soil Moisture")
+SUSM <- list(Sub_MonthlysoilbyDis,"Sub-Surface Soil Moisture")
+PSM <- list(Perc_MonthlysoilbyDis,"Percent Soil Moisture")
+#listlist <-list(SSM,SUSM,PSM)
 ```
 
-
-
-## 1. Monthly map for YearBegin 2011 and 2017
+## 1. Monthly MAX maps for YearBegin  2017
 ```{r}
-growgraph1 <- function(df){
-  grow1 <- df %>%
+growgraph1 <- function(df,string){
+  grow1 = df %>%
     filter(YearBegin == 2016 & MonthBegin == "10"|
           YearBegin == 2016 & MonthBegin == "11"|
           YearBegin == 2016 & MonthBegin == "12"|
@@ -86,11 +85,11 @@ growgraph1 <- function(df){
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~group) +
-  ggtitle("Max soil moisture in Zimbabwe - Growing season 1")
+  ggtitle(string)
 grow1
 }
-growgraph2 <- function(df){
-  grow2 <- df %>%
+growgraph2 <- function(df,string){
+  grow2 = df %>%
     filter(YearBegin == 2017 & MonthBegin == "10"|
           YearBegin == 2017 & MonthBegin == "11"|
           YearBegin == 2017 & MonthBegin == "12"|
@@ -115,34 +114,192 @@ growgraph2 <- function(df){
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~group) +
-  ggtitle("Max soil moisture in Zimbabwe - Growing season 2")
+  ggtitle(string)
 grow2
 }
-
 ```
 
+## 1. Monthly mean maps for YearBegin  2017
 ```{r}
-growgraph <- function(df){
-growgraph1(df)
-growgraph2(df)
+growgraph3 <- function(df,string){
+  grow1 = df %>%
+    filter(YearBegin == 2016 & MonthBegin == "10"|
+          YearBegin == 2016 & MonthBegin == "11"|
+          YearBegin == 2016 & MonthBegin == "12"|
+          YearBegin == 2017 & MonthBegin == "01"|
+          YearBegin == 2017 & MonthBegin == "02"|
+          YearBegin == 2017 & MonthBegin == "03"|
+          YearBegin == 2017 & MonthBegin == "04"|
+          YearBegin == 2017 & MonthBegin == "05") %>%
+    
+   mutate(group = case_when(
+          YearBegin == 2016 & MonthBegin == "10" ~"A",
+          YearBegin == 2016 & MonthBegin == "11" ~"B",
+          YearBegin == 2016 & MonthBegin == "12"~"C",
+          YearBegin == 2017 & MonthBegin == "01"~"D",
+          YearBegin == 2017 & MonthBegin == "02"~"E",
+          YearBegin == 2017 & MonthBegin == "03"~"F",
+          YearBegin == 2017 & MonthBegin == "04"~"G",
+          YearBegin == 2017 & MonthBegin == "05"~ "H")
+   ) %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageSoilMoisture)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~group) +
+  ggtitle(string)
+grow1
+}
+growgraph4 <- function(df,string){
+  grow2 = df %>%
+    filter(YearBegin == 2017 & MonthBegin == "10"|
+          YearBegin == 2017 & MonthBegin == "11"|
+          YearBegin == 2017 & MonthBegin == "12"|
+          YearBegin == 2018 & MonthBegin == "01"|
+          YearBegin == 2018 & MonthBegin == "02"|
+          YearBegin == 2018 & MonthBegin == "03"|
+          YearBegin == 2018 & MonthBegin == "04"|
+          YearBegin == 2018 & MonthBegin == "05") %>%
+
+   mutate(group = case_when(
+          YearBegin == 2017 & MonthBegin == "10" ~"A",
+          YearBegin == 2017 & MonthBegin == "11" ~"B",
+          YearBegin == 2017 & MonthBegin == "12"~"C",
+          YearBegin == 2018 & MonthBegin == "01"~"D",
+          YearBegin == 2018 & MonthBegin == "02"~"E",
+          YearBegin == 2018 & MonthBegin == "03"~"F",
+          YearBegin == 2018 & MonthBegin == "04"~"G",
+          YearBegin == 2018 & MonthBegin == "05"~ "H")
+   ) %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = AverageSoilMoisture)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~group) +
+  ggtitle(string)
+grow2
 }
 ```
 
+## 1. Monthly min for YearBegin 2017
 ```{r}
-growgraph(Surface_MonthlysoilbyDis)
+growgraph5 <- function(df,string){
+  grow1 = df %>%
+    filter(YearBegin == 2016 & MonthBegin == "10"|
+          YearBegin == 2016 & MonthBegin == "11"|
+          YearBegin == 2016 & MonthBegin == "12"|
+          YearBegin == 2017 & MonthBegin == "01"|
+          YearBegin == 2017 & MonthBegin == "02"|
+          YearBegin == 2017 & MonthBegin == "03"|
+          YearBegin == 2017 & MonthBegin == "04"|
+          YearBegin == 2017 & MonthBegin == "05") %>%
+    
+   mutate(group = case_when(
+          YearBegin == 2016 & MonthBegin == "10" ~"A",
+          YearBegin == 2016 & MonthBegin == "11" ~"B",
+          YearBegin == 2016 & MonthBegin == "12"~"C",
+          YearBegin == 2017 & MonthBegin == "01"~"D",
+          YearBegin == 2017 & MonthBegin == "02"~"E",
+          YearBegin == 2017 & MonthBegin == "03"~"F",
+          YearBegin == 2017 & MonthBegin == "04"~"G",
+          YearBegin == 2017 & MonthBegin == "05"~ "H")
+   ) %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MinSoilMoisture)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~group) +
+  ggtitle(string)
+grow1
+}
+growgraph6 <- function(df,string){
+  grow2 = df %>%
+    filter(YearBegin == 2017 & MonthBegin == "10"|
+          YearBegin == 2017 & MonthBegin == "11"|
+          YearBegin == 2017 & MonthBegin == "12"|
+          YearBegin == 2018 & MonthBegin == "01"|
+          YearBegin == 2018 & MonthBegin == "02"|
+          YearBegin == 2018 & MonthBegin == "03"|
+          YearBegin == 2018 & MonthBegin == "04"|
+          YearBegin == 2018 & MonthBegin == "05") %>%
+
+   mutate(group = case_when(
+          YearBegin == 2017 & MonthBegin == "10" ~"A",
+          YearBegin == 2017 & MonthBegin == "11" ~"B",
+          YearBegin == 2017 & MonthBegin == "12"~"C",
+          YearBegin == 2018 & MonthBegin == "01"~"D",
+          YearBegin == 2018 & MonthBegin == "02"~"E",
+          YearBegin == 2018 & MonthBegin == "03"~"F",
+          YearBegin == 2018 & MonthBegin == "04"~"G",
+          YearBegin == 2018 & MonthBegin == "05"~ "H")
+   ) %>%
+  ggplot() +
+  geom_sf(size = 1, color = "black", aes(fill = MinSoilMoisture)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~group) +
+  ggtitle(string)
+grow2
+}
 ```
 
 
 
+Graph max
 ```{r}
-growgraph1(Surface_MonthlysoilbyDis)
-growgraph2(Surface_MonthlysoilbyDis)
-growgraph1(Sub_MonthlysoilbyDis)
-growgraph2(Sub_MonthlysoilbyDis)
-growgraph1(Perc_MonthlysoilbyDis)
-growgraph2(Perc_MonthlysoilbyDis)
+growgraph1(SSM[[1]],SSM[[2]])
+growgraph2(SSM[[1]],SSM[[2]])
+growgraph1(SUSM[[1]],SUSM[[2]])
+growgraph2(SUSM[[1]],SUSM[[2]])
+growgraph1(PSM[[1]],PSM[[2]])
+growgraph2(PSM[[1]],PSM[[2]])
+```
+Graph mean
+```{r}
+growgraph3(SSM[[1]],SSM[[2]])
+growgraph4(SSM[[1]],SSM[[2]])
+growgraph3(SUSM[[1]],SUSM[[2]])
+growgraph4(SUSM[[1]],SUSM[[2]])
+growgraph3(PSM[[1]],PSM[[2]])
+growgraph4(PSM[[1]],PSM[[2]])
+```
+Graph min
+```{r}
+growgraph5(SSM[[1]],SSM[[2]])
+growgraph6(SSM[[1]],SSM[[2]])
+growgraph5(SUSM[[1]],SUSM[[2]])
+growgraph6(SUSM[[1]],SUSM[[2]])
+growgraph5(PSM[[1]],PSM[[2]])
+growgraph6(PSM[[1]],PSM[[2]])
 ```
 
+
+```{r}
+#```{r}
+growgraph1(SSM[[1]],SSM[[2]])
+growgraph2(SSM[[1]],SSM[[2]])
+growgraph1(SUSM[[1]],SUSM[[2]])
+growgraph2(SUSM[[1]],SUSM[[2]])
+growgraph1(PSM[[1]],PSM[[2]])
+growgraph2(PSM[[1]],PSM[[2]])
+```growgraph1(Surface_MonthlysoilbyDis) 
+#growgraph2(Surface_MonthlysoilbyDis)
+#growgraph1(Sub_MonthlysoilbyDis)
+#growgraph2(Sub_MonthlysoilbyDis)
+#growgraph1(Perc_MonthlysoilbyDis)
+#growgraph2(Perc_MonthlysoilbyDis)
+```
+
+
+```{r}
+#grows <- list(Surface_MonthlysoilbyDis,Sub_MonthlysoilbyDis,Perc_MonthlysoilbyDis)
+#names <- list("Surface Soil Moisture", "Sub-Surface Soil Moisture", "Percent Soil Moisture")
+#listlist <- list(grows,names)
+```
+
+```{r}
+#jim <- list(Surface_MonthlysoilbyDis,"Surface Soil Moisture")
+```
 
 
 
