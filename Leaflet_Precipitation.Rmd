@@ -21,9 +21,29 @@ library(ggpolypath)
 ```
 
 ```{r}
-m <- leaflet() %>%
-  addTiles() %>%
-  get_polygon(zim_district)
-m  
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = SummerPRECIP_2016_2017_MeanMap$MeanPRECIP
+)
+
+mypal(c(10, 20, 30, 40, 50))
+```
+
+
+```{r}
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = SummerPRECIP_2016_2017_MeanMap,
+              color = ~mypal(MeanPRECIP),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~MeanPRECIP) %>%
+  addLegend(
+    position = "bottomleft",
+    pal = mypal,
+    values = SummerPRECIP_2016_2017_MeanMap$'MeanPRECIP',
+    title = "Median Population Income Across VA Counties"
+  )
 ```
 
