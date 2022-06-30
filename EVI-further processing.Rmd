@@ -16,8 +16,16 @@ library(tidyverse)
 library(sf)
 library(ggplot2)
 library(rgdal)
-
+library(sp)
+library(leaflet)
 ```
+
+## Info for EVI:
+
+Pixel: 463.313 meters\
+Satellite: MODIS\
+generated from the MODIS/006/MOD09GA surface reflectance composites
+
 
 ### read in the files
 
@@ -49,12 +57,10 @@ EVISelectedYears <- EVI_monthly %>%
   filter(!(Year == 2016 & Month == "01")) %>%
   filter(!(Year == 2017 & Month == "10")) %>% 
   filter(!(Year == 2017 & Month == "11")) %>%
-  filter(!(Year == 2017 & Month == "12"))
+  filter(!(Year == 2017 & Month == "12")) %>% 
+  mutate(GrowingSeason = if_else(Year == 2010|Year==2011, "2011", "2017"))
   
 EVISelectedYears$YM <- paste(EVISelectedYears$Year, EVISelectedYears$Month, sep="-")
-
-
-
 
 
 EVI2011 <- EVI_monthly %>% 
@@ -92,12 +98,24 @@ EVI2017$YM <- paste(EVI2017$Year, EVI2017$Month, sep="-")
 `2011&2017` <- EVISelectedYears %>% 
   filter(District == "Hwange") %>% 
   ggplot(aes(x = YM, y = MaxEVI)) +
-  geom_line(aes(group=1), color = "blue")+
+  geom_line(aes(group=1, color = as.factor(GrowingSeason)))+
   geom_point() +
   theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum NDVI in Hwange During Growing Season--2011 & 2017")+
+  labs(title = "Maximum EVI in Hwange During Growing Season--2011 & 2017", color =  "Growing Season")+
   xlab("Time")+
   ylab("Maximum EVI")
+
+
+Beitbridge <- EVISelectedYears %>% 
+  filter(District == "Beitbridge") %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(GrowingSeason)))+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum EVI in Beitbridge During Growing Season--2011 & 2017", color =  "Growing Season")+
+  xlab("Time")+
+  ylab("Maximum EVI")
+
 
 
 badVis <- EVISelectedYears %>% 
@@ -105,7 +123,7 @@ badVis <- EVISelectedYears %>%
   geom_line(aes(group=1), color = "blue")+
   geom_point(aes(color = factor(District))) +
   theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum NDVI in Hwange During Growing Season--2011 & 2017")+
+  labs(title = "Maximum EVI During Growing Season--2011 & 2017")+
   xlab("Time")+
   ylab("Maximum EVI")
 
@@ -116,7 +134,7 @@ MaxEVI2011 <- EVI2011 %>%
   geom_line(aes(group=1), color = "blue")+
   geom_point() +
   theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum NDVI in Hwange During Growing Season--2011")+
+  labs(title = "Maximum EVI in Hwange During Growing Season--2011")+
   xlab("Time")+
   ylab("Maximum EVI")
 
@@ -127,16 +145,20 @@ MaxEVI2017 <- EVI2017 %>%
   geom_line(aes(group=1), color = "blue")+
   geom_point() +
   theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum NDVI in Hwange During Growing Season--2017")+
+  labs(title = "Maximum EVI in Hwange During Growing Season--2017")+
   xlab("Time")+
   ylab("Maximum EVI")
 
 `2011&2017`
+Beitbridge
 MaxEVI2011
 MaxEVI2017
 badVis
 ```
 Here I chose the district "Hwange", and plotted a graph to show the variation in its EVI across the growing seasons in 2011 and 2017.\
+
+We could see from the graph that the EVI peaks at Feb/March, and has it lowest values in October. This lines up with the farming season--the land is cleared for sowing in October, and the harvest is usually during Apr/May, so the crops are still in land in Feb/March. 
+
 \
 This would only show one district in Zim because having 60 districts add another layer to the graph, which could be very unclear for visualization if trying to graph them all at once (see `badVis`).
 
@@ -154,7 +176,7 @@ GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
 ```{r}
 GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>% 
   ggplot() +
-  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~Month) +
@@ -163,7 +185,7 @@ GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>%
 
 GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>% 
   ggplot() +
-  geom_sf(size = 1, color = "black", aes(fill = MaxEVI)) +
+  geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
   scale_fill_viridis_c(option = "G", direction = -1) +
   facet_wrap(~Month) +
@@ -171,6 +193,144 @@ GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>%
 
 GrowEVI2011
 GrowEVI2017
+```
+The EVI partially matches up with the growing season in Zim--sowing in Oct, but it seems that in May there isnt that much lost. 
+
+
+## Leaflet
+
+```{r}
+
+# Notes for adding layer--DONT RUN
+
+addTiles(group = "OSM (default)") %>%
+  addProviderTiles(providers$Stamen.Toner, group = "Toner") %>%
+  addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite") %>%
+  # Overlay groups
+  addCircles(~long, ~lat, ~10^mag/5, stroke = F, group = "Quakes") %>%
+  addPolygons(data = outline, lng = ~long, lat = ~lat,
+    fill = F, weight = 2, color = "#FFFFCC", group = "Outline") %>%
+  # Layers control
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
+    overlayGroups = c("Quakes", "Outline"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+```
+
+
+
+
+
+
+```{r, Leaflet for GrowingSeason2011}
+mypal <- colorNumeric(
+  palette = "viridis",
+  domain = GrowingSsonEVIbyDis2011$MaxEVI)
+mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
+
+#Flip the direction of scale of color
+# labFormat = labelFormat(transform = function(MaxEVI) sort(MaxEVI, decreasing = TRUE))
+
+leaflet(GrowingSsonEVIbyDis2011) %>%
+  addTiles() %>% 
+  addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = ~MaxEVI,
+    opacity = 1.0, fillOpacity = 0.5,
+    highlightOptions = highlightOptions(color = "white", weight = 2,
+      bringToFront = TRUE)) %>% 
+  addLegend( labFormat = labelFormat(transform = function(MaxEVI) sort(MaxEVI, decreasing = TRUE)),
+    position = "bottomleft",
+    pal = mypal,
+    values = GrowingSsonEVIbyDis2011$MaxEVI,
+    title = "Max EVI in Zimbabwe - Growing Seaon 2011")
+```
+
+
+
+
+
+
+## z Score
+```{r}
+EVI_long$Year <- as.numeric(EVI_long$Year)
+EVI_long$Month <- as.numeric(EVI_long$Month)
+EVI_long$Day <- as.numeric(EVI_long$Day)
+
+
+MaxEVIGrow <- EVI_long %>% 
+  filter(Month == 1:5|Month == 10:12) %>% 
+  filter(!(Year == 2005 & Month == 3)) %>% 
+  filter(!(Year == 2005 & Month == 4)) %>%
+  filter(!(Year == 2005 & Month == 5)) %>%
+  filter(!(Year == 2005 & Month == 2)) %>% 
+  filter(!(Year == 2005 & Month == 1)) %>% 
+  
+  filter(!(Year == 2021 & Month == 10)) %>% 
+  filter(!(Year == 2021 & Month == 11)) %>%
+  filter(!(Year == 2021 & Month == 12)) %>% 
+  mutate(YMD = paste(Year, Month, Day, sep="-")) %>% 
+  group_by(District, Year, Month) %>% 
+  summarise( 
+         MaxEVI = max(EVI, na.rm=TRUE))
+
+
+MaxEVIPop <- MaxEVIGrow %>% 
+  group_by(District, Year, Month) %>% 
+  summarise(sdMaxEVI = sd(MaxEVI, na.rm=TRUE),
+         MeanMaxEVI = max(MaxEVI, na.rm=TRUE))
+  
+  
+  
+
+PopMeanEVIMax = mean(as.numeric(MaxEVI), na.rm = TRUE)
+  
+```
+
+
+
+## Leaflet--Map w/ 15 layers 
+
+
+
+## Static Map-- Max EVI for every district
+```{r}
+EVI_MAX <- EVI_long %>% 
+  group_by(District, Year) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+  group_by(District) %>% 
+  summarise(AvgAnnualMaxEVI = mean(MaxEVI, na.rm = TRUE))
+
+AvrgAnnualMaxEVI <- full_join(zim_district, EVI_MAX, by = "District")
+
+StaticMap <- AvrgAnnualMaxEVI %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AvgAnnualMaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average Annual Maximum EVI in Zimbabwe")
+
+
+
+
+
+PRECIPmonthly <- read_csv("./Data/PRECIP_filtered.csv")
+PRECIPAvg <- PRECIPmonthly %>% 
+  group_by(District, Year) %>% 
+  summarise(MeanEVI = mean(Precipitation, na.rm = TRUE)) %>% 
+  group_by(District) %>% 
+  summarise(AvgAnnualEVI = mean(MeanEVI, na.rm = TRUE))
+AvrgAnnualPRECIP <- full_join(zim_district, PRECIPAvg, by = "District")
+
+
+Map2 <- AvrgAnnualPRECIP %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AvgAnnualEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average Annual Precipitation in Zimbabwe")
+
+StaticMap
+Map2
 ```
 
 
