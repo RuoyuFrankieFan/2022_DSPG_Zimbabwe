@@ -1,0 +1,48 @@
+---
+title: "Ag_region"
+author: "JBN"
+date: '2022-06-30'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Packages required
+```{r}
+
+```
+
+
+read in region level data [Start with AVG 3hr Precipitation]
+```{r}
+zim_Ag_Region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp")
+
+zim_region_3h_avg_10_11_12 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2010-2012).csv")
+zim_region_3h_avg_16_17_18 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2016-2018).csv")
+```
+
+Change col names into long format region, Date, Hour, Average Precipitation
+```{r}
+zim_region_3h_avg_10_11_12_long <- gather(zim_region_3h_avg_10_11_12, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(nat_region, Date, Precipitation) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+```
+
+Change to daily data
+```{r}
+zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>% group_by( Region, Date) %>% 
+  summarize(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+```
+
+Separate date col into year, month, & day col
+```{r}
+
+zim_region_3h_avg_10_11_12_long$Date <- ymd(zim_region_3h_avg_10_11_12_long$Date)
+
+zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>% 
+  select(Region, Date, dailyPRECIP) %>% 
+  separate(col = Date, into = c("Year","Month","Day"))
+
+
+```
+
+
