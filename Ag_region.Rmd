@@ -10,7 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 Packages required
 ```{r}
-
+library(dplyr)
+library(tidyverse)
 ```
 
 
@@ -25,11 +26,19 @@ zim_region_3h_avg_16_17_18 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2016-2018).
 Change col names into long format region, Date, Hour, Average Precipitation
 ```{r}
 zim_region_3h_avg_10_11_12_long <- gather(zim_region_3h_avg_10_11_12, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(nat_region, Date, Precipitation) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+
+zim_region_3h_avg_16_17_18_long <- gather(zim_region_3h_avg_16_17_18, Date, Precipitation, '3B42_20160101_03_7_precipitation': '3B42_20181231_00_7_precipitation') %>% select(nat_region, Date, Precipitation) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+
 ```
 
 Change to daily data
 ```{r}
 zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>% group_by( Region, Date) %>% 
+  summarize(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+zim_region_3h_avg_16_17_18_long <- zim_region_3h_avg_16_17_18_long %>% group_by( Region, Date) %>% 
   summarize(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
 ```
 
@@ -43,6 +52,184 @@ zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>%
   separate(col = Date, into = c("Year","Month","Day"))
 
 
+zim_region_3h_avg_16_17_18_long$Date <- ymd(zim_region_3h_avg_16_17_18_long$Date)
+
+zim_region_3h_avg_16_17_18_long <- zim_region_3h_avg_16_17_18_long %>% 
+  select(Region, Date, dailyPRECIP) %>% 
+  separate(col = Date, into = c("Year","Month","Day"))
+
 ```
 
+
+Summer growing season 10-11-12
+```{r}
+zim_reg_10_11_12 <- zim_region_3h_avg_10_11_12_long %>%
+  filter(!(Year == 2010 & Month == "01")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>%
+  filter(!(Year == 2010 & Month == "03")) %>%
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "06")) %>%
+  filter(!(Year == 2010 & Month == "07")) %>%
+  filter(!(Year == 2010 & Month == "08")) %>%
+  filter(!(Year == 2010 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2011 & Month == "06")) %>%
+  filter(!(Year == 2011 & Month == "07")) %>%
+  filter(!(Year == 2011 & Month == "08")) %>%
+  filter(!(Year == 2011 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2012 & Month == "06")) %>%
+  filter(!(Year == 2012 & Month == "07")) %>%
+  filter(!(Year == 2012 & Month == "08")) %>%
+  filter(!(Year == 2012 & Month == "09")) %>%
+  filter(!(Year == 2012 & Month == "10")) %>%
+  filter(!(Year == 2012 & Month == "11")) %>%
+  filter(!(Year == 2012 & Month == "12")) %>%
+  
+  
+  arrange(Year, Month, Day)
+
+
+
+zim_reg_16_17_18 <- zim_region_3h_avg_16_17_18_long %>%
+  filter(!(Year == 2016 & Month == "01")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>%
+  filter(!(Year == 2016 & Month == "03")) %>%
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "06")) %>%
+  filter(!(Year == 2016 & Month == "07")) %>%
+  filter(!(Year == 2016 & Month == "08")) %>%
+  filter(!(Year == 2016 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2017 & Month == "06")) %>%
+  filter(!(Year == 2017 & Month == "07")) %>%
+  filter(!(Year == 2017 & Month == "08")) %>%
+  filter(!(Year == 2017 & Month == "09")) %>%
+  
+  
+  filter(!(Year == 2018 & Month == "06")) %>%
+  filter(!(Year == 2018 & Month == "07")) %>%
+  filter(!(Year == 2018 & Month == "08")) %>%
+  filter(!(Year == 2018 & Month == "09")) %>%
+  filter(!(Year == 2018 & Month == "10")) %>%
+  filter(!(Year == 2018 & Month == "11")) %>%
+  filter(!(Year == 2018 & Month == "12")) %>%
+  
+  
+  arrange(Year, Month, Day)
+```
+
+
+Rain day: when a region receives 2.95 mm or more of rainfall [x > 2.95]
+ Dry day: any day that accumulates less than 2.95 mm of rain [x < 2.95]
+ 
+ADD A BINARY COL FOR #RAIN_DAYS & #DRY_DAYS
+```{r}
+#add a new col for rainy or dry day based on 2.95 threshold 
+zim_reg_10_11_12 <- zim_reg_10_11_12 %>% 
+  mutate(Rain_Dry = if_else(dailyPRECIP > 2.95, 0, 1))
+
+
+zim_reg_16_17_18 <- zim_reg_16_17_18 %>% 
+  mutate(Rain_Dry = if_else(dailyPRECIP > 2.95, 0, 1))
+
+#write.csv(zim_reg_10_11_12,"./zim_reg_10_11_12.csv", row.names = FALSE)
+write.csv(zim_reg_16_17_18,"./zim_reg_16_17_18.csv", row.names = FALSE)
+```
+
+ADD A BINARY COL FOR INDENTIFING A DRYSPELL [14 DAYS]
+```{r}
+zim_reg_10_11_12 <- zim_reg_10_11_12 %>%
+  mutate(DrySpell)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+RainyDays <- zim_reg_10_11_12 %>% 
+  filter(Rain_Dry == "Rainy Day") %>% 
+  group_by(Region, Year, Month) %>% 
+  summarise(CountRainy = n())
+  
+
+DryDays <- zim_reg_10_11_12 %>% 
+  filter(Rain_Dry == "Dry Day") %>% 
+  group_by(Region, Year, Month) %>% 
+  summarise(CountDry = n())
+
+Rainy_join <- full_join(RainyDays, DryDays, by=c("Region" = "Region", "Year" = "Year", "Month" = "Month"))
+  
+  summarise(CountRainy_Dry = count(Rain_Dry))
+  
+count(zim_reg_10_11_12, Rain_Dry)
+```
+
+ 
+
+```{r}
+long_RainDry <- Rainy_join %>% 
+  gather(Type, Number, CountRainy:CountDry)
+
+long_RainDry$Type[which(long_RainDry$Type=="CountRainy")] <- "Rainy"
+long_RainDry$Type[which(long_RainDry$Type=="CountDry")] <- "Dry"
+
+```
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------
+                                    [MONTHLY DATA]
+2010 -> 2011 [mean, min, max]
+```{r}
+Summer_10_12_Mean_Min_Max <- zim_reg_10_11_12 %>%
+  group_by(Region, Year, Month) %>% 
+  summarise(MeanPRECIP = mean(dailyPRECIP, na.rm=TRUE),
+            MaxPRECIP = max(dailyPRECIP, na.rm=TRUE),
+            MinPRECIP = min(dailyPRECIP, na.rm = TRUE))
+
+write.csv(Summer_10_12_Mean_Min_Max,"./Summer_10_12_Mean_Min_Max.csv", row.names = FALSE)
+```
+
+
+Oct 2010 -> May 2011 [mean, min, max]
+Oct 2011 -> May 2012 [mean, min, max]
+Oct 2016 -> May 2017 [mean, min, max]
 
