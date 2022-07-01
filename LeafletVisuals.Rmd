@@ -1,0 +1,21 @@
+---
+title: "LeafletVisuals"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+read in the files #variables already loaded from growing season viz.rmd
+```{r}
+surface_soil_1617 <- read_csv("./Data/SSoil_2016_2017.csv")
+surface_soil_1718 <- st_read("./Data/SSoil_2017_2018.csv")  
+
+
+sub_soil_1617 <- read_csv("./Data/SUSoil_2016_2017.csv")
+sub_soil_1718 <-read_csv("./Data/SUSoil_2017_2018.csv")
+
+perc_soil_1617 <- read_csv("./Data/PerSoil_2016_2017.csv")
+perc_soil_1718 <-read_csv("./Data/PerSoil_2017_2018.csv")
+```

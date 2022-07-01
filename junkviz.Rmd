@@ -20,6 +20,7 @@ library(rgdal)
 
 library(ggsn)
 library(ggspatial)
+library(leaflet)
 ```
 
 read in the files #variables already loaded from dataProcessing-Soil.rmd
@@ -29,10 +30,10 @@ zim_district <- st_read("./shape60/gadm36_ZWE_2.shp")
 
 
 sub_soil_monthly <- read_csv("./Data/sub_soil_monthly.csv")
-
+sub_soil_range <-read_csv("./Data/sub_soil_monthly_2016_2018.csv")
 
 perc_soil_monthly <- read_csv("./Data/perc_soil_monthly.csv")
-
+perc_soil_range <-read_csv("./Data/perc_soil_monthly_2016_2018.csv")
 ```
 Rename cols to match
 ```{r}
@@ -80,43 +81,41 @@ growgraph1 <- function(df,string){
           YearBegin == 2017 & MonthBegin == "04"~"G",
           YearBegin == 2017 & MonthBegin == "05"~ "H")
    ) %>%
-  ggplot() +
-  geom_sf(size = 1, color = "black", aes(fill = MaxSoilMoisture)) +
-  coord_sf() +
-  scale_fill_viridis_c(option = "G", direction = -1) +
-  facet_wrap(~group) +
-  ggtitle(string)
-grow1
-}
-growgraph2 <- function(df,string){
-  grow2 = df %>%
-    filter(YearBegin == 2017 & MonthBegin == "10"|
-          YearBegin == 2017 & MonthBegin == "11"|
-          YearBegin == 2017 & MonthBegin == "12"|
-          YearBegin == 2018 & MonthBegin == "01"|
-          YearBegin == 2018 & MonthBegin == "02"|
-          YearBegin == 2018 & MonthBegin == "03"|
-          YearBegin == 2018 & MonthBegin == "04"|
-          YearBegin == 2018 & MonthBegin == "05") %>%
+leaflet() %>%
+  addTiles()%>%
+  addPolygons(color = ~mypal(as.numeric(MaxSoilMoisture)),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,) %>%
+  facet_wrap(~group)
+ grow1
+```
 
+
+```{r}
+  Perc_MonthlysoilbyDis <- 
+  Perc_MonthlysoilbyDis %>%
+    filter(YearBegin == 2016 & MonthBegin == "10"|
+          YearBegin == 2016 & MonthBegin == "11"|
+          YearBegin == 2016 & MonthBegin == "12"|
+          YearBegin == 2017 & MonthBegin == "01"|
+          YearBegin == 2017 & MonthBegin == "02"|
+          YearBegin == 2017 & MonthBegin == "03"|
+          YearBegin == 2017 & MonthBegin == "04"|
+          YearBegin == 2017 & MonthBegin == "05") %>%
+    
    mutate(group = case_when(
-          YearBegin == 2017 & MonthBegin == "10" ~"A",
-          YearBegin == 2017 & MonthBegin == "11" ~"B",
-          YearBegin == 2017 & MonthBegin == "12"~"C",
-          YearBegin == 2018 & MonthBegin == "01"~"D",
-          YearBegin == 2018 & MonthBegin == "02"~"E",
-          YearBegin == 2018 & MonthBegin == "03"~"F",
-          YearBegin == 2018 & MonthBegin == "04"~"G",
-          YearBegin == 2018 & MonthBegin == "05"~ "H")
-   ) %>%
-  ggplot() +
-  geom_sf(size = 1, color = "black", aes(fill = MaxSoilMoisture)) +
-  coord_sf() +
-  scale_fill_viridis_c(option = "G", direction = -1) +
-  facet_wrap(~group) +
-  ggtitle(string)
-grow2
-}
+          YearBegin == 2016 & MonthBegin == "10" ~"A",
+          YearBegin == 2016 & MonthBegin == "11" ~"B",
+          YearBegin == 2016 & MonthBegin == "12"~"C",
+          YearBegin == 2017 & MonthBegin == "01"~"D",
+          YearBegin == 2017 & MonthBegin == "02"~"E",
+          YearBegin == 2017 & MonthBegin == "03"~"F",
+          YearBegin == 2017 & MonthBegin == "04"~"G",
+          YearBegin == 2017 & MonthBegin == "05"~ "H")
+   )
+write.csv(Perc_MonthlysoilbyDis,"./Data/PerSoil_2016_2017.csv")
+   
 ```
 
 ## 1. Monthly mean maps for YearBegin  2017
@@ -243,6 +242,17 @@ grow2
 }
 ```
 
+```{r}
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = Surface_MonthlysoilbyDis$MaxSoilMoisture
+)
+
+mypal(c(100, 200, 300, 400, 500))
+```
+```{r}
+growgraph2(Surface_MonthlysoilbyDis)
+```
 
 
 Graph max
@@ -274,17 +284,15 @@ growgraph6(PSM[[1]],PSM[[2]])
 ```
 
 
+```{r}
 #```{r}
-
 growgraph1(SSM[[1]],SSM[[2]])
 growgraph2(SSM[[1]],SSM[[2]])
 growgraph1(SUSM[[1]],SUSM[[2]])
 growgraph2(SUSM[[1]],SUSM[[2]])
 growgraph1(PSM[[1]],PSM[[2]])
 growgraph2(PSM[[1]],PSM[[2]])
-```
-
-#```{r}growgraph1(Surface_MonthlysoilbyDis) 
+```growgraph1(Surface_MonthlysoilbyDis) 
 #growgraph2(Surface_MonthlysoilbyDis)
 #growgraph1(Sub_MonthlysoilbyDis)
 #growgraph2(Sub_MonthlysoilbyDis)
