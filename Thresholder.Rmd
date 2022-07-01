@@ -1,0 +1,156 @@
+---
+title: "thresholder"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+packages
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+
+library(ggsn)
+library(ggspatial)
+```
+
+Read in the files 
+```{r}
+
+zim_district <- st_read("./shape60/gadm36_ZWE_2.shp")  
+
+surface_soil_all <- read_csv("./Data/soil_monthly.csv", show_col_types = FALSE)
+surface_soil_g1 <- read_csv("./Data/SSoil_2016_2017.csv", show_col_types = FALSE)
+surface_soil_g2 <- read_csv("./Data/SSoil_2017_2018.csv", show_col_types = FALSE)
+
+sub_soil_all <- read_csv("./Data/sub_soil_monthly.csv", show_col_types = FALSE)
+sub_soil_g1 <- read_csv("./Data/SuSoil_2016_2017.csv", show_col_types = FALSE)
+sub_soil_g2 <- read_csv("./Data/SuSoil_2017_2018.csv", show_col_types = FALSE)
+
+perc_soil_all <- read_csv("./Data/sub_soil_monthly.csv", show_col_types = FALSE)
+perc_soil_g1 <- read_csv("./Data/PerSoil_2016_2017.csv", show_col_types = FALSE)
+perc_soil_g2 <- read_csv("./Data/PerSoil_2017_2018.csv", show_col_types = FALSE)
+
+
+
+```
+
+function to evaluate surface threshold
+```{r}
+SurfThresholder <- function(df){
+df %>% 
+  mutate(AverageIdeal = case_when(AverageSoilMoisture >= 20 & AverageSoilMoisture <=25 ~ 1,
+                                  TRUE ~ 0),
+         MaxIdeal = case_when(MaxSoilMoisture >= 20 & MaxSoilMoisture <=25 ~ 1,
+                                  TRUE ~ 0),
+         MinIdeal = case_when(MinSoilMoisture >= 20 & MinSoilMoisture <=25 ~ 1,
+                                  TRUE ~ 0),
+         AverageWet = case_when(AverageSoilMoisture > 25 ~ 1,
+                                  TRUE ~ 0),
+         MaxWet = case_when(MaxSoilMoisture > 25 ~ 1,
+                                  TRUE ~ 0),
+         MinWet = case_when(MinSoilMoisture > 25 ~ 1,
+                                  TRUE ~ 0),
+         AverageDry = case_when(AverageSoilMoisture <20 ~ 1,
+                                  TRUE ~ 0),
+         MaxDry = case_when(MaxSoilMoisture <20  ~ 1,
+                                  TRUE ~ 0),
+         MinDry = case_when(MinSoilMoisture <20  ~ 1,
+                                  TRUE ~ 0)
+         )
+}
+```
+function to evaluate subsurface threshold
+```{r}
+SubThresholder <- function(df){
+df %>% 
+  mutate(AverageIdeal = case_when(AverageSoilMoisture >= 25 & AverageSoilMoisture <=100 ~ 1,
+                                  TRUE ~ 0),
+         MaxIdeal = case_when(MaxSoilMoisture >= 25 & MaxSoilMoisture <=100 ~ 1,
+                                  TRUE ~ 0),
+         MinIdeal = case_when(MinSoilMoisture >= 25 & MinSoilMoisture <=100 ~ 1,
+                                  TRUE ~ 0),
+         AverageWet = case_when(AverageSoilMoisture > 100 ~ 1,
+                                  TRUE ~ 0),
+         MaxWet = case_when(MaxSoilMoisture > 100 ~ 1,
+                                  TRUE ~ 0),
+         MinWet = case_when(MinSoilMoisture > 100 ~ 1,
+                                  TRUE ~ 0),
+         AverageDry = case_when(AverageSoilMoisture <25 ~ 1,
+                                  TRUE ~ 0),
+         MaxDry = case_when(MaxSoilMoisture <25  ~ 1,
+                                  TRUE ~ 0),
+         MinDry = case_when(MinSoilMoisture <25  ~ 1,
+                                  TRUE ~ 0)
+         )
+}
+```
+
+function to evaluate profile threshold
+```{r}
+ProThresholder <- function(df){
+df %>% 
+  mutate(AverageIdeal = case_when(AverageSoilMoisture >= .40 & AverageSoilMoisture <=.80 ~ 1,
+                                  TRUE ~ 0),
+         MaxIdeal = case_when(MaxSoilMoisture >= .40 & MaxSoilMoisture <=.80 ~ 1,
+                                  TRUE ~ 0),
+         MinIdeal = case_when(MinSoilMoisture >= .40 & MinSoilMoisture <=.80 ~ 1,
+                                  TRUE ~ 0),
+         AverageWet = case_when(AverageSoilMoisture > .80 ~ 1,
+                                  TRUE ~ 0),
+         MaxWet = case_when(MaxSoilMoisture > .80 ~ 1,
+                                  TRUE ~ 0),
+         MinWet = case_when(MinSoilMoisture > .80 ~ 1,
+                                  TRUE ~ 0),
+         AverageDry = case_when(AverageSoilMoisture <.40 ~ 1,
+                                  TRUE ~ 0),
+         MaxDry = case_when(MaxSoilMoisture <.40  ~ 1,
+                                  TRUE ~ 0),
+         MinDry = case_when(MinSoilMoisture <.40  ~ 1,
+                                  TRUE ~ 0)
+         )
+}
+```
+
+apply to data
+```{r}
+surface_soil_all <- SurfThresholder(surface_soil_all)
+surface_soil_g1 <- SurfThresholder(surface_soil_g1)
+surface_soil_g2 <- SurfThresholder(surface_soil_g2)
+
+sub_soil_all <- SubThresholder(sub_soil_all)
+sub_soil_g1 <- SubThresholder(sub_soil_g1)
+sub_soil_g2 <- SubThresholder(sub_soil_g2)
+
+perc_soil_all <- ProThresholder(perc_soil_all)
+perc_soil_g1 <- ProThresholder(perc_soil_g1)
+perc_soil_g2 <- ProThresholder(perc_soil_g2)
+
+```
+
+write to new folder
+```{r}
+write.csv(surface_soil_all, "./Thresheld_files/soil_monthly_Thresheld.csv")
+write.csv(surface_soil_g1, "./Thresheld_files/SSoil_2016_2017_Thresheld.csv")
+write.csv(surface_soil_g2, "./Thresheld_files/SSoil_2017_2018_Thresheld.csv")
+
+write.csv(sub_soil_all, "./Thresheld_files/sub_soil_monthly_Thresheld.csv")
+write.csv(sub_soil_g1, "./Thresheld_files/SuSoil_2016_2017_Thresheld.csv")
+write.csv(sub_soil_g2, "./Thresheld_files/SuSoil_2017_2018_Thresheld.csv")
+
+write.csv(perc_soil_all, "./Thresheld_files/sub_soil_monthly_Thresheld.csv")
+write.csv(perc_soil_g1, "./Thresheld_files/PerSoil_2016_2017_Thresheld.csv")
+write.csv(perc_soil_g2, "./Thresheld_files/PerSoil_2017_2018_Thresheld.csv")
+
+```
+
+
+
+
+
