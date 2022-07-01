@@ -1,0 +1,75 @@
+---
+title: "Livelihood Shapefile"
+author: "Frankie Fan"
+date: '2022-07-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+library(viridis) 
+
+library(ggsn)
+library(ggspatial)
+```
+
+## read in the files
+```{r, echo=FALSE, include=FALSE}
+
+zim_livelihood <- st_read("./Shapefiles/ZW_LHZ_2011.shp") 
+zim_livelihood <- zim_livelihood %>% 
+  select(-c(LZNAMEFR, LZNAMESP, LZNAMEPT, CLASS, EFF_YEAR, LZNUM, COUNTRY))
+zim_livelihood$LZCODE <- as.factor(zim_livelihood$LZCODE)
+```
+
+
+## Livelihood Map
+```{r, echo=FALSE, include=FALSE}
+LivelihoodMap <- zim_livelihood %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = LZNAMEEN)) +
+  coord_sf() +
+  scale_fill_viridis(discrete = TRUE, option = "H") +
+  theme(legend.title = element_text(size = 5), 
+               legend.text = element_text(size = 5)) +
+  labs(title = "Livelihood Zone in Zimbabwe", fill =  "Livelihood Zone")
+LivelihoodMap
+
+```
+
+
+## Selected Regions
+```{r}
+zim_llh2 <- zim_livelihood %>% 
+  mutate(SelectedRegion = case_when(LZCODE=="ZW04" ~ "Central and Northern Semi Intensive Farming",
+                                    LZCODE=="ZW07" ~ "Eastern Highlands Commercial Farming",
+                                    LZCODE=="ZW11" ~ "Highveld Prime Cereal and Cash Crop Resettlement",
+                                    LZCODE=="ZW13" ~ "Irrigated Commercial Sugar and Fruit Farming",
+                                    LZCODE=="ZW15" ~ "Livestock and Cereal  Farming Communal in Forests",
+                                    LZCODE=="ZW16" ~ "Lusulu, Lupane and Southern Gokwe Mixed Agriculture",
+                                    LZCODE=="ZW17" ~ "Masvingo Manicaland Middleveld Smallholder",
+                                    LZCODE=="ZW21" ~ "Northern Cattle and Cereal Farming",
+                                    LZCODE=="ZW24" ~ "Southern Cattle and Cereal Farming"))
+SelectedRegion <- zim_llh2 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = SelectedRegion)) +
+  coord_sf() +
+  scale_fill_viridis(discrete = TRUE, option = "H") +
+  theme(legend.title = element_text(size = 8), 
+               legend.text = element_text(size = 8)) +
+  labs(title = "Livelihood Zone in Zimbabwe-Selected Region", fill =  "Livelihood Zone")
+SelectedRegion
+
+
+```
+
+
