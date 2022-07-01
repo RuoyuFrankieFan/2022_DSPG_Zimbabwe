@@ -9,14 +9,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(moderndive)
 library(readr)
 library(tidyr)
 ```
 ## Read in the files
-```{r}
+```{r, warning=FALSE, message=FALSE}
 EVI_source <- read_csv("./Data/EVI_ts_Zimb.csv")
 
 ```
@@ -24,15 +24,15 @@ EVI_source <- read_csv("./Data/EVI_ts_Zimb.csv")
 ## Goal: find the mean, max and min value for precipitation for each month
 
 1. Drop some unessential columns 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 #This is in wide format
 EVI_wide <- EVI_source %>% 
   select(NAME_2, `2005_03_01_EVI`:`2021_12_30_EVI`) %>% #select needed columns--Districts and observations
   rename(District = NAME_2) #rename column
 ```
 
-2. Transform it to long format
-```{r}
+2. Transform it to long format (daily Data)
+```{r, warning=FALSE, message=FALSE}
 # Parsed through the date with "_". Might need to change the code when it comes with different format
 # Here the format for observation is yyyy_mm_dd_NDVI. Modify it if your observation comes with a different format.
 EVI_long <- gather(EVI_wide, Date, EVI, `2005_03_01_EVI`:`2021_12_30_EVI`)%>% 
@@ -40,11 +40,26 @@ EVI_long <- gather(EVI_wide, Date, EVI, `2005_03_01_EVI`:`2021_12_30_EVI`)%>%
   select(-EVI11) #drop the _NDVI string segment
 
 
-write.csv(EVI_long,"./Data/EVI_long.csv", row.names = FALSE)
+# write.csv(EVI_long,"./Data/EVI_long.csv", row.names = FALSE)
 ```
 
-3. Find the average, max, and min precipitation for annual level
-```{r}
+
+3. Monthly Data (average, max, and min EVI)
+```{r, warning=FALSE, message=FALSE}
+EVI_monthly <- EVI_long %>% 
+  select(-Day) %>% 
+  group_by(District, Year, Month) %>%   # Group by district, year and month
+  summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
+         MaxEVI = max(EVI, na.rm=TRUE),
+         MinEVI = min(EVI, na.rm=TRUE),
+         MedianEVI = median(EVI, na.rm=TRUE))
+
+# write.csv(EVI_monthly,"./Data/EVI_monthly.csv", row.names = FALSE)
+
+```
+
+4. Find the average, max, and min EVI for annual level
+```{r, warning=FALSE, message=FALSE}
 EVI_annual <- EVI_long %>% 
   select(-Month, -Day) %>% 
   group_by(District, Year) %>%    # group by district and year
@@ -53,25 +68,8 @@ EVI_annual <- EVI_long %>%
          MinEVI = min(EVI, na.rm=TRUE),
          MedianEVI = median(EVI, na.rm=TRUE))   # could also find median, standard deviation, z-score if needed
 
- write.csv(EVI_annual,"./Data/EVI_annual.csv", row.names = FALSE)
+# write.csv(EVI_annual,"./Data/EVI_annual.csv", row.names = FALSE)
 
 ```
-
-4. Monthly Data
-```{r}
-EVI_monthly <- EVI_long %>% 
-  select(-Day) %>% 
-  group_by(District, Year, Month) %>%   # Group by district, year and month
-  summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
-         MaxEVI = max(EVI, na.rm=TRUE),
-         MinEVI = min(EVI, na.rm=TRUE),
-         MedianEVI = median(EVI, na.rm=TRUE),
-         zScore = scale(EVI, center = TRUE, scale = TRUE))
-
-write.csv(EVI_monthly,"./Data/EVI_monthly.csv", row.names = FALSE)
-
-```
-
-
 
 

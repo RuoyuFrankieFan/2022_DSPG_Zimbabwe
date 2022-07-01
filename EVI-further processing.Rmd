@@ -18,6 +18,7 @@ library(ggplot2)
 library(rgdal)
 library(sp)
 library(leaflet)
+library(directlabels)
 ```
 
 ## Info for EVI:
@@ -34,6 +35,8 @@ EVI_monthly <- read_csv("./Data/EVI_monthly.csv")
 AnnualEVI <- read_csv("./Data/EVI_annual.csv")
 zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
 EVI_long <- read_csv("./Data/EVI_long.csv") 
+zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
+
 ```
 
 ### Selected Years
@@ -168,6 +171,9 @@ This would only show one district in Zim because having 60 districts add another
 ```{r, echo=FALSE, include=FALSE}
 zim_district <- rename(zim_district, District = NAME_2) %>% 
   select(District)
+
+zim_region <- rename(zim_region, Region = nat_region) %>% 
+  select(Region)
 
 GrowingSsonEVIbyDis2017 <-full_join (zim_district, `EVI2017`, by = "District")
 GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
@@ -312,7 +318,6 @@ StaticMap <- AvrgAnnualMaxEVI %>%
 
 
 
-
 PRECIPmonthly <- read_csv("./Data/PRECIP_filtered.csv")
 PRECIPAvg <- PRECIPmonthly %>% 
   group_by(District, Year) %>% 
@@ -333,4 +338,239 @@ StaticMap
 Map2
 ```
 
+```{r}
+EVI_region_source<- read_csv("./Data/EVI_ts_Zimb_region.csv")
+
+```
+1. Drop some unessential columns 
+```{r}
+#This is in wide format
+EVI_region_wide <- EVI_region_source %>% 
+  select(nat_region, `2005_03_01_EVI`:`2021_12_30_EVI`) %>% #select needed columns--Districts and observations
+  rename(Region = nat_region) #rename column
+```
+
+2. Transform it to long format
+```{r}
+# Parsed through the date with "_". Might need to change the code when it comes with different format
+# Here the format for observation is yyyy_mm_dd_NDVI. Modify it if your observation comes with a different format.
+EVI_region_long <- gather(EVI_region_wide, Date, EVI, `2005_03_01_EVI`:`2021_12_30_EVI`)%>% 
+  separate( col=Date, into=c('Year', 'Month', "Day", "EVI11"), sep='_') %>% # Parsed it into Year/Month/Day
+  select(-EVI11) #drop the _NDVI string segment
+
+EVI_region_processed <-  EVI_region_long %>% 
+  group_by(Region, Year, Month) %>%   # Group by district, year and month
+  summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
+         MaxEVI = max(EVI, na.rm=TRUE),
+         MinEVI = min(EVI, na.rm=TRUE),
+         MedianEVI = median(EVI, na.rm=TRUE))
+
+write.csv(EVI_region_long,"./Data/EVI_region_long.csv", row.names = FALSE)
+write.csv(EVI_region_processed,"./Data/EVI_region_processed.csv", row.names = FALSE)
+```
+
+
+```{r}
+EVI_MAX_region <- EVI_region_long %>% 
+  group_by(Region, Year) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+  group_by(Region) %>% 
+  summarise(AvgAnnualMaxEVI = mean(MaxEVI, na.rm = TRUE))
+
+AvrgAnnualMaxEVI_region <- full_join(zim_region, EVI_MAX_region, by = "Region")
+
+StaticMapSet2 <- AvrgAnnualMaxEVI_region %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AvgAnnualMaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average Annual Maximum EVI in Zimbabwe")
+
+StaticMapSet2
+```
+## Time Series Line Graph for MAX EVI 
+```{r}
+# EVI in growing seasons by year by month
+EVIGrSs <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2005:2021) %>% 
+  filter(!(Year == 2005 & Month == "03")) %>% 
+  filter(!(Year == 2005 & Month == "04")) %>%
+  filter(!(Year == 2005 & Month == "05")) %>%
+  filter(!(Year == 2005 & Month == "02")) %>% 
+  filter(!(Year == 2005 & Month == "01")) %>% 
+  filter(!(Year == 2021 & Month == "10")) %>% 
+  filter(!(Year == 2021 & Month == "11")) %>%
+  filter(!(Year == 2021 & Month == "12")) %>% 
+  group_by(Region, Year, Month) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE))
+ 
+  mutate(GrowingSeason = if_else(Year == 2010|Year==2011, "2011", "2017"))
+  
+EVIGrSs$YM <- paste(EVIGrSs$Year, EVIGrSs$Month, sep="-")
+
+
+EVIGrSsTimeSeries <- EVIGrSs %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(Region)))+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum EVI in Zim During Growing Season", color =  "Region") +
+  xlab("Time") +
+  ylab("Maximum EVI")
+
+
+EVIGrSsTimeSeries2 <- EVIGrSs %>% 
+  ggplot(aes(x = YM, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(Region)))+
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 315)) +
+  facet_wrap(~Region) +
+  labs(title = "Maximum EVI in Zim During Growing Season", color =  "Region") +
+  xlab("Time") +
+  ylab("Maximum EVI")
+
+EVIGrSsTimeSeries2
+EVIGrSsTimeSeries
+```
+```{r}
+# EVI in growing seasons by year
+EVIGrSs2 <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2005:2021) %>% 
+  filter(!(Year == 2005 & Month == "03")) %>% 
+  filter(!(Year == 2005 & Month == "04")) %>%
+  filter(!(Year == 2005 & Month == "05")) %>%
+  filter(!(Year == 2005 & Month == "02")) %>% 
+  filter(!(Year == 2005 & Month == "01")) %>% 
+  filter(!(Year == 2021 & Month == "10")) %>% 
+  filter(!(Year == 2021 & Month == "11")) %>%
+  filter(!(Year == 2021 & Month == "12")) %>% 
+  group_by(Region, Year) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE))
+
+
+EVIGrSsTimeSeriesByYear <- EVIGrSs2 %>% 
+  ggplot(aes(x = Year, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(Region)))+
+  geom_point(aes(color = Region, shape = Region)) +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
+  xlab("Time") +
+  ylab("Maximum EVI")
+
+
+EVIGrSsTimeSeriesByYear2 <- EVIGrSs2 %>% 
+  ggplot(aes(x = Year, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(Region)))+
+  geom_point(aes(shape = Region)) +
+  theme(axis.text.x = element_text(angle = 315)) +
+  facet_wrap(~Region)+
+  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
+  xlab("Time") +
+  ylab("Maximum EVI")
+EVIGrSsTimeSeriesByYear2
+EVIGrSsTimeSeriesByYear
+
+EVIGrSsTimeSeries2017 <- EVIGrSs2 %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2016:2017) %>% 
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>% 
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12")) %>% 
+  ggplot(aes(x = Year, y = MaxEVI)) +
+  geom_line(aes(group=1, color = as.factor(Region)))+
+  geom_point(aes(color = Region, shape = Region)) +
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
+  xlab("Time") +
+  ylab("Maximum EVI") 
+
+
+
+
+```
+
+## Time Series Line Graph for Average EVI by Month
+```{r}
+EVIGrSs3 <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2005:2021) %>% 
+  filter(!(Year == 2005 & Month == "03")) %>% 
+  filter(!(Year == 2005 & Month == "04")) %>%
+  filter(!(Year == 2005 & Month == "05")) %>%
+  filter(!(Year == 2005 & Month == "02")) %>% 
+  filter(!(Year == 2005 & Month == "01")) %>% 
+  filter(!(Year == 2021 & Month == "10")) %>% 
+  filter(!(Year == 2021 & Month == "11")) %>%
+  filter(!(Year == 2021 & Month == "12")) %>% 
+  group_by(Region, Month) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE)) %>% 
+  mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                             Month =="11" ~ "2",
+                             Month =="12" ~ "3",
+                             Month =="01" ~ "4",
+                             Month =="02" ~ "5",
+                             Month =="03" ~ "6",
+                             Month =="04" ~ "7",
+                             Month =="05" ~ "8"))
+                             
+
+
+EVIGrSs3$Month[which(EVIGrSs3$Month=="10")] <- "October"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="11")] <- "November"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="12")] <- "December"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="01")] <- "January"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="02")] <- "Febuary"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="03")] <- "March"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="04")] <- "April"
+EVIGrSs3$Month[which(EVIGrSs3$Month=="05")] <- "May"
+
+EVIGrSs3$Month <- reorder(EVIGrSs3$Month, as.numeric(EVIGrSs3$GSOrder))
+EVIGrSs3$Month <- as.factor(EVIGrSs3$Month)
+EVIGrSs3$Region <- as.factor(EVIGrSs3$Region)
+AvgEVIGrSsByMonth <- EVIGrSs3 %>% 
+  ggplot(aes(x = Month, y = AverageEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8)+
+  theme(axis.text.x = element_text(angle = 315)) +
+  labs(title = "Average EVI in Zim During Growing Season--By Month", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Average EVI") 
+
+AvgEVIGrSsByMonth
+
+
+
+EVIGrSs3 %>% 
+  ggplot(aes(x = Month, y = AverageEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  geom_text(aes(label = Region),
+              hjust = 0, nudge_x = 0.1)+
+  coord_cartesian(clip = "off") +
+  theme(axis.text.x = element_text(angle = 315),
+        legend.position = "none",
+          plot.margin = margin(0.1, 2.6, 0.1, 0.1, "cm")) +
+  labs(title = "Average EVI in Zim During Growing Season--By Month", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Average EVI") 
+```
+## Zim Region Map
+```{r}
+RegionMap <- zim_region %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = Region)) +
+  coord_sf() +
+  scale_fill_viridis_d(option = "H") +
+  theme(legend.title = element_text(size = 10), 
+               legend.text = element_text(size = 10)) +
+  labs(title = "Agro-ecological regions in Zimbabwe", color =  "Agro-ecological regions")
+
+RegionMap
+```
 
