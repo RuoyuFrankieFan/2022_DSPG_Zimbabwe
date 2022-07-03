@@ -43,9 +43,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 2. Data & Methodology
 
-# 2.1 Data 
+# 2.1 Data
 
-## 2.1.1 PICES Data 
+## 2.1.1 PICES Data
 
 The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011--2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities.
 
@@ -66,16 +66,15 @@ A brief overview of the Mathematics behind the Multidimensional Poverty Index
 
 ## 2.2.3 Selected Indicies
 
-- NDVI
+-   NDVI
 
-- EVI
+-   EVI
 
-- Soil
+-   Soil
 
-- Precipitation
+-   Precipitation
 
-
-# 3. Spatial visualization of Indices 
+# 3. Spatial visualization of Indices
 
 # 4. Spatial visualization of MPI
 
@@ -114,7 +113,6 @@ FRANKIE FAN (Math and Data Science Double Major)
 [BRIANNA POSADAS](https://www.linkedin.com/in/briannaposadas/) (Virginia Tech School of Plant and Environmental Sciences)
 
 [JEFFREY ALWANG](https://aaec.vt.edu/people/faculty/alwang-jeffrey.html) (Virginia Tech, Agricultural and Applied Microeconomics);
-
 
 ### Project Stakeholders
 
