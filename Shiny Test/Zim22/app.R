@@ -324,8 +324,7 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             
                             tabPanel("Soil Moisture",
-                                     
-                                     # tabName = "91_Dist",
+                                    # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
                                        box(
@@ -445,7 +444,40 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                  ),
                  
-                 
+                 ## Tab X
+                 tabPanel("Testing",
+                            tabsetPanel(
+                            tabPanel("Testing Tab",
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(
+                                         title = "Testing Tab",
+                                         
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                          
+                          tabPanel("Testing Tab2",
+                                   
+                                   # tabName = "91_Dist",
+                                   # # Everything has to be put in a row or column
+                                   fluidRow(
+                                     box(
+                                       title = "Testing Tab",
+                                       
+                                       box(
+                                         
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))))
+                          
+                          ),
                  
                  tabPanel("Takeaways",
                           
