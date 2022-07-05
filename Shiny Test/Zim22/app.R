@@ -85,7 +85,14 @@ jscode <- "function getUrlVars() {
            }
            "
 
-# Load Data
+
+# LOADING DATA-----------------------------------------------
+#EVI_monthly <- read_csv("./Data/EVI_monthly.csv")
+#AnnualEVI <- read_csv("./Data/EVI_annual.csv")
+#zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+#EVI_long <- read_csv("./Data/EVI_long.csv") 
+#zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
+
 
 # UI -------------------------------------------------------------
 
@@ -289,6 +296,57 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                  ),
                  
+                 
+                 ## Tab X------------
+                 tabPanel("Data & Methodology",
+                          tabsetPanel(
+                            tabPanel("Data",
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(
+                                         title = "Data",
+                                         
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                            
+                            tabPanel("Methodology",
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(
+                                         title = "Methodology",
+                                         
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                            
+                            tabPanel("Resources",
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(
+                                         title = "Resources",
+                                         
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))))
+                          )),
+                 
+                 
 
                  ## Tab 1
                  navbarMenu("Remote Sensed Data", 
@@ -444,41 +502,7 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                  ),
                  
-                 ## Tab X
-                 tabPanel("Testing",
-                            tabsetPanel(
-                            tabPanel("Testing Tab",
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(
-                                         title = "Testing Tab",
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
-                          
-                          tabPanel("Testing Tab2",
-                                   
-                                   # tabName = "91_Dist",
-                                   # # Everything has to be put in a row or column
-                                   fluidRow(
-                                     box(
-                                       title = "Testing Tab",
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))))
-                          
-                          ),
-                 
+
                  tabPanel("Takeaways",
                           
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
@@ -522,12 +546,14 @@ ui <- navbarPage(title = "Zimbabwe",
                                           img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, PHD);"),
                                           p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, BSE PHD);"),
                                           p(a(href = 'https://www.linkedin.com/in/atticus-rex-717581191/', 'Frankie Fan', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Major, Data and Decisions minor);"),
                                           p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
+                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
                                           p("", style = "padding-top:10px;")
                                           
                                    ),
@@ -603,12 +629,7 @@ ui <- navbarPage(title = "Zimbabwe",
 
 
 
-
-
-
-
-
-# Define server logic required to draw a histogram
+## Define server logic required
 server <- function(input, output) {
   # Run JavaScript Code
   runjs(jscode)
