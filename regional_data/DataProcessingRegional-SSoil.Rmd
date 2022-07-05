@@ -1,0 +1,84 @@
+---
+title: "Processing Soil Regional"
+author: "Ari L."
+Last Update: 7/05/2022
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Libraries
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+```
+
+## Read in the files
+```{r}
+soil_source <- read_csv("./regional_data/soil_ts_Zimb.csv")
+
+```
+
+## Goal: find the mean, max and min value for precipitation for each month
+
+1. Drop some unessential columns 
+```{r}
+#This is in wide format
+soil_wide <- soil_source %>% 
+  select(`NASA_USDA_SMAP_SM20150502_20150504_ssm`:`NASA_USDA_SMAP_SM20211229_20211231_ssm`) #%>% #select needed columns--Districts and observations
+# rename(Region = nat_region) #rename column
+```
+
+
+2. transpose data
+```{r}
+soil_tr<- as.data.frame(t(soil_wide))
+```
+
+3. Create df with Dates for row names
+```{r}
+Dates <- colnames(soil_wide) %>% 
+  as.data.frame() %>% 
+    separate(1,into=c("NASA", "USDA", "SMAP", "DateBegin", "DateEnd", "ssm"), sep='_') %>% # Parsed it into Year/Month/Day
+  select(-c(NASA, USDA, SMAP, ssm)) %>% #drop the string segment 
+  mutate_all(as.character()) %>%
+  separate( col=DateBegin, into=c('s', 'DateBegin'), sep='M')%>% 
+  select(-s) 
+```
+
+4. add row and column names
+```{r}
+rownames(soil_tr)<- as.Date(Dates$DateBegin, format="%Y%m%d")
+colnames(soil_tr)<- soil_source$nat_region
+```
+
+5. Subset Data for growing season
+```{r}
+soil_g1 <- soil_tr %>% 
+  filter(between(as.Date(row.names(soil_tr)), as.Date("2016-10-1"),as.Date("2017-4-30"))) #%>% 
+
+#write.csv(soil_monthly_2017,"./Data/soil_monthly_2017.csv", row.names = FALSE)
+```
+
+
+6. write csv
+```{r}
+write.csv(soil_tr,"./regional data/Ssoil_regional.csv", row.names = FALSE)
+write.csv(soil_g1,"./regional data/Ssoil_regional_g16_17.csv", row.names = FALSE)
+```
+
+
+
+#seperate date into year, month and day collumns
+#```{r}
+soilDated <- soilDated%>%
+  separate( col=DateBegin, into=c('YearBegin', 'MonthBegin', "DayBegin"), sep='-') %>% # Parsed it into Year/Month/Day
+  separate( col=DateEnd, into=c('YearEnd', 'MonthEnd', "DayEnd"), sep='-')  # Parsed it into Year/Month/Day
+
+#```
+
