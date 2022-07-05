@@ -132,7 +132,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("Monetary poverty measures in 2017 revealed that roughly 63% of Zimbabwean households lived in poverty. Together with the high poverty rate, the country experiences income inequality, malnourishment, low life expectancy, high infant/maternal mortality rates, difficulty accessing health and education resources, and overall low living standards.")),
                                    
                                    column(4,
-                                          h2(strong("Recent History"), align = "center"),
+                                          h2(strong("Agricultural Profile"), align = "center"),
                                           p("After gaining independence in 1980, there was widespread hope that the economic and labor exploitation Africans suffered at the hands of an imperial Great Britain would diminish. 
                                             While initial trends were encouraging, this hope dwindled as many factors sent the Zimbabwean economy into decline. Most prominent among these factors was the central government’s inconsistent policy, 
                                             which resulted in vague and evolving strategies for combatting poverty. A scientific socialist policy approach was applied between 1980 and 1990 to address poverty but was ineffective and abandoned due to a 
@@ -271,21 +271,26 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             tabPanel("Resources", 
                                      fluidPage(
-                                       column(5,
+                                       column(4,
                                               h3(strong("Google Earth Engine")),
                                               img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "40%"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
-                                       column(5,
+                                       column(4,
                                               h3(strong("Google Maps")),
                                               img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "150px"),
                                               withMathJax(), 
                                               p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
                                        
-                                       column(5,
+                                       column(4,
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "150px"),
+                                              withMathJax(), 
+                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
+                                       column(4,
+                                              h3(strong("Other")),
+                                              img(src = "zimstat.jpg", style = "display: inline; float: left;", width = "150px"),
                                               withMathJax(), 
                                               p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine."))
                                        
@@ -310,9 +315,9 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                          box(
                                            
-                                           width = 4,
+                                           width = 8,
                                            withMathJax(),
-                                           title = "Description",
+                                           title = "PICES Data",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
                             
                             tabPanel("Methodology",
@@ -340,7 +345,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                          box(
                                            
-                                           width = 4,
+                                           width = 12,
                                            withMathJax(),
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))))
