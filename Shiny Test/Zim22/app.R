@@ -1,5 +1,5 @@
 #Leo's setting WD
-# setwd("G:/My Drive/PhD/Internship/Zimbabwe/03_Git/2021_DSPG_Zimbabwe/ShinyApp")
+# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Shiny Test/Zim22)
 
 library(shiny)
 library(leaflet)
@@ -87,11 +87,11 @@ jscode <- "function getUrlVars() {
 
 
 # LOADING DATA-----------------------------------------------
-#EVI_monthly <- read_csv("./Data/EVI_monthly.csv")
-#AnnualEVI <- read_csv("./Data/EVI_annual.csv")
-#zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
-#EVI_long <- read_csv("./Data/EVI_long.csv") 
-#zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
+EVI_monthly <- read_csv("./data/EVI_monthly.csv")
+AnnualEVI <- read_csv("./data/EVI_annual.csv")
+zim_district <- st_read("./data/Shapefiles/Zim_D60.shp")  
+EVI_long <- read_csv("./data/EVI_long.csv") 
+zim_region <- st_read("./data/Shapefiles/agro-ecological-regions.shp")
 
 
 # UI -------------------------------------------------------------
