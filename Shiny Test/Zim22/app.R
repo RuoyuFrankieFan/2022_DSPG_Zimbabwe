@@ -87,11 +87,21 @@ jscode <- "function getUrlVars() {
 
 
 # LOADING DATA-----------------------------------------------
+#SHAPEFILES
+zim_district <- st_read("./data/Shapefiles/Zim_D60.shp")  
+zim_region <- st_read("./data/Shapefiles/agro-ecological-regions.shp")
+
+#EVI DATA
 EVI_monthly <- read_csv("./data/EVI_monthly.csv")
 AnnualEVI <- read_csv("./data/EVI_annual.csv")
-zim_district <- st_read("./data/Shapefiles/Zim_D60.shp")  
 EVI_long <- read_csv("./data/EVI_long.csv") 
-zim_region <- st_read("./data/Shapefiles/agro-ecological-regions.shp")
+
+
+#PRECIPITATION DATA
+
+
+#SOIL DATA
+
 
 
 # UI -------------------------------------------------------------
@@ -122,9 +132,13 @@ ui <- navbarPage(title = "Zimbabwe",
                           fluidRow(style = "margin: 6px;",
                                    column(4,
                                           h2(strong("Project Overview"), align = "center"),
-                                          p("Prior research suggests that poverty in Zimbabwe has increased since the period of crisis began at the turn of the millennium. According to the latest World Bank (2020) estimates, due to the longstanding economic crisis and disruptions following the COVID-19 pandemic, 49% of Zimbabwe’s population was in extreme poverty in 2020. Our stakeholders seek solutions to the economic situation. They would like more granular information presented in creative ways that allow the user to glean the multidimensional and temporal aspects of poverty in Zimbabwe. The recent availability of household surveys for public use has opened the possibility of using the data to inform evidence-based policy."),
-                                          p("This project uses data from the Poverty, Income, Consumption, Expenditure Survey (PICES) to provide granular information on poverty in Zimbabwe. We created multidimensional poverty indices (MPI) at the", strong(" district and province level"), " and decomposed them into components that focus on ", strong("education, health, employment, housing conditions, living conditions, assets, agricultural assets, and access to services."),   
-                                            "We provide interactive tools that allow the user to visualize and study each component and understand their contribution to the MPI. We constructed these measures for two waves of data, 2011 and 2017, to show the changes in poverty over time and across regions.  The composition and decomposition of MPI in this project provide evidence-based policy recommendations and interventions for poverty reduction. ")),
+                                          p("In Zimbabwe, agriculture is a mainstay of the economy and the source of livelihoods for the majority of rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with a series of drought, macro-economic instability, and diseases contributing to the problem. Additionally, an ill-conceived fast-track land reform beginning in 2000 led to decapitalization of the commercial agriculture sector, while extreme droughts in 2003 and 2016 contributed to increased food insecurity and a huge increase in rural poverty."),
+                                          p("Prior research suggests that poverty in Zimbabwe has increased since the period of crisis began at the turn of the millennium. According to the latest World Bank (2020) estimates, due to the longstanding economic crisis and disruptions following the COVID-19 pandemic, 49% of Zimbabwe’s population was in extreme poverty in 2020. Zimbabwe’s government seeks guidance in policies to enhance the climate resilience of its agricultural sector and contribute to sustainable enhancement in rural conditions. It has made available to researchers a trove of household survey data from large national samples for 2000, 2011, 2017 and 2019 with the hope that these can be used to inform agricultural policy."),
+                                          p("This project has several goals:", strong("(i) to identify the different remotely sensed climate/weather related data available for Zimbabwe; (ii) to use these data to construct a spatial profile of exposure to long-term climate changes and short-term adverse weather events; and (iii) analyze the benefit of these remotely sensed data to explain demographic conditions."), "In doing so, the project seeks to contribute to understanding the impacts of a climate-resilient agricultural policy. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, but it contains very little geographic specificity in an incredibly diverse agricultural economy. "),
+                                          p("This project uses data from the Poverty, Income, Consumption, Expenditure Survey (PICES) to provide granular information on poverty in Zimbabwe. We created multidimensional poverty indices (MPI) at the", strong("district and province level"), " and decomposed them into components that focus on ", strong("education, health, employment, housing conditions, living conditions, assets, agricultural assets, and access to services. Additionally, we obtain data on our selected indices: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine."),   
+                                            "We provide interactive tools that allow the user to visualize and study each remote sensed data index and understand their contribution to the MPI and the components of the MPI. We constructed these measures for two waves of data, 2011 and 2017, to show the changes in weather over time and across the districts and the agroecological regions. The overall goal of this project is to understand how remote sensing data can be used to inform socioeconomic and climate policy. So, we seek to understanding how remotely sensed data can be used to inform climate change and poverty in Zimbabwe.")),
+                                   
+                                   
                                    column(4,
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
                                           p("Nestled in the Southeastern tip of Africa, Zimbabwe neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by Prime Minister and eventually President Robert Mugabe until his resignation in 2017. Presently, Emmerson Mnangagwa holds office. The country is home to roughly 14,830,000 inhabitants, 10% of whom live in the capital city of Harare. Although large agglomerations exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is relatively evenly dispersed throughout the country otherwise. Zimbabwe’s central government is responsible for regulating its ten provinces, and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."), 
