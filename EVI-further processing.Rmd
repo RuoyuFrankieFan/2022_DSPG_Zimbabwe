@@ -253,6 +253,7 @@ zim_region <- rename(zim_region, Region = nat_region) %>%
 GrowingSsonEVIbyDis2017 <-full_join (zim_district, `EVI2017`, by = "District")
 GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
 ```
+
 ## 4. Spatial Visualization for growing seasons 2011&2017
 ```{r}
 GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>% 
@@ -447,6 +448,7 @@ EVI_region_processed <-  EVI_region_long %>%
 
 ## 6. Spatial Visualization: Average Annual MaxEVI by Region
 ```{r}
+EVI_region_long <- read_csv("./Data/EVI_region_long.csv")
 EVI_MAX_region <- EVI_region_long %>% 
   group_by(Region, Year) %>% 
   summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
@@ -470,6 +472,224 @@ StaticMapSet2
 
 
 ```
+## Added: Max EVI in 2010-2011 and 2016-2017 growing seasons; regional and district levels
+
+```{r}
+# Regional 2011
+
+# Max
+Grow2011 <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2010:2011) %>% 
+  filter(!(Year == 2010 & Month == "03")) %>% 
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>% 
+  filter(!(Year == 2010 & Month == "01")) %>% 
+  filter(!(Year == 2011 & Month == "10")) %>% 
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12")) %>% 
+  group_by(Region) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE),
+            MaxEVI = max(EVI, na.rm = TRUE),
+            SdEVI = sd(EVI, na.rm = TRUE))
+
+EVIGrow2011 <- full_join(zim_region, Grow2011, by = "Region")
+
+RgMaxEVI2011 <- EVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2011")
+
+# Average
+AvgEVI2011 <- EVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AverageEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average EVI in Zimbabwe-Growing Season 2011")
+
+# Standard Deviation
+SdEVI2011 <- EVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = SdEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Standard Deviation of EVI in Zimbabwe-Growing Season 2011")
+
+AvgEVI2011
+SdEVI2011
+RgMaxEVI2011
+```
+
+```{r}
+# Regional 2017
+
+# Max
+Grow2017 <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2016:2017) %>% 
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>% 
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12")) %>% 
+  group_by(Region) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE),
+            MaxEVI = max(EVI, na.rm = TRUE),
+            SdEVI = sd(EVI, na.rm = TRUE))
+
+EVIGrow2017 <- full_join(zim_region, Grow2017, by = "Region")
+
+RgMaxEVI2017 <- EVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2017")
+
+# Average
+AvgEVI2017 <- EVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AverageEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average EVI in Zimbabwe-Growing Season 2017")
+
+# Standard Deviation
+SdEVI2017 <- EVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = SdEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Standard Deviation of EVI in Zimbabwe-Growing Season 2017")
+
+AvgEVI2017
+SdEVI2017
+RgMaxEVI2017
+```
+
+
+```{r}
+# District Level 2011
+
+DisGrow2011 <- EVI_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2010:2011) %>% 
+  filter(!(Year == 2010 & Month == "03")) %>% 
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>% 
+  filter(!(Year == 2010 & Month == "01")) %>% 
+  filter(!(Year == 2011 & Month == "10")) %>% 
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12")) %>% 
+  group_by(District) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE),
+            MaxEVI = max(EVI, na.rm = TRUE),
+            SdEVI = sd(EVI, na.rm = TRUE))
+
+DisEVIGrow2011 <- full_join(zim_district, DisGrow2011, by = "District")
+
+# Max
+DisMaxEVI2011 <- DisEVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2011")
+
+# Average
+DisAvgEVI2011 <- DisEVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AverageEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average EVI in Zimbabwe-Growing Season 2011")
+
+# Standard Deviation
+DisSdEVI2011 <- DisEVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = SdEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Standard Deviation of EVI in Zimbabwe-Growing Season 2011")
+
+DisMaxEVI2011
+DisAvgEVI2011
+DisSdEVI2011
+```
+
+
+
+
+```{r}
+# District Level 2017
+
+DisGrow2017 <- EVI_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2016:2017) %>% 
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>% 
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12")) %>% 
+  group_by(District) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE),
+            MaxEVI = max(EVI, na.rm = TRUE),
+            SdEVI = sd(EVI, na.rm = TRUE))
+
+DisEVIGrow2017 <- full_join(zim_district, DisGrow2017, by = "District")
+
+# Max
+DisMaxEVI2017 <- DisEVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2017")
+
+# Average
+DisAvgEVI2017 <- DisEVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = AverageEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Average EVI in Zimbabwe-Growing Season 2017")
+
+# Standard Deviation
+DisSdEVI2017 <- DisEVIGrow2017 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = SdEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Standard Deviation of EVI in Zimbabwe-Growing Season 2017")
+
+DisMaxEVI2017
+DisAvgEVI2017
+DisSdEVI2017
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 7. Line graph: Time Series Line Graph for MAX EVI 
 
 ```{r}
