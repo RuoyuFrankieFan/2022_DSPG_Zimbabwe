@@ -19,6 +19,8 @@ library(rgdal)
 library(sp)
 library(leaflet)
 library(directlabels)
+
+library(ggrepel)
 ```
 
 ## Info for EVI:
@@ -39,8 +41,105 @@ zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
 
 ```
 
-### Selected Years
+
+```{r, echo=FALSE, include=FALSE}
+# Rename cols to match
+zim_district <- rename(zim_district, District = NAME_2)
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+zim_district <- zim_district %>% 
+  select(District)
+
+MonthlyEVIbyDis <-full_join (zim_district, `EVI_monthly`, by = "District")
+```
+
+## 1. Monthly map for Year 2011 and 2017
+```{r, echo=FALSE}
+# Maximum evi by month
+MaxMonthlyEVI2011 <- MonthlyEVIbyDis %>% 
+  filter(Year == 2011) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - 2011")
+MaxMonthlyEVI2011
+
+
+
+MaxMonthlyEVI2017 <- MonthlyEVIbyDis %>% 
+  filter(Year == 2017) %>% 
+  arrange(Month) %>% 
+  ggplot() +
+  geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  facet_wrap(~Month) +
+  ggtitle("Max EVI in Zimbabwe - 2017")
+MaxMonthlyEVI2017
+```
+The two maps above show the spatial visualization of maximum EVI of each month by district. We could see that the maximum EVI (deepest blue) of a year occurs in February and March, and this is coherent with the weather and the growing seasons of crops in Zim--the rainy season is from November to March, and the earliest harvest time could be in April. 
+
+
+## 2a. Distribution of EVI from 2011-2017
+
+```{r, echo=FALSE}
+
+EVI_long %>% 
+  filter(Year == 2011|Year == 2012|Year == 2013|Year == 2014|Year == 2015|Year == 2016|Year == 2017) %>% 
+  ggplot(aes(x = Year, y = EVI, fill = as.factor(Year))) + 
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point", shape = 8,
+               size = 2, color = "white") +
+  scale_fill_brewer(palette="Set1", name = "Year") +
+  labs(title = "Distribution of EVI in Zimbabwe, Year 2011-2017") 
+
+```
+Here I used the white star '*' to represent the average EVI in a year, as it presents an overall summary of the EVI by year. However, the median (the black line in the middle of a bar) could be a better indicator when there is a regional drought in Zimbabwe.
+
+
+## 2b. Distribution of EVI in 2011 and 2017
+```{r, echo=FALSE}
+AnnualEVI %>% 
+  filter( Year == 2011|Year == 2017) %>% 
+  gather(Type, EVI, AverageEVI:MedianEVI) %>% 
+  ggplot(aes(x = Type, y = EVI, fill = Type)) +
+  scale_fill_brewer(palette="Set3", name = "Type") +
+  facet_wrap(~Year)+
+  geom_boxplot() +
+  labs(title = "Distribution of EVI, Year 2011 & 2017") +
+    xlab("Statistics") +
+    ylab("EVI")
+
+```
+
+
+## 3. map for EVI in March in 2011 and 2017
+
+```{r, visualization for March, echo=FALSE}
+
+MaxMarch <- MonthlyEVIbyDis %>% 
+  filter(Year == 2011|Year == 2017, Month == "03") %>% 
+  ggplot() +
+  geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
+  facet_wrap(~Year) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe - March")
+MaxMarch
+```
+The map shows a comparison of the maximum EVI between Year 2011 and 2017. Here I chose March (the month with max EVI in a year) as it will compare the EVI in two years in the same scale. It is obvious that March 2017 has a higher in almost all districts. 
+
+
+
 ```{r}
+
+### Selected Years
+
 EVISelectedYears <- EVI_monthly %>% 
   filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
          Year == 2010|Year == 2011|Year == 2016|Year == 2017) %>% 
@@ -94,7 +193,6 @@ EVI2017$YM <- paste(EVI2017$Year, EVI2017$Month, sep="-")
 ```
 
 
-
 ## Time Series Scatter Plot
 
 ```{r}
@@ -131,31 +229,8 @@ badVis <- EVISelectedYears %>%
   ylab("Maximum EVI")
 
 
-MaxEVI2011 <- EVI2011 %>% 
-  filter(District == "Hwange") %>% 
-  ggplot(aes(x = YM, y = MaxEVI)) +
-  geom_line(aes(group=1), color = "blue")+
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum EVI in Hwange During Growing Season--2011")+
-  xlab("Time")+
-  ylab("Maximum EVI")
-
-
-MaxEVI2017 <- EVI2017 %>% 
-  filter(District == "Hwange") %>% 
-  ggplot(aes(x = YM, y = MaxEVI)) +
-  geom_line(aes(group=1), color = "blue")+
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum EVI in Hwange During Growing Season--2017")+
-  xlab("Time")+
-  ylab("Maximum EVI")
-
 `2011&2017`
 Beitbridge
-MaxEVI2011
-MaxEVI2017
 badVis
 ```
 Here I chose the district "Hwange", and plotted a graph to show the variation in its EVI across the growing seasons in 2011 and 2017.\
@@ -178,9 +253,32 @@ zim_region <- rename(zim_region, Region = nat_region) %>%
 GrowingSsonEVIbyDis2017 <-full_join (zim_district, `EVI2017`, by = "District")
 GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
 ```
-
+## 4. Spatial Visualization for growing seasons 2011&2017
 ```{r}
 GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>% 
+    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                             Month =="11" ~ "2",
+                             Month =="12" ~ "3",
+                             Month =="01" ~ "4",
+                             Month =="02" ~ "5",
+                             Month =="03" ~ "6",
+                             Month =="04" ~ "7",
+                             Month =="05" ~ "8"))
+                             
+GrowEVI2011$Month[which(GrowEVI2011$Month=="10")] <- "October"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="11")] <- "November"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="12")] <- "December"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="01")] <- "January"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="02")] <- "Febuary"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="03")] <- "March"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="04")] <- "April"
+GrowEVI2011$Month[which(GrowEVI2011$Month=="05")] <- "May"
+
+GrowEVI2011$Month <- reorder(GrowEVI2011$Month, as.numeric(GrowEVI2011$GSOrder))
+GrowEVI2011$Month <- as.factor(GrowEVI2011$Month)
+
+
+GrowEVI2011 %>% 
   ggplot() +
   geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
@@ -189,7 +287,30 @@ GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>%
   ggtitle("Max EVI in Zimbabwe - Growing Seaon 2011")
 
 
-GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>% 
+
+GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>%
+  mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                             Month =="11" ~ "2",
+                             Month =="12" ~ "3",
+                             Month =="01" ~ "4",
+                             Month =="02" ~ "5",
+                             Month =="03" ~ "6",
+                             Month =="04" ~ "7",
+                             Month =="05" ~ "8"))
+                             
+GrowEVI2017$Month[which(GrowEVI2017$Month=="10")] <- "October"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="11")] <- "November"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="12")] <- "December"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="01")] <- "January"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="02")] <- "Febuary"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="03")] <- "March"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="04")] <- "April"
+GrowEVI2017$Month[which(GrowEVI2017$Month=="05")] <- "May"
+
+GrowEVI2017$Month <- reorder(GrowEVI2017$Month, as.numeric(GrowEVI2017$GSOrder))
+GrowEVI2017$Month <- as.factor(GrowEVI2017$Month)
+
+GrowEVI2017 %>% 
   ggplot() +
   geom_sf(size = 0.1, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
@@ -203,7 +324,7 @@ GrowEVI2017
 The EVI partially matches up with the growing season in Zim--sowing in Oct, but it seems that in May there isnt that much lost. 
 
 
-## Leaflet
+## Leaflet (Not Ready Yet)
 
 ```{r}
 
@@ -223,11 +344,6 @@ addTiles(group = "OSM (default)") %>%
     options = layersControlOptions(collapsed = FALSE)
   )
 ```
-
-
-
-
-
 
 ```{r, Leaflet for GrowingSeason2011}
 mypal <- colorNumeric(
@@ -254,51 +370,11 @@ leaflet(GrowingSsonEVIbyDis2011) %>%
 
 
 
-
-
-## z Score
-```{r}
-EVI_long$Year <- as.numeric(EVI_long$Year)
-EVI_long$Month <- as.numeric(EVI_long$Month)
-EVI_long$Day <- as.numeric(EVI_long$Day)
-
-
-MaxEVIGrow <- EVI_long %>% 
-  filter(Month == 1:5|Month == 10:12) %>% 
-  filter(!(Year == 2005 & Month == 3)) %>% 
-  filter(!(Year == 2005 & Month == 4)) %>%
-  filter(!(Year == 2005 & Month == 5)) %>%
-  filter(!(Year == 2005 & Month == 2)) %>% 
-  filter(!(Year == 2005 & Month == 1)) %>% 
-  
-  filter(!(Year == 2021 & Month == 10)) %>% 
-  filter(!(Year == 2021 & Month == 11)) %>%
-  filter(!(Year == 2021 & Month == 12)) %>% 
-  mutate(YMD = paste(Year, Month, Day, sep="-")) %>% 
-  group_by(District, Year, Month) %>% 
-  summarise( 
-         MaxEVI = max(EVI, na.rm=TRUE))
-
-
-MaxEVIPop <- MaxEVIGrow %>% 
-  group_by(District, Year, Month) %>% 
-  summarise(sdMaxEVI = sd(MaxEVI, na.rm=TRUE),
-         MeanMaxEVI = max(MaxEVI, na.rm=TRUE))
-  
-  
-  
-
-PopMeanEVIMax = mean(as.numeric(MaxEVI), na.rm = TRUE)
-  
-```
-
-
-
 ## Leaflet--Map w/ 15 layers 
 
 
 
-## Static Map-- Max EVI for every district
+## 5. Static Map--Average Max EVI for every district from 2011-2017
 ```{r}
 EVI_MAX <- EVI_long %>% 
   group_by(District, Year) %>% 
@@ -337,7 +413,7 @@ Map2 <- AvrgAnnualPRECIP %>%
 StaticMap
 Map2
 ```
-
+## Data Cleaning for EVI by Region
 ```{r}
 EVI_region_source<- read_csv("./Data/EVI_ts_Zimb_region.csv")
 
@@ -365,11 +441,11 @@ EVI_region_processed <-  EVI_region_long %>%
          MinEVI = min(EVI, na.rm=TRUE),
          MedianEVI = median(EVI, na.rm=TRUE))
 
-write.csv(EVI_region_long,"./Data/EVI_region_long.csv", row.names = FALSE)
-write.csv(EVI_region_processed,"./Data/EVI_region_processed.csv", row.names = FALSE)
+# write.csv(EVI_region_long,"./Data/EVI_region_long.csv", row.names = FALSE)
+# write.csv(EVI_region_processed,"./Data/EVI_region_processed.csv", row.names = FALSE)
 ```
 
-
+## 6. Spatial Visualization: Average Annual MaxEVI by Region
 ```{r}
 EVI_MAX_region <- EVI_region_long %>% 
   group_by(Region, Year) %>% 
@@ -387,116 +463,15 @@ StaticMapSet2 <- AvrgAnnualMaxEVI_region %>%
   ggtitle("Average Annual Maximum EVI in Zimbabwe")
 
 StaticMapSet2
-```
-## Time Series Line Graph for MAX EVI 
-```{r}
-# EVI in growing seasons by year by month
-EVIGrSs <- EVI_region_long %>% 
-  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-         Year == 2005:2021) %>% 
-  filter(!(Year == 2005 & Month == "03")) %>% 
-  filter(!(Year == 2005 & Month == "04")) %>%
-  filter(!(Year == 2005 & Month == "05")) %>%
-  filter(!(Year == 2005 & Month == "02")) %>% 
-  filter(!(Year == 2005 & Month == "01")) %>% 
-  filter(!(Year == 2021 & Month == "10")) %>% 
-  filter(!(Year == 2021 & Month == "11")) %>%
-  filter(!(Year == 2021 & Month == "12")) %>% 
-  group_by(Region, Year, Month) %>% 
-  summarise(MaxEVI = max(EVI, na.rm = TRUE))
- 
-  mutate(GrowingSeason = if_else(Year == 2010|Year==2011, "2011", "2017"))
-  
-EVIGrSs$YM <- paste(EVIGrSs$Year, EVIGrSs$Month, sep="-")
 
 
-EVIGrSsTimeSeries <- EVIGrSs %>% 
-  ggplot(aes(x = YM, y = MaxEVI)) +
-  geom_line(aes(group=1, color = as.factor(Region)))+
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum EVI in Zim During Growing Season", color =  "Region") +
-  xlab("Time") +
-  ylab("Maximum EVI")
-
-
-EVIGrSsTimeSeries2 <- EVIGrSs %>% 
-  ggplot(aes(x = YM, y = MaxEVI)) +
-  geom_line(aes(group=1, color = as.factor(Region)))+
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 315)) +
-  facet_wrap(~Region) +
-  labs(title = "Maximum EVI in Zim During Growing Season", color =  "Region") +
-  xlab("Time") +
-  ylab("Maximum EVI")
-
-EVIGrSsTimeSeries2
-EVIGrSsTimeSeries
-```
-```{r}
-# EVI in growing seasons by year
-EVIGrSs2 <- EVI_region_long %>% 
-  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-         Year == 2005:2021) %>% 
-  filter(!(Year == 2005 & Month == "03")) %>% 
-  filter(!(Year == 2005 & Month == "04")) %>%
-  filter(!(Year == 2005 & Month == "05")) %>%
-  filter(!(Year == 2005 & Month == "02")) %>% 
-  filter(!(Year == 2005 & Month == "01")) %>% 
-  filter(!(Year == 2021 & Month == "10")) %>% 
-  filter(!(Year == 2021 & Month == "11")) %>%
-  filter(!(Year == 2021 & Month == "12")) %>% 
-  group_by(Region, Year) %>% 
-  summarise(MaxEVI = max(EVI, na.rm = TRUE))
-
-
-EVIGrSsTimeSeriesByYear <- EVIGrSs2 %>% 
-  ggplot(aes(x = Year, y = MaxEVI)) +
-  geom_line(aes(group=1, color = as.factor(Region)))+
-  geom_point(aes(color = Region, shape = Region)) +
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
-  xlab("Time") +
-  ylab("Maximum EVI")
-
-
-EVIGrSsTimeSeriesByYear2 <- EVIGrSs2 %>% 
-  ggplot(aes(x = Year, y = MaxEVI)) +
-  geom_line(aes(group=1, color = as.factor(Region)))+
-  geom_point(aes(shape = Region)) +
-  theme(axis.text.x = element_text(angle = 315)) +
-  facet_wrap(~Region)+
-  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
-  xlab("Time") +
-  ylab("Maximum EVI")
-EVIGrSsTimeSeriesByYear2
-EVIGrSsTimeSeriesByYear
-
-EVIGrSsTimeSeries2017 <- EVIGrSs2 %>% 
-  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-         Year == 2016:2017) %>% 
-  filter(!(Year == 2016 & Month == "03")) %>% 
-  filter(!(Year == 2016 & Month == "04")) %>%
-  filter(!(Year == 2016 & Month == "05")) %>%
-  filter(!(Year == 2016 & Month == "02")) %>% 
-  filter(!(Year == 2016 & Month == "01")) %>% 
-  filter(!(Year == 2017 & Month == "10")) %>% 
-  filter(!(Year == 2017 & Month == "11")) %>%
-  filter(!(Year == 2017 & Month == "12")) %>% 
-  ggplot(aes(x = Year, y = MaxEVI)) +
-  geom_line(aes(group=1, color = as.factor(Region)))+
-  geom_point(aes(color = Region, shape = Region)) +
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Maximum EVI in Zim During Growing Season--By Year", color =  "Region") +
-  xlab("Time") +
-  ylab("Maximum EVI") 
-
+# Just do feb and march for each year, and average for year
 
 
 
 ```
+## 7. Line graph: Time Series Line Graph for MAX EVI 
 
-## Time Series Line Graph for Average EVI by Month
 ```{r}
 EVIGrSs3 <- EVI_region_long %>% 
   filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
@@ -510,7 +485,8 @@ EVIGrSs3 <- EVI_region_long %>%
   filter(!(Year == 2021 & Month == "11")) %>%
   filter(!(Year == 2021 & Month == "12")) %>% 
   group_by(Region, Month) %>% 
-  summarise(AverageEVI = mean(EVI, na.rm = TRUE)) %>% 
+  summarise(AverageEVI = mean(EVI, na.rm = TRUE),
+            MaxEVI = max(EVI, na.rm = TRUE)) %>% 
   mutate(GSOrder = case_when(Month =="10" ~ "1", 
                              Month =="11" ~ "2",
                              Month =="12" ~ "3",
@@ -520,8 +496,6 @@ EVIGrSs3 <- EVI_region_long %>%
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
                              
-
-
 EVIGrSs3$Month[which(EVIGrSs3$Month=="10")] <- "October"
 EVIGrSs3$Month[which(EVIGrSs3$Month=="11")] <- "November"
 EVIGrSs3$Month[which(EVIGrSs3$Month=="12")] <- "December"
@@ -534,31 +508,46 @@ EVIGrSs3$Month[which(EVIGrSs3$Month=="05")] <- "May"
 EVIGrSs3$Month <- reorder(EVIGrSs3$Month, as.numeric(EVIGrSs3$GSOrder))
 EVIGrSs3$Month <- as.factor(EVIGrSs3$Month)
 EVIGrSs3$Region <- as.factor(EVIGrSs3$Region)
-AvgEVIGrSsByMonth <- EVIGrSs3 %>% 
-  ggplot(aes(x = Month, y = AverageEVI, group = as.factor(Region), color = as.factor(Region))) +
-  geom_line()+
-  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8)+
-  theme(axis.text.x = element_text(angle = 315)) +
-  labs(title = "Average EVI in Zim During Growing Season--By Month", color =  "Region") +
-  xlab("Time(Month)") +
-  ylab("Average EVI") 
 
-AvgEVIGrSsByMonth
-
-
-
+# Average EVI
 EVIGrSs3 %>% 
   ggplot(aes(x = Month, y = AverageEVI, group = as.factor(Region), color = as.factor(Region))) +
   geom_line()+
-  geom_text(aes(label = Region),
-              hjust = 0, nudge_x = 0.1)+
-  coord_cartesian(clip = "off") +
-  theme(axis.text.x = element_text(angle = 315),
-        legend.position = "none",
-          plot.margin = margin(0.1, 2.6, 0.1, 0.1, "cm")) +
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
   labs(title = "Average EVI in Zim During Growing Season--By Month", color =  "Region") +
   xlab("Time(Month)") +
   ylab("Average EVI") 
+
+# This is the same line graph, with a trend line and the actual data points
+EVIGrSs3 %>%
+  ggplot(aes(x = Month, y = AverageEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line(alpha = I(7/10), color="grey", show.legend=F) +
+  #stat_smooth(size=2, span=0.3, se=F, show_guide=F)
+  geom_point(size=1) +
+  geom_smooth(se=FALSE)+
+  geom_text(aes( label = Region))
+
+
+# Do average over maximum
+
+# Max EVI
+EVIGrSs3 %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season--By Month", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+
 ```
 ## Zim Region Map
 ```{r}
