@@ -68,8 +68,8 @@ soil_g1 <- soil_tr %>%
 
 6. write csv
 ```{r}
-write.csv(soil_tr,"./regional_data/Ssoil_regional.csv")
-write.csv(soil_g1,"./regional_data/Ssoil_regional_g16_17.csv")
+write.csv(soil_tr,"./regional_data/Ssoil_regional.csv", row.names = T)
+write.csv(soil_g1,"./regional_data/Ssoil_regional_g16_17.csv", row.names = T)
 ```
 
 

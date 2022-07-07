@@ -1,0 +1,202 @@
+---
+title: "RegionReshape"
+author: "Ari L."
+date: "7/6/2022"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+```
+
+# Getting your data into a nice layout to study the time series properties. 
+When you data is exported from GEE it has a wide format with a column containing the indicator value for each time period. Each row is then a district. 
+For time series analysis we want the opposite of this. We want columns with the district information and row with the time period so we need to transpose the data.In this file I change the format from wide (6151 X 60) to long (60 X 6151) and then back again to put the columns in region. 
+
+
+# Quick review of reading in data 
+
+I use the R package called `openxlsx` and the command readxlx() to read in my excel files. If you have not have the openxlsx package then you need to install it now.
+```{r}
+#Set your working directory to where you want to save your xlsx files
+# Remember the path
+setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe/regional_data")  # note I changed to forward slashes in my path. 
+
+library(openxlsx) # Call the openxlsx library that allows me to read in excel spreadsheets to R
+#mydatXL <- read.xlsx("EVI_ts_Zimb.xlsx",sheet = "tr")
+
+mydatXL2 <-read.xlsx("soil_ts_Zimb.xlsx", sheet= 1)
+
+mydat <- as.data.frame(mydatXL2) #TURN INTO AN R DATAFRAME
+
+library(dplyr)
+rain <- mydat %>% 
+  select(nat_region, `NASA_USDA_SMAP_SM20150502_20150504_ssm`:`NASA_USDA_SMAP_SM20211229_20211231_ssm`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+
+```
+
+```{r}
+library(tidyr)
+
+#Reshape data
+mydat_long <- gather(mydat, Date, SoilMoisture, 'NASA_USDA_SMAP_SM20150502_20150504_ssm': 'NASA_USDA_SMAP_SM20211229_20211231_ssm') %>% select(Date, SoilMoisture,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('NASA', 'USDA', "SMAP", "DateBegin", "DateEnd", "ssm"), sep='_') %>% select(-c(NASA, USDA, SMAP, ssm, DateEnd)) %>%
+#drop the string segment 
+  mutate_all(as.character()) %>%
+  separate( col=DateBegin, into=c('s', 'DateBegin'), sep='M')%>% 
+  select(-s) 
+
+```
+
+```{r}
+######Change here with correct range and  add more lines to make wet, etc.
+sum_long$Rain_Dry <- ifelse(sum_long$dailyPRECIP < 0.25,1,0)
+
+```
+
+function to evaluate surface threshold
+```{r}
+
+sum_long <- mydat_long %>% 
+  mutate(
+         Wet = case_when(SoilMoisture > 25 ~ 1,
+                                  TRUE ~ 0),
+         
+         Ideal = case_when(SoilMoisture >= 15 & SoilMoisture <=25 ~ 1,
+                                  TRUE ~ 0),
+                            
+         Dry = case_when(SoilMoisture >10 & SoilMoisture <15 ~ 1,
+                                  TRUE ~ 0),
+         
+         ExtremelyDry = case_when(SoilMoisture <=10 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+```
+
+
+
+
+
+```{r}
+#create group var 
+sum_long2 <- transform(sum_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+sum_long3<- select(sum_long2,-c(Region))
+
+sum_long4 <- reshape(data=sum_long3, idvar = "DateBegin", timevar = "ID", direction = "wide")
+
+#Read into an R Date Variable.
+sum_long4$newDate <- as.Date(sum_long4$Date, "%Y%m%d")
+attributes(sum_long4$newDate)
+```
+
+Now make some graphs for all the time series
+```{r}
+require(zoo)
+sum_long4$ym <- as.yearmon(sum_long4$newDate, "%Y %m")
+
+# Set axis limits c(min, max)
+#May want to lag one growing season so need data from 2009-10 growing season
+#May need to pull more GEE data for 2009
+min <- as.yearmon("2016101", "%Y%m")
+max <- as.yearmon("2017430", "%Y%m")
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2016-11-19")
+ max <- as.Date("2016-12-20")
+ 
+ library(ggplot2)
+
+pp <- ggplot(data = sum_long4, aes(x=newDate, y=SoilMoisture.1))+
+   geom_line(color = "#00AFBB", size = 1) + xlab("Date") + ylab("Surface Soil Moisture (mm)") + 
+   ggtitle("Surface soil moisture within 30 days beginning Nov 19 2016 by region") + theme(plot.title = element_text(hjust = 0.5))
+
+  ppp <- pp +  scale_x_date(limits = c(min, max))
+ 
+ppp
+
+#Another plot with more regions -- add more here
+p <- ggplot(sum_long4, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = SoilMoisture.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = SoilMoisture.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = SoilMoisture.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = SoilMoisture.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = SoilMoisture.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = SoilMoisture.6, col = "Region V"), size=1.25) + 
+    labs(color="Agri Regions") +
+    xlab("Date") + ylab("Surface Soil Moisture (mm)") + 
+    ggtitle("Surface soil moisture within 30 days beginning Nov 19 2016 by region") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+ ppp <-p + scale_x_date(limits = c(min, max))
+
+ppp
+# Set axis limits c(min, max)
+
+```
+
+filter to first 30 days
+```{r}
+sum_g1 <- sum_long4 %>% 
+  filter(between(sum_long4$newDate, as.Date("2016-11-19"),as.Date("2016-12-20"))) 
+```
+
+
+Create Data frame with sums
+```{r}
+
+specie <- c(rep("Region I" , 4) , rep("Region IIA" , 4) , rep("Region IIB" , 4) , rep("Region III" , 4), rep("Region IV" , 4) , rep("Region V" , 4) )
+
+condition <- rep(c("Wet" , "Ideal" , "Dry","Extremely Dry") , 6)
+
+
+value <- sum_g1 %>%
+    select(., 
+                c(Wet.1, Ideal.1, Dry.1, ExtremelyDry.1,
+                  Wet.2, Ideal.2, Dry.2, ExtremelyDry.2,
+                  Wet.3, Ideal.3, Dry.3, ExtremelyDry.3,
+                  Wet.4, Ideal.4, Dry.4, ExtremelyDry.4,
+                  Wet.5, Ideal.5, Dry.5, ExtremelyDry.5,
+                  Wet.6, Ideal.6, Dry.6, ExtremelyDry.6)
+                ) %>% colSums(na.rm = TRUE)
+
+data <- data.frame(specie,condition,value)
+```
+
+```{r}
+# Grouped
+ggplot(data, aes(fill=condition, y=value, x=specie)) + 
+    geom_bar(position="dodge", stat="identity")+ 
+    labs(color="condition") +
+    xlab("Region") + ylab("Number of 3-Day periods") + 
+    ggtitle("3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition")
+```
+
+
+
+
+
+
+
+
+
+
