@@ -1,0 +1,369 @@
+---
+title: "Mapping Precip"
+author: "Josue Navarrete"
+Last Update: 7/6/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+```
+
+# Getting your data into a nice layout to study the time series properties. 
+When you data is exported from GEE it has a wide format with a column containing the indicator value for each time period. Each row is then a district. 
+For time series analysis we want the opposite of this. We want columns with the district information and row with the time period so we need to transpose the data.In this file I change the format from wide (6151 X 60) to long (60 X 6151) and then back again to put the columns in region. 
+
+
+# Quick review of reading in data 
+
+I use the R package called `openxlsx` and the command readxlx() to read in my excel files. If you have not have the openxlsx package then you need to install it now.
+2010-11
+```{r}
+mydatXL2 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2010-2012).csv")
+
+mydat <- as.data.frame(mydatXL2) #TURN INTO AN R DATAFRAME
+
+library(dplyr)
+rain <- mydat %>% 
+  select(nat_region, `3B42_20100101_03_7A_precipitation`:`3B42_20121231_00_7_precipitation`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+
+```
+
+2016-17
+```{r}
+Precip_raw_16_17 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2016-2018).csv")
+
+Precip_raw_16_17_dat <- as.data.frame(Precip_raw_16_17) #TURN INTO AN R DATAFRAME
+
+rain2 <- Precip_raw_16_17_dat %>% 
+  select(nat_region, `3B42_20100101_03_7A_precipitation`:`3B42_20181231_00_7_precipitation`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+
+```
+
+2010-11
+```{r}
+library(tidyr)
+
+#Reshape data
+mydat_long <- gather(mydat, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+#Find average of daily precipitation -- change to the sum function by day next
+sum_long <- mydat_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+######Change here with correct range and  add more lines to make wet, etc.
+sum_long$Rain_Dry <- ifelse(sum_long$dailyPRECIP < 2.95,1,0)
+
+```
+2010-11
+```{r}
+#create group var 
+sum_long2 <- transform(sum_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+sum_long3<- select(sum_long2,-c(Region))
+
+sum_long4 <- reshape(sum_long3, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+
+#Read into an R Date Variable.
+sum_long4$newDate <- as.Date(sum_long4$Date, "%Y%m%d")
+attributes(sum_long4$newDate)
+```
+
+2010-11
+```{r}
+#Create rolling windows of 15 days long
+library(zoo)
+sum_long4$sum.1 <- rollsum(sum_long4$Rain_Dry.1,15,fill=NA,align = 'left',na.pad = TRUE)
+sum_long4$sum.2 <- rollsum(sum_long4$Rain_Dry.2,15,fill=NA,align = 'left',na.pad = TRUE)
+sum_long4$sum.3 <- rollsum(sum_long4$Rain_Dry.3,15,fill=NA,align = 'left',na.pad = TRUE)
+
+```
+
+2010-11
+Time series graph of sum the of dry days (defined as < 2.95 mm of rainfall in a day) in each month of the two growing seasons (Beginning Nov 20th – end of May) 11,12,01,02,03,04,05
+
+```{r}
+min <- as.yearmon("20111120", "%Y%m")
+max <- as.yearmon("2012531", "%Y%m")
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2010-11-20")
+ max <- as.Date("2011-5-31")
+ 
+ 
+p <- ggplot(sum_long4, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = dailyPRECIP.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.6, col = "Region V"), size=1.25) + 
+    labs(color="Agri Regions") +
+    xlab("Daily Precipitation During Growing Season 2010-11") + ylab("Daily Precipitation (mm)") + 
+    ggtitle("Rainfall Across Regions Growing Season 2010-11") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+ ppp <-p + scale_x_date(limits = c(min, max)) + ylim(0, 12)
+
+ppp
+
+
+```
+
+
+
+
+
+
+Now make some graphs for all the time series
+2010-11
+```{r}
+require(zoo)
+sum_long4$ym <- as.yearmon(sum_long4$newDate, "%Y %m")
+
+# Set axis limits c(min, max)
+#May want to lag one growing season so need data from 2009-10 growing season
+#May need to pull more GEE data for 2009
+min <- as.yearmon("20111120", "%Y%m")
+max <- as.yearmon("2012531", "%Y%m")
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2010-11-20")
+ max <- as.Date("2011-5-31") 
+ library(ggplot2)
+
+pp <- ggplot(data = sum_long4, aes(x=newDate, y=dailyPRECIP.1))+
+   geom_line(color = "#00AFBB", size = 1) + xlab("Daily Precipitation Many Years") + ylab("Precipitation UNITS??") + 
+   ggtitle("Daily Precipitation During Growing Season 2010-11") + theme(plot.title = element_text(hjust = 0.5))
+
+  ppp <- pp +  scale_x_date(limits = c(min, max))
+ 
+ppp
+
+#Another plot with more regions -- add more here
+p <- ggplot(sum_long4, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = dailyPRECIP.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = dailyPRECIP.6, col = "Region V"), size=1.25) + 
+    labs(color="Agri Regions") +
+    xlab("Daily Precipitation During Growing Season 2010-11") + ylab("Daily Precipitation (mm)") + 
+    ggtitle("Rainfall Across Regions Growing Season 2010-11") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+ ppp <-p + scale_x_date(limits = c(min, max)) + ylim(0, 12)
+
+ppp
+# Set axis limits c(min, max)
+#May want to lag one growing season so need data from 2009-10 growing season
+#May need to pull more GEE data for 2009
+```
+
+2010-11
+```{r}
+#Get months to make nice graphs
+library(lubridate)
+sum_long4$mon <- month(sum_long4$newDate,label = FALSE)
+#sum_long4$mon <- as.numeric(format(sum_long4$newDate, "%m") )
+
+#Choose only growing season months 
+season_mon <- c(1,2,3,4,10,11,12)
+season <- filter(sum_long4, mon %in% season_mon)
+
+#library(Hmisc)
+#describe(season$mon)
+
+# Base plot with date axis with all data
+p <- ggplot(data = season, aes(x=newDate, y=sum.1))+
+   geom_line(color = "#00AFBB", size = 1) + xlab("2010-11 Growing Season") + ylab("Count of dry days (15 day window)")
+
+
+# Set axis limits c(min, max)
+min <- as.Date("2010-10-1")
+max <- as.Date("2011-4-30")
+p + scale_x_date(limits = c(min, max))
+
+#Another plot with two regions -- add more here
+p <- ggplot(season, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = sum.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = sum.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = sum.3, col = "Region IIB"), size=1.25) + 
+    labs(color="Agri Regions") +
+     xlab("2010-11 Growing Season") + ylab("Count of dry days (15 day window)") + 
+     ggtitle("Sum of Dry Days within 15 days of Planting") +
+     theme(plot.title = element_text(hjust = 0.5))
+
+
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2010-10-1")
+ max <- as.Date("2011-4-30")
+ p + scale_x_date(limits = c(min, max)) 
+
+
+```
+Now we are going to use the same data to make some maps. Note I go back to sum-long2 and use this to get statistics by region. I do this because it is easier to do it 
+this way for maps. I then join the Shape file to the precipitation data. 
+
+The maps I generate below are for the 2010-11 growing season. I find the average rainfall across the growing season and I find the number of dry days in the growing season.
+2010-11
+```{r}
+library(sf)
+
+zim_region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp")
+zim_region <-rename(zim_region, Region = nat_region)
+head(zim_region)
+
+#What to put on the map .. that is the question?
+
+#Average daily precipitation in growing season
+#Number of dry days in growing season
+#Daily distribution of precipipitation in growing season
+
+
+sum_long2$newDate <- as.Date(sum_long2$Date, "%Y%m%d")
+attributes(sum_long2$newDate)
+
+map <- sum_long2 %>% group_by(Region) %>% filter(newDate >= min & newDate <= max) 
+
+#Mean/Average
+map1 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanP = mean(dailyPRECIP, na.rm = TRUE))     
+#Min
+map3 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MinP = min(dailyPRECIP, na.rm = TRUE))
+#Max
+map4 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MaxP = max(dailyPRECIP, na.rm = TRUE))
+#SD
+map5 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(sd_P = sd(dailyPRECIP, na.rm = TRUE))
+# Total Rainfall 
+map6 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(sumDaily_P = sum(dailyPRECIP, na.rm = TRUE))
+
+# Total number of dry days
+map2 <- map %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(SumDry = sum(Rain_Dry, na.rm = TRUE))     
+
+df_list <- list(zim_region, map1, map3, map4, map5,map6, map2)
+
+library(tidyverse)
+#merge all data frames in list
+total <- df_list %>% reduce(full_join, by='Region')
+head(total)
+```
+
+
+Map prep for December, January and February [THIS WILL NOT WORK, REVISIT WHEN BACK]
+```{r}
+min_Dec <- as.Date("2010-12-1")
+max_Dec <- as.Date("2011-12-30")
+
+map_Dec_2010 <- sum_long2 %>% group_by(Region) %>% filter(newDate >= min_Dec & newDate <= max_Dec) 
+
+#Mean/Average
+map1 <- map  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanP = mean(dailyPRECIP, na.rm = TRUE))
+```
+
+2010-11
+```{r}
+#Mean 
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanP)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Average Daily Precipitation in the 2010-11 Growing Season") + labs(fill='Daily Precipitation (mm)')
+
+
+#Min
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MinP)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Min Daily Precipitation in the 2010-11 Growing Season") + labs(fill='Min Precipitation')
+
+#Max
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MaxP)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Max Daily Precipitation in the 2010-11 Growing Season")+ labs(fill='Max Precipitation')
+
+#Sd
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = sd_P)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Standard Deviation Precipitation in the 2010-11 Growing Season")  + labs(fill='Standard Deviation of Precipitation')
+
+
+
+#total # Dry days
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = SumDry)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Number of Dry Days in the 2010-11 Growing Season")  + labs(fill='Number of Dry Days')
+
+#total rainfall
+ggplot(data = total)+
+    geom_sf(size = 0.15, color = "black", aes(fill = sumDaily_P)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Total Rainfall in the 2010-11 Growing Season") + labs(fill='Total Rainfall (mm)') 
+
+
+
+```
+
+
+Spatial map by region and district of mean daily precipitation during the months of December, January and February for the two growing seasons (6 separate maps for each month) which correspond to the peak rainy months
+```{r}
+#Mean 
+ggplot(data = total) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanP)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "G", direction = -1) +
+    ggtitle("Average Daily Precipitation in the 2010-11 Growing Season") + labs(fill='Daily Precipitation (mm)')
+
+```
+
+

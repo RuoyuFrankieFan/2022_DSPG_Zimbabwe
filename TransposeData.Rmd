@@ -1,0 +1,233 @@
+---
+title: "TransposeData"
+author: "JBN"
+date: '2022-07-05'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Required packages 
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(Hmisc)
+```
+Read in the data 
+```{r}
+zim_Ag_Region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp")
+
+zim_region_3h_avg_10_11_12 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2010-2012).csv")
+zim_region_3h_avg_16_17_18 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2016-2018).csv")
+```
+
+Select the columns needed 
+```{r}
+PRECIP_df<- as.data.frame(zim_region_3h_avg_10_11_12)
+
+rain <- PRECIP_df %>% 
+  select(nat_region, `3B42_20100101_03_7A_precipitation`:`3B42_20121231_00_7_precipitation`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+```
+
+Reshape the data 
+```{r}
+rain_long <- gather(PRECIP_df, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+
+#Find average of daily precipitation -- change to the sum function by day next
+#The group function will drop the last one, in this case drop Hour
+sum_long <- rain_long %>%  select(-Hour) %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE)) %>% mutate(Rain_Dry = ifelse(dailyPRECIP < 2.95,1,0))
+```
+
+```{r}
+#create group var 
+sum_long <- transform(sum_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+
+
+sum_long2 <- select(sum_long,-c(Region))
+
+sum_long_reshaped <- reshape(sum_long2, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+
+#Fix Date Variable then graph.
+```
+
+Separate date col into year, month, & day col
+```{r}
+sum_long$Date <- ymd(sum_long$Date)
+
+sum_long <- sum_long %>% 
+  select(Date, dailyPRECIP, ID, Rain_Dry, Region) %>% 
+  separate(col = Date, into = c("Year","Month","Day"))
+
+#write.csv(Precipitation_long, "./PRECIP_filtered.csv", row.names = FALSE)
+```
+
+Find the average, max, and min precipitation for annual level  
+```{r}
+PRECIP_annual <- sum_long %>%
+  select(-Month,-Day) %>% 
+  group_by(Region, Year) %>% 
+  summarise(AveragePRECIP = mean(dailyPRECIP, na.rm=TRUE),
+            MaxPRECIP = max(dailyPRECIP, na.rm=TRUE),
+            MinPRECIP = min(dailyPRECIP, na.rm=TRUE))
+#write.csv(PRECIP_annual, "./PRECIP_annual.csv", row.names = FALSE)
+```
+
+Sum of dry day for annual level
+```{r}
+DryDays <- sum_long %>%
+  select(-Month,-Day) %>% 
+  group_by(Region, Year) %>% 
+  summarise(sumDry = sum(Rain_Dry, na.rm=TRUE))
+#write.csv(PRECIP_annual, "./PRECIP_annual.csv", row.names = FALSE)
+```
+
+
+Monthly Data
+```{r}
+PRECIP_monthly <- sum_long %>% 
+  select(-Day) %>% 
+  group_by(Region, Year, Month) %>% 
+  summarise(MeanPRECIP = mean(dailyPRECIP, na.rm=TRUE),
+            MaxPRECIP = max(dailyPRECIP, na.rm=TRUE),
+            MinPRECIP = min(dailyPRECIP, na.rm = TRUE))
+
+#write.csv(PRECIP_monthly,"./PRECIP_monthly.csv", row.names = FALSE)
+```
+Sum of dry day for monthly level
+```{r}
+DryDays_monthly <- sum_long %>% 
+  select(-Day) %>% 
+  group_by(Region, Year, Month) %>% 
+  summarise(sumDry_m = sum(Rain_Dry, na.rm=TRUE))
+
+#write.csv(DryDays_monthly,"./DryDays_monthly.csv", row.names = FALSE)
+```
+
+
+
+
+Reshape Monthly Data
+```{r}
+#Set YearMonth object
+PRECIP_monthly$Date <- as.yearmon(paste(PRECIP_monthly$Year, PRECIP_monthly$Month), "%Y %m")
+#----------------------------------------------------------------------------------------
+DryDays_monthly$Date <- as.yearmon(paste(DryDays_monthly$Year, DryDays_monthly$Month), "%Y %m")
+#----------------------------------------------------------------------------------------
+#Remove unwanted columns
+PRECIP_monthly <- subset(PRECIP_monthly, select = -c(Year, Month) )
+
+PRECIP_monthly <- transform(PRECIP_monthly,  # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+PRECIP_monthly2 <- select(PRECIP_monthly,-c(Region))
+
+PRECIP_monthly_reshaped <- reshape(PRECIP_monthly2, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+#----------------------------------------------------------------------------------------
+DryDays_monthly <- subset(DryDays_monthly, select = -c(Year, Month) )
+
+DryDays_monthly <- transform(DryDays_monthly,  # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+DryDays_monthly2 <- select(DryDays_monthly,-c(Region))
+
+DryDays_monthly_reshaped <- reshape(DryDays_monthly2, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+
+
+```
+
+
+Prep to Map the data 
+```{r}
+#Add a Column for month 
+PRECIP_monthly_reshaped$mon <- as.numeric(format(PRECIP_monthly_reshaped$Date, "%m"))
+#Months in the Summer growing season
+season_mon <- c(1,2,3,4,5,10,11,12)
+season <- filter(PRECIP_monthly_reshaped, mon %in% season_mon)
+
+describe(season$mon)
+
+write.csv(PRECIP_monthly_reshaped,"./PRECIP_monthly_reshaped.csv", row.names = FALSE)
+```
+
+Prep to Map the data Dry Days
+```{r}
+#Add a Column for month 
+DryDays_monthly_reshaped$mon <- as.numeric(format(DryDays_monthly_reshaped$Date, "%m"))
+#Months in the Summer growing season
+season_mon_Dry <- c(1,2,3,4,5,10,11,12)
+season_Dry <- filter(DryDays_monthly_reshaped, mon %in% season_mon)
+
+describe(season_Dry$mon)
+
+#write.csv(PRECIP_monthly_reshaped,"./PRECIP_monthly_reshaped.csv", row.names = FALSE)
+
+```
+
+
+
+Map the Mean
+```{r}
+
+MeanMap_2010_11 <- ggplot(PRECIP_monthly_reshaped, aes(Date, y = value, color = variable)) + 
+    geom_line(aes(y = MeanPRECIP.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = MeanPRECIP.2, col = "Region IIA"), size=1.25) +
+    geom_line(aes(y = MeanPRECIP.3, col = "Region IIB"), size=1.25) +
+    geom_line(aes(y = MeanPRECIP.4, col = "Region III"), size=1.25) +
+    geom_line(aes(y = MeanPRECIP.5, col = "Region IV"), size=1.25) +
+    geom_line(aes(y = MeanPRECIP.6, col = "Region V"), size=1.25) + labs(color="Agri Regions") +
+     xlab("2010-11 Growing Season") + ylab("Average rainfall in 2010-11 Growing Season") + 
+     ggtitle("Monthly Average Rainfall by Region") +
+     theme(plot.title = element_text(hjust = 0.5))
+
+MeanMap_2010_11
+```
+
+
+```{r}
+tester <- DryDays_monthly_reshaped %>% slice(10:17)
+
+```
+
+
+Map the number of dry days 
+```{r}
+tester$mon <-as.factor(tester$mon)
+tester$mon <- reorder(tester$mon, tester$Date)
+SumDryMap_2010_11 <- ggplot(tester, aes(x = mon, y = value, color = variable, group = 1)) + 
+    geom_line(aes(y = sumDry_m.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = sumDry_m.2, col = "Region IIA"), size=1.25) +
+    geom_line(aes(y = sumDry_m.3, col = "Region IIB"), size=1.25) +
+    geom_line(aes(y = sumDry_m.4, col = "Region III"), size=1.25) +
+    geom_line(aes(y = sumDry_m.5, col = "Region IV"), size=1.25) +
+    geom_line(aes(y = sumDry_m.6, col = "Region V"), size=1.25) + labs(color="Agri Regions") +
+     xlab("2010-11 Growing Season") + ylab("Sum of Dry Days in 2010-11 Growing Season") + 
+     ggtitle("Monthly Number of Dry Days by Region") +
+     theme(plot.title = element_text(hjust = 0.5))
+SumDryMap_2010_11
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

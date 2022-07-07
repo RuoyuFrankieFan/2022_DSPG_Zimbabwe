@@ -1,0 +1,200 @@
+---
+title: "Josue Data"
+author: "JBN"
+Last Update: 07/05/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+```
+
+
+Required packages
+```{r}
+library(dplyr)
+library(tidyverse)
+library(openxlsx)
+library(lubridate)
+library(zoo)
+```
+
+
+I use the R package called `openxlsx` and the command `readxlx()` to read in my excel files. If you have not have the openxlsx package then you need to install it now.
+I use the R package called `dplyr` and the `mutate()` function to put the month, date, year, fields into a string seperated by `/`
+I use the R package called `lubridate` and the command `as.Date()` to declare a string variable as a date
+I use the R package called `zoo` and the command `rollsum()` to finding the rolling sum across 15 days
+I use the R package called `tidyverse` and the function `reduce()` to join the datasets by date
+```{r}
+zim_reg_10_11_12 <- read_csv(file = "zim_reg_10_11_12.csv")
+zim_reg_16_17_18 <- read_csv(file = "zim_reg_16_17_18.csv")
+
+zim_reg_10_11_12_dat <- as.data.frame(zim_reg_10_11_12) #TURN INTO AN R DATAFRAME
+zim_reg_16_17_18_dat <- as.data.frame(zim_reg_16_17_18)
+
+zim_reg_10_11_12_mutated <- mutate(zim_reg_10_11_12, Dates=paste(Year,Month,Day,sep="/"))
+zim_reg_10_11_12_mutated$newDate <- as.Date(zim_reg_10_11_12_mutated$Dates, format="%Y/%m/%d")
+
+zim_reg_16_17_18_mutated <- mutate(zim_reg_16_17_18, Dates=paste(Year,Month,Day,sep="/"))
+zim_reg_16_17_18_mutated$newDate <- as.Date(zim_reg_16_17_18_mutated$Dates, format="%Y/%m/%d")
+
+zim_reg_10_11_12_mutated$end <- zim_reg_10_11_12_mutated$newDate + days(15)
+zim_reg_16_17_18_mutated$end <- zim_reg_16_17_18_mutated$newDate + days(15)
+#_______________________________________________________________________________________________
+#Isolate Region Data 
+
+#write to different dataframes
+region_I <- filter(zim_reg_10_11_12_mutated, Region == "I")
+region_IIA <- filter(zim_reg_10_11_12_mutated, Region == "IIA")
+region_IIB <- filter(zim_reg_10_11_12_mutated, Region == "IIB")
+region_III <- filter(zim_reg_10_11_12_mutated, Region == "III")
+region_IV <- filter(zim_reg_10_11_12_mutated, Region == "IV")
+region_V <- filter(zim_reg_10_11_12_mutated, Region == "V")
+
+region_I_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "I")
+region_IIA_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "IIA")
+region_IIB_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "IIB")
+region_III_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "III")
+region_IV_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "IV")
+region_V_16_17_18 <- filter(zim_reg_16_17_18_mutated, Region == "V")
+
+region_I$sum_I   <- rollsum(region_I$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IIA$sum_IIA <- rollsum(region_IIA$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IIB$sum_IIB <- rollsum(region_IIB$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_III$sum_III <- rollsum(region_III$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IV$sum_IV   <- rollsum(region_IV$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_V$sum_V   <- rollsum(region_V$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+
+region_I_16_17_18$sum_I   <- rollsum(region_I_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IIA_16_17_18$sum_IIA <- rollsum(region_IIA_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IIB_16_17_18$sum_IIB <- rollsum(region_IIB_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_III_16_17_18$sum_III <- rollsum(region_III_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_IV_16_17_18$sum_IV   <- rollsum(region_IV_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+region_V_16_17_18$sum_V   <- rollsum(region_V_16_17_18$Rain_Dry,15,fill=NA,align = 'left',na.pad = TRUE)
+
+
+#keep only rainfall and date variable
+region_I <- select (region_I,c(newDate,dailyPRECIP,sum_I))
+region_IIA <- select (region_IIA,c(newDate,dailyPRECIP,sum_IIA))
+region_IIB <- select (region_IIB,c(newDate,dailyPRECIP,sum_IIB))
+region_III <- select (region_III,c(newDate,dailyPRECIP,sum_III))
+region_IV <- select (region_IV,c(newDate,dailyPRECIP,sum_IV))
+region_V <- select (region_V,c(newDate,dailyPRECIP,sum_V))
+
+region_I_16_17_18 <- select (region_I_16_17_18,c(newDate,dailyPRECIP,sum_I))
+region_IIA_16_17_18 <- select (region_IIA_16_17_18,c(newDate,dailyPRECIP,sum_IIA))
+region_IIB_16_17_18 <- select (region_IIB_16_17_18,c(newDate,dailyPRECIP,sum_IIB))
+region_III_16_17_18 <- select (region_III_16_17_18,c(newDate,dailyPRECIP,sum_III))
+region_IV_16_17_18 <- select (region_IV_16_17_18,c(newDate,dailyPRECIP,sum_IV))
+region_V_16_17_18 <- select (region_V_16_17_18,c(newDate,dailyPRECIP,sum_V))
+#total <- merge(junk1,junk2,junk3,by="new")
+
+#put all data frames into list
+zim_reg_list <- list(region_I, region_IIA, region_IIB, region_III, region_IV, region_V)
+zim_reg_list_16_17_18 <- list(region_I_16_17_18, region_IIA_16_17_18, region_IIB_16_17_18, region_III_16_17_18, region_IV_16_17_18, region_V_16_17_18)
+
+library(tidyverse)
+#merge all data frames in list
+total <- zim_reg_list %>% reduce(full_join, by='newDate')
+total2 <- zim_reg_list_16_17_18 %>%  reduce(full_join, by='newDate')
+
+```
+
+Now make some graphs
+```{r}
+library(dplyr)
+total$mon <- as.numeric(format(total$newDate, "%m") )
+total2$mon <- as.numeric(format(total2$newDate, "%m") )
+
+season_mon <- c(1,2,3,4,10,11,12)
+season <- filter(total, mon %in% season_mon)
+season2 <- filter(total2, mon %in% season_mon)
+  
+  
+library(Hmisc)
+describe(season$mon)
+describe(season2$mon)
+
+# Base plot with date axis
+p <- ggplot(data = season, aes(x=newDate, y=sum_I))+
+   geom_line(color = "#00AFBB", size = 1) + xlab("2010-11 Growing Season") + ylab("Count of dry days (15 day window)")
+p
+
+q <- ggplot(data = season2, aes(x=newDate, y=sum_I))+
+   geom_line(color = "#00AFBB", size = 1) + xlab("2010-11 Growing Season") + ylab("Count of dry days (15 day window)")
+q
+
+
+#____________________________________________________________________________________________________
+
+# Set axis limits c(min, max)
+min <- as.Date("2010-10-1")
+max <- as.Date("2011-4-30")
+p + scale_x_date(limits = c(min, max))
+
+
+#Another plot with two regions -- add more here
+p <- ggplot(total, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = sum_I, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = sum_IIA, col = "Region IIA"), size=1.25) +
+    geom_line(aes(y = sum_IIB, col = "Region IIB"), size=1.25) +
+    geom_line(aes(y = sum_III, col = "Region III"), size=1.25) +
+    geom_line(aes(y = sum_IV, col = "Region IV"), size=1.25) +
+    geom_line(aes(y = sum_V, col = "Region V"), size=1.25) + labs(color="Agri Regions") +
+     xlab("2010-11 Growing Season") + ylab("Count of dry days (15 day window)") + 
+     ggtitle("Sum of Dry Days within 15 days of Planting") +
+     theme(plot.title = element_text(hjust = 0.5))
+
+p
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2010-10-1")
+ max <- as.Date("2011-4-30")
+ p + scale_x_date(limits = c(min, max)) 
+
+
+#____________________________________________________________________________________________________
+# Set axis limits c(min, max)
+min2 <- as.Date("2016-10-1")
+max2 <- as.Date("2017-4-30")
+q + scale_x_date(limits = c(min2, max2))
+ 
+q <- ggplot(total2, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = sum_I, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = sum_IIA, col = "Region IIA"), size=1.25) +
+    geom_line(aes(y = sum_IIB, col = "Region IIB"), size=1.25) +
+    geom_line(aes(y = sum_III, col = "Region III"), size=1.25) +
+    geom_line(aes(y = sum_IV, col = "Region IV"), size=1.25) +
+    geom_line(aes(y = sum_V, col = "Region V"), size=1.25) + labs(color="Agri Regions") +
+     xlab("2016-17 Growing Season") + ylab("Count of dry days (15 day window)") + 
+     ggtitle("Sum of Dry Days within 15 days of Planting") +
+     theme(plot.title = element_text(hjust = 0.5))
+q
+
+ 
+ min2 <- as.Date("2016-10-1")
+ max2 <- as.Date("2017-4-30")
+ q + scale_x_date(limits = c(min2, max2)) 
+
+ 
+ 
+```
+
