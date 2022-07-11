@@ -1,5 +1,5 @@
 #Leo's setting WD
-# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Shiny Test/Zim22)
+# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Shiny Test/Zim22")
 
 library(shiny)
 library(leaflet)
@@ -101,11 +101,22 @@ EVI_long <- read_csv("./data/EVI_long.csv")
 
 
 #SOIL DATA
-
+mydatXL2 <- read_csv("./data/soil_ts_Zimb.csv")
 
 #MPI DATA
 MPI_2011 <- read_excel("./data/2011_MPI_w_components.xlsx")
 MPI_2017 <- read_excel("./data/2017_MPI_w_components.xlsx")
+
+
+##Join data
+zim_district <- rename(zim_district, District_name = "NAME_2")
+zim_district <- zim_district %>% 
+  arrange(District_name) %>% 
+  mutate(District_ID = c(1:60))
+
+joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
+
+
 
 
 
@@ -540,8 +551,15 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             
                             tabPanel(strong("Soil Moisture"),
-                                    # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                                     tabPanel("Soil Moisture", value = "socio",
+                                              fluidRow(style = "margin: 6px;",
+                                                       h1(strong("Soil Moisture "), align = "center"),
+                                                       p("", style = "padding-top:10px;"),
+                                                       column(12,
+                                                              h4(strong("Soil Moisture Profile")),
+                                                              p("paragraph 1"),
+                                                              p("paragraph 2"))
+                                              )),
                                      fluidRow(
                                        box(withSpinner(plotOutput("myplot3")),
                                          title = "Soil Moisture",
@@ -558,15 +576,15 @@ ui <- navbarPage(title = "Zimbabwe",
                             #),
                  
                  ## Tab 2------
-                 navbarMenu(strong("Multidimentional Poverty Index (MPI)"), 
-                            tabPanel(strong("Multidimentional Poverty Index"),
+                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
+                            tabPanel(strong("Multidimensional Poverty Index"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(withSpinner(plotOutput("myplot4")),
-                                         title = "Multidimentional Poverty Index",
-                                         width = 6,
+                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
+                                         title = "Multidimensional Poverty Index",
+                                         width = 8,
                                          height = 600
                                        ),
                                          box(
@@ -805,6 +823,33 @@ output$myplot4 <- renderPlot({
   #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
 })
 
+mypal <- colorNumeric(
+  palette = "viridis",
+  domain = joined_zim$M0_k3)
+mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
+
+output$MPI_map_2011 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = ~M0_k3,
+                      opacity = 1.0, fillOpacity = 0.5,
+                      highlightOptions = highlightOptions(color = "white", weight = 2,
+                      bringToFront = TRUE), group="M0") %>%
+        addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = ~M1_k3,
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                    bringToFront = TRUE), group="M1")  %>%  
+    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = ~M2_k3,
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                    bringToFront = TRUE), group="M2") %>% 
+    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$M0_k3,
+                      opacity = .6,title= paste("Headcount Ratio")) %>% 
+    addLayersControl(baseGroups = c("M0", "M1", "M2"), 
+                   options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("M1")%>% 
+    hideGroup("M2")
+})
 
 }
 
