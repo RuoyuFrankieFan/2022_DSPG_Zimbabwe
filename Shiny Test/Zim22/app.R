@@ -310,7 +310,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                      fluidPage(
                                        column(4,
                                               h3(strong("Google Earth Engine")),
-                                              img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "40%"),
+                                              img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
@@ -468,7 +468,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                      fluidPage(
                                        column(4,
                                               h3(strong("Google Earth Engine")),
-                                              img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "40%"),
+                                              img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
