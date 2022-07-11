@@ -103,6 +103,11 @@ EVI_long <- read_csv("./data/EVI_long.csv")
 #SOIL DATA
 
 
+#MPI DATA
+MPI_2011 <- read_excel("./data/2011_MPI_w_components.xlsx")
+MPI_2017 <- read_excel("./data/2017_MPI_w_components.xlsx")
+
+
 
 # UI -------------------------------------------------------------
 
@@ -136,7 +141,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("Prior research suggests that poverty in Zimbabwe has increased since the period of crisis began at the turn of the millennium. According to the latest World Bank (2020) estimates, due to the longstanding economic crisis and disruptions following the COVID-19 pandemic, 49% of Zimbabwe’s population was in extreme poverty in 2020. Zimbabwe’s government seeks guidance in policies to enhance the climate resilience of its agricultural sector and contribute to sustainable enhancement in rural conditions. It has made available to researchers a trove of household survey data from large national samples for 2000, 2011, 2017 and 2019 with the hope that these can be used to inform agricultural policy."),
                                           p("This project seeks to:", strong("(i) to identify the different remotely sensed climate/weather related data available for Zimbabwe; (ii) to use these data to construct a spatial profile of exposure to long-term climate changes and short-term adverse weather events; and (iii) analyze the benefit of these remotely sensed data to explain demographic conditions."), 
                                             p("In doing so, the project seeks to contribute to understanding the impacts of a climate-resilient agricultural policy. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, but it contains very little geographic specificity in an incredibly diverse agricultural economy. "),
-                                          p("This project uses data from the Poverty, Income, Consumption, Expenditure Survey (PICES) to provide granular information on poverty in Zimbabwe. We created multidimensional poverty indices (MPI) at the", strong("district and province level"), " and decomposed them into components that focus on ", strong("education, health, employment, housing conditions, living conditions, assets, agricultural assets, and access to services."), "Additionally, we obtain data on our selected indices: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine."),   
+                                          p("This project uses data from the Poverty, Income, Consumption, Expenditure Survey (PICES) to provide granular information on poverty in Zimbabwe. We adopt a multidimensional poverty indices (MPI) at the", strong("district level"), " and decomposed them into components that focus on ", strong("education, health, employment, housing conditions, living conditions, assets, agricultural assets, and access to services."), "Additionally, we obtain data on our selected indices: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine."),   
                                             "We provide interactive tools that allow the user to visualize and study each remote sensed data index and understand their contribution to the MPI and the components of the MPI. We constructed these measures for two waves of data, 2011 and 2017, to show the changes in weather over time and across the districts and the agroecological regions. The overall goal of this project is to understand how remote sensing data can be used to inform socioeconomic and climate policy. So, we seek to understand how remotely sensed data can be used to inform climate change and poverty in Zimbabwe.")),
                                    
                                    
@@ -182,24 +187,29 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             tabPanel(strong("Data"), 
                                      fluidPage(
+                                       box(
+                                         width = 6,
                                        h2(strong("Description of the Remote Sensed Data")),
                                        withMathJax(),
                                        h3(strong("EVI")),
                                        p("Description of EVI"),
                                        
-                                       h3(strong("Precipitaion")),
+                                       h3(strong("Precipitation")),
                                        p("Description of Precipitation"),
                                        
                                        h3(strong("Soil Moisture")),
                                        p("Description of Soil Moisture"),
+                                       ),
                                        
                                        br(),
                                        
+                                       box(
+                                         width = 6,
                                        h2(strong("Description of the PICES DATA")),
                                        withMathJax(),  
                                        p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
                                        h3(strong("Description of the Variables/Components")),
-                                       img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"),
+                                       img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                        withMathJax(), 
                                        p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
                                        p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
@@ -215,21 +225,23 @@ ui <- navbarPage(title = "Zimbabwe",
                                        p("\\( D = 1 \\)", " if ","\\(AEI < 1 \\)", align = "center"),
                                        p("The agricultural asset dimension is not included for households in urban areas.  "),
                                        p("The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access."),
-                                       p("**Note: The livestock data were not available in the 2011-12 wave, which limited our ability to compare the change in livestock dimension across time. To account for this, we have assigned the Lack of Livestock variable a weight of zero and divided the weight proportionally between the other two agricultural asset variables. We use this adjusted index to compare the MPI for 2011 and 2017."),
-                                       h3(strong("Heading")),
-                                       p("text")
+                                       p("**Note: The livestock data were not available in the 2011-12 wave, which limited our ability to compare the change in livestock dimension across time. To account for this, we have assigned the Lack of Livestock variable a weight of zero and divided the weight proportionally between the other two agricultural asset variables. We use this adjusted index to compare the MPI for 2011 and 2017."))
                                      )
-                                     
-                                     
-                                     
-                                     
                             ),
+                            
+                            
                             tabPanel(strong("Methodology"), 
-                                     fluidPage(
+                                     fluidRow(
+                                       box(
+                                         withMathJax(),
+                                         title = h3(strong("Remote Sensed data Methodology")),
+                                         width = 6,
+                                         em(h4("A brief overview of the wrangling of the Remote Sensed data")), tags$br(),
+                                       ),
                                        box(
                                          withMathJax(),
                                          title = h3(strong("MPI Methodology")),
-                                         width = 12,
+                                         width = 6,
                                          em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
                                          p("The aggregate methodology for determining the multidimensional poverty 
        indices proposed by Alkine and Foster in 2011 involve a matrix with \\(n\\) 
@@ -264,8 +276,8 @@ ui <- navbarPage(title = "Zimbabwe",
        threshold, \\(k\\). The advantage of using this metric is that it weights
        poorer individuals who fall farther from the poverty line more heavily to 
        provide a more obvious descriptor for the poorest people in a given area."),
-                                         tags$br()
-                                       ),
+                                         tags$br(),
+                                       #),
                                        box(
                                          width = 6,
                                          h5(strong("Headcount Ratio")),
@@ -302,7 +314,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                        )
                                      )
-                            ),
+                            )),
                             
                             
                             
@@ -351,7 +363,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h3(strong("EVI")),
                                          p("Description of EVI"),
                                          
-                                         h3(strong("Precipitaion")),
+                                         h3(strong("Precipitation")),
                                          p("Description of Precipitation"),
                                          
                                          h3(strong("Soil Moisture")),
@@ -384,13 +396,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                        box(
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
-                                         width = 12,
+                                         width = 6,
                                          em(h4("A brief overview of the wrangling of the Remote Sensed data")), tags$br(),
                                        ),
                                        box(
                                          withMathJax(),
                                          title = h3(strong("MPI Methodology")),
-                                         width = 12,
+                                         width = 6,
                                          em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
                                          p("The aggregate methodology for determining the multidimensional poverty 
        indices proposed by Alkine and Foster in 2011 involve a matrix with \\(n\\) 
@@ -425,8 +437,8 @@ ui <- navbarPage(title = "Zimbabwe",
        threshold, \\(k\\). The advantage of using this metric is that it weights
        poorer individuals who fall farther from the poverty line more heavily to 
        provide a more obvious descriptor for the poorest people in a given area."),
-                                         tags$br()
-                                       ),
+                                         tags$br(),
+                                       #),
                                        box(
                                          width = 6,
                                          h5(strong("Headcount Ratio")),
@@ -461,7 +473,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h4("\\(g^{2}_{i} = [k - \\frac{\\sum deprivations}{\\sum possible\\ deprivations}]^{2}\\) if \\(g^{2}_{i} > 0\\)"),
                                          h4("Else \\(g^{2}_{i} = 0\\)")
                                          
-                                       )
+                                       ))
                                          )),
                             
                             tabPanel(strong("Resources"), 
@@ -545,22 +557,37 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             #),
                  
-                 ## Tab 2
+                 ## Tab 2------
                  navbarMenu(strong("Multidimentional Poverty Index (MPI)"), 
                             tabPanel(strong("Multidimentional Poverty Index"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot4")),
                                          title = "Multidimentional Poverty Index",
-                                         
+                                         width = 6,
+                                         height = 600
+                                       ),
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+                                           tags$ul(  
+                                             tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
+                                                     " and considers all of the dimensions described in the methodology section."),
+                                             tags$li("\\(M_{1}\\)
+                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+                                             tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
+                                             
+                                           ),
+                                           p("To adjust the threshold cutoff, k, by which an individual is considered poor,
+                                      we use k=3 as our threshold.")))),
+                            
+                            
                             
                             tabPanel(strong("Components of the MPI"),
                                      
@@ -769,6 +796,11 @@ output$myplot2 <- renderPlot({
   
   
 output$myplot3 <- renderPlot({
+  ggplot(mtcars, aes(disp, mpg)) + geom_point()
+  #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
+})
+
+output$myplot4 <- renderPlot({
   ggplot(mtcars, aes(disp, mpg)) + geom_point()
   #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
 })
