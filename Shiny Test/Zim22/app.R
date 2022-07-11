@@ -296,28 +296,23 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             tabPanel("Resources", 
                                      fluidPage(
-                                       column(6,
+                                       column(4,
                                               h3(strong("Google Earth Engine")),
                                               img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "40%"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
-                                       column(6,
+                                       column(4,
                                               h3(strong("Google Maps")),
-                                              img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "150px"),
+                                              img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
                                               p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
                                        
                                        column(4,
                                               h3(strong("ZimStat")),
-                                              img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "150px"),
+                                              img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
-                                              p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ...")),
-                                       column(4,
-                                              h3(strong("Other")),
-                                              img(src = "team-Frankie.png", style = "display: inline; float: left;", width = "150px"),
-                                              withMathJax(), 
-                                              p("Other source"))
+                                              p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
                                        
                                        )),
                             
@@ -327,7 +322,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  ),
                  
                  
-                 ## Tab X Data------------
+                 ## Tab X Data-----------------------
                  tabPanel("Data & Methodology",
                           tabsetPanel(
                             tabPanel("Data",
@@ -346,6 +341,11 @@ ui <- navbarPage(title = "Zimbabwe",
                                            p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
                                            h3(strong("Description of the Variables/Components")),
                                            img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"),
+                                           withMathJax(), 
+                                           p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
+                                           p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
+                                           p("For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence Lack of Electricity and Lack of Toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
+                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.  ")
                                            
                                            
                                            )))),
@@ -355,35 +355,45 @@ ui <- navbarPage(title = "Zimbabwe",
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
                                          title = "Methodology",
                                          
-                                         box(
+                                         column(4,
                                            
-                                           width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
                             
                             tabPanel("Resources",
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       #box(
                                          title = "Resources",
                                          
-                                         box(
-                                           
-                                           width = 12,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))))
+                                         column(4,
+                                           #withMathJax(),
+                                           #title = "Description",
+                                           h3(strong("Google Earth Engine")),
+                                           img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "140px")),
+                                           withMathJax(),  
+                                           p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe."),
+                                         column(4,  
+                                         h3(strong("Google Maps")),
+                                           img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
+                                           withMathJax(), 
+                                           p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
+                                         column(4,
+                                         h3(strong("ZimStat")),
+                                           img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
+                                           withMathJax(), 
+                                           p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
+                                           ))
                           )),
                  
                  
 
-                 ## Tab 1
+                 ## Tab 1---------------------
                  navbarMenu("Remote Sensed Data", 
                             tabPanel("Enhanced Vegetation Index",
                                      
@@ -398,7 +408,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
                             
                             tabPanel("Precipitation (Rainfall)",
                                      
@@ -413,7 +423,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
                             
                             
                             tabPanel("Soil Moisture",
@@ -425,10 +435,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                          box(
                                            
-                                           width = 4,
+                                           width = 8,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
                             
                             
                             ),
@@ -587,7 +597,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, PHD);"),
                                           p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, BSE PHD);"),
-                                          p(a(href = 'https://www.linkedin.com/in/atticus-rex-717581191/', 'Frankie Fan', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
+                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Major, Data and Decisions minor);"),
                                           p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
                                           p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
@@ -631,7 +641,9 @@ ui <- navbarPage(title = "Zimbabwe",
                           column(6, 
                                  h1(strong("References"), align = "center"),
                                  p("Milne, G., Mekonnen, A. F., & Benitez Ponce, P. C. (2019). Zimbabwe-Climate Smart Agriculture Investment Plan."),
-                                 p("Akhtar Ali Memon, Sher Muhammad, Said Rahman, Mateeul Haq, Flood monitoring and damage assessment using water indices: A case study of Pakistan flood-2012, The Egyptian Journal of Remote Sensing and Space Science, Volume 18, Issue 1, 2015, Pages 99-106, ISSN 1110-9823. "))
+                                 p("Reference 2"),
+                                 p("Reference 3")
+                                 )
                  ),
                  inverse = T)
 
