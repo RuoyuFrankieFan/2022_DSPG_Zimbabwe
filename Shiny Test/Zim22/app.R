@@ -116,7 +116,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  #     console.log(header)")
                  #                  ),
                  ## Tab Overview -----------------------------------------------------------
-                 tabPanel("Overview", value = "overview",
+                 tabPanel(strong("Overview"), value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
                                    br(""),
@@ -178,11 +178,24 @@ ui <- navbarPage(title = "Zimbabwe",
                  ),
                  
                  ## Tab data and methodology ----------------------------------------------------
-                 navbarMenu("Data & Methodology", 
+                 navbarMenu(strong("Data & Methodology"), 
                             
-                            tabPanel("Data", 
+                            tabPanel(strong("Data"), 
                                      fluidPage(
-                                       h3(strong("Description of the PICES DATA")),
+                                       h2(strong("Description of the Remote Sensed Data")),
+                                       withMathJax(),
+                                       h3(strong("EVI")),
+                                       p("Description of EVI"),
+                                       
+                                       h3(strong("Precipitaion")),
+                                       p("Description of Precipitation"),
+                                       
+                                       h3(strong("Soil Moisture")),
+                                       p("Description of Soil Moisture"),
+                                       
+                                       br(),
+                                       
+                                       h2(strong("Description of the PICES DATA")),
                                        withMathJax(),  
                                        p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
                                        h3(strong("Description of the Variables/Components")),
@@ -203,16 +216,15 @@ ui <- navbarPage(title = "Zimbabwe",
                                        p("The agricultural asset dimension is not included for households in urban areas.  "),
                                        p("The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access."),
                                        p("**Note: The livestock data were not available in the 2011-12 wave, which limited our ability to compare the change in livestock dimension across time. To account for this, we have assigned the Lack of Livestock variable a weight of zero and divided the weight proportionally between the other two agricultural asset variables. We use this adjusted index to compare the MPI for 2011 and 2017."),
-                                       h3(strong("Sensitivity Check")),
-                                       p("Our stakeholders believe that given the country’s high level of literacy, a higher education threshold would more accurately represent education (or the lack thereof) in the Zimbabwean context. To understand how sensitive the MPI measures are to a change in definition, we construct an adjusted MPI. The adjusted MPI assumes that a household is deprived if no one in the household has attained a secondary school education. This is an expansion of the original definition in Alkire-Foster MPI, which sets the threshold at primary school."),
-                                       p("We present this sensitivity analysis in the MPI Mapping tab. Select the education-adjusted MPI to compare with the original Alkire-Foster MPI results with the lower education threshold.")
+                                       h3(strong("Heading")),
+                                       p("text")
                                      )
                                      
                                      
                                      
                                      
                             ),
-                            tabPanel("Methodology", 
+                            tabPanel(strong("Methodology"), 
                                      fluidPage(
                                        box(
                                          withMathJax(),
@@ -294,7 +306,7 @@ ui <- navbarPage(title = "Zimbabwe",
                             
                             
                             
-                            tabPanel("Resources", 
+                            tabPanel(strong("Resources"), 
                                      fluidPage(
                                        column(4,
                                               h3(strong("Google Earth Engine")),
@@ -323,24 +335,38 @@ ui <- navbarPage(title = "Zimbabwe",
                  
                  
                  ## Tab X Data-----------------------
-                 tabPanel("Data & Methodology",
+                 tabPanel(strong("Data & Methodology"),
                           tabsetPanel(
-                            tabPanel("Data",
+                            tabPanel(strong("Data"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
                                        box(
-                                         title = "Data",
+                                         width = 6,
+                                         withMathJax(),
+                                         title = h1(strong("Remote Sensed Data")),
+                                         h2(strong("Description of the Remote Sensed Data")),
+                                         withMathJax(),
+                                         h3(strong("EVI")),
+                                         p("Description of EVI"),
+                                         
+                                         h3(strong("Precipitaion")),
+                                         p("Description of Precipitation"),
+                                         
+                                         h3(strong("Soil Moisture")),
+                                         p("Description of Soil Moisture"),
+                                         
+                                         br()),
                                          
                                          box(
                                            
-                                           width = 24,
+                                           width = 6,
                                            withMathJax(),
-                                           title = "PICES Data",
+                                           title = h1(strong("PICES Data")),
                                            p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
                                            h3(strong("Description of the Variables/Components")),
-                                           img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"),
+                                           img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                            withMathJax(), 
                                            p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
                                            p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
@@ -348,104 +374,180 @@ ui <- navbarPage(title = "Zimbabwe",
                                            p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.  ")
                                            
                                            
-                                           )))),
+                                           ))),
                             
-                            tabPanel("Methodology",
+                            tabPanel(strong("Methodology"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                         title = "Methodology",
+                                       box(
+                                         withMathJax(),
+                                         title = h3(strong("Remote Sensed data Methodology")),
+                                         width = 12,
+                                         em(h4("A brief overview of the wrangling of the Remote Sensed data")), tags$br(),
+                                       ),
+                                       box(
+                                         withMathJax(),
+                                         title = h3(strong("MPI Methodology")),
+                                         width = 12,
+                                         em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
+                                         p("The aggregate methodology for determining the multidimensional poverty 
+       indices proposed by Alkine and Foster in 2011 involve a matrix with \\(n\\) 
+       rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
+       state and \\(d\\) is the number of dimensions for assessing poverty. There 
+       are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
+       The A-F method employed in this study contains eight dimensions of poverty. 
+       Within each dimension, there are one or two variables that indicate whether 
+       an individual is deprived in that area. Each variable has a specific
+       weight associated with it depending on its contribution to overall poverty
+       and how it pertains to rural and urban communities differently. For a given 
+       individual, the total number of deprivations are added up and if he or she falls
+       above a given threshold, \\(k\\), then that individual is considered poor. 
+       Having multiple dimensions of poverty allows us to decompose the original 
+       measure into its individual variables to identify which are contributing 
+       most to the overall index of poverty."),
+                                         tags$br(),
+                                         p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
+       ratio is simply the number of individuals considered to be poor divided by
+       the entire population. The \\(M_{0}\\) index adjusts for the multidimensionality
+       of the algorithm by multiplying the simple headcount ratio, \\(H\\), by the 
+       average deprivation share, \\(A\\). This metric can be thought of as a more
+       accurate measure of the simple headcount ratio."),
+                                         tags$br(),
+                                         p("The \\(M_{1}\\) index is known as the Adjusted Poverty Gap. This examines the distance
+       between the prescribed threshold, \\(k\\), and an individual","'","s true number of 
+       deprivations. This helps examine the subset of poor individuals to efficiently
+       assess which individuals are the poorest in the country."),
+                                         tags$br(),
+                                         p("The \\(M_{2}\\) index is known as the Adjusted Poverty Severity. This is
+       simply the square of the distance between a poor individual and the poverty
+       threshold, \\(k\\). The advantage of using this metric is that it weights
+       poorer individuals who fall farther from the poverty line more heavily to 
+       provide a more obvious descriptor for the poorest people in a given area."),
+                                         tags$br()
+                                       ),
+                                       box(
+                                         width = 6,
+                                         h5(strong("Headcount Ratio")),
+                                         h3("\\(H = \\frac{n_{poor}}{n_{pop}}\\)"),
+                                         tags$br(),
+                                         h5(strong("Average Deprivation Share")),
+                                         h3("\\(A = \\frac{n_{deprivations}}{n_{potential}}\\)"),
+                                         tags$br(),
+                                         h5(strong("Deprivation Threshold")),
+                                         h5(em("\\(k\\) = Threshold (If an index is above threshold, k, then the individual is considered poor)")),
+                                         tags$br(),
+                                         h5(strong("Dimensional Aggregation")),
+                                         h4("\\(D_{total} = \\sum_{i=1}^{d}\\sum_{j=1}^{v_{d}} w_{i, j}\\)"),
+                                         em(p("\\(d = \\) Number of Dimensions")),
+                                         em(p("\\(v_{d} = \\) Number of variables for a Specific Dimension")),
+                                         em(p("\\(w_{i,j} = \\) Weight of a Specific Variable for a Specific Dimension"))
                                          
-                                         column(4,
-                                           
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
+                                         
+                                       ),
+                                       box(
+                                         width = 6,
+                                         h5(strong("Poverty Index")),
+                                         h4("\\(M_{0}= H * A\\)"),
+                                         tags$br(),
+                                         h5(strong("Adjusted Poverty Gap")),
+                                         h4("\\(M_{1} = μ(g^{1}(k))\\)"),
+                                         h4("\\(g^{1}_{i} = k - \\frac{\\sum deprivations}{\\sum possible\\ deprivations}\\)   if   \\(g^{1}_{i} > 0\\)"),
+                                         h4("Else \\(g^{1}_{i} = 0\\)"),
+                                         tags$br(),
+                                         h5(strong("Adjusted Poverty Severity")),
+                                         h4("\\(M_{2} = μ(g^{2}(k))\\)"),
+                                         h4("\\(g^{2}_{i} = [k - \\frac{\\sum deprivations}{\\sum possible\\ deprivations}]^{2}\\) if \\(g^{2}_{i} > 0\\)"),
+                                         h4("Else \\(g^{2}_{i} = 0\\)")
+                                         
+                                       )
+                                         )),
                             
-                            tabPanel("Resources",
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       #box(
-                                         title = "Resources",
-                                         
-                                         column(4,
-                                           #withMathJax(),
-                                           #title = "Description",
-                                           h3(strong("Google Earth Engine")),
-                                           img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "140px")),
-                                           withMathJax(),  
-                                           p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe."),
-                                         column(4,  
-                                         h3(strong("Google Maps")),
-                                           img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
-                                           withMathJax(), 
-                                           p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
-                                         column(4,
-                                         h3(strong("ZimStat")),
-                                           img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
-                                           withMathJax(), 
-                                           p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
-                                           ))
+                            tabPanel(strong("Resources"), 
+                                     fluidPage(
+                                       column(4,
+                                              h3(strong("Google Earth Engine")),
+                                              img(src = "GoogleEarthEngine.jpg", style = "display: inline; float: left;", width = "40%"),
+                                              withMathJax(),  
+                                              p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
+                                       
+                                       column(4,
+                                              h3(strong("Google Maps")),
+                                              img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
+                                              withMathJax(), 
+                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
+                                       
+                                       column(4,
+                                              h3(strong("ZimStat")),
+                                              img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
+                                              withMathJax(), 
+                                              p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
+                                       
+                                     ))
                           )),
                  
                  
 
                  ## Tab 1---------------------
-                 navbarMenu("Remote Sensed Data", 
-                            tabPanel("Enhanced Vegetation Index",
+                 navbarMenu(strong("Remote Sensed Data"), 
+                            tabPanel(strong("Enhanced Vegetation Index"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot")),
                                          title = "Enhanced Vegetation Index (EVI)",
-                                         
+                                         width = 6,
+                                         height = 600
+                                       ),
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:")))),
                             
-                            tabPanel("Precipitation (Rainfall)",
+                            tabPanel(strong("Precipitation (Rainfall)"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot2")),
                                          title = "Precipitation (Rainfall)",
+                                         width = 6,
+                                         height = 600
+                                         ),
                                          
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:")))),
                             
                             
-                            tabPanel("Soil Moisture",
+                            tabPanel(strong("Soil Moisture"),
                                     # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot3")),
                                          title = "Soil Moisture",
-                                         
+                                         width = 6,
+                                         height = 600
+                                       ),
                                          box(
-                                           
-                                           width = 8,
+                                           width = 4,
                                            withMathJax(),
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
                             
                             
-                            ),
+                            #),
                  
                  ## Tab 2
-                 navbarMenu("Multidimentional Poverty Index (MPI)", 
-                            tabPanel("Multidimentional Poverty Index",
+                 navbarMenu(strong("Multidimentional Poverty Index (MPI)"), 
+                            tabPanel(strong("Multidimentional Poverty Index"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -460,7 +562,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
                             
-                            tabPanel("Components of the MPI",
+                            tabPanel(strong("Components of the MPI"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -476,7 +578,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
                             
                             
-                            tabPanel("Tab 3",
+                            tabPanel(strong("Tab 3"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -497,8 +599,8 @@ ui <- navbarPage(title = "Zimbabwe",
                  
                  
                  ## Tab 3
-                 navbarMenu("MPI and Indices", 
-                            tabPanel("MPI & EVI",
+                 navbarMenu(strong("MPI and Indices"), 
+                            tabPanel(strong("MPI & EVI"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -513,7 +615,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
                             
-                            tabPanel("MPI & Precipitation",
+                            tabPanel(strong("MPI & Precipitation"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -529,7 +631,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
                             
                             
-                            tabPanel("MPI & Soil Moisture",
+                            tabPanel(strong("MPI & Soil Moisture"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
@@ -548,7 +650,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  ),
                  
 
-                 tabPanel("Takeaways",
+                 tabPanel(strong("Takeaways"),
                           
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    column(3),
@@ -570,7 +672,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  
                  
                  ## Tab DSPG Team------------------------------------------------
-                 tabPanel("Our Team", 
+                 tabPanel(strong("Our Team"), 
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h1(strong("Project Team"), align = "center"),
                                    br(),
@@ -636,7 +738,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  
                  
                  ## References-------------------------------
-                 tabPanel("References", value = "references",
+                 tabPanel(strong("References"), value = "references",
                           column(3),
                           column(6, 
                                  h1(strong("References"), align = "center"),
@@ -655,14 +757,23 @@ server <- function(input, output) {
   # Run JavaScript Code
   runjs(jscode)
   
-#    output$distPlot <- renderPlot({
-#        # generate bins based on input$bins from ui.R
-#        x    <- faithful[, 2]
-#        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-#
-#        # draw the histogram with the specified number of bins
-#        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-#    })
+output$myplot <- renderPlot({
+    ggplot(mtcars, aes(disp, mpg)) + geom_point()
+      #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
+  })
+  
+output$myplot2 <- renderPlot({
+    ggplot(mtcars, aes(disp, mpg)) + geom_point()
+    #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
+  })
+  
+  
+output$myplot3 <- renderPlot({
+  ggplot(mtcars, aes(disp, mpg)) + geom_point()
+  #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
+})
+
+
 }
 
 # Run the application ----------------
