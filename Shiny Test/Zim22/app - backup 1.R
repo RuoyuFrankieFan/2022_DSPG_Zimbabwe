@@ -99,23 +99,13 @@ EVI_long <- read_csv("./data/EVI_long.csv")
 
 #PRECIPITATION DATA
 
-#SOIL ----------
+
 #SOIL DATA
-mydatXL2 <- read_csv("./data/Agro-Eco Indices/soil/soil_ts_Zimb.csv")
-mydat_long <- readRDS("./data/Agro-Eco Indices/soil/mydat_long.RDS")
-#df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
-df2 <- readRDS("./data/Agro-Eco Indices/soil/soil_hist.RDS")
-total <- readRDS("./data/Agro-Eco Indices/soil/soil_map.RDS")
-
-
+mydatXL2 <- read_csv("./data/soil_ts_Zimb.csv")
 
 #MPI DATA
-MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
-MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
-
-
-
-
+MPI_2011 <- read_excel("./data/2011_MPI_w_components.xlsx")
+MPI_2017 <- read_excel("./data/2017_MPI_w_components.xlsx")
 
 
 ##Join data
@@ -124,7 +114,7 @@ zim_district <- zim_district %>%
   arrange(District_name) %>% 
   mutate(District_ID = c(1:60))
 
-joined_zim <-  full_join(zim_district, MPI_2011, by = "District_ID")
+joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
 
 
 
@@ -216,13 +206,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                        p("Description of EVI"),
                                        
                                        h3(strong("Precipitation")),
-                                       p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided as millimeters per hour."),
+                                       p("Description of Precipitation"),
                                        
                                        h3(strong("Soil Moisture")),
                                        p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
                                        ),
                                        
-                                      # br(),
+                                       br(),
                                        
                                        box(
                                          width = 6,
@@ -258,20 +248,6 @@ ui <- navbarPage(title = "Zimbabwe",
                                          title = h3(strong("Remote Sensed data Methodology")),
                                          width = 6,
                                          em(h4("A brief overview of the wrangling of the Remote Sensed data")), tags$br(),
-                                         h3(strong("EVI")),
-                                         p("Description of EVI"),
-                                         h3(strong("Precipitation")),
-                                         p("In project interest, we have subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. In consideration, we have decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data. Aggregating the data to daily averages of precipitation."),
-                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, Maize. Zimbabwe, generally follows previous analysis of its weather pattern but as it relates to precipitation. Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions. What is the annual value of rainfall for the country as a whole? Past literature defines the growing season of maize to start in October and continue into May the following year. For production of Maize, a season must see 600-700 mm of rain. If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season.  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress. The timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
-                                         p("Alternatively planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product. In a day, we need to characterize the possible types of conditions that may affect the production of Maize. For the purposes of this project, we will only examine what is considered to be a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm the opposite can describe a wet day as receiving more than 2.95mm of rain. A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more. "),
-                                         h3(strong("Soil Moisture")),
-                                         p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
-                                        #br(), 
-p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
-
-p("-   15-20mm are normally the best for vigorous field activity."),
-
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
                                        ),
                                        box(
                                          withMathJax(),
@@ -399,7 +375,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          p("Description of EVI"),
                                          
                                          h3(strong("Precipitation")),
-                                         p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided as millimeters per hour."),
+                                         p("Description of Precipitation"),
                                          
                                          h3(strong("Soil Moisture")),
                                          p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
@@ -592,65 +568,26 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             
                             tabPanel(strong("Soil Moisture"),
-                                     tabPanel("Surface Soil Moisture", value = "socio",
+                                     tabPanel("Soil Moisture", value = "socio",
                                               fluidRow(style = "margin: 6px;",
                                                        h1(strong("Soil Moisture "), align = "center"),
                                                        p("", style = "padding-top:10px;"),
                                                        column(12,
-                                                              h4(strong("Ideal soil type for maize production")),
-                                                              p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."),
+                                                              h4(strong("Soil Moisture Profile")),
+                                                              p("paragraph 1"),
                                                               p("paragraph 2"))
                                               )),
                                      fluidRow(
-                                       box(withSpinner(leafletOutput("soil_map_leaflet")),
-                                           title = "Average Soil Moisture",
-                                           width = 7,
-                                           height = 650
+                                       box(withSpinner(plotOutput("myplot3")),
+                                         title = "Soil Moisture",
+                                         width = 6,
+                                         height = 600
                                        ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of the Average Soil Moisture During The First 30 days Of 2016-17 Growing Season"))),
-                                     
-#                                      fluidRow(
-#                                        box(withSpinner(plotOutput("soil_map")),
-#                                          title = "Average Soil Moisture",
-#                                          width = 8,
-#                                          height = 600
-#                                        ),
-#                                          box(
-#                                            width = 4,
-#                                            withMathJax(),
-#                                            title = "Description",
-#                                            p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up # into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
-                                    
-                                     fluidRow(
-                                       box(withSpinner(plotOutput("soil_hist")),
-                                           title = "Soil Moisture At Planting",
-                                           width = 8,
-                                           height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
-                                       
-                                     fluidRow(  
-                                     box(withSpinner(plotOutput("soil_line")),
-                                           title = "Soil Moisture at Planting Times",
-                                           width = 8,
-                                           height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))
-                                       
-                                       )
-                                      )),
+                                         box(
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))))),
                             
                             
                             #),
@@ -903,103 +840,10 @@ output$myplot4 <- renderPlot({
   #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
 })
 
-
-
-# SOIL MOISTURE OUTPUTS
-output$soil_map_leaflet <- renderLeaflet({
-  mypal <- colorNumeric(
-    palette = "viridis",
-    domain = total$AvgSurfaceMoisture)
-  
-  leaflet(total) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region -", total$region,":", round(total$AvgSurfaceMoisture, digits = 3)),
-                opacity = 1.0, fillOpacity = 0.5,
-                highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE)) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = total$AvgSurfaceMoisture,
-              opacity = .6,title= paste("Average Soil Moisture (mm)"))%>%
-    
-    addPolylines(data = total$geometry, color = "black", opacity = 2, weight = 2,)%>% 
-    setView(lat = -19.0154, lng=29.1549 , zoom =6)
-})
-
-output$soil_hist <- renderPlot({
-  # Grouped
-  ggplot(df2, aes(fill=time, y=value, x=region)) + 
-    geom_bar(position="dodge", stat="identity")+ 
-    labs(color="time") +
-    xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
-    ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
-    guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
-    scale_fill_viridis(discrete=TRUE, direction=-1)
-  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition  
-})  
-
-output$soil_line <- renderPlot({
-  
-  #Generate categories for soil moisture
-  mydat_longg <- mydat_long %>% 
-    mutate(
-      Wet = case_when(Moisture > 25 ~ 1,
-                      TRUE ~ 0),
-      
-      Ideal = case_when(Moisture >= 15 & Moisture <=25 ~ 1,
-                        TRUE ~ 0),
-      
-      Dry = case_when(Moisture >10 & Moisture <15 ~ 1,
-                      TRUE ~ 0),
-      
-      ExtremelyDry = case_when(Moisture <=10 ~ 1,
-                               TRUE ~ 0),
-    )
-  
-  # Make sure that the data is in columns for each region. This step will group by column to get the desired wide dataset.
-  #Put into columns by group
-  mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
-                           ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
-                                                                                               timevar = "ID", direction = "wide")
-  
-  
-ggplot(mydat_long2, aes(newDate, y = value, color = variable)) + 
-    geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
-    geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
-    geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
-    geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
-    geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
-    geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
-    labs(color="Agro-ecological Region") +
-    xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
-    ggtitle("Planting Time During The 2016-17 Growing Season") +
-    theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
-    scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
-  
-})  
-  
-
-
-# #Add maps
-# output$soil_map <- renderPlot({
-#   ggplot(data = total) +
-#     geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
-#     xlab("Longitude") + ylab("Latitude") +
-#     coord_sf() +
-#     scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,14), breaks=c(6,8,10,12,14), labels=c("6","8", "10", "12", "14")) +
-#     ggtitle("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
-#     guides(fill=guide_legend(title="Average Soil Moisture (mm)"))+theme_bw()
-# })
-
-
-
-
-
-
-
-
-
 mypal <- colorNumeric(
   palette = "viridis",
   domain = joined_zim$M0_k3)
-#mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
+mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
 
 output$MPI_map_2011 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
