@@ -613,10 +613,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                               p("paragraph 2"))
                                               )),
                                      fluidRow(
-                                       box(withSpinner(leafletOutput("soil_map_leaflet")),
+                                       box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
                                            title = "Average Soil Moisture",
                                            width = 7,
-                                           height = 650
+                                           height = 600
                                        ),
                                        box(
                                          width = 4,
@@ -636,7 +636,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
 #                                            title = "Description",
 #                                            p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up # into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
                                     
-                                     fluidRow(
+                                     #fluidRow(
                                        box(withSpinner(plotOutput("soil_hist")),
                                            title = "Soil Moisture At Planting",
                                            width = 8,
@@ -646,9 +646,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This grouped bar chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of three-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that none of the regions experienced any wet days, and region V is unique in not experiencing any ideal days. Furthermore, Regions one through three all had either 4 or 5 ideal days, while region four only had 2. This aligns with the previous visualization’s findings of regions I-III having more soil moisture on average than regions IV and V."))),
+                                         p("This grouped bar chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of three-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that none of the regions experienced any wet days, and region V is unique in not experiencing any ideal days. Furthermore, Regions one through three all had either 4 or 5 ideal days, while region four only had 2. This aligns with the previous visualization’s findings of regions I-III having more soil moisture on average than regions IV and V.")),
                                        
-                                     fluidRow(  
+                                     #fluidRow(  
                                      box(withSpinner(plotOutput("soil_line")),
                                            title = "Soil Moisture at Planting Times",
                                            width = 8,
@@ -660,7 +660,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          title = "Description",
                                          p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))
                                        
-                                       )
+                                       
                                       )),
                             
                             
