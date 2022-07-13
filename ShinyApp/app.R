@@ -1,5 +1,5 @@
 #Leo's setting WD
-# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Shiny Test/Zim22")
+# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp")
 
 library(shiny)
 library(leaflet)
@@ -95,6 +95,12 @@ jscode <- "function getUrlVars() {
 zim_district <- st_read("./data/Shapefiles/Zim_D60.shp")  
 zim_region <- st_read("./data/Shapefiles/agro-ecological-regions.shp")
 
+#Map palette
+mypal <- colorNumeric(
+  palette = "viridis",
+  domain = NULL)
+
+
 #EVI DATA
 EVI_monthly <- read_csv("./data/EVI_monthly.csv")
 AnnualEVI <- read_csv("./data/EVI_annual.csv")
@@ -105,7 +111,7 @@ EVI_long <- read_csv("./data/EVI_long.csv")
 
 #SOIL ----------
 #SOIL DATA
-mydatXL2 <- read_csv("./data/Agro-Eco Indices/soil/soil_ts_Zimb.csv")
+mydatXL2 <- read_csv(paste0(getwd(),"/data/Agro-Eco Indices/soil/soil_ts_Zimb.csv"))
 mydat_long <- readRDS("./data/Agro-Eco Indices/soil/mydat_long.RDS")
 #df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
 df2 <- readRDS("./data/Agro-Eco Indices/soil/soil_hist.RDS")
@@ -756,7 +762,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      tabsetPanel(
                                        tabPanel(title = "2011",
                                      fluidRow(
-                                       box(withSpinner(plotOutput("myplot4", height = 520)),
+                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
                                          title = "Components of the MPI",
                                          width = 8,
                                          height = 600
@@ -770,7 +776,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      
                                      tabPanel(title = "2017",
                                               fluidRow(
-                                                box(
+                                                box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
                                                     title = "Components of the MPI",
                                                     width = 8,
                                                     height = 600
@@ -790,7 +796,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot4", height = 520)),
                                          title = "Tab 3",
                                          
                                          box(
@@ -1076,17 +1082,6 @@ ggplot(mydat_long2, aes(newDate, y = value, color = variable)) +
 
 
 
-
-
-
-
-
-
-mypal <- colorNumeric(
-  palette = "viridis",
-  domain = joined_zim$M0_k3)
-#mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
-
 output$MPI_map_2011 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
     addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
@@ -1113,10 +1108,7 @@ output$MPI_map_2011 <- renderLeaflet({
 })
 
 output$MPI_map_2017 <- renderLeaflet({
-  mypal <- colorNumeric(
-    palette = "viridis",
-    domain = joined_zim17$M0_k3) 
-  
+
   leaflet(joined_zim17) %>% addTiles() %>%  
     addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
@@ -1139,6 +1131,62 @@ output$MPI_map_2017 <- renderLeaflet({
     #hideGroup("M0")%>% 
     hideGroup("M1")%>% 
     hideGroup("M2")
+})
+
+output$compo_MPI_11 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$g0_edu_max_k3,
+              opacity = .6,title= paste("k=3")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness")
+})
+
+output$compo_MPI_17 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomleft",values = joined_zim17$g0_edu_max_k3,
+              opacity = .6,title= paste("k=3")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness")
+  
+  
 })
 
 
