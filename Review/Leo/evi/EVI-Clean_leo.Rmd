@@ -1,0 +1,301 @@
+---
+title: "EVI-Cleaned"
+author: "Frankie Fan"
+date: '2022-07-11'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+library(sp)
+library(directlabels)
+
+library(ggrepel)
+```
+
+## Info for EVI:
+
+Pixel: 463.313 meters\
+Satellite: MODIS\
+generated from the MODIS/006/MOD09GA surface reflectance composites
+
+
+
+## 1. 
+
+Generate mean and standard deviation of monthly EVI for 2010-11 and 2016-17 growing seasons by region (these will only be included in Leaflet as a pop-up when the cursor is placed on a specific region)
+
+```{r, echo=FALSE, include=FALSE}
+# I uploaded them in my `Data` folder under `Frankie's Branch`
+
+#GrSs2011 <- read_csv("./Data/EVI_region_GrSs2011.csv")
+#GrSs2017 <- read_csv("./Data/EVI_region_GrSs2017.csv")
+setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp")
+
+GrSs2011 <- read_csv(paste0(getwd(),"/data/agregion indices/evi/EVI_region_GrSs2011.csv"))
+GrSs2017 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2017.csv")
+EVI_region_long <- read_csv("./data/agregion indices/evi/EVI_region_long.csv")
+
+# Other Files
+zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
+zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
+
+zim_district <- rename(zim_district, District_name = "NAME_2")
+zim_region <- rename(zim_region, Region = "nat_region")
+# zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
+# zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
+# EVI_region_long <- read_csv("./Data/EVI_region_long.csv")
+
+```
+
+
+
+## 2.
+
+Time series graphs by region of maximum monthly EVI for 2010-11 and 2016-17 growing seasons (note: these will be two separate graphs)
+
+```{r}
+GrSs2011Line <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2010|Year == 2011) %>% 
+  filter(!(Year == 2010 & Month == "03")) %>% 
+  filter(!(Year == 2010 & Month == "04")) %>%
+  filter(!(Year == 2010 & Month == "05")) %>%
+  filter(!(Year == 2010 & Month == "02")) %>% 
+  filter(!(Year == 2010 & Month == "01")) %>% 
+  filter(!(Year == 2011 & Month == "10")) %>% 
+  filter(!(Year == 2011 & Month == "11")) %>%
+  filter(!(Year == 2011 & Month == "12")) %>% 
+  group_by(Region, Month) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+  mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                             Month =="11" ~ "2",
+                             Month =="12" ~ "3",
+                             Month =="01" ~ "4",
+                             Month =="02" ~ "5",
+                             Month =="03" ~ "6",
+                             Month =="04" ~ "7",
+                             Month =="05" ~ "8"))
+                             
+GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
+
+GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
+GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
+GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
+
+#write.csv(GrSs2011Line, file = "eviline2011.csv")
+
+
+# Max EVI
+GrSs2011Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+
+#Plotly
+p11 <- GrSs2011Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = paste(GrSs2011Line$Region)), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+ggplotly(p11)
+
+```
+
+
+```{r}
+GrSs2017Line <- EVI_region_long %>% 
+  filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+         Year == 2016|Year == 2017) %>% 
+  filter(!(Year == 2016 & Month == "03")) %>% 
+  filter(!(Year == 2016 & Month == "04")) %>%
+  filter(!(Year == 2016 & Month == "05")) %>%
+  filter(!(Year == 2016 & Month == "02")) %>% 
+  filter(!(Year == 2016 & Month == "01")) %>% 
+  filter(!(Year == 2017 & Month == "10")) %>% 
+  filter(!(Year == 2017 & Month == "11")) %>%
+  filter(!(Year == 2017 & Month == "12")) %>% 
+  group_by(Region, Month) %>% 
+  summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+  mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                             Month =="11" ~ "2",
+                             Month =="12" ~ "3",
+                             Month =="01" ~ "4",
+                             Month =="02" ~ "5",
+                             Month =="03" ~ "6",
+                             Month =="04" ~ "7",
+                             Month =="05" ~ "8"))
+                             
+GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
+
+GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
+GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
+GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
+
+
+# Max EVI
+GrSs2017Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+
+p17 <- GrSs2011Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = paste(GrSs2017Line$Region)), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+ggplotly(p17)
+
+```
+
+
+##3. 
+
+Spatial maps of max EVI during the 2010-11 and 2016-17 growing seasons by region (note: these will be two separate graphs
+
+```{r}
+# Regional 2011
+
+# Max
+
+EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
+
+RgMaxEVI2011 <- EVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2011")
+
+RgMaxEVI2011
+
+
+
+# ADDING LEAFLET
+mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+#Here is my leaflet code
+#The label option creates a popup with my Region name followed by the Avg Surface Moisture value
+  leaflet(EVIGrow2011) %>% addTiles() %>%  
+    addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2011$Region,":", round(EVIGrow2011$MaxEVI, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE)) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = EVIGrow2011$MaxEVI,
+              opacity = .6,title= paste("Maximum EVI"))%>%
+    
+    addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6)
+
+```
+
+
+```{r}
+# Regional 2017
+
+# Max
+
+EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
+
+RgMaxEVI2017 <- EVIGrow2011 %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
+  coord_sf() +
+  scale_fill_viridis_c(option = "G", direction = -1) +
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2017")
+
+RgMaxEVI2017
+
+
+# ADDING LEAFLET
+mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+#Here is my leaflet code
+#The label option creates a popup with my Region name followed by the Avg Surface Moisture value
+  leaflet(EVIGrow2017) %>% addTiles() %>%  
+    addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2017$Region,":", round(EVIGrow2017$MaxEVI, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE)) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = EVIGrow2017$MaxEVI,
+              opacity = .6,title= paste("Maximum EVI"))%>%
+    
+    addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6)
+
+```
+
+
+## Zim Region Map
+```{r}
+RegionMap <- zim_region %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = Region)) +
+  coord_sf() +
+  scale_fill_viridis_d(option = "H") +
+  theme(legend.title = element_text(size = 10), 
+               legend.text = element_text(size = 10)) +
+  labs(title = "Agro-ecological regions in Zimbabwe", color =  "Agro-ecological regions")
+
+RegionMap
+
+ggplotly(RegionMap)
+
+
+```
+

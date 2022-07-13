@@ -1,0 +1,139 @@
+---
+title: "Wrangling GEE Data"
+author: "Susan E. Chen"
+Last Update: 6/29/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+```
+
+# Getting your data into a nice layout to study the time series properties. 
+When you data is exported from GEE it has a wide format with a column containing the indicator value for each time period. Each row is then a district. 
+For time series analysis we want the opposite of this. We want columns with the district information and row with the time period so we need to transpose the data. For this exercise I am using daily EVI data. I have 6,151 observations. My version of R is not happy with this file with 6,151 variables but excel is quite happy with it so I will process my data in excel and change the format from wide (6151 X 60) to long (60 X 6151). 
+
+**Note: if you want to use R to reshape the data you can do this too. Please talk to Frankie who I heard wrote code to do this year by year. This is an efficient way to do a task like this.**
+
+Here are the steps I used to pre-process the data in excel:
+
+1. I first go to the very last column and remove all the variables I do not need. In my EVI file they are ENGTYPE_2,NL_NAME_2,NL_NAME_1,HASC_2,CC_2,NAME_0,NAME_1,TYPE_2,GID_0,GID_1,GID_2,VARNAME_2,"system:index". Note I make sure to keep NAME_2 as this contains my district name. I am not down to 6137 variables.
+
+2. I then copy the entire data frame in excel. I go to another worksheet and I choose transpose when I paste the dataframe (to do this right click on the mouse and under past options choose transpose). Rename your worksheet "tr' for transposed. You are not finished yet. Move the bottom row with the district names to row 1. Look at your data in excel. Rename NAME_2 to date. Your dataset is now in wide format! Now you can read it in to R for time series analysis.
+
+# Quick review of reading in data 
+
+I use the R package called `openxlsx` and the command readxlx() to read in my excel files. If you have not have the openxlsx package then you need to install it now.
+```{r}
+#Set your working directory to where you want to save your xlsx files
+# Remember the path
+setwd("C:/Users/ecsusan/Dropbox/2021VT-DSPG-FILES/Zimbabwe/GEE_EVI/")  # note I changed to forward slashes in my path. 
+
+library(openxlsx) # Call the openxlsx library that allows me to read in excel spreadsheets to R
+mydatXL <- read.xlsx("EVI_ts_Zimb.xlsx",sheet = "tr")
+
+mydat <- as.data.frame(mydatXL) #TURN INTO AN R DATAFRAME
+
+```
+Let us clean up the date variable some more. We will parse the string and extract the year, month, day. Then turn the parsed substring into a number
+We will use the `stringr` package to do this with the `str_sub()` function to parse the string variable
+
+```{r}
+library(stringr)
+mydat$datest <- str_sub(mydat$date,1,10)
+mydat$datef <- as.Date(mydat$datest, format="%Y_%m_%d")
+head(mydat) #check new date variable is there
+attributes(mydat$datef) #confirm it is a date
+
+```
+Next I am going to generate a time series plot of daily EVI
+
+```{r}
+# Generate a plot of the EVI over time.
+#
+plot(mydat$datef,mydat$Buhera,
+     main="Daily EVI, Growing Season 2005-2021", # The main graph title.
+     type="l",                  # type="l" creates a line graph.
+     xlab="Day",               # Define the x-axis label.
+     ylab="EVI",          # Define the y-axis label.
+     xaxt="n",                  # Suppress the x-axis.
+     lwd = 2.00,                # Determine line thickness.
+     tck=0.01)                  # Define the tick size (positive = inside).
+                                # Note: tick size for the y-axis.
+
+
+library(ggplot2)
+ggplot(data = mydat, aes(x=datef, y=Buhera))+
+  geom_line(color = "#00AFBB", size = 1)
+```
+
+Now we are going to use our nice date variable to create a month variable. We will then select a subset of data only for the growing season months where month = 10,11,12,1. You can do this with the `dplyr` package using the filter function. Note I saved the subset as the dataframe `season`. I can do analysis with this now.
+
+```{r}
+library(dplyr)
+mydat$mon <- as.numeric(format(mydat$datef, "%m") )
+
+library(Hmisc)
+describe(mydat$mon)
+
+season_mon <- c(1,2,3,4,10,11,12)
+season <- filter(mydat, mon %in% season_mon)
+describe(season$mon)
+
+# Base plot with date axis
+p <- ggplot(data = season, aes(x=datef, y=Buhera))+
+  geom_line(color = "#00AFBB", size = 1)
+p
+# Set axis limits c(min, max)
+min <- as.Date("2016-10-1")
+max <- as.Date("2017-4-30")
+p + scale_x_date(limits = c(min, max))
+```
+
+
+So daily may be a bit much so it may be helpful to look at quarterly data or monthly data. Let us do monthly for now. We are going to use the lubridate package in R to help us here. You can install lubridate which you get when you install the tidyverse package. Recall at the prompt: install.packages("tidyverse").
+
+```{r}
+library(lubridate, warn.conflicts = FALSE)
+library(tidyverse)
+library(dplyr)
+
+MeanSeason <- mean(season$Buhera, na.rm = TRUE)
+MeanSeason #mean for all daily data
+
+#can do for your season
+season <- season %>% 
+  group_by(mon) %>% 
+  mutate(x.new = mean(Buhera, na.rm = TRUE)) #this gives you monthly mean for months in season
+
+```
+
+#can do for every month in your data
+```{r}
+head(season)
+# Basic line plot
+p <-ggplot(data = season, aes(x = mon, y = x.new))+
+  geom_line(color = "#00AFBB", size = 2)
+
+p
+
+```
+
