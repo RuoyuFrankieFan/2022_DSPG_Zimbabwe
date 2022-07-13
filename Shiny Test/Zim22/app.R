@@ -30,6 +30,10 @@ library(ggrepel)
 library(hrbrthemes)
 library(rmapshaper)
 library(magrittr)
+library(viridis)
+library(zoo)
+library(stringr)
+
 #gpclibPermit()
 
 ## FORMATTING-------------------------------------------------------------------
@@ -125,6 +129,7 @@ zim_district <- zim_district %>%
   mutate(District_ID = c(1:60))
 
 joined_zim <-  full_join(zim_district, MPI_2011, by = "District_ID")
+joined_zim17 <-  full_join(zim_district, MPI_2017, by = "District_ID")
 
 
 
@@ -592,9 +597,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             
                             tabPanel(strong("Soil Moisture"),
-                                     tabPanel("Surface Soil Moisture", value = "socio",
-                                              fluidRow(style = "margin: 6px;",
-                                                       h1(strong("Soil Moisture "), align = "center"),
+                                     tabPanel("Surface Soil Moisture",
+                                              fluidRow(#style = "margin: 6px;",
+                                                       h1(strong("Surface Soil Moisture "), align = "center"),
                                                        p("", style = "padding-top:10px;"),
                                                        column(12,
                                                               h4(strong("Ideal soil type for maize production")),
@@ -611,7 +616,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This graphic shows a detailed visualization of the Average Soil Moisture During The First 30 days Of 2016-17 Growing Season"))),
+                                         p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From the visualization we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm). These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
                                      
 #                                      fluidRow(
 #                                        box(withSpinner(plotOutput("soil_map")),
@@ -635,7 +640,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
+                                         p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of three-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that none of the regions experienced any wet days, and region V is unique in not experiencing any ideal days. Furthermore, Regions one through three all had either 4 or 5 ideal days, while region four only had 2. This aligns with the previous visualization’s findings of regions I-III having more soil moisture on average than regions IV and V."))),
                                        
                                      fluidRow(  
                                      box(withSpinner(plotOutput("soil_line")),
@@ -647,7 +652,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))
+                                         p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))
                                        
                                        )
                                       )),
@@ -659,8 +664,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
                             tabPanel(strong("Multidimensional Poverty Index"),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                                     tabsetPanel(
+                                     tabPanel(title = "2011",
                                      fluidRow(
                                        box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
                                          title = "Multidimensional Poverty Index",
@@ -672,7 +677,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
                                            tags$ul(  
                                              tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
@@ -683,24 +688,101 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                              
                                            ),
                                            p("To adjust the threshold cutoff, k, by which an individual is considered poor,
-                                      we use k=3 as our threshold.")))),
+                                      we use k=3 as our threshold."))),
+                                     
+                                     fluidRow(
+                                       box(
+                                         withMathJax(),
+                                         title = strong("Descriptive Analysis"),
+                                         width = 12,
+                                         p("\\(M_{0}\\)"),
+                                         p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                         
+                                         p("\\(M_{1}\\)"),
+                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
+                                         p("\\(M_{2}\\)"),
+                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
+                                         p("")
+                                       )
+                                     )),
+                                     
+                                     tabPanel(title = "2017",
+                                              fluidRow(
+                                                box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
+                                                    title = "Multidimensional Poverty Index",
+                                                    width = 8,
+                                                    height = 600
+                                                ),
+                                                box(
+                                                  
+                                                  width = 4,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+                                                  tags$ul(  
+                                                    tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
+                                                            " and considers all of the dimensions described in the methodology section."),
+                                                    tags$li("\\(M_{1}\\)
+                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+                                                    tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
+                                                    
+                                                  ),
+                                                  p("To adjust the threshold cutoff, k, by which an individual is considered poor,
+                                      we use k=3 as our threshold."))),
+                                              
+                                              fluidRow(
+                                                box(
+                                                  withMathJax(),
+                                                  title = strong("Descriptive Analysis"),
+                                                  width = 12,
+                                                  p("\\(M_{0}\\)"),
+                                                  p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                                  
+                                                  p("\\(M_{1}\\)"),
+                                                  p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
+                                                  p("\\(M_{2}\\)"),
+                                                  p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
+                                                  p("")
+                                                )
+                                              ),
+                                     
+                                     ))),
                             
                             
                             
                             tabPanel(strong("Components of the MPI"),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                                     tabsetPanel(
+                                       tabPanel(title = "2011",
                                      fluidRow(
-                                       box(
+                                       box(withSpinner(plotOutput("myplot4", height = 520)),
                                          title = "Components of the MPI",
-                                         
+                                         width = 8,
+                                         height = 600
+                                       ),
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
+                                     
+                                     tabPanel(title = "2017",
+                                              fluidRow(
+                                                box(
+                                                    title = "Components of the MPI",
+                                                    width = 8,
+                                                    height = 600
+                                                ),
+                                                box(
+                                                  
+                                                  width = 4,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))
+                                     
+                                     )),
                             
                             
                             tabPanel(strong("Tab 3"),
@@ -716,12 +798,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))))),
                             
                             
-                 ),
-                 
-                 
                  
                  ## Tab 3
                  navbarMenu(strong("MPI and Indices"), 
@@ -958,7 +1037,14 @@ output$soil_line <- renderPlot({
   mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
                            ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
                                                                                                timevar = "ID", direction = "wide")
+  # Now let us look at the first month of the growing season. This means we will subset our sample to the first 30 days of planting in the 2016-17 Growing Season. We set this with the min and max variables below.
+  # Set limits to first thirty days of the growing season: c(min, max)
+  min <- as.yearmon("20161119", "%Y%m")
+  max <- as.yearmon("20161219", "%Y%m")
   
+  # Set axis limits c(min, max) on plot
+  min <- as.Date("2016-11-19")
+  max <- as.Date("2016-12-19")
   
 ggplot(mydat_long2, aes(newDate, y = value, color = variable)) + 
     geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
@@ -1003,26 +1089,58 @@ mypal <- colorNumeric(
 
 output$MPI_map_2011 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = ~M0_k3,
-                      opacity = 1.0, fillOpacity = 0.5,
-                      highlightOptions = highlightOptions(color = "white", weight = 2,
-                      bringToFront = TRUE), group="M0") %>%
-        addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = ~M1_k3,
+    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
-                highlightOptions = highlightOptions(color = "white", weight = 2,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="M0") %>%
+    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = ~M2_k3,
+    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
-                highlightOptions = highlightOptions(color = "white", weight = 2,
-                                                    bringToFront = TRUE), group="M2") %>% 
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="M2") %>%
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomleft",values = joined_zim$M0_k3,
-                      opacity = .6,title= paste("Headcount Ratio")) %>% 
+              opacity = .6,title= paste("MPI 2011")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
-                   options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
     hideGroup("M1")%>% 
     hideGroup("M2")
 })
+
+output$MPI_map_2017 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = joined_zim17$M0_k3) 
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="M0") %>%
+    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="M1")  %>%  
+    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="M2") %>%
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$M0_k3,
+              opacity = .6,title= paste("MPI 2017")) %>% 
+    addLayersControl(baseGroups = c("M0", "M1", "M2"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("M1")%>% 
+    hideGroup("M2")
+})
+
 
 }
 
