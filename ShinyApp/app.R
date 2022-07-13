@@ -1,6 +1,4 @@
-#Leo's setting WD
-# setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp")
-
+#Load Libraries
 library(shiny)
 library(leaflet)
 library(tidyverse)
