@@ -147,7 +147,7 @@ df2 <- reshape(data=df, idvar = "region",
  ggplot(df2, aes(fill=time, y=value, x=region)) + 
      geom_bar(position="dodge", stat="identity")+ 
      labs(color="time") +
-     xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
+     xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
      ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
      guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
      scale_fill_viridis(discrete=TRUE, direction=-1)
@@ -224,7 +224,15 @@ zim_region <-rename(zim_region, region = nat_region)
      
 ```
 
-```{r}
+
+################################
+####################
+######################
+##############################
+####################
+
+# Leaflet Practice (Code only, does not run)
+```{r eval=FALSE, include=FALSE}
 #I am loading the color palette
 #I use the library(viridis) to get the color
 #My data file is called total and I want to show the Avg Surface Moisture in each region on the map
@@ -340,6 +348,18 @@ leaflet(joined_zim17) %>% addTiles() %>%
 
 
 ```
+
+################################
+####################
+######################
+##############################
+####################
+
+
+
+
+
+
 
 # To Do: do you want to label maps with the regions? I tried to find the centroid of each region's polygon and save the x,y coordinates. This effort was not great as some regons are not-contiguous. The code I generated is commented out in case someone wants to try to fix it.
 

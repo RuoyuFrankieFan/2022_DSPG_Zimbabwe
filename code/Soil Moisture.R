@@ -34,7 +34,14 @@ mydat_longg <- mydat_long %>%
 mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
                          ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
                                                                                              timevar = "ID", direction = "wide")
+# Now let us look at the first month of the growing season. This means we will subset our sample to the first 30 days of planting in the 2016-17 Growing Season. We set this with the min and max variables below.
+# Set limits to first thirty days of the growing season: c(min, max)
+min <- as.yearmon("20161119", "%Y%m")
+max <- as.yearmon("20161219", "%Y%m")
 
+# Set axis limits c(min, max) on plot
+min <- as.Date("2016-11-19")
+max <- as.Date("2016-12-19")
 
 
 #loading the processed data to save time
