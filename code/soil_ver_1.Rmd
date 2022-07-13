@@ -225,10 +225,16 @@ zim_region <-rename(zim_region, region = nat_region)
 ```
 
 ```{r}
+#I am loading the color palette
+#I use the library(viridis) to get the color
+#My data file is called total and I want to show the Avg Surface Moisture in each region on the map
+
 mypal <- colorNumeric(
     palette = "viridis",
     domain = total$AvgSurfaceMoisture)
-  
+
+#Here is my leaflet code
+#The label option creates a popup with my Region name followed by the Avg Surface Moisture value
   leaflet(total) %>% addTiles() %>%  
     addPolygons(color = ~mypal(AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region -", total$region,":", round(total$AvgSurfaceMoisture, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
