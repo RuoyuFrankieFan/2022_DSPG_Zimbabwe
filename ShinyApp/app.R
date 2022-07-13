@@ -31,7 +31,8 @@ library(magrittr)
 library(viridis)
 library(zoo)
 library(stringr)
-
+library(sp)
+library(directlabels)
 #gpclibPermit()
 
 ## FORMATTING-------------------------------------------------------------------
@@ -90,8 +91,10 @@ jscode <- "function getUrlVars() {
 
 # LOADING DATA-----------------------------------------------
 #SHAPEFILES
-zim_district <- st_read("./data/Shapefiles/Zim_D60.shp")  
-zim_region <- st_read("./data/Shapefiles/agro-ecological-regions.shp")
+zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
+zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
+
+zim_region <- rename(zim_region, Region = "nat_region")
 
 #Map palette
 mypal <- colorNumeric(
@@ -100,20 +103,19 @@ mypal <- colorNumeric(
 
 
 #EVI DATA
-EVI_monthly <- read_csv("./data/EVI_monthly.csv")
-AnnualEVI <- read_csv("./data/EVI_annual.csv")
-EVI_long <- read_csv("./data/EVI_long.csv") 
-
+#agregion
+GrSs2011 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2011.csv")
+GrSs2017 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2017.csv")
+EVI_region_long <- read_csv("./data/agregion indices/evi/EVI_region_long.csv")
 
 #PRECIPITATION DATA
 
-#SOIL ----------
 #SOIL DATA
-mydatXL2 <- read_csv(paste0(getwd(),"/data/Agro-Eco Indices/soil/soil_ts_Zimb.csv"))
-mydat_long <- readRDS("./data/Agro-Eco Indices/soil/mydat_long.RDS")
+mydatXL2 <- read_csv(paste0(getwd(),"/data/agregion indices/soil/soil_ts_Zimb.csv"))
+mydat_long <- readRDS("./data/agregion indices/soil/mydat_long.RDS")
 #df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
-df2 <- readRDS("./data/Agro-Eco Indices/soil/soil_hist.RDS")
-total <- readRDS("./data/Agro-Eco Indices/soil/soil_map.RDS")
+df2 <- readRDS("./data/agregion indices/soil/soil_hist.RDS")
+total <- readRDS("./data/agregion indices/soil/soil_map.RDS")
 
 
 
@@ -987,8 +989,11 @@ output$myplot4 <- renderPlot({
 })
 
 
+# EVI OUTPUTS-------
 
-# SOIL MOISTURE OUTPUTS
+
+
+# SOIL MOISTURE OUTPUTS-------
 output$soil_map_leaflet <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
@@ -1079,7 +1084,7 @@ ggplot(mydat_long2, aes(newDate, y = value, color = variable)) +
 # })
 
 
-
+#MPI OUTPUTS -----
 output$MPI_map_2011 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
     addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
