@@ -1,0 +1,291 @@
+---
+title: "DSPG 2022 Zimbabwe Remote - Soil Moisture"
+author: "Susan E. Chen and Zimbabwe 2022 Team"
+Last Update: 7/10/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float:
+      collapsed: yes
+    theme: readable
+    number_sections: true
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+    number_sections: true
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(viridis)
+library(zoo)
+
+```
+
+```{r warning=FALSE}
+# Read in the data from GEE. Drop some unneccesary variables and rename the region variable. Write the dataset to a dataframe
+#setwd("D:/Virginia Tech/Summer 2022/Project-Zimbabwe/")
+setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe")   
+mydatXL2 <- read_csv("./regional_data/soil_ts_Zimb.csv")
+mydat <- as.data.frame(mydatXL2) #TURN INTO AN R DATAFRAME
+
+mydat <- mydat %>% 
+  select(nat_region, `NASA_USDA_SMAP_SM20150502_20150504_ssm`:`NASA_USDA_SMAP_SM20211229_20211231_ssm`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) 
+```
+
+```{r warning=FALSE}
+# Reshape the data from wide to long format & create number of 3 day intervals with ideal, wet, dry, and extremely dry intervals.
+
+#Step 1: transpose
+mydat_long <- gather(mydat, Date, Moisture, 'NASA_USDA_SMAP_SM20150502_20150504_ssm': 'NASA_USDA_SMAP_SM20211229_20211231_ssm') %>% select(Date, Moisture, region) %>% separate( col=Date, into=c('useless1', 'useless2','useless3','useless4','Date','useless5'), sep='_') %>% select(-useless1,-useless2,-useless3,-useless4,-useless5,)
+
+#Read date string into an R Date Variable and remove date character variable from dataset.
+mydat_long$newDate <- as.Date(mydat_long$Date, "%Y%m%d") -2
+mydat_long <-mydat_long %>% select(-c(Date)) 
+# attributes(mydat_long$newDate)
+
+#Generate categories for soil moisture
+mydat_longg <- mydat_long %>% 
+  mutate(
+         Wet = case_when(Moisture > 25 ~ 1,
+                                  TRUE ~ 0),
+         
+         Ideal = case_when(Moisture >= 15 & Moisture <=25 ~ 1,
+                                  TRUE ~ 0),
+                            
+         Dry = case_when(Moisture >10 & Moisture <15 ~ 1,
+                                  TRUE ~ 0),
+         
+         ExtremelyDry = case_when(Moisture <=10 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+```
+
+```{r  warning=FALSE}
+# Make sure that the data is in columns for each region. This step will group by column to get the desired wide dataset.
+#Put into columns by group
+mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
+                      ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
+                          timevar = "ID", direction = "wide")
+
+# head(mydat_long2)
+```
+
+```{r include=FALSE}
+# and count the number of extremely dry soil spells within the growing season using the rle() function which returns two vectors of the length of a spell and the type of spell (0 or 1). This function returns two variables: length and values. This is shown on line 107. You can make it even shorter by using data.table() function as I show on line 109.
+
+#The str() function tells you the structure of your new spell table. Here it shows you that you 82 spells within the growing season. The first dry spell is 1 day. The second is 74 days, etc. The values are a dummy for whether you had a dry day. 
+
+#The sort() function sorts the data and then displays in decreasing order, the length of spells in the time period.
+
+#The tapply function shows you the max number of dry days (1 days) and non-dry days (0 days). Question: what does this mean? Are there only two states: dry (bad) or not dry (good) or are these non-mutually exclusive categories.
+
+#Here is the video I used to teach me this: https://www.youtube.com/watch?v=NaUZdPc42hs.
+
+# spell.1 <- rle(mydat_long2$Dry.1)
+# str(spell.1)
+# sort(spell.1$lengths, decreasing=TRUE)
+# tapply(spell.1$lengths, spell.1$values, max)
+# 
+# #use sequence along function to create new groups by spells -- same as doing loop and iterating across the number of spells
+# #mydat_long2$spell.group <- rep(seq_along(spell.1$values),spell.1$lengths)
+# mydat_long2$spell.group <- data.table::rleid(mydat_long2$Dry.1)
+# junk <- aggregate(Dry.1~spell.group, mydat_long2, sum)
+# 
+# #Now you can merge the DataFrame junk back in with mydat_long2 if you think this is helpful. 
+# #put all data frames into list
+# df_list <- list(mydat_long2,junk)
+# 
+# library(tidyverse)
+# #merge all data frames in list
+# mydat_long2spells <- df_list %>% reduce(full_join, by='spell.group')
+```
+
+```{r  warning=FALSE}
+# Keep only one month: Nov 19-Dec 19 2016 of the growing season and sum the data in each column for the Wet, Ideal, Dry, and Extremely Dry columns. This makes the nice side-by-side histograms for regions.
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2016-11-19")
+ max <- as.Date("2016-12-19")
+ 
+sum_g1 <- mydat_longg %>% 
+  filter(between(mydat_longg$newDate, min, max))
+sum_g1 <- sum_g1 
+
+#Summarise data like this before plotting:
+library(dplyr)
+ 
+df <- sum_g1 %>%  select(-c(newDate)) %>%
+   group_by(region) %>%
+   summarise_all(sum)  %>% select(-c(Moisture)) 
+
+#Need this step to do side-by-side histogram by region
+df2 <- reshape(data=df, idvar = "region", 
+               varying = c("Wet","Ideal","Dry","ExtremelyDry"), 
+               v.name=c("value"), 
+               times = c("Wet","Ideal","Dry","ExtremelyDry"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+# Grouped
+ ggplot(df2, aes(fill=time, y=value, x=region)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
+     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
+     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+     #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+   
+```
+
+In this bar graph note that there are no wet days. Say this in the Shiny App.
+
+```{r  warning=FALSE}
+
+# Now let us look at the first month of the growing season. This means we will subset our sample to the first 30 days of planting in the 2016-17 Growing Season. We set this with the min and max variables below.
+# Set limits to first thirty days of the growing season: c(min, max)
+min <- as.yearmon("20161119", "%Y%m")
+max <- as.yearmon("20161219", "%Y%m")
+
+# Set axis limits c(min, max) on plot
+ min <- as.Date("2016-11-19")
+ max <- as.Date("2016-12-19")
+ 
+#Another plot with more regions -- add more here
+p <- ggplot(mydat_long2, aes(newDate, y = value, color = variable)) + 
+    geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
+    labs(color="Agro-ecological Region") +
+    xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
+    ggtitle("Planting Time During The 2016-17 Growing Season") +
+    theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
+    scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+p
+
+```
+
+```{r}
+#Add maps
+
+zim_region <- st_read("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe/regional_data/agro-ecological-regions/agro-ecological-regions.shp")
+zim_region <-rename(zim_region, region = nat_region)
+
+# attributes(mydat_long2$newDate)
+
+ map1 <- sum_g1  %>% 
+   group_by(region)  %>% 
+   dplyr::summarize(AvgSurfaceMoisture = mean(Moisture, na.rm = TRUE))     
+
+ df_list <- list(zim_region, map1)
+ 
+ #merge all data frames in list
+ total <- df_list %>% reduce(full_join, by='region')
+ 
+ #Get a coordinate on the surface of each region's polygon to add a region label
+ # map2 <- total  %>% 
+ #  mutate(lon = map_dbl(geometry, ~st_point_on_surface(.x)[[1]]),
+ #         lat = map_dbl(geometry, ~st_point_on_surface(.x)[[2]]))
+  # 
+  #  ggplot() +
+  #  ggplot2::geom_sf(data = map2, fill = "orange") +
+  #  geom_label_repel(data = map2, aes(x = lon, y = lat, label = region))
+  # # 
+ 
+  ggplot(data = total) +
+     geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
+    xlab("Longitude") + ylab("Latitude") +
+   coord_sf() +
+    scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,14), breaks=c(6,8,10,12,14), labels=c("6","8", "10", "12", "14")) +
+     ggtitle("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
+     guides(fill=guide_legend(title="Average Soil Moisture (mm)"))+theme_bw()
+  
+  
+     
+```
+
+# To Do: do you want to label maps with the regions? I tried to find the centroid of each region's polygon and save the x,y coordinates. This effort was not great as some regons are not-contiguous. The code I generated is commented out in case someone wants to try to fix it.
+
+# Settle on labels for all maps/graphs/figures - Susan & Naveen did this. Please let me know if you want to change them.
+
+# Harmonize the colors on all the visualizations so they mean the same thing. For two of the graphs we did this. For the histogram made no sense.
+
+# do we want a map of average monthly rainfall with growing season -- some type of infographic as below? Do this along with main crops as in the pdf file. Like this one:
+
+# Make sure all the color schemes are the same by using the viridis package (see code above). Make sure scales are the same and the colors map across all diagrams within an indicator. Make sure all fonts/typeface are the same and clean across all indicators and all diagrams. Where do we want to put the legends? Inside the box or map -- see last year. Also needs to work with leaflet??
+
+```{r putpic10000, echo=FALSE, out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "./sasonal_calendar.png")
+```
+
+# Writing Section
+
+#### **Data set Overview**
+
+Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012).
+
+#### **Surface Soil Moisture index**
+
+Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
+
+For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:
+
+-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period.
+
+-   15-20mm are normally the best for vigorous field activity.
+
+-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c).
+
+#### **Ideal soil type for maize production (from Tiwanda docs)**
+
+The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial.
+
+#### **Soil type overview by region**
+
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| NR   | AEZ   | Area                               | **Dominant soils**                                              | **Dominant soils**             |
+|      |       |                                    |                                                                 |                                |
+|      |       | **(million ha)**                   | category                                                        | type                           |
++======+=======+====================================+=================================================================+================================+
+| I    | I     | 0.7                                | red soil                                                        | Acrisols, Ferralsols           |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| II a | II a  | 4.1                                | greyish brown sands and sandy loams derived from granitic rocks | Cambisols, Luvisols, Arenosols |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| IIB  | IIB   | 1.8                                | greyish brown sands and sandy loams derived from granitic rocks | Cambisols, Luvisols, Arenosols |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| III  | II(1) | 0.7                                | deep Kalahari sand                                              | Arenosols                      |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| III  | II(2) | 1.4                                | very shallow                                                    | Leptosols, Lixisols            |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| III  | IV(5) | 7.6                                | greyish brown sands and sandy loams derived from granitic rocks | Luvisols                       |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| V    | V(2)  | 0.7                                | very shallow                                                    | Leptosols                      |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| V    | V(3)  | 0.5                                | Vertisols                                                       | Vertisols                      |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| V    | V(4)  | 1.5                                | brown loamy sands & loams                                       | Luvisols, Solonetz             |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+| V    | V(5)  | 3.9                                | Sands & sandy loams derived from granite & gneiss               | Luvisols                       |
++------+-------+------------------------------------+-----------------------------------------------------------------+--------------------------------+
+
+: From: https://www.fao.org/3/a0395e/a0395e06.htm
