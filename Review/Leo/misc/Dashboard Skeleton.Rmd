@@ -39,7 +39,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1.2 Project Outcomes
 
-## 1.3 About Zimbabwe
+## 1.3 About Zimbabwe Agriculture
+
 
 # 2. Data & Methodology
 
@@ -66,8 +67,6 @@ A brief overview of the Mathematics behind the Multidimensional Poverty Index
 
 ## 2.2.3 Selected Indicies
 
--   NDVI
-
 -   EVI
 
 -   Soil
@@ -75,6 +74,24 @@ A brief overview of the Mathematics behind the Multidimensional Poverty Index
 -   Precipitation
 
 # 3. Spatial visualization of Indices
+## Starting with agregions
+-   EVI:
+    
+    - leaflet map with description of the average soil moisture
+    - line and bar graphs with a toggle
+
+-   Soil
+    (agregion)
+    
+    - leaflet map with description of the average soil moisture
+    - line and bar graphs with a toggle with descriptions
+
+-   Precipitation
+    
+        
+    - leaflet map with description of the average soil moisture
+    - line and bar graphs with a toggle
+    
 
 # 4. Spatial visualization of MPI
 

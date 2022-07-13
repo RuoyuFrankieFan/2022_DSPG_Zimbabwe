@@ -99,7 +99,9 @@ GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrde
 GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
 GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
 
+
 #write.csv(GrSs2011Line, file = "eviline2011.csv")
+GrSs2011Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2011.csv")
 
 
 # Max EVI
@@ -169,6 +171,10 @@ GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
 GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
 GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
 GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
+
+
+write.csv(GrSs2011Line, file = "eviline2017.csv")
+GrSs2017Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2017.csv")
 
 
 # Max EVI
