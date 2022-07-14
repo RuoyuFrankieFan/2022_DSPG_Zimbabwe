@@ -1,8 +1,15 @@
 library(shiny)
 library(leaflet)
 library(readr)
+library(sf)
 
 #total1011 <- readRDS(file = "./Demo/data/total1011.RDS")
+
+total1011 <- readRDS(paste0(getwd(),file = "/data/total1011.RDS"))
+
+total1617 <- readRDS(paste0(getwd(),file = "/data/total1617.RDS"))
+
+
 #total1617 <- readRDS(file = "./Demo/data/total1617.RDS")
 
 

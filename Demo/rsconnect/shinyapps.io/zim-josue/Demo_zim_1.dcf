@@ -5,9 +5,9 @@ account: zim-josue
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6642154
-bundleId: 6098603
+bundleId: 6099007
 url: https://zim-josue.shinyapps.io/Demo_zim_1/
-when: 1657817333.61544
-lastSyncTime: 1657817333.61545
+when: 1657826236.32921
+lastSyncTime: 1657826236.32922
 asMultiple: FALSE
 asStatic: FALSE
