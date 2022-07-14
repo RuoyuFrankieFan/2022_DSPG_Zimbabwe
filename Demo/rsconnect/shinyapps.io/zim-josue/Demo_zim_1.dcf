@@ -1,0 +1,13 @@
+name: Demo_zim_1
+title: Demo_zim_1
+username:
+account: zim-josue
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6642154
+bundleId: 6098371
+url: https://zim-josue.shinyapps.io/Demo_zim_1/
+when: 1657812464.21034
+lastSyncTime: 1657812464.21036
+asMultiple: FALSE
+asStatic: FALSE
