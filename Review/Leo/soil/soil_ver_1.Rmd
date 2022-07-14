@@ -40,7 +40,7 @@ library(zoo)
 # Read in the data from GEE. Drop some unneccesary variables and rename the region variable. Write the dataset to a dataframe
 #setwd("D:/Virginia Tech/Summer 2022/Project-Zimbabwe/")
 #setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe")   
-mydatXL2 <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Shiny Test/Zim22/data/Agro-Eco Indices/soil/soil_ts_Zimb.csv")
+mydatXL2 <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp/data/agregion indices/soil/soil_ts_Zimb.csv")
 mydat <- as.data.frame(mydatXL2) #TURN INTO AN R DATAFRAME
 
 mydat <- mydat %>% 
@@ -60,7 +60,11 @@ mydat_long <-mydat_long %>% select(-c(Date))
 # attributes(mydat_long$newDate)
 
 write.csv(mydat_long, file = "mydat_long.csv")
-mydat_long <- read.csv("C:/Users/Leo Allen/Downloads/mydat_long.csv")
+#mydat_long <- read.csv("C:/Users/Leo Allen/Downloads/mydat_long.csv")
+
+mydat_long <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/soil/mydat_long.csv")
+
+
 
 #Generate categories for soil moisture
 mydat_longg <- mydat_long %>% 
@@ -146,8 +150,8 @@ df2 <- reshape(data=df, idvar = "region",
                new.row.names = 1:30,
                direction=("long"))
 
-write.csv(df2, file = "soil_hist.csv")
-df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
+#write.csv(df2, file = "soil_hist.csv")
+df2 <- read.csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/soil/soil_hist.csv")
 
 # Grouped
  ggplot(df2, aes(fill=time, y=value, x=region)) + 
