@@ -218,7 +218,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  navbarMenu(strong("Data & Methodology"), 
                             
                             tabPanel(strong("Data"), 
-                                     fluidPage(
+                                     fluidPage(#h1(strong("Data"), align = "center"),
                                        box(
                                          width = 6,
                                        h2(strong("Description of the Remote Sensed Data")),
@@ -227,7 +227,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                        p("Description of EVI"),
                                        
                                        h3(strong("Precipitation")),
-                                       p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided as millimeters per hour."),
+                                       p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                        
                                        h3(strong("Soil Moisture")),
                                        p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
@@ -272,9 +272,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h3(strong("EVI")),
                                          p("Description of EVI"),
                                          h3(strong("Precipitation")),
-                                         p("In project interest, we have subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. In consideration, we have decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data. Aggregating the data to daily averages of precipitation."),
-                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, Maize. Zimbabwe, generally follows previous analysis of its weather pattern but as it relates to precipitation. Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions. What is the annual value of rainfall for the country as a whole? Past literature defines the growing season of maize to start in October and continue into May the following year. For production of Maize, a season must see 600-700 mm of rain. If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season.  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress. The timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
-                                         p("Alternatively planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product. In a day, we need to characterize the possible types of conditions that may affect the production of Maize. For the purposes of this project, we will only examine what is considered to be a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm the opposite can describe a wet day as receiving more than 2.95mm of rain. A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more. "),
+                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
+                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
+                                         p("To produce maize, a season must see 600-700 mm of rain (Mugyio et al, 2021). If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016).  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress the timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
+                                         p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
                                          h3(strong("Soil Moisture")),
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
                                         #br(), 
@@ -396,21 +397,19 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  tabPanel(strong("Data & Methodology"),
                           tabsetPanel(
                             tabPanel(strong("Data"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                                    
                                      fluidRow(
                                        box(
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         h2(strong("Description of the Remote Sensed Data")),
+                                         h4(em("Description of the Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("EVI")),
                                          p("Description of EVI"),
                                          
                                          h3(strong("Precipitation")),
-                                         p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided as millimeters per hour."),
+                                         p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                          
                                          h3(strong("Soil Moisture")),
                                          p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
@@ -448,7 +447,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          p("text"),
                                          
                                          h4(strong("Precipitation")),
-                                         p("text"),
+                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
+                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
+                                         p("To produce maize, a season must see 600-700 mm of rain (Mugyio et al, 2021). If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016).  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress the timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
+                                         p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
                                          
                                          h4(strong("Soil Moisture")),
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
@@ -615,8 +617,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      fluidRow(
                                        box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
                                            title = "Average Soil Moisture",
-                                           width = 7,
-                                           height = 600
+                                           width = 7
+                                           #height = 600
                                        ),
                                        box(
                                          width = 4,
@@ -639,8 +641,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      #fluidRow(
                                        box(withSpinner(plotOutput("soil_hist")),
                                            title = "Soil Moisture At Planting",
-                                           width = 8,
-                                           height = 600
+                                           width = 8
+                                           #height = 600
                                        ),
                                        box(
                                          width = 4,
@@ -651,8 +653,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      #fluidRow(  
                                      box(withSpinner(plotOutput("soil_line")),
                                            title = "Soil Moisture at Planting Times",
-                                           width = 8,
-                                           height = 600
+                                           width = 8
+                                           #height = 600
                                        ),
                                        box(
                                          width = 4,
@@ -860,6 +862,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  ),
                  
 
+                  ## Tab Takeaways --------------
+
                  tabPanel(strong("Takeaways"),
                           
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
@@ -952,9 +956,25 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           column(3),
                           column(6, 
                                  h1(strong("References"), align = "center"),
+                                 p("Barron, J., Rockström, J., Gichuki, F., & Hatibu, N. (2003). Dry spell analysis and maize yields for two semi-arid locations in east Africa. Agricultural and Forest Meteorology, 117(1-2), 23–37. https://doi.org/10.1016/s0168-1923(03)00037-6 "),
+                                 p("Reference 3"),
                                  p("Milne, G., Mekonnen, A. F., & Benitez Ponce, P. C. (2019). Zimbabwe-Climate Smart Agriculture Investment Plan."),
-                                 p("Reference 2"),
-                                 p("Reference 3")
+                                 p("Mugiyo, H., Mhizha, T., Chimonyo, Vimbayi. G. P., & Mabhaudhi, T. (2021). Investigation of the optimum planting dates for maize varieties using a hybrid approach: A case of Hwedza, Zimbabwe. Heliyon, 7(2), e06109. https://doi.org/10.1016/j.heliyon.2021.e06109 "),
+                                 p("Mupangwa, W., Walker, S., & Twomlow, S. (2011). Start, end and dry spells of the growing season in semi-arid southern Zimbabwe. Journal of Arid Environments, 75(11), 1097–1104. https://doi.org/10.1016/j.jaridenv.2011.05.011 "),
+                                 p("Mushore, T., Manatsa, D., Pedzisai, E., Muzenda-Mudavanhu, C., Mushore, W., & Kudzotsa, I. (2016). Investigating the implications of meteorological indicators of seasonal rainfall performance on maize yield in a rain-fed agricultural system: case study of Mt. Darwin District in Zimbabwe. Theoretical and Applied Climatology, 129(3-4), 1167–1173. https://doi.org/10.1007/s00704-016-1838-2 "),
+                                 p("Nkomozepi, T., & Chung, S.-O. (2012). Assessing the trends and uncertainty of maize net irrigation water requirement estimated from climate change projections for Zimbabwe. Agricultural Water Management, 111, 60–67. https://doi.org/10.1016/j.agwat.2012.05.004 "),
+                                 p("Nyakudya, I. W., & Stroosnijder, L. (2011). Water management options based on rainfall analysis for rainfed maize (Zea mays L.) production in Rushinga district, Zimbabwe. Agricultural Water Management, 98(10), 1649–1659. https://doi.org/10.1016/j.agwat.2011.06.002 "),
+                                 p("Tadross, M. A., Hewitson, B. C., & Usman, M. T. (2005). The Interannual Variability of the Onset of the Maize Growing Season over South Africa and Zimbabwe. Journal of Climate, 18(16), 3356–3372. https://doi.org/10.1175/jcli3423.1 "),
+                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html "),
+                                 p("Reference"),
+                                 p("Reference"),
+                                 p("Reference")
+
+                                 
+                                 
+                                 
+                                 
+                                 
                                  )
                  ),
                  inverse = T)

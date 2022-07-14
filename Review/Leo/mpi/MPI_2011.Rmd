@@ -1,0 +1,143 @@
+---
+title: "MPI_2011"
+author: "JBN"
+date: '2022-06-17'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###This Script will be used to read In MPI data from 2011 & 2017 
+
+Imports 
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(rgdal)
+library(ggsn)
+library(grid)
+```
+
+read in the MPI Excel
+```{r}
+MPI_2011 <- read_excel("./2011_MPI_excerpt data.xlsx")
+```
+
+```{r}
+head(MPI_2011)
+```
+
+Import Shape file into r (Change district 90 --> district 60)
+```{r}
+#file name: 0=boundary, 1=province, 2=district 
+zim_boundary <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_0.shp") 
+zim_province <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_1.shp")
+zim_district <- st_read("./gadm36_ZWE_shp/gadm36_ZWE_2.shp")  
+```
+plot boundary, province, district 
+```{r}
+plot(zim_boundary)
+plot(zim_province)
+plot(zim_district)
+
+```
+Rename cols to match
+```{r}
+zim_district <- rename(zim_district, District_name = "NAME_2")
+```
+
+
+Get the IDs to match 
+```{r}
+zim_district <- zim_district %>% 
+  arrange(District_name) %>% 
+  mutate(District_ID = c(1:60))
+
+joined_zim <-  full_join (zim_district,MPI_2011, by = "District_ID")
+  
+```
+
+ 
+Mapping M0_k3
+Adjusted Headcount Ratio -  The simple headcount ratio is simply the number of individuals considered to be poor divided by the entire population. 
+
+```{r}
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M0_k3)) +
+ggtitle("Adjusted Headcount Ratio in Zimbabwe - 2011") + guides(fill=guide_legend(title="AHR (M0_k3)")) + 
+scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "plasma", direction = -1)+
+coord_sf() + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
+```
+
+Mapping M1_k3 
+Adjusted Poverty Gap -  This examines the distance between the prescribed threshold,  k , and an individual ' s true number of deprivations. This helps examine the subset of poor individuals to efficiently assess which individuals are the poorest in the country.
+
+```{r}
+ggplot() +
+  geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M1_k3)) +
+  coord_sf()+ 
+  scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "inferno", direction = -1) +
+  ggtitle("Adjusted Poverty Gap in Zimbabwe - 2011") + guides(fill=guide_legend(title="APG (M1_k3)"))  + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
+
+```
+
+Mapping M2_k3 
+Adjusted Poverty Severity - This is simply the square of the distance between a poor individual and the poverty threshold,  k .
+```{r}
+ggplot() +
+geom_sf(data = joined_zim, size = 1, color = "black", aes(fill = M2_k3)) +
+ggtitle("Adjusted Poverty Severity in Zimbabwe - 2011")+ guides(fill=guide_legend(title="APS (M2_k3)")) + 
+scale_fill_viridis_b(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "E", direction = -1) +
+coord_sf() + 
+north(joined_zim, symbol = 15, scale = 0.10, location = "topleft") + 
+scalebar(joined_zim, location = "topleft", dist = 100, st.size = 3 , height = 0.02, transform = TRUE, model = "WGS84", dist_unit = "km")
+
+```
+
+
+Horizontal Bar Chart - M0_k3 Adjusted Headcount Ratio
+```{r}
+joined_zim %>% 
+  arrange(desc(M0_k3))  %>% 
+  ggplot(aes(x=reorder(District_name.x , M0_k3), y = M0_k3, fill = M0_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Headcount Ratio per District", 
+         x="District Name", y = "Adjusted HeadCount Ratio") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="AHR")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "plasma", direction = -1)
+```
+Horizontal Bar Chart - M1_k3 Adjusted Poverty Gap
+```{r}
+
+joined_zim %>% 
+  arrange(desc(M1_k3))  %>%
+  ggplot(aes(x=reorder(District_name.x , M1_k3), y = M1_k3, fill = M1_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Poverty Gap per District", 
+         x="District Name", y = "Adjusted Poverty Gap") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="APG")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "inferno", direction = -1)
+
+```
+
+
+
+
+Horizontal Bar Chart - M2_k3 Adjusted Poverty Severity
+```{r}
+
+joined_zim %>% 
+  arrange(desc(M2_k3))  %>%
+  ggplot(aes(x=reorder(District_name.x , M2_k3), y = M2_k3, fill = M2_k3)) +
+  geom_bar(stat="identity") + coord_flip() + labs(title="Plot of Adjusted Poverty Severity per District", 
+         x="District Name", y = "Adjusted Poverty Severity") + theme(axis.text.y = element_text(size = 6)) + guides(fill=guide_legend(title="APS")) + scale_fill_viridis_c(breaks = c(0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40), option = "E", direction = -1)
+
+```
+
+
+
+

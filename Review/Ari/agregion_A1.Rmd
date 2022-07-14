@@ -1,0 +1,83 @@
+## Zim Region Map
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(ggplot2)
+library(viridis)
+```
+
+```{r}
+setwd("D:/Virginia Tech/Summer 2022/Project-Zimbabwe/")
+```
+
+```{r}
+zim_region <- st_read("agro-ecological-regions.shp")
+zim_region <-rename(zim_region, Region = nat_region)
+head(zim_region)
+```
+
+```{r}
+RegionMap <- zim_region %>% 
+  ggplot() +
+  geom_sf(size = 0.15, color = "black", aes(fill = Region)) +
+  coord_sf() +
+  scale_fill_viridis_d(option = "H") +
+  theme(legend.title = element_text(size = 10), 
+               legend.text = element_text(size = 10)) +
+  labs(title = "Agro-ecological regions in Zimbabwe", color =  "Agro-ecological regions")
+
+RegionMap
+```
+
+# Zimbabwe Agro-ecological Regions
+
+#### Overview 1 
+
+Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well (ZimFact, 2018).
+
+#### Overview 2 
+
+There are five agro-ecological (or natural) regions in Zimbabwe which are separated on the basis of multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is Government interest in updating the map of the regions as they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use and a decrease in runoff (Milne et al., 2019).
+
+#### Natural Region I 
+
+Region one consists of specialized and diversified intensive farming and receives more than 1000 mm of rainfall per year. Covering less than 2% of Zimbabwe's area, this region's primary agriculture interest include fruit production, forestry, and intensive livestock rearing (ZIMSTAT, 2017). Region one exhibits rainfall throughout the year, low temperatures, high altitude, and steep slopes as well as containing the country's timber production (Nations, 2006).
+
+#### Natural Region II 
+
+Region two consists of intensive farming and has between 750 to 1000mm of annual precipitation. Covering 15% of Zimbabwe's total area, this region specializes in crop farming and intensive livestock rearing (ZIMSTAT, 2017). Located in the middle of the north of the country, region II has reliable rainfall taking place from November to March/April and accounts for 75-80% of the area devoted to crops in Zimbabwe. This region was primarily consisted of large-scale, highly mechanized farms before the agrarian and land reform programs of 2000; after which many of the farms were subdivided into smaller portions which were then distributed to new farmers under the A1 and A2 small scale farming system (Nations, 2006). A1 and A2 farms are two accelerated resettlement models produced from the early 2000s accelerated land reform program; in which A1 farms are for individual family farms, and A2 farms are the commercial model (Milne et al., 2019).
+
+#### Natural Region III 
+
+Region three is where semi-intensive farming takes place and receives between 650-800mm of rainfall per year. Covering 19% of Zimbabwe's total area, this region specializes in livestock rearing, fodder and cash crops. Region III also produces small amounts of maize, tobacco and cotton (ZIMSTAT, 2017). Located primarily in the mid-altitude areas of the country, this region is characterized by mid-season dry spells and high temperatures. Smallholder agriculture is the primary farming system in this region, with large scale farming only making up 15% of the arable land production (Nations, 2006).
+
+#### Natural Region IV
+
+Region four is characterized by extensive farming and annual rain of between 450-660mm. Covering 38% of total area, Zimbabwe's largest region specializes in extensive livestock breeding and the development of drought resistant crops (ZIMSTAT, 2017). Located in the low-lying areas within the north and south of the country, Region four experiences severe dry spells during the rainy season, as well as frequent seasonal droughts. Although the region is considered unsuitable for dryland farming, smallholder farmers grow drought resistant varieties of maize, pearl and finger millet, and sorghum. Ideally, Region four is suitable for cattle and wildlife production (Nations, 2006).
+
+#### Natural Region V 
+
+Region five is characterized by semi-extensive farming and rain that is too low (\<650mm) and erratic for even drought resistant crops. Covering 27% of Zimbabwe's total area, this region specializes in the extensive ranching of cattle and game (ZIMSTAT, 2017). Located in the lowland areas in the north and south of the country, region five's uneven topography and poor soils make it unsuitable for crop production despite getting reasonable rainfall in northern Zimbabwe along the Zambezi River. Despite being too dry for crop production like region IV, households on the communal lands within region V still grow grain crops for food security, as well as some cash crops like cotton. As crop yields are extremely low, and risk of crop failure is high in one out of three years, cattle and goat production are major sources of cash income for households in this region (Nations, 2006).
+
+#### **References** 
+
+Milne, G., Mekonnen, A. F., & Benitez Ponce, P. C. (2019). Zimbabwe Climate Smart Agriculture Investment Plan. Retrieved from <https://openknowledge.worldbank.org/handle/10986/33112>
+
+Nations, F. a. A. O. o. t. U. (2006). Fertilizer use by crop in Zimbabwe. Retrieved from <https://www.fao.org/3/a0395e/a0395e00.htm#Contents>
+
+ZimFact. (2018, MARCH 12, 2018). Agriculture in Zimbabwe. Retrieved from <https://zimfact.org/agriculture_in_zimbabwe/>
+
+ZIMSTAT, Z. N. S. A. (2017). Zimbabwe Smallholder Agricultural Productivity Survey 2017 Report Retrieved from <http://www.zimstat.co.zw/wp-content/uploads/publications/Economic/Agriculture/APM/APM-2017-Report.pdf>

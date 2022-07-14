@@ -59,6 +59,9 @@ mydat_long$newDate <- as.Date(mydat_long$Date, "%Y%m%d") -2
 mydat_long <-mydat_long %>% select(-c(Date)) 
 # attributes(mydat_long$newDate)
 
+write.csv(mydat_long, file = "mydat_long.csv")
+mydat_long <- read.csv("C:/Users/Leo Allen/Downloads/mydat_long.csv")
+
 #Generate categories for soil moisture
 mydat_longg <- mydat_long %>% 
   mutate(
@@ -143,6 +146,9 @@ df2 <- reshape(data=df, idvar = "region",
                new.row.names = 1:30,
                direction=("long"))
 
+write.csv(df2, file = "soil_hist.csv")
+df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
+
 # Grouped
  ggplot(df2, aes(fill=time, y=value, x=region)) + 
      geom_bar(position="dodge", stat="identity")+ 
@@ -212,6 +218,9 @@ zim_region <-rename(zim_region, region = nat_region)
   #  geom_label_repel(data = map2, aes(x = lon, y = lat, label = region))
   # # 
  
+write.csv(total, file = "soil_map.csv")
+total <- read.csv("C:/Users/Leo Allen/Downloads/soil_map.csv")
+
   ggplot(data = total) +
      geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
     xlab("Longitude") + ylab("Latitude") +
