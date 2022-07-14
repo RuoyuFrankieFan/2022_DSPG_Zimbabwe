@@ -2,6 +2,10 @@ library(shiny)
 library(leaflet)
 library(readr)
 
+#total1011 <- readRDS(file = "./Demo/data/total1011.RDS")
+#total1617 <- readRDS(file = "./Demo/data/total1617.RDS")
+
+
 ui <- fluidPage(
   titlePanel("Zimbabwe: Josue's Leaflet Maps"),
   sidebarLayout(

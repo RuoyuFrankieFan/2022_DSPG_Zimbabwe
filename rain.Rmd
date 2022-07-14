@@ -1198,3 +1198,13 @@ appendeddf1617$r <- factor(appendeddf1617$region, labels = c("I", "IIA", "IIB", 
 <br>
 <br>
 <br>
+
+```{r}
+#write.csv(total1011,"./total1011_2.csv", row.names = FALSE)
+#write.csv(total1617,"./total1617.csv", row.names = FALSE)
+
+saveRDS(total1011, file = paste0('total1011','.RDS')) #writing RPK_dist_outline to RDS file
+saveRDS(total1617, file = paste0('total1617','.RDS'))
+
+```
+
