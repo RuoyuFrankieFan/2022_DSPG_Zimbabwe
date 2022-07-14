@@ -104,18 +104,18 @@ mypal <- colorNumeric(
 
 #EVI DATA
 #agregion
-GrSs2011 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2011.csv")
-GrSs2017 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2017.csv")
-EVI_region_long <- read_csv("./data/agregion indices/evi/EVI_region_long.csv")
+GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
+GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
+EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 #PRECIPITATION DATA
 
 #SOIL DATA
-mydatXL2 <- read_csv(paste0(getwd(),"/data/agregion indices/soil/soil_ts_Zimb.csv"))
-mydat_long <- readRDS("./data/agregion indices/soil/mydat_long.RDS")
-#df2 <- read.csv("C:/Users/Leo Allen/Downloads/soil_hist.csv")
-df2 <- readRDS("./data/agregion indices/soil/soil_hist.RDS")
-total <- readRDS("./data/agregion indices/soil/soil_map.RDS")
+mydatXL2 <- read_csv(paste0(getwd(),"/data/agregion/soil/soil_ts_Zimb.csv"))
+mydat_long <- readRDS("./data/agregion/soil/mydat_long.RDS")
+
+df2 <- readRDS("./data/agregion/soil/soil_hist.RDS")
+total <- readRDS("./data/agregion/soil/soil_map.RDS")
 
 
 
