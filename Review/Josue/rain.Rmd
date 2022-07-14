@@ -1,0 +1,1210 @@
+###Precipitation
+      TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided as millimeters per hour (TRMM, 2012). 
+<br>
+      In project interest, we have subset the data to investigate over Zimbabwe and within a time frame that parallels PICES data records from 2011 and 2017. We make connection with events of interest to this study within the time frame such as drought episodes and social/economic conditions. In consideration, we have decided to limit the time frame of the indicator due to the 3-hourly characteristic of the data, which have been aggregated to daily precipitation.
+<br>
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(ggplot2)
+library(viridis)
+```
+
+
+```{r}
+raw1011 <- read_csv("PRECIP3hravg_ts_Zimb (2010-2012).csv")
+data1011 <- as.data.frame(raw1011) 
+raw1617 <- read_csv("PRECIP3hravg_ts_Zimb (2016-2018).csv")
+data1617 <- as.data.frame(raw1617) 
+
+rain1011 <- data1011 %>% 
+  select(nat_region, `3B42_20101120_00_7_precipitation`:`3B42_20110531_21_7_precipitation`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+
+rain1617 <- data1617 %>% 
+  select(nat_region, `3B42_20161120_00_7_precipitation`:`3B42_20170531_21_7_precipitation`) %>% #select needed columns--Districts and observations
+  rename(region = nat_region) #rename column
+
+```
+
+```{r}
+
+data1011_long <- gather(data1011, Date, Precipitation, '3B42_20101120_00_7_precipitation': '3B42_20110531_21_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+sum1011_long <- data1011_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3
+
+sum1011_long$Rain_Dry <- ifelse(sum1011_long$dailyPRECIP < 2.95,1,0)
+```
+
+```{r}
+sum1011_long2 <- transform(sum1011_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+sum1011_long3<- select(sum1011_long2,-c(Region))
+
+sum1011_long4 <- reshape(sum1011_long3, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+
+sum1011_long4$newDate <- as.Date(sum1011_long4$Date, "%Y%m%d")
+attributes(sum1011_long4$newDate)
+```
+
+
+```{r}
+
+data1617_long <- gather(data1617, Date, Precipitation, '3B42_20161120_00_7_precipitation': '3B42_20170531_21_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+sum1617_long <- data1617_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+sum1617_long$dailyPRECIP <- sum1617_long$dailyPRECIP * 3
+
+sum1617_long$Rain_Dry <- ifelse(sum1617_long$dailyPRECIP < 2.95,1,0)
+```
+
+```{r}
+sum1617_long2 <- transform(sum1617_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+sum1617_long3<- select(sum1617_long2,-c(Region))
+
+sum1617_long4 <- reshape(sum1617_long3, idvar = "Date", 
+                          timevar = "ID", direction = "wide")
+
+sum1617_long4$newDate <- as.Date(sum1617_long4$Date, "%Y%m%d")
+attributes(sum1617_long4$newDate)
+```
+
+
+
+(1) Total rainfall (mm) in the growing seasons 2010-11 and 2016-17 (generating two separate maps)
+
+```{r}
+
+min1011 <- as.Date("2010-11-20")
+max1011 <- as.Date("2011-05-31")
+
+zim_region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp")
+zim_region <-rename(zim_region, Region = nat_region)
+head(zim_region)
+
+sum1011_long2$newDate <- as.Date(sum1011_long2$Date, "%Y%m%d")
+attributes(sum1011_long2$newDate)
+
+map1011 <- sum1011_long2 %>% group_by(Region) %>% filter(newDate >= min1011 & newDate <= max1011) 
+
+map1011_total <- map1011  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(TotalRainfall = sum(dailyPRECIP, na.rm = TRUE))     
+
+df1011_list <- list(zim_region, map1011_total)
+
+#merge all data frames in list
+total1011 <- df1011_list %>% reduce(full_join, by='Region')
+head(total1011)
+
+summary(map1011_total$TotalRainfall)
+```
+
+ 
+```{r}
+
+ ggplot(data = total1011) +
+    geom_sf(size = 0.15, color = "black", aes(fill = TotalRainfall)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(400, 1100), breaks=c(400,500,600,700,800,900,1000,1100)) +
+    ggtitle("Total Rainfall (mm) In The 2010-11 Growing Season") + guides(fill=guide_legend(title="Rainfall (mm)"))  
+
+```
+<br>
+This is showing us the total rainfall in the 2010-11 growing season. For maize production, the ideal range of rainfall is around 600-700 mm (Mugyio et al, 2021). Regions I, IIA, IIB, & III at the north-east are observed as receiving more rainfall than its south-western counterparts. However, it should be noted that Region IV didn't receive the minimum rainfall for an average yield of Maize.
+<br>
+```{r}
+
+min1617 <- as.Date("2016-11-20")
+max1617 <- as.Date("2017-05-31")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+sum1617_long2$newDate <- as.Date(sum1617_long2$Date, "%Y%m%d")
+attributes(sum1617_long2$newDate)
+
+map1617 <- sum1617_long2 %>% group_by(Region) %>% filter(newDate >= min1617 & newDate <= max1617) 
+
+map1617_total <- map1617  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(TotalRainfall = sum(dailyPRECIP, na.rm = TRUE))     
+
+df1617_list <- list(zim_region, map1617_total)
+
+#merge all data frames in list
+total1617 <- df1617_list %>% reduce(full_join, by='Region')
+head(total1617)
+
+summary(map1617_total$TotalRainfall)
+```
+
+ 
+```{r}
+ ggplot(data = total1617) +
+    geom_sf(size = 0.15, color = "black", aes(fill = TotalRainfall)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis(option = "viridis", direction = -1, limits = c(400, 1100), breaks=c(400,500,600,700,800,900,1000,1100)) +
+    ggtitle("Total Rainfall (mm) In The 2016-17 Growing Season") + guides(fill=guide_legend(title="Rainfall (mm)"))
+
+```
+<br>
+This is showing that in all regions minus region V have received sufficient rainfall in total within the 2016-17 growing season. It should be noted that rainfall in Region I exceeded 1000 mm threshold that indicates the maize yield may have declined for this region. In the same light regions IIA, IIB, & III received up towards 1000 mm of rainfall which may have led to an increase in the maize yield. Maize is cultivated in all regions as it is the staple crop in Zimbabwe (ZimFact, 2018).
+<br>
+<br> 
+Total rainfall seems to have a general pattern of increase over time from 2010-11 to 2016-17. As well as, maintaining our idea that North-East regions consistently receive the most rainfall nationally.  
+<br>
+<br>
+<br>
+<br>
+(2) Average daily precipitation in the months of December, January and February in the 2010-11 and 2016-17 growing seasons (generating six separate graphs)
+```{r}
+#December 2010
+minDec10 <- as.Date("2010-12-01")
+maxDec10 <- as.Date("2010-12-31")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1011_long2$newDate <- as.Date(sum1011_long2$Date, "%Y%m%d")
+#attributes(sum1011_long2$newDate)
+
+mapDec10 <- sum1011_long2 %>% group_by(Region) %>% filter(newDate >= minDec10 & newDate <= maxDec10) 
+
+mapDec10_avg <- mapDec10  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfDec10_list <- list(zim_region, mapDec10_avg)
+
+#merge all data frames in list
+totalDec10 <- dfDec10_list %>% reduce(full_join, by='Region')
+head(totalDec10)
+
+summary(mapDec10_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalDec10) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In December 2010") + guides(fill=guide_legend(title="Average Precipitation (mm)"))
+
+```
+<br>
+As a Preface, the rainy season in Zimbabwe starts November to February (Nyakudya & Stroosnijder, 2011). For this reason, we examine where most of the rain occurs which is in December, January, & February. 
+<br>
+This map is showing Average Daily Precipitation in December 2010. So given that the map is looking at rain distribution at a daily level most regions we're seeing similar amounts of rainfall or a lack of variability per region. A day is considered wet if it exceeds 2.95 mm of precipitation based this we can infer that all regions on average were consider to have wet days.
+<br>
+<br>
+<br>
+```{r}
+#January 2011
+minJan11 <- as.Date("2011-01-01")
+maxJan11 <- as.Date("2011-01-31")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1011_long2$newDate <- as.Date(sum1011_long2$Date, "%Y%m%d")
+#attributes(sum1011_long2$newDate)
+
+mapJan11 <- sum1011_long2 %>% group_by(Region) %>% filter(newDate >= minJan11 & newDate <= maxJan11) 
+
+mapJan11_avg <- mapJan11  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfJan11_list <- list(zim_region, mapJan11_avg)
+
+totalJan11 <- dfJan11_list %>% reduce(full_join, by='Region')
+head(totalJan11)
+
+summary(mapJan11_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalJan11) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In January 2011") + guides(fill=guide_legend(title="Average Precipitation (mm)"))
+
+```
+<br>
+This map is showing Average Daily Precipitation (mm) in January 2011. In contrast from December 2010, We start see higher levels of rainfall which lines up the what literature describes to be the wet season Nov – May. We see a concentration of rainfall in North-East regions.
+<br>
+<br>
+<br>
+```{r}
+
+minFeb11 <- as.Date("2011-02-01")
+maxFeb11 <- as.Date("2011-02-28")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1011_long2$newDate <- as.Date(sum1011_long2$Date, "%Y%m%d")
+#attributes(sum1011_long2$newDate)
+
+mapFeb11 <- sum1011_long2 %>% group_by(Region) %>% filter(newDate >= minFeb11 & newDate <= maxFeb11) 
+
+mapFeb11_avg <- mapFeb11  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfFeb11_list <- list(zim_region, mapFeb11_avg)
+
+totalFeb11 <- dfFeb11_list %>% reduce(full_join, by='Region')
+head(totalFeb11)
+
+summary(mapFeb11_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalFeb11) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In February 2011") + guides(fill=guide_legend(title="Average Precipitation (mm)"))
+
+```
+<br>
+This is showing that most regions are seeing about 0-2mm of rainfall in February 2011 as the rainy season begins to wind down. Most regions received low levels of rain except, region IIA, which is an important maize producing region as 75-80% of the land is devoted to farming in Zimbabwe (Nations, 2006).
+<br>
+<br>
+<br>
+```{r}
+
+minDec16 <- as.Date("2016-12-01")
+maxDec16 <- as.Date("2016-12-31")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1617_long2$newDate <- as.Date(sum1617_long2$Date, "%Y%m%d")
+#attributes(sum1617_long2$newDate)
+
+mapDec16 <- sum1617_long2 %>% group_by(Region) %>% filter(newDate >= minDec16 & newDate <= maxDec16) 
+
+mapDec16_avg <- mapDec16  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfDec16_list <- list(zim_region, mapDec16_avg)
+
+totalDec16 <- dfDec16_list %>% reduce(full_join, by='Region')
+head(totalDec16)
+
+summary(mapDec16_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalDec16) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In December 2016") + guides(fill=guide_legend(title="Average Precipitation (mm)")) 
+
+```
+<br>
+This is showing that most regions are seeing about 2-8mm of rainfall in December 2016 according to the literature these region are receiving healthy levels of rainfall
+<br>
+<br>
+In comparison to December 2010, 2016 generally had a higher yield of rain. One thing to note is that in December 2010 rain seems to be more wide spread but 2016 verified our idea that most rain is received in the North-East regions and showed variability across the regions.    
+<br>
+<br>
+<br>
+```{r}
+
+minJan17 <- as.Date("2017-01-01")
+maxJan17 <- as.Date("2017-01-31")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1617_long2$newDate <- as.Date(sum1617_long2$Date, "%Y%m%d")
+#attributes(sum1617_long2$newDate)
+
+mapJan17 <- sum1617_long2 %>% group_by(Region) %>% filter(newDate >= minJan17 & newDate <= maxJan17) 
+
+mapJan17_avg <- mapJan17  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfJan17_list <- list(zim_region, mapJan17_avg)
+
+totalJan17 <- dfJan17_list %>% reduce(full_join, by='Region')
+head(totalJan17)
+
+summary(mapJan17_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalJan17) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In January 2017") + guides(fill=guide_legend(title="Average Precipitation (mm)")) 
+
+```
+<br>
+This is showing that most regions are seeing about 6-12mm of rainfall in January 2017. Generally, this is lining up with what literature considers to be the wet season.
+<br>
+<br>
+In comparison to January 2011, 2017 generally had a slightly higher yield of rain. Though as anticipated the wet season seems to persist between the two years. 
+<br>
+<br>
+<br>
+```{r}
+
+minFeb17 <- as.Date("2017-02-01")
+maxFeb17 <- as.Date("2017-02-28")
+
+#zim_region <- st_read("agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
+#head(zim_region)
+
+#sum1617_long2$newDate <- as.Date(sum1617_long2$Date, "%Y%m%d")
+#attributes(sum1617_long2$newDate)
+
+mapFeb17 <- sum1617_long2 %>% group_by(Region) %>% filter(newDate >= minFeb17 & newDate <= maxFeb17) 
+
+mapFeb17_avg <- mapFeb17  %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = mean(dailyPRECIP, na.rm = TRUE))     
+
+dfFeb17_list <- list(zim_region, mapFeb17_avg)
+
+totalFeb17 <- dfFeb17_list %>% reduce(full_join, by='Region')
+head(totalFeb17)
+
+summary(mapFeb17_avg$MeanPrecipitation)
+```
+
+ 
+```{r}
+
+ggplot(data = totalFeb17) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis_c(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle("Average Daily Precipitation (mm) In February 2017") + guides(fill=guide_legend(title="Average Precipitation (mm)")) 
+
+```
+<br>
+This is showing that most regions are seeing about 4-8mm of rainfall in February 2017. Generally, this is lining up with what literature considers to be the wet season.
+<br>
+<br>
+In comparison to February 2011, 2017 generally had a slightly higher yield of rain. February 2011, Most regions received less rainfall which indicates higher number of dry days expect for region IIA which is an important maize producing region as 75-80% of the land is devoted to farming in Zimbabwe (Nations, 2006). 
+<br>
+Overall, in comparison to 2010-11 growing season we are seeing slightly more precipitation in 2016-17 growing period at both a seasonal level and month by month level. This could possibly indicate a higher yield for maize. Which lines up with EVI, in 2016-2017 EVI was higher than in 2010-11 in general.  
+<br>
+<br>
+<br>
+(3) Histogram of average monthly rainfall from 2011 and 2017
+```{r}
+
+data11_long <- gather(data1011, Date, Precipitation, '3B42_20110101_00_7_precipitation': '3B42_20111231_21_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+sum11_long <- data11_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+sum11_long$dailyPRECIP <- sum11_long$dailyPRECIP * 3
+
+sum11_long2 <- transform(sum11_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+
+sum11_long2$newDate <- as.Date(sum11_long2$Date, "%Y%m%d")
+
+sum11_long2$month <- format(sum11_long2$newDate, "%m")
+
+sum11_longmonth <- sum11_long2 %>% group_by(month, Region) %>% summarise(monthPRECIP11 = sum(dailyPRECIP, na.rm = TRUE))
+```
+
+```{r}
+
+data17_long <- gather(data1617, Date, Precipitation, '3B42_20170101_00_7_precipitation': '3B42_20171231_21_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+
+sum17_long <- data17_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+sum17_long$dailyPRECIP <- sum17_long$dailyPRECIP * 3
+
+sum17_long2 <- transform(sum17_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+
+sum17_long2$newDate <- as.Date(sum17_long2$Date, "%Y%m%d")
+
+sum17_long2$month <- format(sum17_long2$newDate, "%m")
+
+sum17_longmonth <- sum17_long2 %>% group_by(month, Region) %>% summarise(monthPRECIP17 = sum(dailyPRECIP, na.rm = TRUE))
+```
+
+```{r}
+totalmonth <- merge(sum11_longmonth, sum17_longmonth, by=c("month","Region"))
+```
+
+```{r}
+totalmonthavg <- data.frame(month=totalmonth[,1], region=totalmonth[,2], Means=rowMeans(totalmonth[,3:4]))
+```
+
+```{r}
+totalmonthavg <- transform(totalmonthavg,                               
+                      ID = as.numeric(factor(region))) 
+```
+
+```{r}
+totalmonthavg$m <- factor(totalmonthavg$month, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+```
+
+```{r}
+#Region I
+totalmonthavg1 <- totalmonthavg %>% filter(ID == 1) 
+
+ ggplot(totalmonthavg1, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region I") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region I") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region I: 
+In 2011, this region received around 700 mm for the season indicating that there might have been an average yield of maize. The maximum amount of rainfall is about 350 mm in January. The minimum amount of rainfall is about 5 mm which occurs in the middle of the year. As a result, we can infer that the growing season for rain-fed maize agriculture may start when the most of the rainfall occurs so that would be starting October to the end of May. Based on the three widely recommended planting dates and past literature, we have selected Nov 20th as the start of the maize cultivation season(Nyakudya & Stroosnijder, 2011).
+<br>
+<br>
+<br>
+```{r}
+#Region IIA
+totalmonthavg2a <- totalmonthavg %>% filter(ID == 2) 
+
+ ggplot(totalmonthavg2a, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region IIA") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region IIA") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region IIA: 
+The maximum amount of rainfall is about 275 mm in January.
+<br>
+<br>
+Supported by the data we can assume that most rain is experienced in January. Cross examining January across all regions we can see that most are receiving more than 200 mm except Region V. Region I received the highest amount of rainfall around 350 mm.   
+<br>
+<br>
+<br>
+```{r}
+#Region IIB
+
+totalmonthavg2b <- totalmonthavg %>% filter(ID == 3) 
+
+ ggplot(totalmonthavg2b, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region IIB") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region IIB") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region IIB: 
+The maximum amount of rainfall is about 310 mm in January.
+<br>
+<br>
+<br>
+```{r}
+#Region III
+totalmonthavg3 <- totalmonthavg %>% filter(ID == 4) 
+
+ ggplot(totalmonthavg3, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region III") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region III") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region III:
+The maximum amount of rainfall is about 275 mm in January.
+<br>
+<br>
+<br>
+```{r}
+#Region IV
+totalmonthavg4 <- totalmonthavg %>% filter(ID == 5) 
+
+ ggplot(totalmonthavg4, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region IV") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region IV") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region IV:
+The maximum amount of rainfall is about 275 mm in January.
+<br>
+<br>
+<br>
+```{r}
+#Region V
+totalmonthavg5 <- totalmonthavg %>% filter(ID == 6) 
+
+ ggplot(totalmonthavg5, aes(fill=m, y=Means, x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Region V") + ylab("Precipitation (mm)") + 
+     ggtitle("Average Monthly Rainfall In Region V") +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+    
+```
+<br>
+Region V:
+The maximum amount of rainfall is about 180 mm in January.
+<br>
+<br>
+<br>
+(4) Count of dry spells for each region, by month in 2010-11 and 2016-17 growing seasons
+```{r}
+#Region I
+spell1011.1 <- rle(sum1011_long4$Rain_Dry.1)
+str(spell1011.1)
+sort(spell1011.1$lengths, decreasing=TRUE)
+tapply(spell1011.1$lengths, spell1011.1$values, max)
+
+#use sequence along function to create new groups by spells -- same as doing loop and iterating across the number of spells
+#mydat_long2$spell.group <- rep(seq_along(spell.1$values),spell.1$lengths)
+sum1011_long4$spell.group1 <- data.table::rleid(sum1011_long4$Rain_Dry.1)
+junk1011 <- aggregate(Rain_Dry.1~spell.group1, sum1011_long4, sum)
+
+#Now you can merge the DataFrame junk back in with mydat_long2 if you think this is helpful. 
+#put all data frames into list
+#df1_list <- list(sum1011_long4,junk)
+#sum1011_long4spells <- df_list %>% reduce(full_join, by='spell.group1')
+```
+
+
+```{r}
+junk1011_1 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.1 >=10 & Rain_Dry.1<=20 ~ 1,
+                                  TRUE ~ 0),
+ 
+         spell_morethan20 = case_when(Rain_Dry.1 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1011_1 <- junk1011_1 %>% select(-c(spell.group1, Rain_Dry.1))
+```
+
+```{r}
+df1011_1 <- junk1011_1 %>% summarise_all (sum)
+df1011_1$region <- 1
+
+#Need this step to do side-by-side histogram by region
+df1011_1_2 <- reshape(data=df1011_1, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_1_2$type <- factor(df1011_1_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region IIA
+spell1011.2 <- rle(sum1011_long4$Rain_Dry.2)
+str(spell1011.2)
+sort(spell1011.2$lengths, decreasing=TRUE)
+tapply(spell1011.2$lengths, spell1011.2$values, max)
+
+sum1011_long4$spell.group2 <- data.table::rleid(sum1011_long4$Rain_Dry.2)
+junk1011 <- aggregate(Rain_Dry.2~spell.group2, sum1011_long4, sum)
+
+```
+
+
+```{r}
+junk1011_2 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.2 >=10 & Rain_Dry.2<=20 ~ 1,
+                                  TRUE ~ 0),
+         
+         spell_morethan20 = case_when(Rain_Dry.2 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+```
+
+```{r}
+junk1011_2 <- junk1011_2 %>% select(-c(spell.group2, Rain_Dry.2))
+```
+
+```{r}
+df1011_2 <- junk1011_2 %>% summarise_all (sum)
+df1011_2$region <- 2
+
+#Need this step to do side-by-side histogram by region
+df1011_2_2 <- reshape(data=df1011_2, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_2_2$type <- factor(df1011_2_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region IIB
+spell1011.3 <- rle(sum1011_long4$Rain_Dry.3)
+str(spell1011.3)
+sort(spell1011.3$lengths, decreasing=TRUE)
+tapply(spell1011.3$lengths, spell1011.3$values, max)
+
+sum1011_long4$spell.group3 <- data.table::rleid(sum1011_long4$Rain_Dry.3)
+junk1011 <- aggregate(Rain_Dry.3~spell.group3, sum1011_long4, sum)
+
+```
+
+
+```{r}
+junk1011_3 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.3 >=10 & Rain_Dry.3<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.3 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+```
+
+```{r}
+junk1011_3 <- junk1011_3 %>% select(-c(spell.group3, Rain_Dry.3))
+```
+
+```{r}
+df1011_3 <- junk1011_3 %>% summarise_all (sum)
+df1011_3$region <- 3
+
+#Need this step to do side-by-side histogram by region
+df1011_3_2 <- reshape(data=df1011_3, idvar = "region", 
+               varying = c("spell_10to20", "spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20", "spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_3_2$type <- factor(df1011_3_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region III
+spell1011.4 <- rle(sum1011_long4$Rain_Dry.4)
+str(spell1011.4)
+sort(spell1011.4$lengths, decreasing=TRUE)
+tapply(spell1011.4$lengths, spell1011.4$values, max)
+
+sum1011_long4$spell.group4 <- data.table::rleid(sum1011_long4$Rain_Dry.4)
+junk1011 <- aggregate(Rain_Dry.4~spell.group4, sum1011_long4, sum)
+
+```
+
+
+```{r}
+junk1011_4 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.4 >=10 & Rain_Dry.4<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.4 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+```
+
+```{r}
+junk1011_4 <- junk1011_4 %>% select(-c(spell.group4, Rain_Dry.4))
+```
+
+```{r}
+df1011_4 <- junk1011_4 %>% summarise_all (sum)
+df1011_4$region <- 4
+
+#Need this step to do side-by-side histogram by region
+df1011_4_2 <- reshape(data=df1011_4, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20", "spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_4_2$type <- factor(df1011_4_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region IV
+spell1011.5 <- rle(sum1011_long4$Rain_Dry.5)
+str(spell1011.5)
+sort(spell1011.5$lengths, decreasing=TRUE)
+tapply(spell1011.5$lengths, spell1011.5$values, max)
+
+sum1011_long4$spell.group5 <- data.table::rleid(sum1011_long4$Rain_Dry.5)
+junk1011 <- aggregate(Rain_Dry.5~spell.group5, sum1011_long4, sum)
+
+```
+
+
+```{r}
+junk1011_5 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.5 >=10 & Rain_Dry.5<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.5 >= 21 ~ 1,
+                                  TRUE ~ 0),
+         )
+```
+
+```{r}
+junk1011_5 <- junk1011_5 %>% select(-c(spell.group5, Rain_Dry.5))
+```
+
+```{r}
+df1011_5 <- junk1011_5 %>% summarise_all (sum)
+df1011_5$region <- 5
+
+#Need this step to do side-by-side histogram by region
+df1011_5_2 <- reshape(data=df1011_5, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_5_2$type <- factor(df1011_5_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region V
+spell1011.6 <- rle(sum1011_long4$Rain_Dry.6)
+str(spell1011.6)
+sort(spell1011.6$lengths, decreasing=TRUE)
+tapply(spell1011.6$lengths, spell1011.6$values, max)
+
+sum1011_long4$spell.group6 <- data.table::rleid(sum1011_long4$Rain_Dry.6)
+junk1011 <- aggregate(Rain_Dry.6~spell.group6, sum1011_long4, sum)
+
+```
+
+
+```{r}
+junk1011_6 <- junk1011 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.6 >=10 & Rain_Dry.6<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.6 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+```
+
+```{r}
+junk1011_6 <- junk1011_6 %>% select(-c(spell.group6, Rain_Dry.6))
+```
+
+```{r}
+df1011_6 <- junk1011_6 %>% summarise_all (sum)
+df1011_6$region <- 6
+
+#Need this step to do side-by-side histogram by region
+df1011_6_2 <- reshape(data=df1011_6, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1011_6_2$type <- factor(df1011_6_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+
+```{r}
+appendeddf1011 <- rbind(df1011_1_2, df1011_2_2, df1011_3_2, df1011_4_2, df1011_5_2, df1011_6_2)
+```
+
+
+```{r}
+appendeddf1011$r <- factor(appendeddf1011$region, labels = c("I", "IIA", "IIB", "III", "IV", "V"))
+```
+
+
+```{r}
+# Grouped
+ ggplot(appendeddf1011, aes(fill=type, y=value, x=r)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Regions") + ylab("Count of Dry Spells") + 
+    ggtitle("Number Of Dry Spells In The 2010-11 Growing Season") +
+    guides(fill=guide_legend(title="Length Of Spell")) +
+    scale_fill_viridis(discrete=TRUE, direction=-1)
+     #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+
+
+```
+<br>
+This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or more than 20 days. In the two growing seasons all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure (Mugyio et al., 2021).       
+<br>
+In contrast, 2016-17 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
+<br>
+<br>
+```{r}
+#Region I
+spell1617.1 <- rle(sum1617_long4$Rain_Dry.1)
+str(spell1617.1)
+sort(spell1617.1$lengths, decreasing=TRUE)
+tapply(spell1617.1$lengths, spell1617.1$values, max)
+
+sum1617_long4$spell.group1 <- data.table::rleid(sum1617_long4$Rain_Dry.1)
+junk1617 <- aggregate(Rain_Dry.1~spell.group1, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_1 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.1 >=10 & Rain_Dry.1<=20 ~ 1,
+                                  TRUE ~ 0),
+         
+         spell_morethan20 = case_when(Rain_Dry.1 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_1 <- junk1617_1 %>% select(-c(spell.group1, Rain_Dry.1))
+```
+
+```{r}
+df1617_1 <- junk1617_1 %>% summarise_all (sum)
+df1617_1$region <- 1
+
+#Need this step to do side-by-side histogram by region
+df1617_1_2 <- reshape(data=df1617_1, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_1_2$type <- factor(df1617_1_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+
+```{r}
+#Region IIA
+spell1617.2 <- rle(sum1617_long4$Rain_Dry.2)
+str(spell1617.2)
+sort(spell1617.2$lengths, decreasing=TRUE)
+tapply(spell1617.2$lengths, spell1617.2$values, max)
+
+sum1617_long4$spell.group2 <- data.table::rleid(sum1617_long4$Rain_Dry.2)
+junk1617 <- aggregate(Rain_Dry.2~spell.group2, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_2 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.2 >=10 & Rain_Dry.2<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.2 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_2 <- junk1617_2 %>% select(-c(spell.group2, Rain_Dry.2))
+```
+
+```{r}
+df1617_2 <- junk1617_2 %>% summarise_all (sum)
+df1617_2$region <- 2
+
+#Need this step to do side-by-side histogram by region
+df1617_2_2 <- reshape(data=df1617_2, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_2_2$type <- factor(df1617_2_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region IIB
+spell1617.3 <- rle(sum1617_long4$Rain_Dry.3)
+str(spell1617.3)
+sort(spell1617.3$lengths, decreasing=TRUE)
+tapply(spell1617.3$lengths, spell1617.3$values, max)
+
+sum1617_long4$spell.group3 <- data.table::rleid(sum1617_long4$Rain_Dry.3)
+junk1617 <- aggregate(Rain_Dry.3~spell.group3, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_3 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.3 >=10 & Rain_Dry.3<=20 ~ 1,
+                                  TRUE ~ 0),
+       
+                            
+         spell_morethan20 = case_when(Rain_Dry.3 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_3 <- junk1617_3 %>% select(-c(spell.group3, Rain_Dry.3))
+```
+
+```{r}
+df1617_3 <- junk1617_3 %>% summarise_all (sum)
+df1617_3$region <- 3
+
+#Need this step to do side-by-side histogram by region
+df1617_3_2 <- reshape(data=df1617_3, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_3_2$type <- factor(df1617_3_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region III
+spell1617.4 <- rle(sum1617_long4$Rain_Dry.4)
+str(spell1617.4)
+sort(spell1617.4$lengths, decreasing=TRUE)
+tapply(spell1617.4$lengths, spell1617.4$values, max)
+
+sum1617_long4$spell.group4 <- data.table::rleid(sum1617_long4$Rain_Dry.4)
+junk1617 <- aggregate(Rain_Dry.4~spell.group4, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_4 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.4 >=10 & Rain_Dry.4<=20 ~ 1,
+                                  TRUE ~ 0),
+         
+
+         spell_morethan20 = case_when(Rain_Dry.4 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_4 <- junk1617_4 %>% select(-c(spell.group4, Rain_Dry.4))
+```
+
+```{r}
+df1617_4 <- junk1617_4 %>% summarise_all (sum)
+df1617_4$region <- 4
+
+#Need this step to do side-by-side histogram by region
+df1617_4_2 <- reshape(data=df1617_4, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_4_2$type <- factor(df1617_4_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+#Region IV
+spell1617.5 <- rle(sum1617_long4$Rain_Dry.5)
+str(spell1617.5)
+sort(spell1617.5$lengths, decreasing=TRUE)
+tapply(spell1617.5$lengths, spell1617.5$values, max)
+
+sum1617_long4$spell.group5 <- data.table::rleid(sum1617_long4$Rain_Dry.5)
+junk1617 <- aggregate(Rain_Dry.5~spell.group5, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_5 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.5 >=10 & Rain_Dry.5<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.5 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_5 <- junk1617_5 %>% select(-c(spell.group5, Rain_Dry.5))
+```
+
+```{r}
+df1617_5 <- junk1617_5 %>% summarise_all (sum)
+df1617_5$region <- 5
+
+#Need this step to do side-by-side histogram by region
+df1617_5_2 <- reshape(data=df1617_5, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_5_2$type <- factor(df1617_5_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+```{r}
+#Region V
+spell1617.6 <- rle(sum1617_long4$Rain_Dry.6)
+str(spell1617.6)
+sort(spell1617.6$lengths, decreasing=TRUE)
+tapply(spell1617.6$lengths, spell1617.6$values, max)
+
+sum1617_long4$spell.group6 <- data.table::rleid(sum1617_long4$Rain_Dry.6)
+junk1617 <- aggregate(Rain_Dry.6~spell.group6, sum1617_long4, sum)
+
+```
+
+
+```{r}
+junk1617_6 <- junk1617 %>% 
+  mutate(
+         spell_10to20 = case_when(Rain_Dry.6 >=10 & Rain_Dry.6<=20 ~ 1,
+                                  TRUE ~ 0),
+                            
+         spell_morethan20 = case_when(Rain_Dry.6 > 20 ~ 1,
+                                  TRUE ~ 0),
+         )
+
+junk1617_6 <- junk1617_6 %>% select(-c(spell.group6, Rain_Dry.6))
+```
+
+```{r}
+df1617_6 <- junk1617_6 %>% summarise_all (sum)
+df1617_6$region <- 6
+
+#Need this step to do side-by-side histogram by region
+df1617_6_2 <- reshape(data=df1617_6, idvar = "region", 
+               varying = c("spell_10to20","spell_morethan20"), 
+               v.name=c("value"), 
+               times = c("spell_10to20","spell_morethan20"),
+               new.row.names = 1:30,
+               direction=("long"))
+
+df1617_6_2$type <- factor(df1617_6_2$time, labels = c("10 to 20 Days", "> 20 Days"))
+```
+
+
+```{r}
+appendeddf1617 <- rbind(df1617_1_2, df1617_2_2, df1617_3_2, df1617_4_2, df1617_5_2, df1617_6_2)
+```
+
+
+```{r}
+appendeddf1617$r <- factor(appendeddf1617$region, labels = c("I", "IIA", "IIB", "III", "IV", "V"))
+```
+
+
+```{r}
+# Grouped
+ ggplot(appendeddf1617, aes(fill=type, y=value, x=r)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     xlab("Regions") + ylab("Count Of Dry Spells") + 
+    ggtitle("Number Of Dry Spells In The 2016-17 Growing Season") +
+    guides(fill=guide_legend(title="Length Of Spell")) +
+    scale_fill_viridis(discrete=TRUE, direction=-1)
+     #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+
+
+```
+<br>
+<br>
+<br>
+<br>
+
+```{r}
+#write.csv(total1011,"./total1011_2.csv", row.names = FALSE)
+#write.csv(total1617,"./total1617.csv", row.names = FALSE)
+
+saveRDS(total1011, file = paste0('total1011','.RDS')) #writing RPK_dist_outline to RDS file
+saveRDS(total1617, file = paste0('total1617','.RDS'))
+
+```
+
