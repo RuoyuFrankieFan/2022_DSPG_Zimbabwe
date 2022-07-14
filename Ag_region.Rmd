@@ -10,8 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 Packages required
 ```{r}
+library(sf)
 library(dplyr)
 library(tidyverse)
+library(moderndive)
+library(readr)
+library(tidyr)
 ```
 
 
@@ -25,21 +29,22 @@ zim_region_3h_avg_16_17_18 <- read_csv(file = "PRECIP3hravg_ts_Zimb (2016-2018).
 
 Change col names into long format region, Date, Hour, Average Precipitation
 ```{r}
-zim_region_3h_avg_10_11_12_long <- gather(zim_region_3h_avg_10_11_12, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(nat_region, Date, Precipitation) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+zim_region_3h_avg_10_11_12_long <- gather(zim_region_3h_avg_10_11_12, Date, Precipitation, '3B42_20100101_03_7A_precipitation': '3B42_20121231_00_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
 
 
-zim_region_3h_avg_16_17_18_long <- gather(zim_region_3h_avg_16_17_18, Date, Precipitation, '3B42_20160101_03_7_precipitation': '3B42_20181231_00_7_precipitation') %>% select(nat_region, Date, Precipitation) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+zim_region_3h_avg_16_17_18_long <- gather(zim_region_3h_avg_16_17_18, Date, Precipitation, '3B42_20160101_03_7_precipitation': '3B42_20181231_00_7_precipitation') %>% select(Date, Precipitation, nat_region) %>% rename(Region = nat_region)%>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
 
 
 ```
 
 Change to daily data
 ```{r}
-zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>% group_by( Region, Date) %>% 
-  summarize(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+zim_region_3h_avg_10_11_12_long <- zim_region_3h_avg_10_11_12_long %>% group_by(Date,Region)%>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
 
-zim_region_3h_avg_16_17_18_long <- zim_region_3h_avg_16_17_18_long %>% group_by( Region, Date) %>% 
-  summarize(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+zim_region_3h_avg_16_17_18_long <- zim_region_3h_avg_16_17_18_long %>% group_by(Date, Region) %>%
+summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+
+
 ```
 
 Separate date col into year, month, & day col
