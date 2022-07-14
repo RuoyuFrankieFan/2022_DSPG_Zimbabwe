@@ -169,12 +169,9 @@ ui <- navbarPage(title = "Zimbabwe",
                           fluidRow(style = "margin: 6px;",
                                    column(4,
                                           h2(strong("Project Overview"), align = "center"),
-                                          p("In Zimbabwe, agriculture is a mainstay of the economy and the source of livelihoods for the majority of rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with a series of drought, macro-economic instability, and diseases contributing to the problem. Additionally, an ill-conceived fast-track land reform beginning in 2000 led to decapitalization of the commercial agriculture sector, while extreme droughts in 2003 and 2016 contributed to increased food insecurity and a huge increase in rural poverty."),
-                                          p("Prior research suggests that poverty in Zimbabwe has increased since the period of crisis began at the turn of the millennium. According to the latest World Bank (2020) estimates, due to the longstanding economic crisis and disruptions following the COVID-19 pandemic, 49% of Zimbabwe’s population was in extreme poverty in 2020. Zimbabwe’s government seeks guidance in policies to enhance the climate resilience of its agricultural sector and contribute to sustainable enhancement in rural conditions. It has made available to researchers a trove of household survey data from large national samples for 2000, 2011, 2017 and 2019 with the hope that these can be used to inform agricultural policy."),
-                                          p("This project seeks to:", strong("(i) to identify the different remotely sensed climate/weather related data available for Zimbabwe; (ii) to use these data to construct a spatial profile of exposure to long-term climate changes and short-term adverse weather events; and (iii) analyze the benefit of these remotely sensed data to explain demographic conditions."), 
-                                            p("In doing so, the project seeks to contribute to understanding the impacts of a climate-resilient agricultural policy. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, but it contains very little geographic specificity in an incredibly diverse agricultural economy. "),
-                                          p("This project uses data from the Poverty, Income, Consumption, Expenditure Survey (PICES) to provide granular information on poverty in Zimbabwe. We adopt a multidimensional poverty indices (MPI) at the", strong("district level"), " and decomposed them into components that focus on ", strong("education, health, employment, housing conditions, living conditions, assets, agricultural assets, and access to services."), "Additionally, we obtain data on our selected indices: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine."),   
-                                            "We provide interactive tools that allow the user to visualize and study each remote sensed data index and understand their contribution to the MPI and the components of the MPI. We constructed these measures for two waves of data, 2011 and 2017, to show the changes in weather over time and across the districts and the agroecological regions. The overall goal of this project is to understand how remote sensing data can be used to inform socioeconomic and climate policy. So, we seek to understand how remotely sensed data can be used to inform climate change and poverty in Zimbabwe.")),
+                                          p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, an ill-conceived fast-track land reform beginning in 2000 led to the decapitalization of the commercial agriculture sector."),
+                                          p("In this project, we identify the publicly available remotely sensed climate-related data available and suitable for Zimbabwe. These are the Enhanced Vegetation Index, Precipitation, and Soil Moisture. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. And we analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe. We disaggregate our analysis to the 60 administrative district-level to study the association between poverty and climate indicators. To do this, we augment the climate data with poverty variables constructed from the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("We then use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles. Still, it contains little geographic specificity in an incredibly diverse agricultural economy. Our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.")),
                                    
                                    
                                    column(4,
@@ -383,7 +380,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
-                                              p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
+                                              p("Zimbabwe National Statistics Agency (ZimStat) is a corporate body established through the Census and Statistics Act of 2007 and the main source of official statistics in Zimbabwe We used the the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."))
                                        
                                        )),
                             
@@ -559,7 +556,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
-                                              p("Zimbabwe National Statistics Agency is the statistics agency of Zimbabwe. We used ..."))
+                                              p("Zimbabwe National Statistics Agency (ZimStat) is a corporate body established through the Census and Statistics Act of 2007 and the main source of official statistics in Zimbabwe We used the the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."))
                                        
                                      ))
                           )),
@@ -609,10 +606,15 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                               fluidRow(style = "margin: 6px;",
                                                        h1(strong("Surface Soil Moisture "), align = "center"),
                                                        p("", style = "padding-top:10px;"),
-                                                       column(12,
+                                                       
+                                                       column(6,
+                                                              h4(strong("Why Soil Moisture?")),
+                                                              p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the time period we have chosen to focus on for the Surface soil moisture section of our study.")
+                                                              ),
+                                                       
+                                                       column(6,
                                                               h4(strong("Ideal soil type for maize production")),
-                                                              p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."),
-                                                              p("paragraph 2"))
+                                                              p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."))
                                               )),
                                      fluidRow(
                                        box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
@@ -944,7 +946,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Acknowledgement"), align = "center"),
-                                   p("We would like to thank ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support on this project",". We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
+                                   p("We would like to thank ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support on this project;"),
+                                   p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech); "),
+                                   p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
+                                   p("We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
                                    
                           )
                  ),
@@ -957,6 +962,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           column(6, 
                                  h1(strong("References"), align = "center"),
                                  p("Barron, J., Rockström, J., Gichuki, F., & Hatibu, N. (2003). Dry spell analysis and maize yields for two semi-arid locations in east Africa. Agricultural and Forest Meteorology, 117(1-2), 23–37. https://doi.org/10.1016/s0168-1923(03)00037-6 "),
+                                 p("Bolten, J. D., Sazib, N., & Mladenova, I. E. (2018). *Surface_Soil_Moisture_SMAP.pdf*. NASA Goddard Space Flight Center Retrieved from https://gimms.gsfc.nasa.gov/SMOS/SMAP/SoilMoisture_Profile_SMAP.pdf"),
                                  p("Milne, G., Mekonnen, A. F., & Benitez Ponce, P. C. (2019). Zimbabwe-Climate Smart Agriculture Investment Plan."),
                                  p("Mugiyo, H., Mhizha, T., Chimonyo, Vimbayi. G. P., & Mabhaudhi, T. (2021). Investigation of the optimum planting dates for maize varieties using a hybrid approach: A case of Hwedza, Zimbabwe. Heliyon, 7(2), e06109. https://doi.org/10.1016/j.heliyon.2021.e06109 "),
                                  p("Mupangwa, W., Walker, S., & Twomlow, S. (2011). Start, end and dry spells of the growing season in semi-arid southern Zimbabwe. Journal of Arid Environments, 75(11), 1097–1104. https://doi.org/10.1016/j.jaridenv.2011.05.011 "),

@@ -173,8 +173,8 @@ GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
 GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
 
 
-write.csv(GrSs2011Line, file = "eviline2017.csv")
-GrSs2017Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2017.csv")
+#write.csv(GrSs2011Line, file = "eviline2017.csv")
+#GrSs2017Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2017.csv")
 
 
 # Max EVI
@@ -266,6 +266,7 @@ RgMaxEVI2017 <- EVIGrow2011 %>%
 
 RgMaxEVI2017
 
+#ggplotly(RgMaxEVI2017)
 
 # ADDING LEAFLET
 mypal <- colorNumeric(
