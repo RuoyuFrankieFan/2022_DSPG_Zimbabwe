@@ -233,7 +233,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h4(em("Description of the Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("EVI")),
-                                         p("Description of EVI"),
+                                         p("The dataset MODIS TERRA Daily EVI is derived from atmospherically-corrected reflectance in the red, near-infrared, and blue wavebands in satellite imagery, and then improved with higher sensitivity over high biomass regions by minimizing canopy-soil variations (Frazier). EVI can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019)."),
                                          
                                          h3(strong("Precipitation")),
                                          p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
@@ -271,7 +271,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          em(h4("A brief overview of the wrangling of the Remote Sensed data")),
                                          h4(strong("Enhanced Vegetation Index")),
-                                         p("text"),
+                                         p("Zimbabwe had the highest maize production and export in Africa back in the 1980s, while its maize yield has been fluctuating in recent years. Since EVI has a dynamic range and high sensitivity in dense vegetation, it becomes particularly suitable to map the cropping density in Zimbabwe. As high EVI values correspond to crops at their peak growth stage, we used maximum EVI values in each agro-ecological region during the growing season to observe the variation in crop growth in different periods. Because the daily EVI values are too high-frequency to represent vegetation states, we aggregated the data into a monthly level as a better approach."),
                                          
                                          h4(strong("Precipitation")),
                                          p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
@@ -397,10 +397,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Remote Sensed Data"), 
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
-                                     fluidRow(
+                                     fluidRow(h1(strong("Enhanced Vegetation Index"), align = "center"),
                                        box(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
                                          title = "Enhanced Vegetation Index (EVI)",
-                                         width = 6,
+                                         width = 8,
                                          height = 600
                                        ),
                                          box(
@@ -409,17 +409,42 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            withMathJax(),
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The graphs above show the maximum EVI (which corresponds to the density of crops) in Zimbabwe during the growing seasons in 2011 and 2017, respectively. In both graphs, we could see that the maximum EVI value is at its highest in Region IIA, which, according to United Nations’ Food and Agriculture Organisation, is suitable for intensive farming. After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
-                                           p("Compared to the growing season in 2011, the deeper color shows that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."),
-                                           ))),
+                                           p("Compared to the growing season in 2011, the deeper color shows that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
+                                     br(),
+                                     box(
+                                       width = 12,
+                                       withMathJax(),
+                                       title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
+                                       p("The line graphs above show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February. The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+                                       
+                                     ),
+                                       box(
+                                           withSpinner(plotOutput("evi_line11", height=520)),
+                                           title = "Enhanced Vegetation Index (EVI) 2011",
+                                           width = 6,
+                                           height = 600
+                                       ),
+                                     
+                                     box(
+                                       withSpinner(plotOutput("evi_line17", height=520)),
+                                       title = "Enhanced Vegetation Index (EVI) 2017",
+                                       width = 6,
+                                       height = 600
+                                     )
+                                     
+                                     
+                                       
+                                       
+                                       ),
                             
                             tabPanel(strong("Precipitation (Rainfall)"),
                                      
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(withSpinner(plotOutput("myplot2")),
+                                       box(withSpinner(plotOutput("myplot2", height = 520)),
                                          title = "Precipitation (Rainfall)",
-                                         width = 6,
+                                         width = 8,
                                          height = 600
                                          ),
                                          
@@ -449,8 +474,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      fluidRow(
                                        box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
                                            title = "Average Soil Moisture",
-                                           width = 7
-                                           #height = 600
+                                           width = 8,
+                                           height = 600
                                        ),
                                        box(
                                          width = 4,
@@ -760,7 +785,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Acknowledgement"), align = "center"),
-                                   p("We would like to thank ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support on this project;"),
+                                   p("We would like to thank:"),
+                                   p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support;"),
                                    p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech); "),
                                    p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
                                    p("We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
@@ -849,6 +875,139 @@ output$evi_map_leaflet <- renderLeaflet({
     hideGroup("2017") %>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6)
 })
+
+output$evi_line11 <- renderPlot({
+  GrSs2011Line <- EVI_region_long %>% 
+    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+           Year == 2010|Year == 2011) %>% 
+    filter(!(Year == 2010 & Month == "03")) %>% 
+    filter(!(Year == 2010 & Month == "04")) %>%
+    filter(!(Year == 2010 & Month == "05")) %>%
+    filter(!(Year == 2010 & Month == "02")) %>% 
+    filter(!(Year == 2010 & Month == "01")) %>% 
+    filter(!(Year == 2011 & Month == "10")) %>% 
+    filter(!(Year == 2011 & Month == "11")) %>%
+    filter(!(Year == 2011 & Month == "12")) %>% 
+    group_by(Region, Month) %>% 
+    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                               Month =="11" ~ "2",
+                               Month =="12" ~ "3",
+                               Month =="01" ~ "4",
+                               Month =="02" ~ "5",
+                               Month =="03" ~ "6",
+                               Month =="04" ~ "7",
+                               Month =="05" ~ "8"))
+  
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
+  GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
+  
+  GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
+  GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
+  GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
+  
+ 
+  # Max EVI
+  GrSs2011Line %>% 
+    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+    geom_line()+
+    theme(axis.text.x = element_text(angle = 315)) +
+    scale_colour_discrete(guide = 'none') +
+    scale_x_discrete(expand=c(0, 1)) +
+    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+    scale_color_viridis_d(option = "H") +
+    labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+    xlab("Time(Month)") +
+    ylab("Max EVI")
+  
+})
+
+output$evi_line17 <- renderPlot({
+  GrSs2017Line <- EVI_region_long %>% 
+    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+           Year == 2016|Year == 2017) %>% 
+    filter(!(Year == 2016 & Month == "03")) %>% 
+    filter(!(Year == 2016 & Month == "04")) %>%
+    filter(!(Year == 2016 & Month == "05")) %>%
+    filter(!(Year == 2016 & Month == "02")) %>% 
+    filter(!(Year == 2016 & Month == "01")) %>% 
+    filter(!(Year == 2017 & Month == "10")) %>% 
+    filter(!(Year == 2017 & Month == "11")) %>%
+    filter(!(Year == 2017 & Month == "12")) %>% 
+    group_by(Region, Month) %>% 
+    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+                               Month =="11" ~ "2",
+                               Month =="12" ~ "3",
+                               Month =="01" ~ "4",
+                               Month =="02" ~ "5",
+                               Month =="03" ~ "6",
+                               Month =="04" ~ "7",
+                               Month =="05" ~ "8"))
+  
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
+  GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
+  
+  GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
+  GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
+  GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
+  
+  
+  #write.csv(GrSs2017Line, file = "eviline2017.csv")
+  GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+  
+  
+  
+  # Max EVI
+  GrSs2017Line %>% 
+    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+    geom_line()+
+    theme(axis.text.x = element_text(angle = 315)) +
+    scale_colour_discrete(guide = 'none') +
+    scale_x_discrete(expand=c(0, 1)) +
+    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+    scale_color_viridis_d(option = "H") +
+    labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+    xlab("Time(Month)") +
+    ylab("Max EVI") 
+  
+  
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # SOIL MOISTURE OUTPUTS-------
