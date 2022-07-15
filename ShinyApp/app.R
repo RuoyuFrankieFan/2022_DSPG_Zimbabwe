@@ -41,10 +41,10 @@ library(viridis)
 
 #setwd and other references to local files must be commented out for app to run properly
 #setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe/ShinyApp")
-MapDataPre <- read.csv("agregion Indices/soil/SoilMapPlotData.csv")
-BarData <- read.csv("agregion Indices/soil/SoilBarPlotData.csv")
-LineData <- read.csv("agregion Indices/soil/SoilLinePlotData.csv")
-zim_region <- st_read("shapefiles/agro-ecological-regions.shp")
+MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
+BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
+LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
 zim_region <-rename(zim_region, region = nat_region)
 
 MapDataTwo <- list(zim_region, MapDataPre)
