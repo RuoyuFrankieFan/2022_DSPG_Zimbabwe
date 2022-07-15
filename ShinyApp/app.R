@@ -370,26 +370,37 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             tabPanel(strong("Resources"), 
                                      fluidPage(
-                                       column(4,
+                                       column(6,
                                               h3(strong("Google Earth Engine")),
                                               img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
-                                       column(4,
+                                       column(6,
                                               h3(strong("Google Maps")),
                                               img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
+                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine."))),
+                                     column(6,
+                                            h3(strong("Google Colab")),
+                                            img(src = "DSPG_black-01.png", style = "display: inline; float: left;", width = "140px"),
+                                            withMathJax(), 
+                                            p("Google Colab is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
+                                       
+                                     column(6,
+                                              h3(strong("2021 DSPG - Zimbabwe Project")),
+                                              img(src = "DSPG_black-01.png", style = "display: inline; float: left;", width = "140px"),
+                                              withMathJax(), 
                                               p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
                                        
-                                       column(4,
+                                       column(6,
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
                                               p("Zimbabwe National Statistics Agency (ZimStat) is a corporate body established through the Census and Statistics Act of 2007 and the main source of official statistics in Zimbabwe We used the the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."))
                                        
                                      ))
-                          )),
+                          ),
                  
                  
 
@@ -966,7 +977,7 @@ output$evi_line17 <- renderPlot({
   
   
   #write.csv(GrSs2017Line, file = "eviline2017.csv")
-  GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+  #GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
   
   
   
