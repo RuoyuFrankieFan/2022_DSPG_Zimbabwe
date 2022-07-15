@@ -20,6 +20,9 @@ library(sp)
 library(directlabels)
 
 library(ggrepel)
+
+library(plotly)
+library(leaflet)
 ```
 
 ## Info for EVI:
@@ -41,9 +44,9 @@ Generate mean and standard deviation of monthly EVI for 2010-11 and 2016-17 grow
 #GrSs2017 <- read_csv("./Data/EVI_region_GrSs2017.csv")
 setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp")
 
-GrSs2011 <- read_csv(paste0(getwd(),"/data/agregion indices/evi/EVI_region_GrSs2011.csv"))
-GrSs2017 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2017.csv")
-EVI_region_long <- read_csv("./data/agregion indices/evi/EVI_region_long.csv")
+GrSs2011 <- read_csv(paste0(getwd(),"/data/agregion/evi/EVI_region_GrSs2011.csv"))
+GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
+EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 # Other Files
 zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
@@ -101,7 +104,7 @@ GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
 
 
 #write.csv(GrSs2011Line, file = "eviline2011.csv")
-GrSs2011Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2011.csv")
+#GrSs2011Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2011.csv")
 
 
 # Max EVI
