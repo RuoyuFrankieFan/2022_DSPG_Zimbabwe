@@ -1206,5 +1206,13 @@ appendeddf1617$r <- factor(appendeddf1617$region, labels = c("I", "IIA", "IIB", 
 saveRDS(total1011, file = paste0('total1011','.RDS')) #writing RPK_dist_outline to RDS file
 saveRDS(total1617, file = paste0('total1617','.RDS'))
 
+saveRDS(totalDec10, file = paste0('totalDec10','.RDS'))
+saveRDS(totalJan11, file = paste0('totalJan11','.RDS'))
+saveRDS(totalFeb11, file = paste0('totalFeb11','.RDS'))
+
+saveRDS(totalDec16, file = paste0('totalDec16','.RDS'))
+saveRDS(totalJan17, file = paste0('totalJan17','.RDS'))
+saveRDS(totalFeb17, file = paste0('totalFeb17','.RDS'))
+
 ```
 
