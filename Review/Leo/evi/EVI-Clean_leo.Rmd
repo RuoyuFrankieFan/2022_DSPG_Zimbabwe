@@ -104,7 +104,7 @@ GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
 
 
 #write.csv(GrSs2011Line, file = "eviline2011.csv")
-#GrSs2011Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2011.csv")
+#GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 
 
 # Max EVI
@@ -176,8 +176,9 @@ GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
 GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
 
 
-#write.csv(GrSs2011Line, file = "eviline2017.csv")
-#GrSs2017Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2017.csv")
+#write.csv(GrSs2017Line, file = "eviline2017.csv")
+GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+
 
 
 # Max EVI
@@ -288,6 +289,35 @@ mypal <- colorNumeric(
     addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6)
 
+```
+
+
+#I am putting all the two years into one map
+
+```{r}
+mypal <- colorNumeric(
+  palette = "viridis",
+  domain = NULL)
+#Here is my leaflet code
+#The label option creates a popup with my Region name followed by the Avg Surface Moisture value
+leaflet(EVIGrow2011) %>% addTiles() %>%  
+  addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2011$Region,":", round(EVIGrow2011$MaxEVI, digits = 3)),
+              opacity = 1.0, fillOpacity = 0.5,
+              highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                  bringToFront = TRUE), group="2011") %>%
+    addPolygons(data = EVIGrow2017, color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2017$Region,":", round(EVIGrow2017$MaxEVI, digits = 3)),
+              opacity = 1.0, fillOpacity = 0.5,
+              highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                  bringToFront = TRUE), group="2017") %>% 
+  
+  addLegend(pal = mypal,position = "bottomright",values = c(EVIGrow2011$MaxEVI, EVIGrow2017$MaxEVI),
+            opacity = .6,title= paste("Maximum EVI"))%>%
+  
+  addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>%
+  addLayersControl(baseGroups = c("2011", "2017"), 
+                   options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    hideGroup("2017") %>% 
+  setView(lat = -19.0154, lng=29.1549 , zoom =6)
 ```
 
 

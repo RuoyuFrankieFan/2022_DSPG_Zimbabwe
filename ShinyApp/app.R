@@ -108,6 +108,15 @@ GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
 GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
 EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
+GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
+GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+
+EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
+EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
+
+
+
+
 #PRECIPITATION DATA
 
 #SOIL DATA
@@ -567,10 +576,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Remote Sensed Data"), 
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(withSpinner(plotOutput("myplot")),
+                                       box(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
                                          title = "Enhanced Vegetation Index (EVI)",
                                          width = 6,
                                          height = 600
@@ -1015,7 +1022,26 @@ output$myplot4 <- renderPlot({
 
 
 # EVI OUTPUTS-------
-
+output$evi_map_leaflet <- renderLeaflet({
+  leaflet(EVIGrow2011) %>% addTiles() %>%  
+    addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2011$Region,":", round(EVIGrow2011$MaxEVI, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="2011") %>%
+    addPolygons(data = EVIGrow2017, color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2017$Region,":", round(EVIGrow2017$MaxEVI, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="2017") %>% 
+    
+    addLegend(pal = mypal,position = "bottomright",values = c(EVIGrow2011$MaxEVI, EVIGrow2017$MaxEVI),
+              opacity = .6,title= paste("Maximum EVI"))%>%
+    
+    addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>%
+    addLayersControl(baseGroups = c("2011", "2017"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    hideGroup("2017") %>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6)
+})
 
 
 # SOIL MOISTURE OUTPUTS-------

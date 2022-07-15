@@ -7,13 +7,14 @@ library(rgdal)
 library(sp)
 library(directlabels)
 library(ggrepel)
-
+library(plotly)
+library(leaflet)
 
 #setwd("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/ShinyApp")
 
-GrSs2011 <- read_csv(paste0(getwd(),"/data/agregion indices/evi/EVI_region_GrSs2011.csv"))
-GrSs2017 <- read_csv("./data/agregion indices/evi/EVI_region_GrSs2017.csv")
-EVI_region_long <- read_csv("./data/agregion indices/evi/EVI_region_long.csv")
+GrSs2011 <- read_csv(paste0(getwd(),"/data/agregion/evi/EVI_region_GrSs2011.csv"))
+GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
+EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 # Other Files
 zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
@@ -21,6 +22,7 @@ zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
 
 zim_district <- rename(zim_district, District_name = "NAME_2")
 zim_region <- rename(zim_region, Region = "nat_region")
+
 
 
 GrSs2011Line <- EVI_region_long %>% 
@@ -60,9 +62,10 @@ GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
 
 
 
-
+###################################################
 #write.csv(GrSs2011Line, file = "eviline2011.csv")
-GrSs2011Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2011.csv")
+GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
+
 
 # Max EVI
 GrSs2011Line %>% 
@@ -94,7 +97,8 @@ ggplotly(p11)
 
 
 
-GrSs2017Line <- read.csv("C:/Users/Leo Allen/Downloads/eviline2017.csv")
+#write.csv(GrSs2017Line, file = "eviline2017.csv")
+GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
 
 
 # Max EVI
@@ -128,12 +132,32 @@ ggplotly(p17)
 
 
 
+EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
 
-
-
-
-
-
+# ADDING LEAFLET
+mypal <- colorNumeric(
+  palette = "viridis",
+  domain = NULL)
+#Here is my leaflet code
+#The label option creates a popup with my Region name followed by the Avg Surface Moisture value
+leaflet(EVIGrow2011) %>% addTiles() %>%  
+  addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2011$Region,":", round(EVIGrow2011$MaxEVI, digits = 3)),
+              opacity = 1.0, fillOpacity = 0.5,
+              highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                  bringToFront = TRUE), group="2011") %>%
+  addPolygons(data = EVIGrow2017, color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2017$Region,":", round(EVIGrow2017$MaxEVI, digits = 3)),
+              opacity = 1.0, fillOpacity = 0.5,
+              highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                  bringToFront = TRUE), group="2017") %>% 
+  
+  addLegend(pal = mypal,position = "bottomright",values = c(EVIGrow2011$MaxEVI, EVIGrow2017$MaxEVI),
+            opacity = .6,title= paste("Maximum EVI"))%>%
+  
+  addPolylines(data = zim_region$geometry, color = "black", opacity = 2, weight = 2,)%>%
+  addLayersControl(baseGroups = c("2011", "2017"), 
+                   options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+  hideGroup("2017") %>% 
+  setView(lat = -19.0154, lng=29.1549 , zoom =6)
 
 
 
