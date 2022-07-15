@@ -133,6 +133,7 @@ ggplotly(p17)
 
 
 EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
+EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
 # ADDING LEAFLET
 mypal <- colorNumeric(
@@ -161,12 +162,41 @@ leaflet(EVIGrow2011) %>% addTiles() %>%
 
 
 
+GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
+GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
 
 
+#Plotly
+p11 <- GrSs2011Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = paste(GrSs2011Line$Region)), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI") 
+
+ggplotly(p11)
+
+#plot_ly(data=GrSs2011Line, type="scatter",mode="lines", x = GrSs2011Line$Month, y = GrSs2011Line$MaxEVI, group = as.factor(GrSs2011Line$Region), color = as.factor(GrSs2011Line$Region))
 
 
+p17 <- GrSs2017Line %>% 
+  ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+  geom_line()+
+  theme(axis.text.x = element_text(angle = 315)) +
+  scale_colour_discrete(guide = 'none') +
+  scale_x_discrete(expand=c(0, 1)) +
+  geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+  xlab("Time(Month)") +
+  ylab("Max EVI")
 
-
+ggplotly(p17)
 
 
 
