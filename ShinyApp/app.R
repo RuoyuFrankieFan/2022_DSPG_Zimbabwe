@@ -42,7 +42,7 @@ options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinne
 
 colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a","#e6a01d","#e57200","#fdfdfd")
 
-# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY------
 jscode <- "function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -94,7 +94,7 @@ jscode <- "function getUrlVars() {
 zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
 zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
 
-zim_region <- rename(zim_region, Region = "nat_region")
+zim_region <- rename(zim_region, region = "nat_region")
 
 #Map palette
 mypal <- colorNumeric(
@@ -106,13 +106,19 @@ mypal <- colorNumeric(
 #agregion
 GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
 GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
-EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
+GrSs2011 <- rename(GrSs2011, region="Region")
+GrSs2017 <- rename(GrSs2017, region="Region")
+
+#EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+GrSs2011Line <- rename(GrSs2011Line, region="Region")
+GrSs2017Line <- rename(GrSs2017Line, region="Region")
 
-EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
-EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
+
+EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "region")
+EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "region")
 
 
 
@@ -120,11 +126,20 @@ EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 #PRECIPITATION DATA
 
 #SOIL DATA
-mydatXL2 <- read_csv(paste0(getwd(),"/data/agregion/soil/soil_ts_Zimb.csv"))
-mydat_long <- readRDS("./data/agregion/soil/mydat_long.RDS")
+MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
+BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
+LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
+zim_region <-rename(zim_region, region = nat_region)
 
-df2 <- readRDS("./data/agregion/soil/soil_hist.RDS")
-total <- readRDS("./data/agregion/soil/soil_map.RDS")
+MapDataTwo <- list(zim_region, MapDataPre)
+MapDataFin <- MapDataTwo %>% reduce(full_join, by='region')
+
+# Set axis limits c(min, max) on plot
+min <- as.yearmon("20161119", "%Y%m")
+max <- as.yearmon("20161219", "%Y%m")
+min <- as.Date("2016-11-19")
+max <- as.Date("2016-12-19")
 
 
 
@@ -455,7 +470,6 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             tabPanel(strong("Precipitation (Rainfall)"),
                                      
-                                     # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
                                        box(withSpinner(plotOutput("myplot2", height = 520)),
@@ -488,8 +502,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                               p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."))
                                               )),
                                      fluidRow(
-                                       box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
-                                           title = "Average Soil Moisture",
+                                       box(withSpinner(leafletOutput("MapGraph", height=520)),
+                                           title = "Average Soil Moisture During The First 30 days Of 2016-17 Growing Season",
                                            width = 8,
                                            height = 600
                                        ),
@@ -499,20 +513,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          title = "Description",
                                          p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From the visualization, we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm). These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
                                      
-#                                      fluidRow(
-#                                        box(withSpinner(plotOutput("soil_map")),
-#                                          title = "Average Soil Moisture",
-#                                          width = 8,
-#                                          height = 600
-#                                        ),
-#                                          box(
-#                                            width = 4,
-#                                            withMathJax(),
-#                                            title = "Description",
-#                                            p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up # into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
-                                    
+
                                      #fluidRow(
-                                       box(withSpinner(plotOutput("soil_hist")),
+                                       box(withSpinner(plotOutput("BarGraph")),
                                            title = "Soil Moisture At Planting",
                                            width = 8
                                            #height = 600
@@ -524,7 +527,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From this visualization, we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization’s findings of Regions I through III having more soil moisture on average than regions IV and V.")),
                                        
                                      #fluidRow(  
-                                     box(withSpinner(plotOutput("soil_line")),
+                                     box(withSpinner(plotOutput("LineGraph")),
                                            title = "Soil Moisture at Planting Times",
                                            width = 8
                                            #height = 600
@@ -1027,68 +1030,35 @@ output$evi_line17 <- renderPlot({
 
 
 # SOIL MOISTURE OUTPUTS-------
-output$soil_map_leaflet <- renderLeaflet({
+output$MapGraph <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = total$AvgSurfaceMoisture)
+    domain = NULL,
+    reverse = TRUE)
   
-  leaflet(total) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region -", total$region,":", round(total$AvgSurfaceMoisture, digits = 3)),
+  leaflet(MapDataFin) %>% addTiles() %>%
+    addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$region, ":", round(MapDataFin$AvgSurfaceMoisture, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE)) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = total$AvgSurfaceMoisture,
-              opacity = .6,title= paste("Average Soil Moisture (mm)"))%>%
-    
-    addPolylines(data = total$geometry, color = "black", opacity = 2, weight = 2,)%>% 
-    setView(lat = -19.0154, lng=29.1549 , zoom =6)
-})
-
-output$soil_hist <- renderPlot({
-  # Grouped
-  ggplot(df2, aes(fill=time, y=value, x=region)) + 
+                                                    bringToFront = TRUE)) %>%
+    addPolylines(data = MapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+    addLegend(pal = mypal,position = "bottomleft",values = MapDataFin$AvgSurfaceMoisture, opacity = .6,
+              title= paste("Average Soil Moisture (mm)"))
+})       
+output$BarGraph <- renderPlot({
+  ggplot(BarData, aes(fill=time, y=value, x=region)) + 
     geom_bar(position="dodge", stat="identity")+ 
     labs(color="time") +
-    xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
+    xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
     scale_fill_viridis(discrete=TRUE, direction=-1)
-  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition  
-})  
+  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+})
 
-output$soil_line <- renderPlot({
+output$LineGraph <- renderPlot({
   
-  #Generate categories for soil moisture
-  mydat_longg <- mydat_long %>% 
-    mutate(
-      Wet = case_when(Moisture > 25 ~ 1,
-                      TRUE ~ 0),
-      
-      Ideal = case_when(Moisture >= 15 & Moisture <=25 ~ 1,
-                        TRUE ~ 0),
-      
-      Dry = case_when(Moisture >10 & Moisture <15 ~ 1,
-                      TRUE ~ 0),
-      
-      ExtremelyDry = case_when(Moisture <=10 ~ 1,
-                               TRUE ~ 0),
-    )
-  
-  # Make sure that the data is in columns for each region. This step will group by column to get the desired wide dataset.
-  #Put into columns by group
-  mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
-                           ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
-                                                                                               timevar = "ID", direction = "wide")
-  # Now let us look at the first month of the growing season. This means we will subset our sample to the first 30 days of planting in the 2016-17 Growing Season. We set this with the min and max variables below.
-  # Set limits to first thirty days of the growing season: c(min, max)
-  min <- as.yearmon("20161119", "%Y%m")
-  max <- as.yearmon("20161219", "%Y%m")
-  
-  # Set axis limits c(min, max) on plot
-  min <- as.Date("2016-11-19")
-  max <- as.Date("2016-12-19")
-  
-ggplot(mydat_long2, aes(newDate, y = value, color = variable)) + 
+  ggplot(LineData, aes(as.Date(newDate), y = value, color = variable)) + 
     geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
     geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
     geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
@@ -1101,20 +1071,7 @@ ggplot(mydat_long2, aes(newDate, y = value, color = variable)) +
     theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
     scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
   
-})  
-  
-
-
-# #Add maps
-# output$soil_map <- renderPlot({
-#   ggplot(data = total) +
-#     geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
-#     xlab("Longitude") + ylab("Latitude") +
-#     coord_sf() +
-#     scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,14), breaks=c(6,8,10,12,14), labels=c("6","8", "10", "12", "14")) +
-#     ggtitle("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
-#     guides(fill=guide_legend(title="Average Soil Moisture (mm)"))+theme_bw()
-# })
+})
 
 
 #MPI OUTPUTS -----
