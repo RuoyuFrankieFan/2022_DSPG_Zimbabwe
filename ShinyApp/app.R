@@ -38,7 +38,7 @@ library(directlabels)
 ## FORMATTING-------------------------------------------------------------------
 prettyblue <- "#232D4B"
 navBarBlue <- '#427EDC'
-options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 7)
+options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 3)
 
 colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a","#e6a01d","#e57200","#fdfdfd")
 
@@ -109,7 +109,7 @@ GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
 GrSs2011 <- rename(GrSs2011, region="Region")
 GrSs2017 <- rename(GrSs2017, region="Region")
 
-#EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
+EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
@@ -124,6 +124,9 @@ EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "region")
 
 
 #PRECIPITATION DATA
+
+
+
 
 #SOIL DATA
 MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
@@ -769,22 +772,22 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "github.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
-                                          p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, PHD);"),
-                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, BSE PHD);"),
-                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
+                                          p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
+                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
+                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College, Computational Modeling and Data Analytics);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Major, Data and Decisions minor);"),
-                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
-                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
+                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(USD, Computer Science Major)."),
+                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                           
                                    ),
                                    column(6, align = "center",
                                           h4(strong("Virginia Tech Faculty Members")),
                                           p("", style = "padding-top:10px;"),
-                                          img(src = "faculty-posadas.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "faculty-chen.jpg", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "faculty-posadas.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "faculty-chen.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "faculty-alwang.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
@@ -1008,27 +1011,6 @@ output$evi_line17 <- renderPlot({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # SOIL MOISTURE OUTPUTS-------
 output$MapGraph <- renderLeaflet({
   mypal <- colorNumeric(
@@ -1076,6 +1058,11 @@ output$LineGraph <- renderPlot({
 
 #MPI OUTPUTS -----
 output$MPI_map_2011 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL,
+    reverse = F)
+  
   leaflet(joined_zim) %>% addTiles() %>%  
     addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
@@ -1091,7 +1078,7 @@ output$MPI_map_2011 <- renderLeaflet({
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M0_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M1_k3,
               opacity = .6,title= paste("2011 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
@@ -1200,7 +1187,7 @@ output$compo_MPI_17 <- renderLeaflet({
     
     addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomleft",values = joined_zim17$g0_edu_max_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g0_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
     addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
