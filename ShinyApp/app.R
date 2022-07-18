@@ -94,7 +94,7 @@ jscode <- "function getUrlVars() {
 zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
 zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
 
-zim_region <- rename(zim_region, region = "nat_region")
+zim_region <- rename(zim_region, Region = "nat_region")
 
 #Map palette
 mypal <- colorNumeric(
@@ -106,19 +106,19 @@ mypal <- colorNumeric(
 #agregion
 GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
 GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
-GrSs2011 <- rename(GrSs2011, region="Region")
-GrSs2017 <- rename(GrSs2017, region="Region")
+#GrSs2011 <- rename(GrSs2011, region="Region")
+#GrSs2017 <- rename(GrSs2017, region="Region")
 
 EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
-GrSs2011Line <- rename(GrSs2011Line, region="Region")
-GrSs2017Line <- rename(GrSs2017Line, region="Region")
+#GrSs2011Line <- rename(GrSs2011Line, region="Region")
+#GrSs2017Line <- rename(GrSs2017Line, region="Region")
 
 
-EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "region")
-EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "region")
+EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
+EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
 
 
@@ -132,11 +132,14 @@ EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "region")
 MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
 BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
 LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
-zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
-zim_region <-rename(zim_region, region = nat_region)
+MapDataPre <-rename(MapDataPre, Region = "region")
+
+#BarData <-rename(BarData, Region = "region")
+#zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, Region = nat_region)
 
 MapDataTwo <- list(zim_region, MapDataPre)
-MapDataFin <- MapDataTwo %>% reduce(full_join, by='region')
+MapDataFin <- MapDataTwo %>% reduce(full_join, by='Region')
 
 # Set axis limits c(min, max) on plot
 min <- as.yearmon("20161119", "%Y%m")
@@ -443,7 +446,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            withMathJax(),
                                            title = "Description",
                                            p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The graphs above show the maximum EVI (which corresponds to the density of crops) in Zimbabwe during the growing seasons in 2011 and 2017, respectively. In both graphs, we could see that the maximum EVI value is at its highest in Region IIA, which, according to United Nations’ Food and Agriculture Organisation, is suitable for intensive farming. After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
-                                           p("Compared to the growing season in 2011, the deeper color shows that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
+                                           p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
                                      br(),
                                      box(
                                        width = 12,
@@ -774,11 +777,12 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "github.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
-                                          p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
+                                          p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
+', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
                                           p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
-                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College, Computational Modeling and Data Analytics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Major, Data and Decisions minor);"),
-                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(USD, Computer Science Major)."),
+                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College, Math and Data Science);"),
+                                          p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
+                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Miracosta College, Computer Science Major)."),
                                           p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                           
@@ -939,7 +943,7 @@ output$evi_line11 <- renderPlot({
   GrSs2011Line %>% 
     ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
     geom_line()+
-    theme(axis.text.x = element_text(angle = 315)) +
+    #theme(axis.text.x = element_text(angle = 315)) +
     scale_colour_discrete(guide = 'none') +
     scale_x_discrete(expand=c(0, 1)) +
     geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
@@ -996,7 +1000,7 @@ output$evi_line17 <- renderPlot({
   GrSs2017Line %>% 
     ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
     geom_line()+
-    theme(axis.text.x = element_text(angle = 315)) +
+    #theme(axis.text.x = element_text(angle = 315)) +
     scale_colour_discrete(guide = 'none') +
     scale_x_discrete(expand=c(0, 1)) +
     geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
@@ -1019,7 +1023,7 @@ output$MapGraph <- renderLeaflet({
     reverse = TRUE)
   
   leaflet(MapDataFin) %>% addTiles() %>%
-    addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$region, ":", round(MapDataFin$AvgSurfaceMoisture, digits = 3)),
+    addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$Region, ":", round(MapDataFin$AvgSurfaceMoisture, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE)) %>%
