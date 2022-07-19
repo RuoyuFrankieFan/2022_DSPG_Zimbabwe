@@ -780,9 +780,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
 ', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
                                           p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
-                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College, Math and Data Science);"),
+                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
-                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Miracosta College, Computer Science Major)."),
+                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
                                           p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                           
@@ -812,7 +812,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Acknowledgement"), align = "center"),
                                    p("We would like to thank:"),
-                                   p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support;"),
+                                   p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," (Stellenbosch University);"),
                                    p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
                                    p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
                                    p("We also thank Grown Chirongwe, and Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
