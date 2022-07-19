@@ -775,7 +775,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "github.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-naveen.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
 ', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
@@ -813,9 +813,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                    h4(strong("Acknowledgement"), align = "center"),
                                    p("We would like to thank:"),
                                    p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support;"),
-                                   p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech); "),
+                                   p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
                                    p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
-                                   p("We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
+                                   p("We also thank Grown Chirongwe, and Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
                                    
                           )
                  ),
