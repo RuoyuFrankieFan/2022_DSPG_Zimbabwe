@@ -33,6 +33,7 @@ library(zoo)
 library(stringr)
 library(sp)
 library(directlabels)
+library(slickR)
 #gpclibPermit()
 
 ## FORMATTING-------------------------------------------------------------------
@@ -124,7 +125,8 @@ EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
 
 #PRECIPITATION DATA
-
+my_images <- c("av_dec_2010.jpeg","av_jan_2011.jpeg","av_feb_2011.jpeg",
+               "av_dec_2016.jpeg","av_jan_2017.jpeg","av_feb_2017.jpeg")
 
 
 
@@ -199,35 +201,26 @@ ui <- navbarPage(title = "Zimbabwe",
                           fluidRow(style = "margin: 6px;",
                                    column(4,
                                           h2(strong("Project Overview"), align = "center"),
-                                          p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, an ill-conceived fast-track land reform beginning in 2000 led to the decapitalization of the commercial agriculture sector."),
-                                          p("In this project, we identify the publicly available remotely sensed climate-related data available and suitable for Zimbabwe. These are the Enhanced Vegetation Index, Precipitation, and Soil Moisture. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. And we analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe. We disaggregate our analysis to the 60 administrative district-level to study the association between poverty and climate indicators. To do this, we augment the climate data with poverty variables constructed from the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."),
-                                          p("We then use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles. Still, it contains little geographic specificity in an incredibly diverse agricultural economy. Our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.")),
+                                          p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
+                                          p("In this project, we identify the remotely sensed climate-related data that are publically available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe. Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
                                    column(4,
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
-                                          p("Nestled in the Southeastern tip of Africa, Zimbabwe neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by Prime Minister and eventually President Robert Mugabe until his resignation in 2017.
-                                            After gaining independence in 1980, there was widespread hope that the economic and labor exploitation Africans suffered at the hands of an imperial Great Britain would diminish. 
-                                            While initial trends were encouraging, this hope dwindled as many factors sent the Zimbabwean economy into decline. Most prominent among these factors was the central government’s inconsistent policy, 
-                                            which resulted in vague and evolving strategies for combatting poverty."),
-                                            p("A scientific socialist policy approach was applied between 1980 and 1990 to address poverty but was ineffective and abandoned due to a 
-                                            financial downturn coupled with a prolonged drought which forced agricultural workers into the cities where they faced even greater poverty due to unemployment. In an attempt to revamp the economy, 
-                                            Zimbabwe sought help from the International Monetary Fund (IMF) and the World Bank (WB), which led to adopting a different approach to economic development. The costs of necessities, including food, water, and education, 
-                                            went up, harming and expanding the already existing poor population. The late 1990s and 2000s brought greater poverty and financial distress to Zimbabwe ever."), 
-                                            p("A continuing government budget deficit mixed with a fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation. 
-                                            In turn, this increased the economic crisis as foreign investment dropped and Zimbabwean currency crashed. During this time, unemployment skyrocketed, and a massive informal sector of the economy emerged. 
-                                            In 2009, Zimbabwe adopted the US dollar along with a handful of other currencies. Though this move somewhat stabilized the economy initially, a 2013 shift in government rendered these efforts futile. 
-                                            By 2017, inflation increased significantly, as did the overall economic crisis and poverty."), 
-                                            p("Presently, Emmerson Mnangagwa holds office. The country is home to roughly 14,830,000 inhabitants, 10% of whom live in the capital city of Harare. Although large agglomerations exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is relatively evenly dispersed throughout the country otherwise. Zimbabwe’s central government is responsible for regulating its ten provinces, and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."), 
-                                          p("Arable land is plenty, and  67.5 percent of the labor force works in agriculture growing sugar cane, tobacco, fruit, and vegetables, among other things. Another 7.3% of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufacturing wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment and severe underemployment. Many individuals are either overqualified for the jobs they have or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
-                                          p("Monetary poverty measures in 2017 revealed that roughly 63% of Zimbabwean households lived in poverty. Together with the high poverty rate, the country experiences income inequality, malnourishment, low life expectancy, high infant/maternal mortality rates, difficulty accessing health and education resources, and overall low living standards.")),
+                                          p("Zimbabwe is located at the Southeastern tip of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. After independence there was a hope that the economic and labor exploitation Africans suffered at the hands of an imperial Great Britain would no longer persist. However, poorly planned and executed government policies about land, as well as factors like persistent drought, pushed the economy into decline and worsened poverty."),
+                                            p("In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened. In 2017, measures of poverty showed that about 63% of Zimbabwean households lived in poverty. This high poverty rate adds to income inequality, malnourishment, low life expectancy, high infant/maternal mortality rates, difficulty accessing health and education resources, and overall low living standards."), 
+                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."), 
+                                            p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive.")),
                                    
                                    column(4,
                                           h2(strong("Agricultural Profile"), align = "center"),
-                                          p("89% of farmers in Zimbabwe are smallholders who rely on rain for their agriculture and less than 1% of whom have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to have a negative impact on agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
-                                          h3(em("Regional Specificity"), align = "center"),
-                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
-                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
+                                          p("89% of farmers in Zimbabwe are smallholders who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
+                                          p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
+                                          
+                                          #h3(em("Regional Specificity"), align = "center"),
+                                          #img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
+                                          #div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
                                           p(""),
                                           p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
                                           
@@ -251,7 +244,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         h4(em("Description of the Remote Sensed Data")),
+                                         h4("Description of what Remote Sensed Data is"),
+                                         h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("EVI")),
                                          p("The dataset MODIS TERRA Daily EVI is derived from atmospherically-corrected reflectance in the red, near-infrared, and blue wavebands in satellite imagery, and then improved with higher sensitivity over high biomass regions by minimizing canopy-soil variations (Frazier). EVI can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019)."),
@@ -474,22 +468,64 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        
                                        ),
                             
-                            tabPanel(strong("Precipitation (Rainfall)"),
-                                     
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(withSpinner(plotOutput("myplot2", height = 520)),
-                                         title = "Precipitation (Rainfall)",
-                                         width = 8,
-                                         height = 600
-                                         ),
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:")))),
+                            tabPanel(
+                              strong("Precipitation"),
+                              fluidRow(
+                                h1(strong("Precipitation Index (TRMM 3B42)"), 
+                                   style = "font-size:35px;"),
+                                align = "center"
+                              ),
+                              fluidRow(
+                                p(strong("Leaflet: 3-month observation 2011-17"))
+                              ),
+                              fluidRow(
+                                column(2),
+                                column(8, slickROutput("my_slick"), offset = 0, br(),br(),br()),
+                                align = "center"
+                                
+                              ),
+                              fluidRow(
+                                p("Although the overview of this map is difficult to understand, context will help with that. This map is showing Average Daily Precipitation in December 2010. So given that the map is looking at rain distribution at a daily level most regions we’re seeing similar amounts of rainfall or a lack of variability per region. A day is considered wet if it exceeds 2.95 mm of precipitation based this we can infer that all regions on average were consider to have wet days.
+                                                                  This map is showing Average Daily Precipitation (mm) in January 2011. In contrast from December 2010, We start see higher levels of rainfall which lines up the what literature describes to be the wet season Nov – May. We see a concentration of rainfall in North-East regions
+                                                                  This is showing that most regions are seeing about 0-2mm of rainfall in February 2011 mentioned in the literature; a day is consider to be dry if the value is less than 2.95 mm. Indicating low levels rain except in region IIA where they’re receive a good amount of rain.
+                                                                  This is showing that most regions are seeing about 2-8mm of rainfall in December 2016 according to the literature these region are receiving healthy levels of rainfall and this month is considered to have on average number of wet days among the regions.
+                                                                  This is showing that most regions are seeing about 6-12mm of rainfall in January 2017. Generally, this is lining up with what literature considers to be the wet season.
+                                                                  This is showing that most regions are seeing about 4-8mm of rainfall in February 2017. Generally, this is lining up with what literature considers to be the wet season.
+                                                                  In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize.")
+                              ),
+                              fluidRow(
+                                h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Season"), 
+                                   style ="font-size: 25px;"),
+                                align = "center"
+                              ),
+                              fluidRow(
+                                column(6, img(src = "Totalrainfall_2011.jpeg")), 
+                                column(6, img(src = "Totalrainfall_2017.jpeg"))
+                              ),
+                              fluidRow(
+                                column(12, p(strong("Description")) , 
+                                       p("This is showing us the total rainfall in the 2010-11 growing season. For Maize production, the ideal range of rainfall is 600-700 mm. Regions I,IIA,IIB, & III at the North-East are observed as receiving more rainfall than its South-Western counterparts. However, It should be noted that Region IV still received the minimum rainfall for an average yield of Maize.This is showing that in all regions minus region v have received a health range of rainfall within the 2016-17 growing season. It should be noted that in region I, exceeded 1000 mm threshold that indicates the maize yield may have declined for this region. In the same light regions IIA,IIB, & III received up towards 1000 mm of rainfall which may have lead to an increase in the maize yield."))
+                                
+                              ),
+                              fluidRow(
+                                h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
+                                   style = "font-size: 25px;"),
+                                align = "center"
+                              ),
+                            
+                            fluidRow(
+                              column(5, img(src = "numDry10.jpeg")), 
+                              column(6, img(src = "numDry16.jpeg")),
+                              align = "center"
+                            ),
+                            fluidRow(
+                              column(12, p(strong("Description")) ,
+                                     p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
+               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
+               ")
+                              )
+                              
+                            )),
                             
                             
                             tabPanel(strong("Soil Moisture"),
@@ -567,7 +603,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
                                            tags$ul(  
                                              tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
@@ -586,12 +622,12 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          title = strong("Descriptive Analysis"),
                                          width = 12,
                                          p("\\(M_{0}\\)"),
-                                         p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                         p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
                                          
                                          p("\\(M_{1}\\)"),
-                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
+                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
                                          p("\\(M_{2}\\)"),
-                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
+                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
                                          p("")
                                        )
                                      )),
@@ -608,7 +644,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                   width = 4,
                                                   withMathJax(),
                                                   title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                                                  p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
                                                   tags$ul(  
                                                     tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
@@ -627,12 +663,12 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                   title = strong("Descriptive Analysis"),
                                                   width = 12,
                                                   p("\\(M_{0}\\)"),
-                                                  p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                                  p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
                                                   
                                                   p("\\(M_{1}\\)"),
-                                                  p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
+                                                  p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
                                                   p("\\(M_{2}\\)"),
-                                                  p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
+                                                  p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
                                                   p("")
                                                 )
                                               ),
@@ -656,7 +692,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. This page presents the unidimensional indices for the six of the individual components that make up the MPI. The radio buttons allows the user to display the unidimensional index (i.e., the health, education, or asset component. This is shown at the district level with our selected k-threshold value of 3.
+                                             There are six layers to this graph: Maximum Education, Education Dropout, Chronic Illness, Health Visit, Household Assets, and Service Access."),
+                                           p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                           ))),
                                      
                                      tabPanel(title = "2017",
                                               fluidRow(
@@ -670,28 +709,47 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                   width = 4,
                                                   withMathJax(),
                                                   title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))
+                                                  p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. This page presents the unidimensional indices for the six of the individual components that make up the MPI. The radio buttons allows the user to display the unidimensional index (i.e., the health, education, or asset component. This is shown at the district level with our selected k-threshold value of 3.
+                                             There are six layers to this graph: Maximum Education, Education Dropout, Chronic Illness, Health Visit, Household Assets, and Service Access."),
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                  
+                                                  )))
                                      
                                      ))),
                             
                             
                  
                  ## Tab 3
-                 navbarMenu(strong("MPI and Indices"), 
+                 tabPanel(strong("MPI and Indices"),
+                          tabsetPanel(
                             tabPanel(strong("MPI & EVI"),
-                                     
+                                     #h3(em("Regional Specificity"), align = "center"),
+                                     #img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
+                                     #div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
-                                         title = "MPI & EVI",
-                                         
+                                       box(img(src = "EVI Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Maximum EVI in the Maize Growing Season",
+                                         width=8,
+                                         height = 600
+                                       ),
                                          box(
-                                           
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")),
+                                       box(img(src = "EVI Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
+                                           title = "Selected MPI components & Maximum EVI in the Maize Growing Season",
+                                           width=8,
+                                           height = 600
+                                       ),
+                                       box(
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))
+                                       )),
                             
                             tabPanel(strong("MPI & Precipitation"),
                                      
@@ -700,13 +758,15 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      fluidRow(
                                        box(
                                          title = "MPI & Precipitation",
-                                         
+                                         width=8,
+                                         height = 600),
+                                       
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
                             
                             
                             tabPanel(strong("MPI & Soil Moisture"),
@@ -714,15 +774,33 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(img(src = "Soil Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                          title = "MPI & Soil Moisture",
-                                         
+                                         width=8,
+                                         height = 600),
                                          box(
                                            
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
+                                           p("Table 1 presents the OLS estimation results of MPI measures from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season. The results in Table 1 show that if average surface soil moisture increases by 10 mm, then poverty index, M0, decreases by 0.0102 units, adjusted poverty gap M1 decreases by 0.0162 units and adjusted poverty severity M2 decreases by 0.01 units. However, none of these associations are statistically significant."))
+                                       ),
+                                     box(img(src = "Soil Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Soil Moisture",
+                                         width=8,
+                                         height = 600),
+                                     box(
+                                       
+                                       width = 4,
+                                       withMathJax(),
+                                       title = "Description",
+                                       p("Table 2 presents the OLS estimation results of selected MPI components from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season.  
+
+A 10 mm increase in average surface soil moisture is associated with a decrease in the probability of nobody in the household having completed primary school by 0.1. The coefficient is statistically significant at the 5 percent level. On the other hand, a 10 mm increase in average surface soil moisture is associated with an increase in the probability of Lack of Health Visit by 0.1. This coefficient, however, is statistically significant only at the 10 percent level. The association between average surface soil moisture index and the other components of MPI presented in Table 2 above are not statistically significant.  "))
+                                     
+                                     
+                                     )
+                            ),
                             
                             
                  ),
@@ -768,18 +846,37 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    column(4, align = "center",
-                                          h4(strong("DSPG Team Members")),
+                                          h4(strong("Graduate Fellows")),
                                           p("", style = "padding-top:10px;"),
                                           img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Poonam.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
 ', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
                                           p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
+                                          #p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
+                                          #p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
+                                          #p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
+                                          
+                                          p("", style = "padding-top:10px;")
+                                          
+                                   ),
+                                   column(4, align = "center",
+                                          h4(strong("DSPG Team Members")),
+                                          p("", style = "padding-top:10px;"),
+                                          #img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Poonam.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          
+                                          p("", style = "padding-top:10px;"),
+                                          #p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
+                                          #p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
                                           p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
                                           p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
@@ -1014,7 +1111,13 @@ output$evi_line17 <- renderPlot({
   
 })
 
-
+# PRECIPITATION OUTPUTS
+output$my_slick <- renderSlickR(
+  slickR(
+    my_images,
+    width = "90%"
+  )
+)
 
 
 # SOIL MOISTURE OUTPUTS-------
