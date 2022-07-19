@@ -244,8 +244,6 @@ This would only show one district in Zim because having 60 districts add another
 ## Spatial Visulization
 
 ```{r, echo=FALSE, include=FALSE}
-zim_district <- rename(zim_district, District = NAME_2) %>% 
-  select(District)
 
 zim_region <- rename(zim_region, Region = nat_region) %>% 
   select(Region)
