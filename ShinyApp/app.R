@@ -767,7 +767,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                    p("", style = "padding-top:10px;")
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   column(6, align = "center",
+                                   column(4, align = "center",
                                           h4(strong("DSPG Team Members")),
                                           p("", style = "padding-top:10px;"),
                                           img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
@@ -775,7 +775,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-naveen.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
 ', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
@@ -783,20 +783,22 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                           p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
                                           p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
-                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
+                                          
                                           p("", style = "padding-top:10px;")
                                           
                                    ),
-                                   column(6, align = "center",
-                                          h4(strong("Virginia Tech Faculty Members")),
+                                   column(4, align = "center",
+                                          h4(strong("Faculty & Associate Team Members")),
                                           p("", style = "padding-top:10px;"),
                                           img(src = "faculty-posadas.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "faculty-chen.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "faculty-alwang.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-naveen.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
                                           p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
                                           p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics)."),
+                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                    )
                           ),
@@ -815,7 +817,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                    p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," (Stellenbosch University);"),
                                    p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
                                    p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
-                                   p("We also thank Grown Chirongwe, and Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
+                                   p("We also thank Grown Chirongwe of Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
                                    
                           )
                  ),
