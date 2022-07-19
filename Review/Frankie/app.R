@@ -56,8 +56,8 @@ server <- function(input, output, session) {
 
   
     GrSs2011Line %>%
-    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-      geom_line()+
+    ggplot(aes(x = Month, y = MaxEVI, group = Region)) +
+      geom_line(aes(color = Region))+
       theme(axis.text.x = element_text(angle = 315)) +
       scale_colour_discrete(guide = 'none') +
       scale_x_discrete(expand=c(0, 1)) +
