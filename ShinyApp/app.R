@@ -190,8 +190,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                   # fluidRow(style = "margin: 2px;",
-                                   #          img(src = "Zimbabwe_Flag.png", height="100", width="200", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    fluidRow(style = "margin: 2px;",
+                                             img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -225,11 +225,22 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
                                           
                                           )
-                                   
-                                   
-                                   
-                                   
+                                          ),
+                          
+                          fluidRow(align = "center",
+                                   column(6,
+                                          h3(em("Regional Specificity"), align = "center"),
+                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe"))  
+                                   ),
+                                   column(6,
+                                          h3(em("We will insert Table of the regions and the crops here, this image is only a placeholder"), align = "center"),
+                                          img(src = "zimbabwe_var_dim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"),
+                                          div(tags$caption("Table 1: Agro-ecological regions of Zimbabwe"))  
+                                   )
+                            
                           ),
+                          
                           fluidRow(align = "center",
                                    p(tags$small(em('Last updated: August 2022'))))
                  ),
@@ -244,17 +255,19 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         h4("Description of what Remote Sensed Data is"),
-                                         h4(em("Selected Remote Sensed Data")),
+                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
+                                         #h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("EVI")),
-                                         p("The dataset MODIS TERRA Daily EVI is derived from atmospherically-corrected reflectance in the red, near-infrared, and blue wavebands in satellite imagery, and then improved with higher sensitivity over high biomass regions by minimizing canopy-soil variations (Frazier). EVI can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019)."),
+                                         p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
+                                         p(strong("insert EVI Image here")),
+                                         p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
                                          
                                          h3(strong("Precipitation")),
-                                         p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
+                                         p("Tropical Rainfall Measuring Mission (TRMM) 3B42 is a Google Earth Engine (GEE) index containing observations on all forms of tropical precipitation such as snow, rain, and drizzle. The dataset is provided by NASA Goddard Earth Sciences Data and Information Services Center (GES DISC) at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm, in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates result in a dataset. The data is produced over a 3-hour period, and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                          
                                          h3(strong("Soil Moisture")),
-                                         p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
+                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This correction is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
                                          
                                          br()),
                                          
@@ -264,22 +277,25 @@ ui <- navbarPage(title = "Zimbabwe",
                                            withMathJax(),
                                            title = h1(strong("PICES Data")),
                                            p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
-                                           h3(strong("Description of the Variables/Components")),
-                                           img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           withMathJax(), 
-                                           p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
-                                           p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
-                                           p("For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence Lack of Electricity and Lack of Toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
-                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.  ")
-                                           
+                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently.  The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each of the sub-dimensions), along with the two health variables that make up the second health dimension (2 out of 9.5; a weight of 1 for each of the sub-dimensions). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
+                                           p("Unemployment, defined as a member of the household being unemployed in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.
+For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence lack of electricity and lack of toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5.
+"),
+                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.
+Lack of Household Assets is given a dimension weight of 1 in both rural and urban areas. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:
+"),
+                                           p("Insert equation 1"),
+                                           p("For rural households, agricultural assets are essential indicators of wellbeing and agricultural activity capabilities. The dimension weight is 1.5, with three component variables usually given a weight of 0.5 each. The first variable, Lack of Land, uses a threshold of 0.25 hectares. The second variable on livestock is measured in Tropical Livestock Units (TLU), an indicator of wealth that can be used to insulate households from negative idiosyncratic and covariate shocks. A TLU deprivation threshold of 1 indicates Lack of Livestock. The third variable is the Lack of Rural Equipment. An agricultural equipment index (AEI) is created as follows:"),
+                                           p("insert equation 2"),
+                                           p("The agricultural asset dimension is not included for households in urban areas.
+The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access.
+**Note: The livestock data were not available in the 2011-12 wave, so a weight of zero has been assigned to this variable. More details can be found here:", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
                                            
                                            ))),
                             
                             tabPanel(strong("Methodology"),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
+                                      fluidRow(
                                        box(
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
@@ -295,6 +311,14 @@ ui <- navbarPage(title = "Zimbabwe",
                                          p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
                                          
                                          h4(strong("Soil Moisture")),
+                                                h5(strong("Why Soil Moisture?")),
+                                                p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the period we have chosen to focus on for the surface soil moisture section of our study.")
+                                         ,
+                                         
+                                         
+                                                h5(strong("Ideal soil type for maize production")),
+                                                p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."),
+                                         
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
 
 For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
@@ -316,16 +340,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
        rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
        state and \\(d\\) is the number of dimensions for assessing poverty. There 
        are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
-       The A-F method employed in this study contains eight dimensions of poverty. 
-       Within each dimension, there are one or two variables that indicate whether 
-       an individual is deprived in that area. Each variable has a specific
-       weight associated with it depending on its contribution to overall poverty
-       and how it pertains to rural and urban communities differently. For a given 
-       individual, the total number of deprivations are added up and if he or she falls
-       above a given threshold, \\(k\\), then that individual is considered poor. 
-       Having multiple dimensions of poverty allows us to decompose the original 
-       measure into its individual variables to identify which are contributing 
-       most to the overall index of poverty."),
+       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, k. The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
                                          tags$br(),
                                          p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
        ratio is simply the number of individuals considered to be poor divided by
@@ -534,14 +549,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                        h1(strong("Surface Soil Moisture "), align = "center"),
                                                        p("", style = "padding-top:10px;"),
                                                        
-                                                       column(6,
-                                                              h4(strong("Why Soil Moisture?")),
-                                                              p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the period we have chosen to focus on for the surface soil moisture section of our study.")
-                                                              ),
                                                        
-                                                       column(6,
-                                                              h4(strong("Ideal soil type for maize production")),
-                                                              p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."))
                                               )),
                                      fluidRow(
                                        box(withSpinner(leafletOutput("MapGraph", height=520)),
@@ -590,37 +598,44 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
                             tabPanel(strong("Multidimensional Poverty Index"),
                                      
-                                     tabsetPanel(
+                                     
                                      tabPanel(title = "2011",
                                      fluidRow(
                                        box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
-                                         title = "Multidimensional Poverty Index",
-                                         width = 8,
+                                         title = "Multidimensional Poverty Index 2011",
+                                         width = 6,
                                          height = 600
                                        ),
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:
-                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-                                           tags$ul(  
-                                             tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
-                                                     " and considers all of the dimensions described in the methodology section."),
-                                             tags$li("\\(M_{1}\\)
-                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-                                             tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
-                                             
-                                           ),
-                                           p("To adjust the threshold cutoff, k, by which an individual is considered poor,
-                                      we use k=3 as our threshold."))),
+                                       box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
+                                           title = "Multidimensional Poverty Index 2017",
+                                           width = 6,
+                                           height = 600
+                                         
+                                       )
+                                         ),
                                      
                                      fluidRow(
                                        box(
+                                         
+                                         width = 6,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 91 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to this graph:
+                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+                                         tags$ul(  
+                                           tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
+                                                   " and considers all of the dimensions described in the methodology section."),
+                                           tags$li("\\(M_{1}\\)
+                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+                                           tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
+                                           
+                                         ),
+                                         p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
+                                       box(
                                          withMathJax(),
                                          title = strong("Descriptive Analysis"),
-                                         width = 12,
+                                         width = 6,
                                          p("\\(M_{0}\\)"),
                                          p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
                                          
@@ -630,104 +645,46 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
                                          p("")
                                        )
-                                     )),
-                                     
-                                     tabPanel(title = "2017",
-                                              fluidRow(
-                                                box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
-                                                    title = "Multidimensional Poverty Index",
-                                                    width = 8,
-                                                    height = 600
-                                                ),
-                                                box(
-                                                  
-                                                  width = 4,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:
-                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-                                                  tags$ul(  
-                                                    tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
-                                                            " and considers all of the dimensions described in the methodology section."),
-                                                    tags$li("\\(M_{1}\\)
-                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-                                                    tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
-                                                    
-                                                  ),
-                                                  p("To adjust the threshold cutoff, k, by which an individual is considered poor,
-                                      we use k=3 as our threshold."))),
-                                              
-                                              fluidRow(
-                                                box(
-                                                  withMathJax(),
-                                                  title = strong("Descriptive Analysis"),
-                                                  width = 12,
-                                                  p("\\(M_{0}\\)"),
-                                                  p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
-                                                  
-                                                  p("\\(M_{1}\\)"),
-                                                  p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
-                                                  p("\\(M_{2}\\)"),
-                                                  p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
-                                                  p("")
-                                                )
-                                              ),
-                                     
                                      ))),
                             
                             
                             
                             tabPanel(strong("Components of the MPI"),
                                      
-                                     tabsetPanel(
+                                     #tabsetPanel(
                                        tabPanel(title = "2011",
                                      fluidRow(
                                        box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
-                                         title = "Components of the MPI",
-                                         width = 8,
+                                         title = "Components of the MPI for 2011",
+                                         width = 6,
                                          height = 600
                                        ),
-                                         box(
+                                       box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
+                                           title = "Components of the MPI for 2017",
+                                           width = 6,
+                                           height = 600
+                                       )),
+                                         
+                                     fluidRow(
+                                     box(
                                            
-                                           width = 4,
+                                           width = 12,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. This page presents the unidimensional indices for the six of the individual components that make up the MPI. The radio buttons allows the user to display the unidimensional index (i.e., the health, education, or asset component. This is shown at the district level with our selected k-threshold value of 3.
-                                             There are six layers to this graph: Maximum Education, Education Dropout, Chronic Illness, Health Visit, Household Assets, and Service Access."),
+                                           p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
                                            p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                           ))),
+                                           ))
                                      
-                                     tabPanel(title = "2017",
-                                              fluidRow(
-                                                box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
-                                                    title = "Components of the MPI",
-                                                    width = 8,
-                                                    height = 600
-                                                ),
-                                                box(
-                                                  
-                                                  width = 4,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. This page presents the unidimensional indices for the six of the individual components that make up the MPI. The radio buttons allows the user to display the unidimensional index (i.e., the health, education, or asset component. This is shown at the district level with our selected k-threshold value of 3.
-                                             There are six layers to this graph: Maximum Education, Education Dropout, Chronic Illness, Health Visit, Household Assets, and Service Access."),
-                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                                  
-                                                  )))
                                      
                                      ))),
                             
                             
                  
                  ## Tab 3
-                 tabPanel(strong("MPI and Indices"),
-                          tabsetPanel(
-                            tabPanel(strong("MPI & EVI"),
-                                     #h3(em("Regional Specificity"), align = "center"),
-                                     #img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
-                                     #div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                 navbarMenu(strong("MPI and Indices"),
+                          tabPanel(strong("MPI & EVI"),
+                                     
                                      fluidRow(
                                        box(img(src = "EVI Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                          title = "MPI & Maximum EVI in the Maize Growing Season",
@@ -756,7 +713,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      # tabName = "91_Dist",
                                      # # Everything has to be put in a row or column
                                      fluidRow(
-                                       box(
+                                       box(img(src = "Precip Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                          title = "MPI & Precipitation",
                                          width=8,
                                          height = 600),
@@ -803,9 +760,7 @@ A 10 mm increase in average surface soil moisture is associated with a decrease 
                             ),
                             
                             
-                 ),
                  
-
                   ## Tab Takeaways --------------
 
                  tabPanel(strong("Takeaways"),
