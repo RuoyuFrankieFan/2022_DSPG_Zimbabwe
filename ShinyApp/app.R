@@ -125,8 +125,8 @@ EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
 
 #PRECIPITATION DATA
-my_images <- c("av_dec_2010.jpeg","av_jan_2011.jpeg","av_feb_2011.jpeg",
-               "av_dec_2016.jpeg","av_jan_2017.jpeg","av_feb_2017.jpeg")
+my_images <- c("av_dec_compared_up.jpg","av_jan_compared_up.jpg","av_feb_compared_up.jpg")
+
 
 
 
@@ -155,7 +155,9 @@ max <- as.Date("2016-12-19")
 MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
 MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
 
-
+my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
+my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
+my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
 
 
 
@@ -475,7 +477,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        
                                      fluidRow(
                                      box(width = 6,
-                                           withSpinner(img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                           withSpinner(img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                                        #div(tags$caption("Figure 2: EVI of Zimbabwe"),align="center")
                                                        ),
                                            title = "Enhanced Vegetation Index (EVI) 2011"
@@ -484,7 +486,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        ),
                                      
                                      box(width = 6,
-                                       withSpinner(img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                       withSpinner(img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                                    #div(tags$caption("Figure 2: EVI of Zimbabwe"),align="center")
                                        ),
                                        title = "Enhanced Vegetation Index (EVI) 2017"
@@ -500,20 +502,22 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             tabPanel(
                               strong("Precipitation"),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Precipitation Index (TRMM 3B42)"), 
                                    style = "font-size:35px;"),
                                 align = "center"
                               ),
                               fluidRow(
-                                p(strong("Leaflet: 3-month observation 2011-17"))
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                p(strong("3-month observation 2011-17"))
                               ),
                               fluidRow(
-                                column(2),
-                                column(8, slickROutput("my_slick"), offset = 0, br(),br(),br()),
-                                align = "center"
+                                style = "margin-left: 0px; margin-right: 0px;",
+                                column(12, slickROutput("my_slick"), offset = 0, br(),br(),br())
                                 
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 p("Although the overview of this map is difficult to understand, context will help with that. This map is showing Average Daily Precipitation in December 2010. So given that the map is looking at rain distribution at a daily level most regions we’re seeing similar amounts of rainfall or a lack of variability per region. A day is considered wet if it exceeds 2.95 mm of precipitation based this we can infer that all regions on average were consider to have wet days.
                                                                   This map is showing Average Daily Precipitation (mm) in January 2011. In contrast from December 2010, We start see higher levels of rainfall which lines up the what literature describes to be the wet season Nov – May. We see a concentration of rainfall in North-East regions
                                                                   This is showing that most regions are seeing about 0-2mm of rainfall in February 2011 mentioned in the literature; a day is consider to be dry if the value is less than 2.95 mm. Indicating low levels rain except in region IIA where they’re receive a good amount of rain.
@@ -523,38 +527,41 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                                   In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize.")
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Season"), 
                                    style ="font-size: 25px;"),
-                                align = "center"
+                                align = "left"
                               ),
                               fluidRow(
-                                column(6, img(src = "Totalrainfall_2011.jpeg")), 
-                                column(6, img(src = "Totalrainfall_2017.jpeg"))
+                                style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "totalrainfall_compared.jpg"),
+                                align = "left"
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 column(12, p(strong("Description")) , 
                                        p("This is showing us the total rainfall in the 2010-11 growing season. For Maize production, the ideal range of rainfall is 600-700 mm. Regions I,IIA,IIB, & III at the North-East are observed as receiving more rainfall than its South-Western counterparts. However, It should be noted that Region IV still received the minimum rainfall for an average yield of Maize.This is showing that in all regions minus region v have received a health range of rainfall within the 2016-17 growing season. It should be noted that in region I, exceeded 1000 mm threshold that indicates the maize yield may have declined for this region. In the same light regions IIA,IIB, & III received up towards 1000 mm of rainfall which may have lead to an increase in the maize yield."))
                                 
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
                                    style = "font-size: 25px;"),
+                                align = "left"
+                              ),
+                              fluidRow(
+                                style = "margin-left: 70px; margin-right: 100px;",
+                                column(12, img(src = "dry_compared.jpg", height = "100%", width = "100%")),
                                 align = "center"
                               ),
-                            
-                            fluidRow(
-                              column(5, img(src = "numDry10.jpeg")), 
-                              column(6, img(src = "numDry16.jpeg")),
-                              align = "center"
-                            ),
-                            fluidRow(
-                              column(12, p(strong("Description")) ,
-                                     p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
-               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
-               ")
-                              )
                               
-                            )),
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, p(strong("Description")) ,
+                                       p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
+               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
+               "))
+                              )),
                             
                             
                             tabPanel(strong("Soil Moisture"),
@@ -699,123 +706,88 @@ Our study uses district-level measures of various MPI components to explore thei
                             
                  
                  ## Tab 3
-                 navbarMenu(strong("MPI and Indices"),
-                          tabPanel(strong("MPI & EVI"),
-                                     
-                                     fluidRow(
-                                       box(img(src = "EVI Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Maximum EVI in the Maize Growing Season",
-                                         width=8,
-                                         height = 600
-                                       ),
-                                         box(
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("We estimated the association between M0, M1, M2 and maximum EVI (which ranges from -1 to +1) in the maize growing season using pooled Ordinary Least Squares (OLS) regression. We also included a year dummy variable (0 for 2011; 1 for 2017) and an interaction term of the year dummy with Max EVI as additional control variables. The table presents the results."),
-                                           p("All else constant, an increase in Max EVI by 0.1 units is associated with a 0.0138 unit increase in the M0 index in 2011 and a 0.0198 unit increase in the M0 index in 2017. These associations are counter-intuitive since a higher maximum EVI is an indication of good maize yield, but the coefficients are not statistically significant."),
-                                           p("An increase in Max EVI by 0.1 units is associated with a 0.0070 unit increase in the M1 index in 2011, ceteris paribus, and a 0.0099 unit increase in the M1 index in 2017, ceteris paribus. On the other hand, an increase in Max EVI by 0.1 units is associated with a 0.0071 unit increase in the M2 index in 2011, ceteris paribus, and a 0.00705 unit increase in the M2 index in 2017, ceteris paribus. These associations again are counter-intuitive, however all coefficients are statistically not significant."),
-                                           p("")
-                                           ),
-                                       box(img(src = "EVI Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
-                                           title = "Selected MPI components & Maximum EVI in the Maize Growing Season",
-                                           width=8,
-                                           height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))
-                                       )),
-                            
-                            tabPanel(strong("MPI & Precipitation"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Precipitation",
-                                         width=8,
-                                         height = 600),
-                                       
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 3.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 4.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))
-                                     ),
-                            
-                            
-                            tabPanel(strong("MPI & Soil Moisture"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(img(src = "Soil Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Soil Moisture",
-                                         width=8,
-                                         height = 600),
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("Table 1 presents the OLS estimation results of MPI measures from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season. The results in Table 1 show that if average surface soil moisture increases by 10 mm, then poverty index, M0, decreases by 0.0102 units, adjusted poverty gap M1 decreases by 0.0162 units and adjusted poverty severity M2 decreases by 0.01 units. However, none of these associations are statistically significant."))
-                                       ),
-                                     box(img(src = "Soil Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Soil Moisture",
-                                         width=8,
-                                         height = 600),
-                                     box(
-                                       
-                                       width = 4,
-                                       withMathJax(),
-                                       title = "Description",
-                                       p("Table 2 presents the OLS estimation results of selected MPI components from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season.  
-
-A 10 mm increase in average surface soil moisture is associated with a decrease in the probability of nobody in the household having completed primary school by 0.1. The coefficient is statistically significant at the 5 percent level. On the other hand, a 10 mm increase in average surface soil moisture is associated with an increase in the probability of Lack of Health Visit by 0.1. This coefficient, however, is statistically significant only at the 10 percent level. The association between average surface soil moisture index and the other components of MPI presented in Table 2 are not statistically significant."))
-                                     
-                                     
-                                     )
-                            ),
+navbarMenu(strong("MPI and Indices"),
+           tabPanel(strong("Summary Statistics")),
+                    fluidRow(
+                    style = "margin-left: 0px; margin-right: 0px;",
+                    column(8, p("Summary Statistics and Correlations"))),
+                    
+           tabPanel(strong("MPI & Precipitation"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick2")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           ),
+           tabPanel(strong("MPI & EVI"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick3")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           ),
+           tabPanel(strong("MPI & Soil Moisture"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick4")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           )
+           
+           
+           
+           
+           
+),
                             
                             
                  
@@ -1300,6 +1272,27 @@ output$compo_MPI_17 <- renderLeaflet({
     hideGroup("Service Access")
   
 })
+
+
+output$my_slick2 <- renderSlickR(
+  slickR(
+    my_images2,
+    width = "90%"
+  )
+)
+output$my_slick3 <- renderSlickR(
+  slickR(
+    my_images3,
+    width = "90%"
+  )
+)
+output$my_slick4 <- renderSlickR(
+  slickR(
+    my_images4,
+    width = "90%"
+  )
+)
+
 
 
 }
