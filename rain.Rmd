@@ -366,7 +366,8 @@ spell_barchart %>% # code for Shiny app
  ggplot(aes(fill=variable, y=value, x=region)) + 
      geom_bar(position="dodge", stat="identity")+ 
      labs(color="time") +
-     xlab("Regions") + ylab("Count Of Dry Spells") + 
+     scale_y_continuous(limits = c(0,3)) +
+     xlab("Regions") + ylab("Number Of Dry Spells") + 
     ggtitle("Number Of Dry Spells In The 2010-11 Growing Season") +
     guides(fill=guide_legend(title="Length Of Spell")) +
     scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
@@ -377,7 +378,8 @@ spell_barchart %>% # code for Shiny app
  ggplot(aes(fill=variable, y=value, x=region)) + 
      geom_bar(position="dodge", stat="identity")+ 
      labs(color="time") +
-     xlab("Regions") + ylab("Count Of Dry Spells") + 
+     scale_y_continuous(limits = c(0,3)) +
+     xlab("Regions") + ylab("Number Of Dry Spells") + 
     ggtitle("Number Of Dry Spells In The 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Length Of Spell")) +
     scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
