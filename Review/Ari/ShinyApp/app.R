@@ -41,20 +41,34 @@ library(viridis)
 
 #setwd and other references to local files must be commented out for app to run properly
 #setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe/ShinyApp")
-MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
-BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
-LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+SurfMapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
+SurfBarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
+SurfLineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+
+PercMapDataPre <- read.csv("data/agregion/soil/PercSoilMapPlotData.csv")
+PercBarData <- read.csv("data/agregion/soil/PercSoilBarPlotData.csv")
+PercLineData <- read.csv("data/agregion/soil/PercSoilLinePlotData.csv")
+
 zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
 zim_region <-rename(zim_region, region = nat_region)
 
-MapDataTwo <- list(zim_region, MapDataPre)
-MapDataFin <- MapDataTwo %>% reduce(full_join, by='region')
+SurfMapDataTwo <- list(zim_region, SurfMapDataPre)
+SurfMapDataFin <- SurfMapDataTwo %>% reduce(full_join, by='region')
+
+PercMapDataTwo <- list(zim_region, PercMapDataPre)
+PercMapDataFin <- PercMapDataTwo %>% reduce(full_join, by='region')
 
 # Set axis limits c(min, max) on plot
-min <- as.yearmon("20161119", "%Y%m")
-max <- as.yearmon("20161219", "%Y%m")
-min <- as.Date("2016-11-19")
-max <- as.Date("2016-12-19")
+Surfmin <- as.yearmon("20161119", "%Y%m")
+Surfmax <- as.yearmon("20161219", "%Y%m")
+Surfmin <- as.Date("2016-11-19")
+Surfmax <- as.Date("2016-12-19")
+
+# Set axis limits c(min, max) on plot
+Percmin <- as.yearmon("20161219", "%Y%m")
+Percmax <- as.yearmon("20170529", "%Y%m")
+Percmin <- as.Date("2016-12-19")
+Percmax <- as.Date("2017-05-29")
 
 
 ## CAPTIONS---------------------------------------------------------------------
@@ -112,9 +126,9 @@ ui <- navbarPage(title = "Zimbabwe",
                                    p(tags$small(em('Last updated: July 2022'))))
                  ),
                  
-                 # Tab MPI Ranking-----------------
+                 # Tab SoilMoisture-----------------
                  navbarMenu("Soil Moisture",
-                            ### 91 DIstricts ranking--------
+                            ### Surface Soil--------
                             tabPanel("Surface Soil Moisture",
                                      
                                      tabsetPanel(
@@ -137,10 +151,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                                    <https://gimms.gsfc.nasa.gov/SMOS/SMAP/SoilMoisture_Profile_SMAP.pdf>"
                                                            ))))
                                          ),
-                                         tabPanel("Average Soil Moisture",
+                                         tabPanel("Average Surface Soil Moisture Map",
                                                   fluidRow(
                                                       box(width = 8,
-                                                          withSpinner(leafletOutput("MapGraph", height = 950))
+                                                          withSpinner(leafletOutput("SurfMapGraph", height = 950))
                                                       ),
                                                       box(withMathJax(),
                                                           width = 4,
@@ -153,16 +167,29 @@ ui <- navbarPage(title = "Zimbabwe",
                                                             farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))
                                                       
                                                   )),
-                                         
-                                         tabPanel("Soil Moisture at Planting",
+                                         tabPanel("Average Percent Soil Moisture Map",
                                                   fluidRow(
                                                       box(width = 8,
-                                                          withSpinner(plotOutput("BarGraph", height = 950))
+                                                          withSpinner(leafletOutput("PercMapGraph", height = 950))
                                                       ),
                                                       box(withMathJax(),
                                                           width = 4,
                                                           title = "Description",
-                                                          p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four soil 
+                                                          p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. 
+                                                            The average is taken over the 2016-17 growing season after the first 30 days,
+                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
+                                                      
+                                                  )),
+                                         
+                                         tabPanel("Surface Soil Moisture period conditions",
+                                                  fluidRow(
+                                                      box(width = 8,
+                                                          withSpinner(plotOutput("SurfBarGraph", height = 950))
+                                                      ),
+                                                      box(withMathJax(),
+                                                          width = 4,
+                                                          title = "Description",
+                                                          p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
                                                           condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
                                                           which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
                                                           and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
@@ -170,21 +197,47 @@ ui <- navbarPage(title = "Zimbabwe",
                                                             having more soil moisture on average than regions IV and V."))
                                                       
                                                   )),
-                                         
-                                         tabPanel("Soil Moisture at Planting Times",
+                                         tabPanel("Percent Soil Moisture period conditions",
                                                   fluidRow(
                                                       box(width = 8,
-                                                          withSpinner(plotOutput("LineGraph", height = 950))
+                                                          withSpinner(plotOutput("PercBarGraph", height = 950))
+                                                      ),
+                                                      box(withMathJax(),
+                                                          width = 4,
+                                                          title = "Description",
+                                                          p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture 
+                                                          condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days,
+                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
+                                                      
+                                                  )),
+                                         
+                                         tabPanel("Surface Soil Moisture Across Time",
+                                                  fluidRow(
+                                                      box(width = 8,
+                                                          withSpinner(plotOutput("SurfLineGraph", height = 950))
                                                       ),
                                                       box(withMathJax(),
                                                           width = 4,
                                                           title = "Description",
                                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season,
-                                                            which takes place from November 19^th^ to December 19^th^ of 2016. From this visualization we can see that the ranking
+                                                            which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking
                                                             of soil moisture levels by region remains largely consistent over the time period, the difference between the region
                                                             with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season.
                                                             In addition, while regions I -- III experience soil moisture levels above the extremely dry threshold (10mm) as early
                                                             as November 24th, regions IV and V do not reach those levels until December 9th."))
+                                                      
+                                                  )),
+                                         
+                                         tabPanel("Percent Soil Moisture Across Time",
+                                                  fluidRow(
+                                                      box(width = 8,
+                                                          withSpinner(plotOutput("PercLineGraph", height = 950))
+                                                      ),
+                                                      box(withMathJax(),
+                                                          width = 4,
+                                                          title = "Description",
+                                                          p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days,
+                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
                                                       
                                                   ))
                                      )),
@@ -361,35 +414,35 @@ ui <- navbarPage(title = "Zimbabwe",
 
 server <- function(input, output, session){
     
-    output$MapGraph <- renderLeaflet({
+    output$SurfMapGraph <- renderLeaflet({
         mypal <- colorNumeric(
             palette = "viridis",
             domain = NULL,
             reverse = TRUE)
         
-        leaflet(MapDataFin) %>% addTiles() %>%
-            addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$region, ":", round(MapDataFin$AvgSurfaceMoisture, digits = 3)),
+        leaflet(SurfMapDataFin) %>% addTiles() %>%
+            addPolygons(color = ~mypal(SurfMapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", SurfMapDataFin$region, ":", round(SurfMapDataFin$AvgSurfaceMoisture, digits = 3)),
                         opacity = 1.0, fillOpacity = 0.5,
                         highlightOptions = highlightOptions(color = "black", weight = 2,
                                                             bringToFront = TRUE)) %>%
-            addPolylines(data = MapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
-            addLegend(pal = mypal,position = "bottomleft",values = MapDataFin$AvgSurfaceMoisture, opacity = .6,
-                      title= paste("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season"))
+            addPolylines(data = SurfMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+            addLegend(pal = mypal,position = "bottomleft",values = SurfMapDataFin$AvgSurfaceMoisture, opacity = .6,
+                      title= paste("Average Surface Soil Moisture During Planting in 2016-17 Growing Season"))
     })       
-    output$BarGraph <- renderPlot({
-        ggplot(BarData, aes(fill=time, y=value, x=region)) + 
+    output$SurfBarGraph <- renderPlot({
+        ggplot(SurfBarData, aes(fill=time, y=value, x=region)) + 
             geom_bar(position="dodge", stat="identity")+ 
             labs(color="time") +
             xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
-            ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
+            ggtitle("Surface Soil Moisture Conditions during Planting in 2016-17 Growing Season") +
             guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
             scale_fill_viridis(discrete=TRUE, direction=-1)
         #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
     })
     
-    output$LineGraph <- renderPlot({
+    output$SurfLineGraph <- renderPlot({
         
-        ggplot(LineData, aes(as.Date(newDate), y = value, color = variable)) + 
+        ggplot(SurfLineData, aes(as.Date(newDate), y = value, color = variable)) + 
             geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
             geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
             geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
@@ -398,9 +451,52 @@ server <- function(input, output, session){
             geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
             labs(color="Agro-ecological Region") +
             xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
-            ggtitle("Planting Time During The 2016-17 Growing Season") +
+            ggtitle("Surface Soil Moisture During Planting in 2016-17 Growing Season") +
             theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
-            scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+            scale_x_date(limits = c(Surfmin, Surfmax)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+        
+    })
+    
+    output$PercMapGraph <- renderLeaflet({
+        mypal <- colorNumeric(
+            palette = "viridis",
+            domain = NULL,
+            reverse = TRUE)
+        
+        leaflet(PercMapDataFin) %>% addTiles() %>%
+            addPolygons(color = ~mypal(PercMapDataFin$AvgPercentMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", PercMapDataFin$region, ":", round(PercMapDataFin$AvgPercentMoisture, digits = 3)),
+                        opacity = 1.0, fillOpacity = 0.5,
+                        highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                            bringToFront = TRUE)) %>%
+            addPolylines(data = PercMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+            addLegend(pal = mypal,position = "bottomleft",values = PercMapDataFin$AvgPercentMoisture, opacity = .6,
+                      title= paste("Average Percent Soil Moisture After Planting in 2016-17 Growing Season"))
+    })       
+    output$PercBarGraph <- renderPlot({
+        ggplot(PercBarData, aes(fill=time, y=value, x=region)) + 
+            geom_bar(position="dodge", stat="identity")+ 
+            labs(color="time") +
+            xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
+            ggtitle("Percent Soil Moisture Conditions After Planting in 2016-17 Growing Season") +
+            guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
+            scale_fill_viridis(discrete=TRUE, direction=-1)
+        #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+    })
+    
+    output$PercLineGraph <- renderPlot({
+        
+        ggplot(PercLineData, aes(as.Date(newDate), y = value, color = variable)) + 
+            geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
+            geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
+            geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
+            geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
+            geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
+            geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
+            labs(color="Agro-ecological Region") +
+            xlab("Percent Soil Moisture: After Planting Time") + ylab("Percent Soil Moisture Index") + 
+            ggtitle("Percent Soil moisture After Planting in 2016-17 Growing Season") +
+            theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
+            scale_x_date(limits = c(Percmin, Percmax)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
         
     })
     

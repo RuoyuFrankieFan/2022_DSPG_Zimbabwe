@@ -1,0 +1,13 @@
+name: ShinyApp
+title: ShinyApp
+username:
+account: aliverpool
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6647287
+bundleId: 6116835
+url: https://aliverpool.shinyapps.io/ShinyApp/
+when: 1658345484.93376
+lastSyncTime: 1658345484.93377
+asMultiple: FALSE
+asStatic: FALSE
