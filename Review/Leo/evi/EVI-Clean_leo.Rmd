@@ -179,7 +179,7 @@ GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
 
 
 #write.csv(GrSs2017Line, file = "eviline2017.csv")
-GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+#GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
 
 
 
