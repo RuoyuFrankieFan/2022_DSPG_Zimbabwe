@@ -152,8 +152,14 @@ max <- as.Date("2016-12-19")
 
 
 #MPI DATA
-MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
-MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
+MPI <- read.csv("./data/MPI/MPI_Dataset.csv")
+MPI_2011 <- MPI[which(MPI$year=="2011"),]
+MPI_2017 <- MPI[which(MPI$year=="2017"),]
+MPI_2011 <- rename(MPI_2011, District_ID="district_id")
+MPI_2017 <- rename(MPI_2017, District_ID="district_id")
+
+#MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
+#MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
 
 my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
 my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
@@ -675,8 +681,8 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                             
                             tabPanel(strong("Components of the MPI"),
                                      
-                                     #tabsetPanel(
-                                       tabPanel(title = "2011",
+                                     tabsetPanel(
+                                       tabPanel(title = "\\(M_{0}\\)",
                                      fluidRow(h1(strong("Components of the MPI"), align = "center"),
                                        box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
                                          title = "Components of the MPI for 2011",
@@ -698,7 +704,56 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
 Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
                                            p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                           ))
+                                           ))),
+                                     
+                                     tabPanel(title = "\\(M_{1}\\)",
+                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
+                                                           title = "Components of the MPI for 2011",
+                                                           width = 6,
+                                                           height = 600
+                                                       ),
+                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
+                                                           title = "Components of the MPI for 2017",
+                                                           width = 6,
+                                                           height = 600
+                                                       )),
+                                              
+                                              fluidRow(
+                                                box(
+                                                  
+                                                  width = 12,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                ))),
+                                     
+                                     tabPanel(title = "\\(M_{2}\\)",
+                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
+                                                           title = "Components of the MPI for 2011",
+                                                           width = 6,
+                                                           height = 600
+                                                       ),
+                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
+                                                           title = "Components of the MPI for 2017",
+                                                           width = 6,
+                                                           height = 600
+                                                       )),
+                                              
+                                              fluidRow(
+                                                box(
+                                                  
+                                                  width = 12,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                )))
+                                     
                                      
                                      
                                      ))),
@@ -707,10 +762,10 @@ Our study uses district-level measures of various MPI components to explore thei
                  
                  ## Tab 3
 navbarMenu(strong("MPI and Indices"),
-           tabPanel(strong("Summary Statistics")),
+           tabPanel(strong("Summary Statistics"),
                     fluidRow(
                     style = "margin-left: 0px; margin-right: 0px;",
-                    column(8, p("Summary Statistics and Correlations"))),
+                    column(8, p("Summary Statistics and Correlations")))),
                     
            tabPanel(strong("MPI & Precipitation"),
                     fluidRow(
@@ -1137,21 +1192,21 @@ output$MPI_map_2011 <- renderLeaflet({
     reverse = F)
   
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M1_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m1_k3,
               opacity = .6,title= paste("2011 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
@@ -1163,21 +1218,21 @@ output$MPI_map_2011 <- renderLeaflet({
 output$MPI_map_2017 <- renderLeaflet({
 
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M0_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m0_k3,
               opacity = .6,title= paste("2017 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
@@ -1186,29 +1241,30 @@ output$MPI_map_2017 <- renderLeaflet({
     hideGroup("M2")
 })
 
+#M0
 output$compo_MPI_11 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_visit_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_visit_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Health Visit") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_assets_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_assets_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Household Assets") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_services_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_services_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Service Access") %>%
@@ -1227,29 +1283,117 @@ output$compo_MPI_11 <- renderLeaflet({
     hideGroup("Service Access")
 })
 
+#M1
+output$compo_MPI_11_m1 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+#M2
+output$compo_MPI_11_m2 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+
+
 output$compo_MPI_17 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
     domain = NULL)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_visit_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_visit_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Health Visit") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_assets_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_assets_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Household Assets") %>%
@@ -1272,6 +1416,106 @@ output$compo_MPI_17 <- renderLeaflet({
     hideGroup("Service Access")
   
 })
+
+#M1
+output$compo_MPI_17_m1 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+#M2
+output$compo_MPI_17_m2 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+
+
+
 
 
 output$my_slick2 <- renderSlickR(
