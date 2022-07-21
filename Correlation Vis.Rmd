@@ -1,0 +1,21 @@
+---
+title: "Correlation vis"
+author: "Frankie Fan"
+date: '2022-07-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load the packages
+```{r}
+
+```
+
+## Read in the files
+```{r}
+GrSs2011 <- read_csv("./Data/EVI_region_GrSs2011.csv")
+```
+

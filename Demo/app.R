@@ -56,14 +56,14 @@ server <- function(input, output, session) {
 
   
     GrSs2011Line %>%
-    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-      geom_line()+
+    ggplot(aes(x = Month, y = MaxEVI, group = Region)) +
+      geom_line(aes(color = Region))+
       theme(axis.text.x = element_text(angle = 315)) +
       scale_colour_discrete(guide = 'none') +
       scale_x_discrete(expand=c(0, 1)) +
       geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
       scale_color_viridis_d(option = "H") +
-      labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+      labs(title = "Max EVI in Zim During Growing Season 2011") +
       xlab("Time(Month)") +
       ylab("Max EVI")+ 
       plotly()
