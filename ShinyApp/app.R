@@ -213,7 +213,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           
                                           div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
-                                          img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "120%"),
+                                          img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
                                           div(tags$caption("Source: FAO")),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
@@ -775,9 +775,14 @@ navbarMenu(strong("MPI and Indices"),
            tabPanel(strong("Summary Statistics"),
                     fluidRow(
                     style = "margin-left: 0px; margin-right: 0px;",
-                    column(8, slickROutput("my_slick5")),
-                    column(4,
-                           p("Summary Statistics and Correlations")))),
+                    column(12, slickROutput("my_slick5")),
+                    ),
+                    
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(12,
+                      
+                             p("Summary Statistics and Correlations")))),
                     
            tabPanel(strong("MPI & Precipitation"),
                     fluidRow(
