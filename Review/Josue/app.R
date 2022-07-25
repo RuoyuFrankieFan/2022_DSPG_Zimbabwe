@@ -53,14 +53,15 @@ ui <- navbarPage(
     fluidRow(
       style = "margin-left: 100px; margin-right: 100px;",
       column(12, p(strong("Description")) , 
-             p("This is showing us the total rainfall in the two growing seasons. 
-             For maize production, the ideal range of rainfall is 600-700 mm. 2010-11 Growing Season:
-            Regions I, IIA, IIB, & III at the North-East are observed as receiving more rainfall than its South-Western counterparts. 
-            However, It should be noted that Region IV still received the minimum rainfall for an average yield of maize.2016-17 Growing Season: 
-            All regions minus region v have received a healthy range of rainfall within the 2016-17 growing season. 
-            It should be noted that in region I, exceeding the 1000 mm threshold indicates that the maize yield may have declined for this region. 
-            In the same light regions IIA,IIB, & III received up to 1000 mm of rainfall which may have led to an increase in the maize yield.
-"))
+             p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with past Literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
       
     ),
     fluidRow(
@@ -78,12 +79,13 @@ ui <- navbarPage(
     fluidRow(
       style = "margin-left: 100px; margin-right: 100px;",
       column(12, p(strong("Description")) ,
-             p("This is showing the number of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In literature, we found that dry spells play a significant role in agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. 
-2010-11
-In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. 
-2016-17
-In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. The growing season has experienced a lower frequency of dry spells but they seem to have a wider spread of dry spells that were 20 days and more among all the regions.
-"))
+             p("
+               This shows the number of dry spells; A dry spell is described to be a 
+               consecutive series of dry days between 10 to 20 days or 20 days or more. 
+               Dry spells play a significant role in agricultural success by indicating 
+               plant stress exposure while their length and severity can result in the decreased 
+               yields or complete failure of a crop (Nyakudya et al., 2011;Mhizha et al., 2014).  
+               "))
       )
     
     ),
