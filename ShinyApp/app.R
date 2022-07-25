@@ -266,8 +266,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
                                          p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
                                          #br(),
-                                         img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"),
+                                         fluidRow(
+                                         img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
                                          div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
+                                         ),
                                          br(),
                                          withMathJax(),
                                          p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
@@ -307,6 +309,13 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                             tabPanel(strong("Methodology"),
                                      
                                       fluidRow(
+                                        column(
+                                          12,
+                                          h1(strong("Overview of Methodology")),
+                                          img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                          div(tags$caption("Figure 4: Overview of Methodology"),align="center")
+                                        ),
+                                        br(),
                                        box(
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
@@ -490,9 +499,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        withSpinner(slickROutput("my_slick_evi"))
                                      ),
                                      column(
-                                       width = 4,
+                                       width = 3,
                                        withMathJax(),
                                        title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
+                                       p(h3("Description")),
                                        p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February. The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
                                        
                                      )
@@ -993,14 +1003,33 @@ server <- function(input, output) {
   runjs(jscode)
   
 
-  
+#Reading Tables  for front page
 output$table <- renderTable({
     
     table <- read_excel("./data/table.xlsx")
     table
   }, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2)  
   
+
+#correlation for 2011
+output$table11 <- renderTable({
   
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet2")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
+
+
+#Correlation for 2017
+output$table17 <- renderTable({
+  
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet3")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
+
+
+
   
   # EVI OUTPUTS-------
 output$evi_map_leaflet <- renderLeaflet({
@@ -1027,7 +1056,7 @@ output$evi_map_leaflet <- renderLeaflet({
 output$my_slick_evi <- renderSlickR(
   slickR(
     my_images_evi,
-    width = "20%"
+    width = "90%"
   )
 )
 
@@ -1172,7 +1201,7 @@ output$BarGraph <- renderPlot({
   ggplot(BarData, aes(fill=time, y=value, x=region)) + 
     geom_bar(position="dodge", stat="identity")+ 
     labs(color="time") +
-    xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
+    xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
     scale_fill_viridis(discrete=TRUE, direction=-1)

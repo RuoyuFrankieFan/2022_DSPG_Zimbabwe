@@ -1,0 +1,106 @@
+---
+title: "Folder Structure"
+author: "Leonard-Allen"
+date: '2022-07-14'
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Folder Structure
+
+This is the structure we will use for our ShinyApp from now. The structure is similar to the set up in our [GitHub repo](https://github.com/leoallen8/2022_DSPG_Zimbabwe) wit the ShinyApp folder. Please follow this closely and make this folder in your branch for now.
+
+## Main Folder: "ShinyApp". This is also the working directory.
+
+see link: <https://github.com/leoallen8/2022_DSPG_Zimbabwe/tree/main/ShinyApp>
+
+```{r, echo=FALSE,out.height='100%', out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/pasteF005807E.png")
+```
+
+Under the main we have the following subfolders Sub-folders/files:
+
+-   data : strictly the data files that will make the shiny app run
+
+-   www: image and other media files
+
+-   app.R (script)
+
+NB: This folder will also contain the app.R script for the shiny (and then the rsconnect after deployment to shinyapps.io)
+
+## within the ShinyApp/data folder
+
+see link: <https://github.com/leoallen8/2022_DSPG_Zimbabwe/tree/main/ShinyApp/data>
+
+### - ShinyApp/data/agregion
+
+### - ShinyApp/data/district
+
+### - ShinyApp/data/MPI
+
+### - ShinyApp/data/shapefiles
+
+```{r, echo=FALSE, out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/paste35786AC8.png")
+```
+
+### within the ShinyApp/data/agregion folder
+
+Because we are working on the agro-ecological regions; See link: <https://github.com/leoallen8/2022_DSPG_Zimbabwe/tree/main/ShinyApp/data/agregion>
+
+```{r, echo=FALSE, out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/paste9D88D613.png")
+```
+
+### - ShinyApp/data/agregion/evi
+
+```{r, echo=FALSE, out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/paste3BADE762.png")
+```
+
+### - ShinyApp/data/agregion/rain
+
+```{r, echo=FALSE, out.width = '50%', fig.align = 'center'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/paste1AFEE6E8.png")
+```
+
+### - ShinyApp/data/agregion/soil
+
+```{r echo=FALSE, fig.align='center', fig.height=12, fig.width=12, out.width='50%'}
+knitr::include_graphics(path =  "C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Zimbabwe/Review/Leo/misc/images/paste56A9BF17.png")
+```
+
+# Reading data samples
+
+[tip set the working directory to the ShinyApp folder]
+
+***Reading shapefile***
+
+zim_district \<- st_read("./data/shapefiles/Zim_D60.shp")
+
+zim_region \<- st_read("./data/shapefiles/agro-ecological-regions.shp")
+
+***Frankie EVI:***
+
+GrSs2017 \<- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
+
+EVI_region_long \<- read_csv("./data/agregion/evi/EVI_region_long.csv")
+
+***Ari Soil:***
+
+mydatXL2 \<- read_csv(paste0(getwd(),"/data/agregion/soil/soil_ts_Zimb.csv"))
+
+mydat_long \<- readRDS("./data/agregion/soil/mydat_long.RDS")
+
+***Josue Rain:***
+
+total1011 \<- readRDS(paste0(getwd(),file = "/data/agregion/soil/total1011.RDS"))
+
+total1617 \<- readRDS(paste0(getwd(),file = "/data/agregion/soil/total1617.RDS"))
+
+End

@@ -1,0 +1,118 @@
+                 ## Tab 3
+                 navbarMenu(strong("MPI and Indices"),
+                          tabPanel(strong("MPI & EVI"),
+                                     
+                                     fluidRow(
+                                       box(img(src = "EVI Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Maximum EVI in the Maize Growing Season",
+                                         width=8,
+                                         height = 600
+                                       ),
+                                         box(
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("We estimated the association between M0, M1, M2 and maximum EVI (which ranges from -1 to +1) in the maize growing season using pooled Ordinary Least Squares (OLS) regression. We also included a year dummy variable (0 for 2011; 1 for 2017) and an interaction term of the year dummy with Max EVI as additional control variables. The table presents the results."),
+                                           p("All else constant, an increase in Max EVI by 0.1 units is associated with a 0.0138 unit increase in the M0 index in 2011 and a 0.0198 unit increase in the M0 index in 2017. These associations are counter-intuitive since a higher maximum EVI is an indication of good maize yield, but the coefficients are not statistically significant."),
+                                           p("An increase in Max EVI by 0.1 units is associated with a 0.0070 unit increase in the M1 index in 2011, ceteris paribus, and a 0.0099 unit increase in the M1 index in 2017, ceteris paribus. On the other hand, an increase in Max EVI by 0.1 units is associated with a 0.0071 unit increase in the M2 index in 2011, ceteris paribus, and a 0.00705 unit increase in the M2 index in 2017, ceteris paribus. These associations again are counter-intuitive, however all coefficients are statistically not significant."),
+                                           p("")
+                                           ),
+                                       box(img(src = "EVI Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
+                                           title = "Selected MPI components & Maximum EVI in the Maize Growing Season",
+                                           width=8,
+                                           height = 600
+                                       ),
+                                       box(
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))
+                                       )),
+                            
+                            tabPanel(strong("MPI & Precipitation"),
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(img(src = "Precip Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Precipitation",
+                                         width=8,
+                                         height = 600),
+                                       
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
+                                     fluidRow(
+                                       box(img(src = "Precip Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                           title = "MPI & Precipitation",
+                                           width=8,
+                                           height = 600),
+                                       
+                                       box(
+                                         
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
+                                     fluidRow(
+                                       box(img(src = "Precip Reg_Table 3.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                           title = "MPI & Precipitation",
+                                           width=8,
+                                           height = 600),
+                                       
+                                       box(
+                                         
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
+                                     fluidRow(
+                                       box(img(src = "Precip Reg_Table 4.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                           title = "MPI & Precipitation",
+                                           width=8,
+                                           height = 600),
+                                       
+                                       box(
+                                         
+                                         width = 4,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))
+                                     ),
+                            
+                            
+                            tabPanel(strong("MPI & Soil Moisture"),
+                                     
+                                     # tabName = "91_Dist",
+                                     # # Everything has to be put in a row or column
+                                     fluidRow(
+                                       box(img(src = "Soil Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Soil Moisture",
+                                         width=8,
+                                         height = 600),
+                                         box(
+                                           
+                                           width = 4,
+                                           withMathJax(),
+                                           title = "Description",
+                                           p("Table 1 presents the OLS estimation results of MPI measures from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season. The results in Table 1 show that if average surface soil moisture increases by 10 mm, then poverty index, M0, decreases by 0.0102 units, adjusted poverty gap M1 decreases by 0.0162 units and adjusted poverty severity M2 decreases by 0.01 units. However, none of these associations are statistically significant."))
+                                       ),
+                                     box(img(src = "Soil Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                         title = "MPI & Soil Moisture",
+                                         width=8,
+                                         height = 600),
+                                     box(
+                                       
+                                       width = 4,
+                                       withMathJax(),
+                                       title = "Description",
+                                       p("Table 2 presents the OLS estimation results of selected MPI components from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season.  
+
+A 10 mm increase in average surface soil moisture is associated with a decrease in the probability of nobody in the household having completed primary school by 0.1. The coefficient is statistically significant at the 5 percent level. On the other hand, a 10 mm increase in average surface soil moisture is associated with an increase in the probability of Lack of Health Visit by 0.1. This coefficient, however, is statistically significant only at the 10 percent level. The association between average surface soil moisture index and the other components of MPI presented in Table 2 are not statistically significant."))
+                                     
+                                     
+                                     )
+                            )
