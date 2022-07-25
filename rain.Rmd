@@ -385,3 +385,9 @@ spell_barchart %>% # code for Shiny app
     scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
      
 ```
+
+```{r}
+
+```
+
+
