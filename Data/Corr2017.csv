@@ -1,0 +1,8 @@
+,M0,Max EVI,Total Rainfall,Dry Spell: >= 10 days,Avg. Surface Soil Moisture,,,,,,,
+M0,1,0.104,-0.152,0.14,-0.0347,,,,,,,
+Max EVI,0.104,1,0.104,-0.062,-0.0231,,,,,,,
+Total Rainfall,-0.152,0.104,1,-0.274,0.802,,,,,,,
+Dry Spell: >= 10 days,0.14,-0.062,-0.274,1,-0.301,,,,,,,
+Avg. Surface Soil Moisture,-0.0347,-0.0231,0.802,-0.301,1,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
