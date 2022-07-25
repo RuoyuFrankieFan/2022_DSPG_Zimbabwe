@@ -164,7 +164,7 @@ MPI_2017 <- rename(MPI_2017, District_ID="district_id")
 my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
 my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
 my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
-my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png")
+my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png", "stats_2017.png", "stats_v2_2011.png")
 
 
 
