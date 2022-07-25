@@ -39,7 +39,7 @@ library(slickR)
 ## FORMATTING-------------------------------------------------------------------
 prettyblue <- "#232D4B"
 navBarBlue <- '#427EDC'
-options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 4)
+options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 1)
 
 colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a","#e6a01d","#e57200","#fdfdfd")
 
@@ -121,12 +121,12 @@ GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
 EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
 EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
-
+my_images_evi <- c("Max EVI 2011.png", "Max EVI 2017.png")
 
 
 #PRECIPITATION DATA
-my_images <- c("av_dec_2010.jpeg","av_jan_2011.jpeg","av_feb_2011.jpeg",
-               "av_dec_2016.jpeg","av_jan_2017.jpeg","av_feb_2017.jpeg")
+my_images <- c("av_dec_compared_up.jpg","av_jan_compared_up.jpg","av_feb_compared_up.jpg")
+
 
 
 
@@ -152,11 +152,19 @@ max <- as.Date("2016-12-19")
 
 
 #MPI DATA
-MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
-MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
+MPI <- read.csv("./data/MPI/MPI_Dataset.csv")
+MPI_2011 <- MPI[which(MPI$year=="2011"),]
+MPI_2017 <- MPI[which(MPI$year=="2017"),]
+MPI_2011 <- rename(MPI_2011, District_ID="district_id")
+MPI_2017 <- rename(MPI_2017, District_ID="district_id")
 
+#MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
+#MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
 
-
+my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
+my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
+my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
+my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png", "stats_2017.png", "stats_v2_2011.png")
 
 
 
@@ -190,8 +198,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                    fluidRow(style = "margin: 2px;",
-                                             img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    #fluidRow(style = "margin: 2px;",
+                                             #img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -202,14 +210,24 @@ ui <- navbarPage(title = "Zimbabwe",
                                    column(4,
                                           h2(strong("Project Overview"), align = "center"),
                                           p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
-                                          p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe. Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
+                                          
+                                          div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                                          img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                          div(tags$caption("Source: FAO")),
+                                          br(),
+                                          p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
                                           p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
                                    column(4,
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
                                           p("Zimbabwe is located at the Southeastern tip of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
-                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."), 
+                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
+                                          
+                                          img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                          div(tags$caption("Figure 1: Livelihood zones in Zimbabwe"), align="center"),
+                                          br(),
                                             p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive.")),
                                    
                                    column(4,
@@ -218,33 +236,21 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
                                           
                                           #h3(em("Regional Specificity"), align = "center"),
-                                          #img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
-                                          #div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
+                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
+                                          div(tags$caption("Figure 2: Agro-ecological regions of Zimbabwe"), align="center"),
                                           p(""),
                                           p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
                                           
                                           )
                                           ),
                           
-                          fluidRow(align = "center",
-                                   column(6,
-                                          h3(em("Regional Specificity"), align = "center"),
-                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe"))  
-                                   ),
-                                   column(6,
-                                          h3(em("We will insert Table of the regions and the crops here, this image is only a placeholder"), align = "center"),
-                                          img(src = "zimbabwe_var_dim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"),
-                                          div(tags$caption("Table 1: Agro-ecological regions of Zimbabwe"))  
-                                   )
-                            
-                          ),
+
                           
                           fluidRow(align = "center",
                                    p(tags$small(em('Last updated: August 2022'))))
                  ),
                  
-                 ## Tab X Data-----------------------
+                 ## Tab Data & Methodology-----------------------
                  tabPanel(strong("Data & Methodology"),
                           tabsetPanel(
                             tabPanel(strong("Data"),
@@ -260,8 +266,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
                                          p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
                                          #br(),
-                                         img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: 200px; margin-right: 200px;", width = "40%"),
-                                         div(tags$caption("Figure 2: EVI of Zimbabwe"),align="center"),
+                                         fluidRow(
+                                         img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
+                                         div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
+                                         ),
                                          br(),
                                          withMathJax(),
                                          p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
@@ -301,6 +309,13 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                             tabPanel(strong("Methodology"),
                                      
                                       fluidRow(
+                                        column(
+                                          12,
+                                          h1(strong("Overview of Methodology")),
+                                          img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                          div(tags$caption("Figure 4: Overview of Methodology"),align="center")
+                                        ),
+                                        br(),
                                        box(
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
@@ -464,33 +479,36 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            p("After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
                                            p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
                                      
+                                     
                                      fluidRow(
-                                     box(
-                                       width = 12,
+                                       style = "margin-left: 100px; margin-right: 100px;",
+                                       h1(strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"), 
+                                          style = "font-size:35px;")
+                                       #align = "center",
+                                     ),
+                                     #fluidRow(
+                                       #style = "margin-left: 100px; margin-right: 100px;",
+                                       #h1(strong("Enhanced Vegetation Index (EVI) 2011"), 
+                                          #style = "font-size:35px;"),
+                                       #align = "center"),
+                                     
+                                     fluidRow(
+                                       
+                                       column(
+                                       8,
+                                       withSpinner(slickROutput("my_slick_evi"))
+                                     ),
+                                     column(
+                                       width = 3,
                                        withMathJax(),
                                        title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
-                                       p("The line graphs above show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February. The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+                                       p(h3("Description")),
+                                       p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February. The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
                                        
-                                     )),
-                                       
-                                     fluidRow(
-                                     box(width = 6,
-                                           withSpinner(img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                                       #div(tags$caption("Figure 2: EVI of Zimbabwe"),align="center")
-                                                       ),
-                                           title = "Enhanced Vegetation Index (EVI) 2011"
-                                           #width = 6,
-                                           #height = 600
-                                       ),
+                                     )
                                      
-                                     box(width = 6,
-                                       withSpinner(img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                                   #div(tags$caption("Figure 2: EVI of Zimbabwe"),align="center")
-                                       ),
-                                       title = "Enhanced Vegetation Index (EVI) 2017"
-                                       #width = 6,
-                                       #height = 600
-                                     ))
+                                     
+                                     )
                                      
                                      
                                        
@@ -500,20 +518,22 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             tabPanel(
                               strong("Precipitation"),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Precipitation Index (TRMM 3B42)"), 
                                    style = "font-size:35px;"),
                                 align = "center"
                               ),
                               fluidRow(
-                                p(strong("Leaflet: 3-month observation 2011-17"))
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                p(strong("3-month observation 2011-17"))
                               ),
                               fluidRow(
-                                column(2),
-                                column(8, slickROutput("my_slick"), offset = 0, br(),br(),br()),
-                                align = "center"
+                                style = "margin-left: 0px; margin-right: 0px;",
+                                column(12, slickROutput("my_slick"), offset = 0, br(),br(),br())
                                 
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 p("Although the overview of this map is difficult to understand, context will help with that. This map is showing Average Daily Precipitation in December 2010. So given that the map is looking at rain distribution at a daily level most regions we’re seeing similar amounts of rainfall or a lack of variability per region. A day is considered wet if it exceeds 2.95 mm of precipitation based this we can infer that all regions on average were consider to have wet days.
                                                                   This map is showing Average Daily Precipitation (mm) in January 2011. In contrast from December 2010, We start see higher levels of rainfall which lines up the what literature describes to be the wet season Nov – May. We see a concentration of rainfall in North-East regions
                                                                   This is showing that most regions are seeing about 0-2mm of rainfall in February 2011 mentioned in the literature; a day is consider to be dry if the value is less than 2.95 mm. Indicating low levels rain except in region IIA where they’re receive a good amount of rain.
@@ -523,38 +543,41 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                                   In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize.")
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Season"), 
                                    style ="font-size: 25px;"),
-                                align = "center"
+                                align = "left"
                               ),
                               fluidRow(
-                                column(6, img(src = "Totalrainfall_2011.jpeg")), 
-                                column(6, img(src = "Totalrainfall_2017.jpeg"))
+                                style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "totalrainfall_compared.jpg"),
+                                align = "left"
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 column(12, p(strong("Description")) , 
                                        p("This is showing us the total rainfall in the 2010-11 growing season. For Maize production, the ideal range of rainfall is 600-700 mm. Regions I,IIA,IIB, & III at the North-East are observed as receiving more rainfall than its South-Western counterparts. However, It should be noted that Region IV still received the minimum rainfall for an average yield of Maize.This is showing that in all regions minus region v have received a health range of rainfall within the 2016-17 growing season. It should be noted that in region I, exceeded 1000 mm threshold that indicates the maize yield may have declined for this region. In the same light regions IIA,IIB, & III received up towards 1000 mm of rainfall which may have lead to an increase in the maize yield."))
                                 
                               ),
                               fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
                                    style = "font-size: 25px;"),
+                                align = "left"
+                              ),
+                              fluidRow(
+                                style = "margin-left: 70px; margin-right: 100px;",
+                                column(12, img(src = "dry_compared.jpg", height = "100%", width = "100%")),
                                 align = "center"
                               ),
-                            
-                            fluidRow(
-                              column(5, img(src = "numDry10.jpeg")), 
-                              column(6, img(src = "numDry16.jpeg")),
-                              align = "center"
-                            ),
-                            fluidRow(
-                              column(12, p(strong("Description")) ,
-                                     p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
-               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
-               ")
-                              )
                               
-                            )),
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, p(strong("Description")) ,
+                                       p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
+               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
+               "))
+                              )),
                             
                             
                             tabPanel(strong("Soil Moisture"),
@@ -668,8 +691,8 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                             
                             tabPanel(strong("Components of the MPI"),
                                      
-                                     #tabsetPanel(
-                                       tabPanel(title = "2011",
+                                     tabsetPanel(
+                                       tabPanel(title = "\\(M_{0}\\)",
                                      fluidRow(h1(strong("Components of the MPI"), align = "center"),
                                        box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
                                          title = "Components of the MPI for 2011",
@@ -691,7 +714,56 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
 Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
                                            p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                           ))
+                                           ))),
+                                     
+                                     tabPanel(title = "\\(M_{1}\\)",
+                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
+                                                           title = "Components of the MPI for 2011",
+                                                           width = 6,
+                                                           height = 600
+                                                       ),
+                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
+                                                           title = "Components of the MPI for 2017",
+                                                           width = 6,
+                                                           height = 600
+                                                       )),
+                                              
+                                              fluidRow(
+                                                box(
+                                                  
+                                                  width = 12,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                ))),
+                                     
+                                     tabPanel(title = "\\(M_{2}\\)",
+                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
+                                                           title = "Components of the MPI for 2011",
+                                                           width = 6,
+                                                           height = 600
+                                                       ),
+                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
+                                                           title = "Components of the MPI for 2017",
+                                                           width = 6,
+                                                           height = 600
+                                                       )),
+                                              
+                                              fluidRow(
+                                                box(
+                                                  
+                                                  width = 12,
+                                                  withMathJax(),
+                                                  title = "Description",
+                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                )))
+                                     
                                      
                                      
                                      ))),
@@ -699,123 +771,95 @@ Our study uses district-level measures of various MPI components to explore thei
                             
                  
                  ## Tab 3
-                 navbarMenu(strong("MPI and Indices"),
-                          tabPanel(strong("MPI & EVI"),
-                                     
-                                     fluidRow(
-                                       box(img(src = "EVI Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Maximum EVI in the Maize Growing Season",
-                                         width=8,
-                                         height = 600
-                                       ),
-                                         box(
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("We estimated the association between M0, M1, M2 and maximum EVI (which ranges from -1 to +1) in the maize growing season using pooled Ordinary Least Squares (OLS) regression. We also included a year dummy variable (0 for 2011; 1 for 2017) and an interaction term of the year dummy with Max EVI as additional control variables. The table presents the results."),
-                                           p("All else constant, an increase in Max EVI by 0.1 units is associated with a 0.0138 unit increase in the M0 index in 2011 and a 0.0198 unit increase in the M0 index in 2017. These associations are counter-intuitive since a higher maximum EVI is an indication of good maize yield, but the coefficients are not statistically significant."),
-                                           p("An increase in Max EVI by 0.1 units is associated with a 0.0070 unit increase in the M1 index in 2011, ceteris paribus, and a 0.0099 unit increase in the M1 index in 2017, ceteris paribus. On the other hand, an increase in Max EVI by 0.1 units is associated with a 0.0071 unit increase in the M2 index in 2011, ceteris paribus, and a 0.00705 unit increase in the M2 index in 2017, ceteris paribus. These associations again are counter-intuitive, however all coefficients are statistically not significant."),
-                                           p("")
-                                           ),
-                                       box(img(src = "EVI Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
-                                           title = "Selected MPI components & Maximum EVI in the Maize Growing Season",
-                                           width=8,
-                                           height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))
-                                       )),
-                            
-                            tabPanel(strong("MPI & Precipitation"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Precipitation",
-                                         width=8,
-                                         height = 600),
-                                       
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 3.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))),
-                                     fluidRow(
-                                       box(img(src = "Precip Reg_Table 4.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           title = "MPI & Precipitation",
-                                           width=8,
-                                           height = 600),
-                                       
-                                       box(
-                                         
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))
-                                     ),
-                            
-                            
-                            tabPanel(strong("MPI & Soil Moisture"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(img(src = "Soil Reg_Table 1.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Soil Moisture",
-                                         width=8,
-                                         height = 600),
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("Table 1 presents the OLS estimation results of MPI measures from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season. The results in Table 1 show that if average surface soil moisture increases by 10 mm, then poverty index, M0, decreases by 0.0102 units, adjusted poverty gap M1 decreases by 0.0162 units and adjusted poverty severity M2 decreases by 0.01 units. However, none of these associations are statistically significant."))
-                                       ),
-                                     box(img(src = "Soil Reg_Table 2.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                         title = "MPI & Soil Moisture",
-                                         width=8,
-                                         height = 600),
-                                     box(
-                                       
-                                       width = 4,
-                                       withMathJax(),
-                                       title = "Description",
-                                       p("Table 2 presents the OLS estimation results of selected MPI components from the 2017 PICES data against average surface soil moisture index (mm) in the 2016-17 growing season.  
-
-A 10 mm increase in average surface soil moisture is associated with a decrease in the probability of nobody in the household having completed primary school by 0.1. The coefficient is statistically significant at the 5 percent level. On the other hand, a 10 mm increase in average surface soil moisture is associated with an increase in the probability of Lack of Health Visit by 0.1. This coefficient, however, is statistically significant only at the 10 percent level. The association between average surface soil moisture index and the other components of MPI presented in Table 2 are not statistically significant."))
-                                     
-                                     
-                                     )
-                            ),
+navbarMenu(strong("MPI and Indices"),
+           tabPanel(strong("Summary Statistics"),
+                    fluidRow(
+                    style = "margin-left: 0px; margin-right: 0px;",
+                    column(12, slickROutput("my_slick5")),
+                    ),
+                    
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(12,
+                      
+                             p("Summary Statistics and Correlations")))),
+                    
+           tabPanel(strong("MPI & Precipitation"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick2")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           ),
+           tabPanel(strong("MPI & EVI"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick3")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           ),
+           tabPanel(strong("MPI & Soil Moisture"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick4")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           )
+           
+           
+           
+           
+           
+),
                             
                             
                  
@@ -828,11 +872,11 @@ A 10 mm increase in average surface soil moisture is associated with a decrease 
                                    column(6,
                                           h1(strong("Takeaways"),align="center"),
                                           p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe. We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view the explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
-                                          p("From our analyses, we see that EVI... "),
-                                          p("We note that precipitation ..."),
-                                          p("We note that Soil Moisture ..."),
-                                          p("We note that MPI ..."),
-                                          p("Finally,"),
+                                          p("EVI: The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
+                                          p("Precipitation: Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted.")
+                                          #p("We note that MPI ..."),
+                                          #p("Finally,"),
                                    )
                                    
                           )
@@ -948,16 +992,9 @@ A 10 mm increase in average surface soil moisture is associated with a decrease 
                                  p("Nkomozepi, T., & Chung, S.-O. (2012). Assessing the trends and uncertainty of maize net irrigation water requirement estimated from climate change projections for Zimbabwe. Agricultural Water Management, 111, 60–67. https://doi.org/10.1016/j.agwat.2012.05.004 "),
                                  p("Nyakudya, I. W., & Stroosnijder, L. (2011). Water management options based on rainfall analysis for rainfed maize (Zea mays L.) production in Rushinga district, Zimbabwe. Agricultural Water Management, 98(10), 1649–1659. https://doi.org/10.1016/j.agwat.2011.06.002 "),
                                  p("Tadross, M. A., Hewitson, B. C., & Usman, M. T. (2005). The Interannual Variability of the Onset of the Maize Growing Season over South Africa and Zimbabwe. Journal of Climate, 18(16), 3356–3372. https://doi.org/10.1175/jcli3423.1 "),
-                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html "),
-                                 p("Reference"),
-                                 p("Reference"),
-                                 p("Reference")
+                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html ")
 
-                                 
-                                 
-                                 
-                                 
-                                 
+                                
                                  )
                  ),
                  inverse = T)
@@ -971,6 +1008,34 @@ server <- function(input, output) {
   runjs(jscode)
   
 
+#Reading Tables  for front page
+output$table <- renderTable({
+    
+    table <- read_excel("./data/table.xlsx")
+    table
+  }, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2)  
+  
+
+#correlation for 2011
+output$table11 <- renderTable({
+  
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet2")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
+
+
+#Correlation for 2017
+output$table17 <- renderTable({
+  
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet3")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
+
+
+
+  
   # EVI OUTPUTS-------
 output$evi_map_leaflet <- renderLeaflet({
   leaflet(EVIGrow2011) %>% addTiles() %>%  
@@ -993,117 +1058,126 @@ output$evi_map_leaflet <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6)
 })
 
-output$evi_line11 <- renderPlot({
-  GrSs2011Line <- EVI_region_long %>% 
-    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-           Year == 2010|Year == 2011) %>% 
-    filter(!(Year == 2010 & Month == "03")) %>% 
-    filter(!(Year == 2010 & Month == "04")) %>%
-    filter(!(Year == 2010 & Month == "05")) %>%
-    filter(!(Year == 2010 & Month == "02")) %>% 
-    filter(!(Year == 2010 & Month == "01")) %>% 
-    filter(!(Year == 2011 & Month == "10")) %>% 
-    filter(!(Year == 2011 & Month == "11")) %>%
-    filter(!(Year == 2011 & Month == "12")) %>% 
-    group_by(Region, Month) %>% 
-    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
-    mutate(GSOrder = case_when(Month =="10" ~ "1", 
-                               Month =="11" ~ "2",
-                               Month =="12" ~ "3",
-                               Month =="01" ~ "4",
-                               Month =="02" ~ "5",
-                               Month =="03" ~ "6",
-                               Month =="04" ~ "7",
-                               Month =="05" ~ "8"))
-  
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
-  GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
-  
-  GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
-  GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
-  GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
-  
- 
-  # Max EVI
-  GrSs2011Line %>% 
-    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-    geom_line()+
-    #theme(axis.text.x = element_text(angle = 315)) +
-    scale_colour_discrete(guide = 'none') +
-    scale_x_discrete(expand=c(0, 1)) +
-    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-    scale_color_viridis_d(option = "H") +
-    labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
-    xlab("Time(Month)") +
-    ylab("Max EVI")
-  
-})
+output$my_slick_evi <- renderSlickR(
+  slickR(
+    my_images_evi,
+    width = "90%"
+  )
+)
 
-output$evi_line17 <- renderPlot({
-  GrSs2017Line <- EVI_region_long %>% 
-    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-           Year == 2016|Year == 2017) %>% 
-    filter(!(Year == 2016 & Month == "03")) %>% 
-    filter(!(Year == 2016 & Month == "04")) %>%
-    filter(!(Year == 2016 & Month == "05")) %>%
-    filter(!(Year == 2016 & Month == "02")) %>% 
-    filter(!(Year == 2016 & Month == "01")) %>% 
-    filter(!(Year == 2017 & Month == "10")) %>% 
-    filter(!(Year == 2017 & Month == "11")) %>%
-    filter(!(Year == 2017 & Month == "12")) %>% 
-    group_by(Region, Month) %>% 
-    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
-    mutate(GSOrder = case_when(Month =="10" ~ "1", 
-                               Month =="11" ~ "2",
-                               Month =="12" ~ "3",
-                               Month =="01" ~ "4",
-                               Month =="02" ~ "5",
-                               Month =="03" ~ "6",
-                               Month =="04" ~ "7",
-                               Month =="05" ~ "8"))
-  
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
-  GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
-  
-  GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
-  GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
-  GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
-  
-  
-  #write.csv(GrSs2017Line, file = "eviline2017.csv")
-  #GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
-  
-  
-  
-  # Max EVI
-  GrSs2017Line %>% 
-    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-    geom_line()+
-    #theme(axis.text.x = element_text(angle = 315)) +
-    scale_colour_discrete(guide = 'none') +
-    scale_x_discrete(expand=c(0, 1)) +
-    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-    scale_color_viridis_d(option = "H") +
-    labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
-    xlab("Time(Month)") +
-    ylab("Max EVI") 
-  
-  
-})
 
-# PRECIPITATION OUTPUTS
+#output$evi_line11 <- renderPlot({
+#  GrSs2011Line <- EVI_region_long %>% 
+#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+#           Year == 2010|Year == 2011) %>% 
+#    filter(!(Year == 2010 & Month == "03")) %>% 
+#    filter(!(Year == 2010 & Month == "04")) %>%
+#    filter(!(Year == 2010 & Month == "05")) %>%
+#    filter(!(Year == 2010 & Month == "02")) %>% 
+#    filter(!(Year == 2010 & Month == "01")) %>% 
+#    filter(!(Year == 2011 & Month == "10")) %>% 
+#    filter(!(Year == 2011 & Month == "11")) %>%
+#    filter(!(Year == 2011 & Month == "12")) %>% 
+#    group_by(Region, Month) %>% 
+#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+#                               Month =="11" ~ "2",
+#                               Month =="12" ~ "3",
+#                               Month =="01" ~ "4",
+#                               Month =="02" ~ "5",
+#                               Month =="03" ~ "6",
+#                               Month =="04" ~ "7",
+#                               Month =="05" ~ "8"))
+#  
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
+#  
+#  GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
+#  GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
+#  GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
+#  
+# 
+#  # Max EVI
+#  GrSs2011Line %>% 
+#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+#    geom_line()+
+#    #theme(axis.text.x = element_text(angle = 315)) +
+#    scale_colour_discrete(guide = 'none') +
+#    scale_x_discrete(expand=c(0, 1)) +
+#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+#    scale_color_viridis_d(option = "H") +
+#    labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+#    xlab("Time(Month)") +
+#    ylab("Max EVI")
+#  
+#})
+#
+#output$evi_line17 <- renderPlot({
+#  GrSs2017Line <- EVI_region_long %>% 
+#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+#           Year == 2016|Year == 2017) %>% 
+#    filter(!(Year == 2016 & Month == "03")) %>% 
+#    filter(!(Year == 2016 & Month == "04")) %>%
+#    filter(!(Year == 2016 & Month == "05")) %>%
+#    filter(!(Year == 2016 & Month == "02")) %>% 
+#    filter(!(Year == 2016 & Month == "01")) %>% 
+#    filter(!(Year == 2017 & Month == "10")) %>% 
+#    filter(!(Year == 2017 & Month == "11")) %>%
+#    filter(!(Year == 2017 & Month == "12")) %>% 
+#    group_by(Region, Month) %>% 
+#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+#                               Month =="11" ~ "2",
+#                               Month =="12" ~ "3",
+#                               Month =="01" ~ "4",
+#                               Month =="02" ~ "5",
+#                               Month =="03" ~ "6",
+#                               Month =="04" ~ "7",
+#                               Month =="05" ~ "8"))
+#  
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
+#  
+#  GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
+#  GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
+#  GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
+#  
+#  
+#  #write.csv(GrSs2017Line, file = "eviline2017.csv")
+#  #GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+#  
+#  
+#  
+#  # Max EVI
+#  GrSs2017Line %>% 
+#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+#    geom_line()+
+#    #theme(axis.text.x = element_text(angle = 315)) +
+#    scale_colour_discrete(guide = 'none') +
+#    scale_x_discrete(expand=c(0, 1)) +
+#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+#    scale_color_viridis_d(option = "H") +
+#    labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+#    xlab("Time(Month)") +
+#    ylab("Max EVI") 
+#  
+#  
+#})
+
+
+## PRECIPITATION OUTPUTS
 output$my_slick <- renderSlickR(
   slickR(
     my_images,
@@ -1112,7 +1186,7 @@ output$my_slick <- renderSlickR(
 )
 
 
-# SOIL MOISTURE OUTPUTS-------
+## SOIL MOISTURE OUTPUTS-------
 output$MapGraph <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
@@ -1132,7 +1206,7 @@ output$BarGraph <- renderPlot({
   ggplot(BarData, aes(fill=time, y=value, x=region)) + 
     geom_bar(position="dodge", stat="identity")+ 
     labs(color="time") +
-    xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
+    xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
     scale_fill_viridis(discrete=TRUE, direction=-1)
@@ -1165,21 +1239,21 @@ output$MPI_map_2011 <- renderLeaflet({
     reverse = F)
   
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M1_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m1_k3,
               opacity = .6,title= paste("2011 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
@@ -1191,21 +1265,21 @@ output$MPI_map_2011 <- renderLeaflet({
 output$MPI_map_2017 <- renderLeaflet({
 
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = joined_zim$M0_k3,
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m0_k3,
               opacity = .6,title= paste("2017 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
@@ -1214,29 +1288,30 @@ output$MPI_map_2017 <- renderLeaflet({
     hideGroup("M2")
 })
 
+#M0
 output$compo_MPI_11 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_visit_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_visit_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Health Visit") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_assets_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_assets_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Household Assets") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_services_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_services_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Service Access") %>%
@@ -1255,29 +1330,117 @@ output$compo_MPI_11 <- renderLeaflet({
     hideGroup("Service Access")
 })
 
+#M1
+output$compo_MPI_11_m1 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+#M2
+output$compo_MPI_11_m2 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+
+
 output$compo_MPI_17 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
     domain = NULL)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_visit_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_visit_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Health Visit") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_assets_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_assets_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Household Assets") %>%
@@ -1301,6 +1464,132 @@ output$compo_MPI_17 <- renderLeaflet({
   
 })
 
+#M1
+output$compo_MPI_17_m1 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+#M2
+output$compo_MPI_17_m2 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+
+
+
+
+
+output$my_slick2 <- renderSlickR(
+  slickR(
+    my_images2,
+    width = "90%"
+  )
+)
+output$my_slick3 <- renderSlickR(
+  slickR(
+    my_images3,
+    width = "90%"
+  )
+)
+output$my_slick4 <- renderSlickR(
+  slickR(
+    my_images4,
+    width = "90%"
+  )
+)
+
+output$my_slick5 <- renderSlickR(
+  slickR(
+    my_images5,
+    width = "90%"
+  )
+)
 
 }
 
