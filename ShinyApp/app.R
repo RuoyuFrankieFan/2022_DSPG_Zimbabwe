@@ -127,230 +127,102 @@ ui <- navbarPage(title = "Zimbabwe",
                  ),
                  
                  # Tab SoilMoisture-----------------
-                 navbarMenu("Soil Moisture",
-                            ### Surface Soil--------
-                            tabPanel("Surface Soil Moisture",
-                                     
-                                     tabsetPanel(
-                                         tabPanel("Background",
-                                                  fluidRow(style = "margin: 2px;",
-                                                           align = "center",
-                                                           br(""),
-                                                           h1(strong("Why Surface Soil Moisture?")),
-                                                           p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops
-                                                             with too little soil moisture during planting stifling the seed germination
-                                                             and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). 
-                                                             Because most planting activities take place during the first 30 days of the growing season,
-                                                             this is the time period we have chosen to focus on for the Surface soil moisture section of our study.")
-                                                           
-                                                  ),
-                                                  fluidRow(align = "center",
-                                                           p(tags$small(em("References"))),
-                                                           p(tags$small(em("Bolten, J. D., Sazib, N., & Mladenova, I. E. (2018). *Surface_Soil_Moisture_SMAP.pdf*. 
-                                                   NASA Goddard Space Flight Center Retrieved from 
-                                                   <https://gimms.gsfc.nasa.gov/SMOS/SMAP/SoilMoisture_Profile_SMAP.pdf>"
-                                                           ))))
-                                         ),
-                                         tabPanel("Average Surface Soil Moisture Map",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(leafletOutput("SurfMapGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe's natural regions. 
-                                                            The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. 
-                                                            From the visualization we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm),
-                                                            while regions IV and V have extremely dry surface soil moisture (>10mm). These soil moisture levels suggest that while farmers 
-                                                            in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season,
-                                                            farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))
-                                                      
-                                                  )),
-                                         tabPanel("Average Percent Soil Moisture Map",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(leafletOutput("PercMapGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. 
-                                                            The average is taken over the 2016-17 growing season after the first 30 days,
-                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
-                                                      
-                                                  )),
-                                         
-                                         tabPanel("Surface Soil Moisture period conditions",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotOutput("SurfBarGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
-                                                          condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
-                                                          which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
-                                                          and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
-                                                          while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III 
-                                                            having more soil moisture on average than regions IV and V."))
-                                                      
-                                                  )),
-                                         tabPanel("Percent Soil Moisture period conditions",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotOutput("PercBarGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture 
-                                                          condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days,
-                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
-                                                      
-                                                  )),
-                                         
-                                         tabPanel("Surface Soil Moisture Across Time",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotOutput("SurfLineGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season,
-                                                            which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking
-                                                            of soil moisture levels by region remains largely consistent over the time period, the difference between the region
-                                                            with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season.
-                                                            In addition, while regions I -- III experience soil moisture levels above the extremely dry threshold (10mm) as early
-                                                            as November 24th, regions IV and V do not reach those levels until December 9th."))
-                                                      
-                                                  )),
-                                         
-                                         tabPanel("Percent Soil Moisture Across Time",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotOutput("PercLineGraph", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days,
-                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
-                                                      
-                                                  ))
-                                     )),
+                 navbarMenu("Remote sensed Data",
+                            ### Surface Soil-------
+                            tabPanel("Soil Moisture",
+                                        tabsetPanel(
+                                            tabPanel("Surface Soil Moisture",
+                                                 fluidRow(h1(strong("Surface Soil Moisture"), align = "center"),
+                                                          box(withSpinner(leafletOutput("SurfMapGraph", height=520)),
+                                                              title = h4(strong("Average Surface Soil Moisture Map")),
+                                                              width = 8,
+                                                              height = 600
+                                                          ),
+                                                          box(withMathJax(),
+                                                              width = 4,
+                                                              title = "Description",
+                                                              p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
+                                                                      condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
+                                                                      which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
+                                                                      and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
+                                                                      while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III 
+                                                                        having more soil moisture on average than regions IV and V."))),
+                                                 
+                                                 fluidRow(
+                                                     box(img(src = "SurfaceSoilBar.png", height = "80%", width = "80%"),
+                                                         title = h4(strong("Surface Soil Moisture period conditions")),
+                                                         width = 8,
+                                                         ),
+                                                     box(withMathJax(),
+                                                         width = 4,
+                                                         title = "Description",
+                                                         p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
+                                                                      condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
+                                                                      which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
+                                                                      and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
+                                                                      while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III 
+                                                                        having more soil moisture on average than regions IV and V."))),
+                                                 fluidRow(
+                                                     box(img(src = "SurfaceSoilLine.png", height = "80%", width = "80%"),
+                                                         title = h4(strong("Surface Soil Moisture Across Time")),
+                                                         width = 8,
+                                                         ),
+                                                         box(withMathJax(),
+                                                             width = 4,
+                                                             title = "Description",
+                                                             p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season,
+                                                                            which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking
+                                                                            of soil moisture levels by region remains largely consistent over the time period, the difference between the region
+                                                                            with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season.
+                                                                            In addition, while regions I -- III experience soil moisture levels above the extremely dry threshold (10mm) as early
+                                                                            as November 24th, regions IV and V do not reach those levels until December 9th."))),
+                                        ),
+                                        tabPanel("Percent Soil Moisture",
+                                                 fluidRow(h1(strong("Percent Soil Moisture"), align = "center"),
+                                                          box(withSpinner(leafletOutput("PercMapGraph", height=520)),
+                                                              title = h4(strong("Average Percent Soil Moisture Map")),
+                                                              width = 8,
+                                                              height = 600
+                                                          ),
+                                                          box(withMathJax(),
+                                                              width = 4,
+                                                              title = "Description",
+                                                              p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over 
+                                                                the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017.
+                                                                From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average 
+                                                                percent soil moisture decreases in order when going from region I to V. "))),
+                                                 fluidRow(
+                                                     box(img(src = "PercentSoilBar.png", height = "80%", width = "80%"),
+                                                         title = h4(strong("Percent Soil Moisture period conditions")),
+                                                         width = 8,
+                                                     ),
+                                                     box(withMathJax(),
+                                                         width = 4,
+                                                         title = "Description",
+                                                         p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture 
+                                                           condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, 
+                                                           which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the number of wet days 
+                                                           decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly,
+                                                           Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days 
+                                                           as well as having no wet days."))),
+                                                 fluidRow(
+                                                     box(img(src = "SurfaceSoilLine.png", height = "80%", width = "80%"),
+                                                         title = h4(strong("Percent Soil Moisture Across Time")),
+                                                         width = 8,
+                                                     ),
+                                                     box(withMathJax(),
+                                                         width = 4,
+                                                         title = "Description",
+                                                         p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days,
+                                                           which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the relative rankings
+                                                           for regions percent soil moisture remains consistent for the most part although there is a greater range in values across
+                                                           regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture
+                                                           around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. ")))
+                                                 
+                                                     ))
+                 )),
                             
                             
-                            
-                            ### DIstricts ranking--------
-                            tabPanel("Subsurface Soil Moisture",
-                                     #tabName = "rank_60",
-                                     tabsetPanel(
-                                         tabPanel("Ex.1",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotlyOutput("M0_ranking", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("These graphs won't work and are just for example")),
-                                                      box(sliderInput("M0_k_threshold", strong("k-Threshold"), 1, 9, 3),
-                                                          width = 4,
-                                                          footer = slider_caption)
-                                                  )),
-                                         
-                                         tabPanel("Ex.2",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotlyOutput("M1_ranking", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("These graphs won't work and are just for example")),
-                                                      box(sliderInput("M1_k_threshold", strong("k-Threshold"), 1, 9, 3),
-                                                          width = 4,
-                                                          footer = slider_caption)
-                                                  )),
-                                         
-                                         tabPanel("Ex.3",
-                                                  fluidRow(
-                                                      box(width = 8,
-                                                          withSpinner(plotlyOutput("M2_ranking", height = 950))
-                                                      ),
-                                                      box(withMathJax(),
-                                                          width = 4,
-                                                          title = "Description",
-                                                          p("These graphs won't work and are just for example")),
-                                                      box(sliderInput("M2_k_threshold", strong("k-Threshold"), 1, 9, 3),
-                                                          width = 4,
-                                                          footer = slider_caption)
-                                                  ))
-                                     ))
-                            
-                            
-                 ),
-                 ## Tab EVI------------------------------------------------
-                 tabPanel("EVI", 
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   h1(strong("Insert EVI charts"), align = "center"),
-                                   br(),
-                                   h4(strong("VT Data Science for the Public Good (this is for example)"), align = "center"),
-                                   p("The", a(href = 'https://aaec.vt.edu/academics/undergraduate/beyond-classroom/dspg.html', 'Data Science for the Public Good (DSPG) Young Scholars program', target = "_blank"),
-                                     "is a summer immersive program offered by the", a(href = 'https://aaec.vt.edu/index.html', 'Virginia Tech Department of Agricultural and Applied Economics'), 
-                                     "In its second year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
-                                               around critical social issues relevant in the world today. DSPG young scholars conduct research at the intersection of statistics, computation, and the social sciences to 
-                                               determine how information generated within every community can be leveraged to improve quality of life and inform public policy. For more information on program highlights, 
-                                               how to apply, and our annual symposium, please visit", 
-                                     a(href = 'https://aaec.vt.edu/content/aaec_vt_edu/en/academics/undergraduate/beyond-classroom/dspg.html#select=1.html', 'the official VT DSPG website.', target = "_blank")),
-                                   p("", style = "padding-top:10px;")
-                          ),
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   column(6, align = "center",
-                                          h4(strong("(this is for example)")),
-                                          p("", style = "padding-top:10px;"),
-                                          img(src = "team-yang.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-sambath.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-atticus.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-matt.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          p("", style = "padding-top:10px;"),
-                                          p(a(href = 'https://www.linkedin.com/in/yang-cheng-200118191/', 'Yang Cheng', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/sambath-jayapregasham-097803127/', 'Sambath Jayapregasham', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/atticus-rex-717581191/', 'Atticus Rex', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
-                                          p( a(href = 'https://www.linkedin.com/in/matthew-burkholder-297b9119a/', 'Matthew Burkholder', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
-                                          p("", style = "padding-top:10px;")
-                                          
-                                   ),
-                                   column(6, align = "center",
-                                          h4(strong("(this is for example)")),
-                                          p("", style = "padding-top:10px;"),
-                                          img(src = "faculty-chen.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "faculty-gupta.jpg", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "faculty-alwang.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          p("", style = "padding-top:10px;"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/gupta-anubhab.html", 'Dr. Anubhab Gupta', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics)."),
-                                          p("", style = "padding-top:10px;")
-                                   )
-                          ),
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   h4(strong("(this is for example)"), align = "center"),
-                                   p(a(href="https://www.linkedin.com/in/dhiraj-sharma-aa029024/?originalSubdomain=np","Dhiraj Sharma",target='_blank')," (World Bank); "),
-                                   p("Grown Chirongwe",a(href="https://www.zimstat.co.zw/","(Zimbabwe National Statistics Agency)",target="_blank")),
-                                   
-                                   p(em("Disclaimer: "),("This project is an academic exercise conducted by VT-Data Science for the Public Good. The findings, interpretations, and conclusions expressed here do not necessarily reflect the views of the World Bank or the Zimbabwe Statistical Agency."))
-                                   
-                          ),
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   h4(strong("(this is for example)"), align = "center"),
-                                   p("We would like to thank ",a(href="https://www.linkedin.com/in/quentin-stoeffler-7913a035/?originalSubdomain=tr","Dr. Quentin Stoeffler",target='_blank')," for providing us with code of the paper", a(href="https://www.researchgate.net/profile/Jeffrey-Alwang/publication/283241726_Multidimensional_Poverty_in_Crisis_Lessons_from_Zimbabwe/links/56b8978a08ae44bb330d32f2/Multidimensional-Poverty-in-Crisis-Lessons-from-Zimbabwe.pdf","Multidimensional Poverty in Crisis: Lessons from Zimbabwe",target='_blank'),". We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
-                                   
-                          )
-                 ),
                  ## Tab precipitation------------------------------------------------
                  tabPanel("Precipitation", 
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
