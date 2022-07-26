@@ -201,7 +201,8 @@ my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
 my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
 my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png")
 my_images6 <- c("stats_v2_2011.png", "stats_2017.png")
-
+my_images7 <- c("mpi_precip1.png","mpi_precip2.png","mpi_precip3.png","mpi_precip4.png"
+                ,"mpi_precip5.png","mpi_precip6.png","mpi_precip7.png")
 
 ##Join data
 zim_district <- rename(zim_district, District_name = "NAME_2")
@@ -249,11 +250,11 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           
                                           fluidRow(
-                                            div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe"), align="center"),
-                                            img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"), align="center",
+                                            img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align="center",
+                                            div(tags$caption("Figure 1: Project Timeline"), align="center"),
                                           #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
                                           #withSpinner(tableOutput("table")),
-                                          div(tags$caption("Source: FAO"))
+                                          #div(tags$caption("Source: FAO"))
                                           ),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
@@ -406,13 +407,13 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                                          
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
 
-For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
+For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
                                         #br(), 
 p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
 
 p("-   15-20mm are normally the best for vigorous field activity."),
 
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
+p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
                                          tags$br(),
                                        ),
                                        column(
@@ -427,7 +428,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
        rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
        state and \\(d\\) is the number of dimensions for assessing poverty. There 
        are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
-       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, k. The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
+       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, \\(k\\). The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
                                          tags$br(),
                                          p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
        ratio is simply the number of individuals considered to be poor divided by
@@ -693,76 +694,136 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                                        
                                                        
                                               ),
+                                              
+                                              
                                      fluidRow(
                                        box(withSpinner(leafletOutput("SurfMapGraph", height=520)),
-                                           title = "Average Surface Soil Moisture During Planting for the 2016-17 Growing Season",
+                                           title = h1(strong("Average Surface Soil Moisture During Planting for the 2016-17 Growing Season"), 
+                                                      style ="font-size: 25px;"),
                                            width = 8,
                                            height = 600
                                        ),
                                        box(
+                                         align="justify",
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
                                          p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From the visualization, we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm)."),
                                          p("These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
                                      
+                                     
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilBar.png", height = "100%", width = "100%"),
+                                           title = h1(strong("Surface Soil Moisture period conditions"), 
+                                                      style ="font-size: 25px;"),
+                                          width = 8,
+                                       ),
+                                       box(
+                                         align="justify",
+                                         withMathJax(),
+                                           width = 4,
+                                           title = "Description",
+                                           p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
+                                                                      condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
+                                                                      which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
+                                                                      and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
+                                                                      while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III 
+                                                                        having more soil moisture on average than regions IV and V."))),
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilLine.png", height = "100%", width = "100%"),
+                                           title = h1(strong("Surface Soil Moisture Across Time"),
+                                                      style ="font-size: 25px;"),
+                                           width = 8,
+                                       ),
+                                       box(
+                                         align="justify",
+                                         withMathJax(),
+                                           width = 4,
+                                           title = "Description",
+                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season,
+                                                                            which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking
+                                                                            of soil moisture levels by region remains largely consistent over the time period, the difference between the region
+                                                                            with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season.
+                                                                            In addition, while regions I -- III experience soil moisture levels above the extremely dry threshold (10mm) as early
+                                                                            as November 24th, regions IV and V do not reach those levels until December 9th.")))
+                                     
+                                     
+                                     ),
+                                     
 
-                                     #fluidRow(
-                                       box(withSpinner(plotOutput("SurfBarGraph")),
-                                           title = "Soil Moisture At Planting",
-                                           width = 8
-                                           #height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
-                                         p("From this visualization, we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization’s findings of Regions I through III having more soil moisture on average than regions IV and V.")),
-                                       
-                                     #fluidRow(  
-                                     box(withSpinner(plotOutput("SurfLineGraph")),
-                                           title = "Soil Moisture at Planting Times",
-                                           width = 8
-                                           #height = 600
-                                       ),
-                                       box(
-                                         width = 4,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the period."),
-                                         p("the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))),
-                                       
-                                      tabPanel("Percent Soil Moisture",
-                                               fluidRow(style = "margin: 6px;",
-                                                        #h1(strong("Percent Soil Moisture "), align = "center"),
-                                                        p("", style = "padding-top:10px;")
-                                                        
-                                                        
-                                               ),
-                                               
-                                               fluidRow(
-                                                 
-                                                 box(width = 8,
-                                                     withSpinner(leafletOutput("PercMapGraph", height = 520)),
-                                                     title="Average Percent Soil Moisture After Planting in 2016-17 Growing Season",
-                                                     height = 600
-                                                 ),
-                                                 box(withMathJax(),
-                                                     width = 4,
-                                                     title = "Description",
-                                                     p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. 
-                                                            The average is taken over the 2016-17 growing season after the first 30 days,
-                                                            which takes place from December 19th of 2016 to May 29th of 2017."))
-                                                 
-                                                 
-                                                 
-                                               )
-                                               
-                                               
-                                               )
+#                                       #fluidRow(
+#                                         box(withSpinner(plotOutput("SurfBarGraph")),
+#                                             title = "Soil Moisture At Planting",
+#                                             width = 8
+#                                             #height = 600
+#                                         ),
+#                                         box(
+#                                           width = 4,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of 3-day periods is  # taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
+#                                           p("From this visualization, we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. #  Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization’s findings of Regions I through III having more #  soil moisture on average than regions IV and V.")),
+#                                         
+#                                       #fluidRow(  
+#                                       box(withSpinner(plotOutput("SurfLineGraph")),
+#                                             title = "Soil Moisture at Planting Times",
+#                                             width = 8
+#                                             #height = 600
+#                                         ),
+#                                         box(
+#                                           width = 4,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to #  December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the period."),
+#                                           p("the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In#   addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))),
                                         
-                                        
+
+                  tabPanel("Percent Soil Moisture",
+                           fluidRow(h1(strong("Percent Soil Moisture"), align = "center"),
+                                    box(withSpinner(leafletOutput("PercMapGraph", height=520)),
+                                        title = h1(strong("Average Percent Soil Moisture Map"),
+                                                   style ="font-size: 25px;"),
+                                        width = 8,
+                                        height = 600
+                                    ),
+                                    box(withMathJax(),
+                                        width = 4,
+                                        title = "Description",
+                                        p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over 
+                                                                                  the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017.
+                                                                                  From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average 
+                                                                                  percent soil moisture decreases in order when going from region I to V. "))),
+                           fluidRow(
+                             box(img(src = "PercentSoilBar.png", height = "100%", width = "100%"),
+                                 title = h1(strong("Percent Soil Moisture period conditions"),
+                                            style ="font-size: 25px;"),
+                                 width = 8,
+                             ),
+                             box(withMathJax(),
+                                 width = 4,
+                                 title = "Description",
+                                 p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture 
+                                                                             condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, 
+                                                                             which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the number of wet days 
+                                                                             decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly,
+                                                                             Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days 
+                                                                             as well as having no wet days."))),
+                           fluidRow(
+                             box(img(src = "PercentSoilLine.png", height = "100%", width = "100%"),
+                                 title = h1(strong("Percent Soil Moisture Across Time"),
+                                            style ="font-size: 25px;"),
+                                 width = 8,
+                             ),
+                             box(withMathJax(),
+                                 width = 4,
+                                 title = "Description",
+                                 p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days,
+                                                                             which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the relative rankings
+                                                                             for regions percent soil moisture remains consistent for the most part although there is a greater range in values across
+                                                                             regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture
+                                                                             around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. "))))
+                           
+
                                         
                                       ))
                             ), 
@@ -902,7 +963,7 @@ Our study uses district-level measures of various MPI components to explore thei
                                                   title = "Description",
                                                   p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
 Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
                                                 )))
                                      
                                      
@@ -911,10 +972,12 @@ Our study uses district-level measures of various MPI components to explore thei
                             
                             
                  
-                 ## Tab 3
+                 ## Tab 3------------------
 navbarMenu(strong("MPI and Indices"),
            tabPanel(strong("Summary Statistics"),
                     fluidRow(
+                      h1(strong("Summary Statistics"), 
+                         style = "font-size:35px;"), align="center",
                     style = "margin-left: 0px; margin-right: 0px;",
                     column(12, slickROutput("my_slick5"))),
                     
@@ -965,10 +1028,31 @@ navbarMenu(strong("MPI and Indices"),
                     
                     
            tabPanel(strong("MPI & Precipitation"),
+                    tabsetPanel(
+                      tabPanel(strong("Tables"),
+                    fluidRow(
+                      h1(strong("MPI & Precipitation"),align="center", 
+                         style = "font-size:35px;"),
+                      column(
+                        10,
+                        style = "margin-left: 100px; margin-right: 100px;",
+                        align="justify",
+                        withMathJax(),
+                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+                      
+                      )),
+                    
+                    br(),
+                    
                     fluidRow(
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick2")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
@@ -992,13 +1076,63 @@ navbarMenu(strong("MPI and Indices"),
                       )
                       
                     )
+                  )
+                  ,
+                  tabPanel(strong("Regressions"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick7")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 5:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 6:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 7:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                             )
+                    )
+                    )
+                  )
+           
                     
            ),
            tabPanel(strong("MPI & EVI"),
                     fluidRow(
+                      h1(strong("MPI & EVI"), 
+                         style = "font-size:35px;"), align="center",
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick3")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
@@ -1016,9 +1150,12 @@ navbarMenu(strong("MPI and Indices"),
            ),
            tabPanel(strong("MPI & Soil Moisture"),
                     fluidRow(
+                      h1(strong("MPI & Soil Moisture"), 
+                         style = "font-size:35px;"), align="center",
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick4")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
@@ -1872,6 +2009,12 @@ output$my_slick_corr <- renderSlickR(
   slickR(
     my_images6,
     width = "90%"
+  )
+)
+output$my_slick7 <- renderSlickR(
+  slickR(
+    my_images7,
+    width = "60%"
   )
 )
 
