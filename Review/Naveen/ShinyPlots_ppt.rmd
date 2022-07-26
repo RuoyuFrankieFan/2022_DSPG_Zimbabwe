@@ -1,0 +1,608 @@
+
+```{r setup}
+knitr::opts_chunk$set(
+    dev = "png",
+    dpi = 300,
+    echo = FALSE,
+    cache = TRUE,
+    colorize <- function(x, color) {
+     if (knitr::is_latex_output()) {
+      sprintf("\\textcolor{%s}{%s}", color, "\\textbf{x}", x)
+     } else if (knitr::is_html_output()) {
+       sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+     } else x
+   })
+library(pastecs)
+library(Hmisc)
+library(MASS)
+library(RColorBrewer)
+library(openxlsx)  # Call the openxlsx library
+library(stargazer)
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(ggplot2)
+library(viridis)
+library(dotwhisker)
+rm(list = ls())
+#
+# Create custom colorblind friendly colors
+#
+customvermilion <- rgb(213/255,94/255,0/255)
+custombluegreen <- rgb(0/255,158/255,115/255)
+customblue <- rgb(0/255,114/255,178/255)
+customskyblue <- rgb(86/255,180/255,233/255)
+customreddishpurple <- rgb(204/255,121/255,167/255)
+customblack <- rgb(0/255,0/255,0/255)
+customorange <- rgb(230/255,159/255,0/255)
+customyellow <- rgb(240/255,228/255,66/255)
+#
+options(scipen=100)             # scipen > 0 ~> printout toward integers
+options(digits=6)               # display 6 digits
+```
+
+```{r}
+#setwd("D:/Virginia Tech/Summer 2022/Project-Zimbabwe/")
+```
+
+```{r}
+dataraw <- read_csv("./ZimDataReg.csv")
+datareg <- as.data.frame(dataraw) 
+```
+
+
+```{r}
+model1 <- lm(m0_k3 ~ yeard + rainnovdec, data = datareg)
+model2 <- lm(m0_k3 ~ yeard + rainnovjan, data = datareg)
+model3 <- lm(m0_k3 ~ yeard + rainnovfeb, data = datareg)
+model4 <- lm(m0_k3 ~ yeard + rainnovmar, data = datareg)
+model5 <- lm(m0_k3 ~ yeard + rainnovapr, data = datareg)
+model6 <- lm(m0_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model1) #not significant
+summary(model2)
+summary(model3)
+summary(model4)
+summary(model5)
+summary(model6)
+```
+
+```{r}
+m1_df <-
+    broom::tidy(model1) %>% filter(term != "yeard") %>% mutate(model = "Model 1")
+m2_df <-
+    broom::tidy(model2) %>% filter(term != "yeard") %>% mutate(model = "Model 2")
+m3_df <-
+    broom::tidy(model3) %>% filter(term != "yeard") %>% mutate(model = "Model 3")
+m4_df <-
+    broom::tidy(model4) %>% filter(term != "yeard") %>% mutate(model = "Model 4")
+m5_df <-
+    broom::tidy(model5) %>% filter(term != "yeard") %>% mutate(model = "Model 5")
+m6_df <-
+    broom::tidy(model6) %>% filter(term != "yeard") %>% mutate(model = "Model 6")
+
+m0_models <- rbind(m1_df, m2_df, m3_df, m4_df, m5_df, m6_df)
+
+```
+
+<!-- ```{r} -->
+<!-- #without using custom color -->
+<!-- dwplot(m0_models, dodge_size = 0, dot_args = list(size = 5), whisker_args = list(size = 2), -->
+<!--        vline = geom_vline( -->
+<!--            xintercept = 0, -->
+<!--            colour = "grey6", -->
+<!--            linetype = 2 -->
+<!--        ), -->
+<!--        vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"), -->
+<!--        model_order = c("Model 6", "Model 5", "Model 4", "Model 3", "Model 2", "Model 1") -->
+<!--        ) %>% # plot line at zero _behind_coefs -->
+<!--     relabel_predictors( -->
+<!--         c( -->
+<!--             rainnovmay = "Nov-May", -->
+<!--             rainnovapr = "Nov-Apr", -->
+<!--             rainnovmar = "Nov-Mar", -->
+<!--             rainnovfeb = "Nov-Feb", -->
+<!--             rainnovjan = "Nov-Jan", -->
+<!--             rainnovdec = "Nov-Dec" -->
+<!--         ) -->
+<!--     ) + coord_flip() + -->
+<!--     # Setting `base_size` for fit the theme -->
+<!--     # No need to set `base_size` in most usage -->
+<!--     xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") + -->
+<!--     geom_vline(xintercept = 0, -->
+<!--                colour = "grey6", -->
+<!--                linetype = 2) + -->
+<!--     ggtitle("OLS Estimation Of Poverty Headcount Ratio (M0) Using Total Precipitation") + theme_bw() + -->
+<!--     theme( -->
+<!--           legend.position = "none" -->
+<!--     )  -->
+
+<!-- ``` -->
+
+
+
+\vspace{0.1in}
+In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method: ${poverty_i} = \beta_0 + year_i\beta_1 + rain_i\beta_2 + \epsilon$, where $_i$ denotes the districts and $\epsilon$ is the error term. $poverty$ denotes the dependent variables: Poverty Headcount Ratio (M0), Poverty Gap (M1), Square of Poverty Gap (M2) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services. $year$ is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017. $rain$ represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May. 
+\vspace{0.1in}
+The figure above has been presented to show what the default color scheme for dwplot looks like. 
+\vspace{0.1in}
+```{r plot_pptm0}
+#colorblind-friendly custom colors used here on
+dwplot(m0_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 6", "Model 5", "Model 4", "Model 3", "Model 2", "Model 1")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 1: OLS Estimation Of Poverty Headcount Ratio (M0) Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+
+```
+
+\vspace{0.1in}
+Figure 1 presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent level. Similarly, cumulative rainfall across all the months of the growing season have negative associations with poverty headcount, ceteris paribus, and the estimated coefficients are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have important implications for the socio-economic conditions of the people. 
+
+\vspace{0.1in}
+
+```{r}
+model7 <- lm(m1_k3 ~ yeard + rainnovdec, data = datareg)
+model8 <- lm(m1_k3 ~ yeard + rainnovjan, data = datareg)
+model9 <- lm(m1_k3 ~ yeard + rainnovfeb, data = datareg)
+model10 <- lm(m1_k3 ~ yeard + rainnovmar, data = datareg)
+model11 <- lm(m1_k3 ~ yeard + rainnovapr, data = datareg)
+model12 <- lm(m1_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model7) 
+summary(model8)
+summary(model9)
+summary(model10)
+summary(model11)
+summary(model12)
+```
+
+```{r}
+m7_df <-
+    broom::tidy(model7) %>% filter(term != "yeard") %>% mutate(model = "Model 7")
+m8_df <-
+    broom::tidy(model8) %>% filter(term != "yeard") %>% mutate(model = "Model 8")
+m9_df <-
+    broom::tidy(model9) %>% filter(term != "yeard") %>% mutate(model = "Model 9")
+m10_df <-
+    broom::tidy(model10) %>% filter(term != "yeard") %>% mutate(model = "Model 10")
+m11_df <-
+    broom::tidy(model11) %>% filter(term != "yeard") %>% mutate(model = "Model 11")
+m12_df <-
+    broom::tidy(model12) %>% filter(term != "yeard") %>% mutate(model = "Model 12")
+
+m1_models <- rbind(m7_df, m8_df, m9_df, m10_df, m11_df, m12_df)
+
+```
+
+
+```{r}
+dwplot(m1_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 12", "Model 11", "Model 10", "Model 9", "Model 8", "Model 7")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 2: OLS Estimation Of Poverty Gap (M1) Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 2 presents ...
+\vspace{0.1in}
+
+```{r}
+model13 <- lm(m2_k3 ~ yeard + rainnovdec, data = datareg)
+model14 <- lm(m2_k3 ~ yeard + rainnovjan, data = datareg)
+model15 <- lm(m2_k3 ~ yeard + rainnovfeb, data = datareg)
+model16 <- lm(m2_k3 ~ yeard + rainnovmar, data = datareg)
+model17 <- lm(m2_k3 ~ yeard + rainnovapr, data = datareg)
+model18 <- lm(m2_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model13) # not significant
+summary(model14)
+summary(model15)
+summary(model16)
+summary(model17)
+summary(model18)
+```
+
+```{r}
+m13_df <-
+    broom::tidy(model13) %>% filter(term != "yeard") %>% mutate(model = "Model 13")
+m14_df <-
+    broom::tidy(model14) %>% filter(term != "yeard") %>% mutate(model = "Model 14")
+m15_df <-
+    broom::tidy(model15) %>% filter(term != "yeard") %>% mutate(model = "Model 15")
+m16_df <-
+    broom::tidy(model16) %>% filter(term != "yeard") %>% mutate(model = "Model 16")
+m17_df <-
+    broom::tidy(model17) %>% filter(term != "yeard") %>% mutate(model = "Model 17")
+m18_df <-
+    broom::tidy(model18) %>% filter(term != "yeard") %>% mutate(model = "Model 18")
+
+m2_models <- rbind(m13_df, m14_df, m15_df, m16_df, m17_df, m18_df)
+
+```
+
+
+```{r}
+dwplot(m2_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 18", "Model 17", "Model 16", "Model 15", "Model 14", "Model 13")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 3: OLS Estimation Of Squared Poverty Gap (M2) Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 3 presents ...
+\vspace{0.1in}
+
+```{r}
+model19 <- lm(g0_edu_max_k3 ~ yeard + rainnovdec, data = datareg)
+model20 <- lm(g0_edu_max_k3 ~ yeard + rainnovjan, data = datareg)
+model21 <- lm(g0_edu_max_k3 ~ yeard + rainnovfeb, data = datareg)
+model22 <- lm(g0_edu_max_k3 ~ yeard + rainnovmar, data = datareg)
+model23 <- lm(g0_edu_max_k3 ~ yeard + rainnovapr, data = datareg)
+model24 <- lm(g0_edu_max_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model19) 
+summary(model20)
+summary(model21)
+summary(model22)
+summary(model23)
+summary(model24)
+```
+
+```{r}
+m19_df <-
+    broom::tidy(model19) %>% filter(term != "yeard") %>% mutate(model = "Model 19")
+m20_df <-
+    broom::tidy(model20) %>% filter(term != "yeard") %>% mutate(model = "Model 20")
+m21_df <-
+    broom::tidy(model21) %>% filter(term != "yeard") %>% mutate(model = "Model 21")
+m22_df <-
+    broom::tidy(model22) %>% filter(term != "yeard") %>% mutate(model = "Model 22")
+m23_df <-
+    broom::tidy(model23) %>% filter(term != "yeard") %>% mutate(model = "Model 23")
+m24_df <-
+    broom::tidy(model24) %>% filter(term != "yeard") %>% mutate(model = "Model 24")
+
+maxedu_models <- rbind(m19_df, m20_df, m21_df, m22_df, m23_df, m24_df)
+
+```
+
+
+```{r}
+dwplot(maxedu_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 24", "Model 23", "Model 22", "Model 21", "Model 20", "Model 19")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 4: OLS Estimation Of Max Educ. Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 4 presents ...
+\vspace{0.1in} 
+
+```{r}
+model25 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovdec, data = datareg)
+model26 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovjan, data = datareg)
+model27 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovfeb, data = datareg)
+model28 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovmar, data = datareg)
+model29 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovapr, data = datareg)
+model30 <- lm(g0_hea_chronic_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model25) 
+summary(model26) # not significant
+summary(model27) # not significant
+summary(model28)
+summary(model29)
+summary(model30)
+```
+
+```{r}
+m25_df <-
+    broom::tidy(model25) %>% filter(term != "yeard") %>% mutate(model = "Model 25")
+m26_df <-
+    broom::tidy(model26) %>% filter(term != "yeard") %>% mutate(model = "Model 26")
+m27_df <-
+    broom::tidy(model27) %>% filter(term != "yeard") %>% mutate(model = "Model 27")
+m28_df <-
+    broom::tidy(model28) %>% filter(term != "yeard") %>% mutate(model = "Model 28")
+m29_df <-
+    broom::tidy(model29) %>% filter(term != "yeard") %>% mutate(model = "Model 29")
+m30_df <-
+    broom::tidy(model30) %>% filter(term != "yeard") %>% mutate(model = "Model 30")
+
+chronic_models <- rbind(m25_df, m26_df, m27_df, m28_df, m29_df, m30_df)
+
+```
+
+
+```{r}
+dwplot(chronic_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 30", "Model 29", "Model 28", "Model 27", "Model 26", "Model 25")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 5: OLS Estimation Of Chronic Illness Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 5 presents ...
+\vspace{0.1in}
+
+```{r}
+model31 <- lm(g0_assets_k3 ~ yeard + rainnovdec, data = datareg)
+model32 <- lm(g0_assets_k3 ~ yeard + rainnovjan, data = datareg)
+model33 <- lm(g0_assets_k3 ~ yeard + rainnovfeb, data = datareg)
+model34 <- lm(g0_assets_k3 ~ yeard + rainnovmar, data = datareg)
+model35 <- lm(g0_assets_k3 ~ yeard + rainnovapr, data = datareg)
+model36 <- lm(g0_assets_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model31) # not significant
+summary(model32) # not significant
+summary(model33) 
+summary(model34)
+summary(model35)
+summary(model36)
+```
+
+```{r}
+m31_df <-
+    broom::tidy(model31) %>% filter(term != "yeard") %>% mutate(model = "Model 31")
+m32_df <-
+    broom::tidy(model32) %>% filter(term != "yeard") %>% mutate(model = "Model 32")
+m33_df <-
+    broom::tidy(model33) %>% filter(term != "yeard") %>% mutate(model = "Model 33")
+m34_df <-
+    broom::tidy(model34) %>% filter(term != "yeard") %>% mutate(model = "Model 34")
+m35_df <-
+    broom::tidy(model35) %>% filter(term != "yeard") %>% mutate(model = "Model 35")
+m36_df <-
+    broom::tidy(model36) %>% filter(term != "yeard") %>% mutate(model = "Model 36")
+
+asset_models <- rbind(m31_df, m32_df, m33_df, m34_df, m35_df, m36_df)
+
+```
+
+
+```{r}
+dwplot(asset_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 36", "Model 35", "Model 34", "Model 33", "Model 32", "Model 31")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 6: OLS Estimation Of Lack of HH Assets Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 6 presents ...
+\vspace{0.1in}
+
+```{r}
+model37 <- lm(g0_services_k3 ~ yeard + rainnovdec, data = datareg)
+model38 <- lm(g0_services_k3 ~ yeard + rainnovjan, data = datareg)
+model39 <- lm(g0_services_k3 ~ yeard + rainnovfeb, data = datareg)
+model40 <- lm(g0_services_k3 ~ yeard + rainnovmar, data = datareg)
+model41 <- lm(g0_services_k3 ~ yeard + rainnovapr, data = datareg)
+model42 <- lm(g0_services_k3 ~ yeard + rainnovmay, data = datareg)
+
+summary(model37) 
+summary(model38) 
+summary(model39) 
+summary(model40)
+summary(model41)
+summary(model42)
+```
+
+```{r}
+m37_df <-
+    broom::tidy(model37) %>% filter(term != "yeard") %>% mutate(model = "Model 37")
+m38_df <-
+    broom::tidy(model38) %>% filter(term != "yeard") %>% mutate(model = "Model 38")
+m39_df <-
+    broom::tidy(model39) %>% filter(term != "yeard") %>% mutate(model = "Model 39")
+m40_df <-
+    broom::tidy(model40) %>% filter(term != "yeard") %>% mutate(model = "Model 40")
+m41_df <-
+    broom::tidy(model41) %>% filter(term != "yeard") %>% mutate(model = "Model 41")
+m42_df <-
+    broom::tidy(model42) %>% filter(term != "yeard") %>% mutate(model = "Model 42")
+
+services_models <- rbind(m37_df, m38_df, m39_df, m40_df, m41_df, m42_df)
+
+```
+
+
+```{r}
+dwplot(services_models, dodge_size = 0, dot_args = list(size = 5, color=customblue), whisker_args = list(size = 2, color=customblue),
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "grey6",
+           linetype = 2
+       ),
+       vars_order = c("rainnovmay", "rainnovapr", "rainnovmar", "rainnovfeb", "rainnovjan", "rainnovdec"),
+       model_order = c("Model 42", "Model 41", "Model 40", "Model 39", "Model 38", "Model 37")
+       ) %>% # plot line at zero _behind_coefs
+    relabel_predictors(
+        c(
+            rainnovmay = "Nov-May",
+            rainnovapr = "Nov-Apr",
+            rainnovmar = "Nov-Mar",
+            rainnovfeb = "Nov-Feb",
+            rainnovjan = "Nov-Jan",
+            rainnovdec = "Nov-Dec"
+        )
+    ) + coord_flip() +
+    # Setting `base_size` for fit the theme
+    # No need to set `base_size` in most usage
+    xlab("Coefficient Estimate") + ylab("Rainfall (100 mm)") +
+    geom_vline(xintercept = 0,
+               colour = "grey6",
+               linetype = 2) +
+    ggtitle("Fig. 7: OLS Estimation Of Lack of Access to Services Using Precipitation") + theme_bw() +
+    theme(
+          legend.position = "none"
+    ) 
+
+```
+\vspace{0.1in}
+Figure 7 presents ...
+\vspace{0.1in}
+
+
+
+
+
+
+
