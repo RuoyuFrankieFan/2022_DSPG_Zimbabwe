@@ -201,7 +201,8 @@ my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
 my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
 my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png")
 my_images6 <- c("stats_v2_2011.png", "stats_2017.png")
-
+my_images7 <- c("mpi_precip1.png","mpi_precip2.png","mpi_precip3.png","mpi_precip4.png"
+                ,"mpi_precip5.png","mpi_precip6.png","mpi_precip7.png")
 
 ##Join data
 zim_district <- rename(zim_district, District_name = "NAME_2")
@@ -1027,6 +1028,8 @@ navbarMenu(strong("MPI and Indices"),
                     
                     
            tabPanel(strong("MPI & Precipitation"),
+                    tabsetPanel(
+                      tabPanel(strong("Tables"),
                     fluidRow(
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick2")),
@@ -1054,6 +1057,53 @@ navbarMenu(strong("MPI and Indices"),
                       )
                       
                     )
+                  )
+                  ,
+                  tabPanel(strong("Regressions"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick7")),
+                      column(4, 
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 5:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 6:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 7:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                             )
+                    )
+                    )
+                  )
+           
                     
            ),
            tabPanel(strong("MPI & EVI"),
@@ -1931,6 +1981,12 @@ output$my_slick_corr <- renderSlickR(
   slickR(
     my_images6,
     width = "90%"
+  )
+)
+output$my_slick7 <- renderSlickR(
+  slickR(
+    my_images7,
+    width = "60%"
   )
 )
 
