@@ -234,8 +234,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                    #fluidRow(style = "margin: 2px;",
-                                             #img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    fluidRow(style = "margin: 2px;",
+                                             img(src = "corn-field.jpg", height="100", width="1000", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -258,7 +258,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           ),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
-                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
+                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
                                    column(4,
@@ -290,7 +290,7 @@ ui <- navbarPage(title = "Zimbabwe",
                             column(
                               align="center",
                               12,
-                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
                               withSpinner(tableOutput("table")),
                               div(tags$caption("Source: FAO")),
                             )
@@ -316,9 +316,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
                                          p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
-                                         #fluidRow(
-                                         #img(src = "spectralfingerprints.jpg", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
-                                         #div(tags$caption("Figure 4: Spectral signatures of different Earth features within the visible light spectrum. Credit: Jeannie Allen."),align="center")),
+                                         
+                                         fluidRow(
+                                         img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
+                                         div(tags$caption("Figure 4: Remote Sensing"),align="center")),
                                          
                                          #br(),
                                          #p("In this project we source data for the following remote sensed data:"),
