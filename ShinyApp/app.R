@@ -406,13 +406,13 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                                          
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
 
-For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
+For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
                                         #br(), 
 p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
 
 p("-   15-20mm are normally the best for vigorous field activity."),
 
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
+p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
                                          tags$br(),
                                        ),
                                        column(
@@ -427,7 +427,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
        rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
        state and \\(d\\) is the number of dimensions for assessing poverty. There 
        are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
-       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, k. The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
+       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, \\(k\\). The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
                                          tags$br(),
                                          p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
        ratio is simply the number of individuals considered to be poor divided by
@@ -962,7 +962,7 @@ Our study uses district-level measures of various MPI components to explore thei
                                                   title = "Description",
                                                   p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
 Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
                                                 )))
                                      
                                      
@@ -971,7 +971,7 @@ Our study uses district-level measures of various MPI components to explore thei
                             
                             
                  
-                 ## Tab 3
+                 ## Tab 3------------------
 navbarMenu(strong("MPI and Indices"),
            tabPanel(strong("Summary Statistics"),
                     fluidRow(
@@ -1028,9 +1028,28 @@ navbarMenu(strong("MPI and Indices"),
                     
            tabPanel(strong("MPI & Precipitation"),
                     fluidRow(
+                      h1(strong("MPI & Precipitation"),align="center", 
+                         style = "font-size:35px;"),
+                      column(
+                        10,
+                        style = "margin-left: 100px; margin-right: 100px;",
+                        align="justify",
+                        withMathJax(),
+                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+                      
+                      )),
+                    
+                    br(),
+                    
+                    fluidRow(
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick2")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
@@ -1058,9 +1077,12 @@ navbarMenu(strong("MPI and Indices"),
            ),
            tabPanel(strong("MPI & EVI"),
                     fluidRow(
+                      h1(strong("MPI & EVI"), 
+                         style = "font-size:35px;"), align="center",
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick3")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
@@ -1078,9 +1100,12 @@ navbarMenu(strong("MPI and Indices"),
            ),
            tabPanel(strong("MPI & Soil Moisture"),
                     fluidRow(
+                      h1(strong("MPI & Soil Moisture"), 
+                         style = "font-size:35px;"), align="center",
                       style = "margin-left: 0px; margin-right: 0px;",
                       column(8, slickROutput("my_slick4")),
-                      column(4, 
+                      column(4,
+                             align="justify",
                              p(
                                "Table 1:
                       This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
