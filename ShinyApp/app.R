@@ -100,7 +100,8 @@ zim_region <- rename(zim_region, Region = "nat_region")
 #Map palette
 mypal <- colorNumeric(
   palette = "viridis",
-  domain = NULL)
+  domain = NULL,
+  reverse = TRUE)
 
 
 #EVI DATA
