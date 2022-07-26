@@ -995,9 +995,10 @@ navbarMenu(strong("MPI and Indices"),
                         width = 5,
                         withMathJax(),
                         title = strong("Summary Statistics and Correlations", align="center"),
-                        p(h3("Description")),
-                        p("some text"), 
-                        p("more text")
+                        p(h3("Summary Statistics")),
+                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in 2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
+
+In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum EVI is also higher in 2016-17 compared that in 2010-11."), 
                         
                       )
                       
@@ -1008,9 +1009,18 @@ navbarMenu(strong("MPI and Indices"),
                         7,
                         img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
                         div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                      ),
+                      
+                      column(
+                        align="justify",
+                        width = 5,
+                        withMathJax(),
+                        title = strong("Summary Statistics and Correlations", align="center"),
+                        p(h3("Correlation Matrices")),
+                        
+                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
+                        
                       )
-                      
-                      
                       
                     ),
                     
@@ -1056,12 +1066,9 @@ navbarMenu(strong("MPI and Indices"),
                              align="justify",
                              p(
                                "
-                               Figure 1:
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the 
-                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
-                               level. Similarly, cumulative rainfall across all the months of the growing season have negative associations with poverty headcount, ceteris paribus, and the estimated coefficients 
-                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
-                               important implications for the socio-economic conditions of the people.
+                               Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
                                "
                              ),
                              p(
@@ -1090,39 +1097,37 @@ navbarMenu(strong("MPI and Indices"),
                       column(8, slickROutput("my_slick7")),
                       column(4, 
                              p(
-                               "Table 1:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figure 1: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the 
+                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
+                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients 
+                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
+                               important implications for the socio-economic conditions of the people.  
+                               "
                              ),
                              p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figure 2: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (M1). Similar to Figure 1, the coefficients are all negative and 
+                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting 
+                               (Nov-Dec) has the highest absolute magnitude.  
+                               "
                              ),
                              p(
-                               "Table 3:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                              Figure 3:  
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (M2). Once again, the coefficients are all negative and 
+                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
+                               "
                              ),
                              p(
-                               "Table 4:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 5:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 6:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 7:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figures 4 – 7: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of 
+                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services 
+                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
+                               "
                              )
                              )
                     )
