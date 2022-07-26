@@ -974,7 +974,7 @@ Our study uses district-level measures of various MPI components to explore thei
 navbarMenu(strong("MPI and Indices"),
            tabPanel(strong("Summary Statistics"),
                     fluidRow(
-                      h1(strong("Summary Staistics"), 
+                      h1(strong("Summary Statistics"), 
                          style = "font-size:35px;"), align="center",
                     style = "margin-left: 0px; margin-right: 0px;",
                     column(12, slickROutput("my_slick5"))),
