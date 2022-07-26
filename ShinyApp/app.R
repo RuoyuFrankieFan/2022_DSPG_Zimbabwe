@@ -918,18 +918,51 @@ navbarMenu(strong("MPI and Indices"),
                     style = "margin-left: 0px; margin-right: 0px;",
                     column(12, slickROutput("my_slick5"))),
                     
+                    
                     fluidRow(
-                    column(12,
-                           p("Summary Statistics and Correlations")))
-                    
-                  #  fluidRow(
-                  #    style = "margin-left: 0px; margin-right: 0px;",
-                  #    column(12, slickROutput("my_slick_corr")),
-                  #    column(12,
-                  #           p("Summary Statistics and Correlations")))
-                    
-                    
+                      column(
+                        7,
+                        img(src = "stats_v2_2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                        div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+                      ),
+                      
+                      column(
+                        align="justify",
+                        width = 5,
+                        withMathJax(),
+                        title = strong("Summary Statistics and Correlations", align="center"),
+                        p(h3("Description")),
+                        p("some text"), 
+                        p("more text")
+                        
+                      )
+                      
                     ),
+                    
+                    fluidRow(
+                      column(
+                        7,
+                        img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                        div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                      )
+                      
+                      
+                      
+                    ),
+                    
+                    #fluidRow(
+                    #column(12,
+                    #p("Summary Statistics and Correlations"))),
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+           ),
+                    
+                    
                     
            tabPanel(strong("MPI & Precipitation"),
                     fluidRow(
