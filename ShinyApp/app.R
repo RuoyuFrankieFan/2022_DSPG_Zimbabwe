@@ -242,6 +242,7 @@ ui <- navbarPage(title = "Zimbabwe",
                           
                           fluidRow(style = "margin: 6px;",
                                    column(4,
+                                          align="justify",
                                           h2(strong("Project Overview"), align = "center"),
                                           p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
@@ -255,6 +256,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                    
                                    
                                    column(4,
+                                          align="justify",
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
                                           p("Zimbabwe is located at the Southeastern tip of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
                                             p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
@@ -265,6 +267,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                             p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive.")),
                                    
                                    column(4,
+                                          align="justify",
                                           h2(strong("Agricultural Profile"), align = "center"),
                                           p("89% of farmers in Zimbabwe are smallholders (farmers with limited recources that work on small plots of land, have little technology, and typically rely on family for labor, and rain for their crops (Kuhudzayi & Mattos, 2018)) who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
                                           p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
@@ -290,7 +293,9 @@ ui <- navbarPage(title = "Zimbabwe",
                             tabPanel(strong("Data"),
                                     
                                      fluidRow(
-                                       box(
+                                       column(
+                                         h1(strong("Remote Sensed Data")),
+                                         align="justify",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
@@ -300,10 +305,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
                                          p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
                                          #br(),
-                                         fluidRow(
-                                         img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
-                                         div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
-                                         ),
+                                         #fluidRow(
+                                         #img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
+                                         #div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
+                                         #),
                                          br(),
                                          withMathJax(),
                                          p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
@@ -312,12 +317,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                          p("Tropical Rainfall Measuring Mission (TRMM) 3B42 is a Google Earth Engine (GEE) index containing observations on all forms of tropical precipitation such as snow, rain, and drizzle. The dataset is provided by NASA Goddard Earth Sciences Data and Information Services Center (GES DISC) at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm, in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates result in a dataset. The data is produced over a 3-hour period, and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                          
                                          h3(strong("Soil Moisture")),
-                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This correction is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
+                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This correction is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012).")),
                                          
-                                         br()),
+                                         #br(),
                                          
-                                         box(
-                                           
+                                         column(
+                                           h1(strong("PICES Data")),
+                                           align="justify",
                                            width = 6,
                                            withMathJax(),
                                            title = h1(strong("PICES Data")),
@@ -345,12 +351,15 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                                       fluidRow(
                                         column(
                                           12,
+                                          #align="justify",
                                           h1(strong("Overview of Methodology")),
                                           img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
                                           div(tags$caption("Figure 4: Overview of Methodology"),align="center")
                                         ),
                                         br(),
-                                       box(
+                                       column(
+                                         h3(strong("Remote Sensed data Methodology")),
+                                         align="justify",
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
                                          width = 6,
@@ -385,7 +394,9 @@ p("-   15-20mm are normally the best for vigorous field activity."),
 p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
                                          tags$br(),
                                        ),
-                                       box(
+                                       column(
+                                         h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
+                                         align="justify",
                                          withMathJax(),
                                          title = h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
                                          width = 6,
@@ -456,34 +467,40 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             tabPanel(strong("Resources"), 
                                      fluidPage(
                                        column(6,
+                                              align="justify",
                                               h3(strong("Google Earth Engine")),
                                               img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
                                        column(6,
+                                              align="justify",
                                               h3(strong("Google Maps")),
                                               img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
                                               p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine."))),
                                      column(6,
+                                            align="justify",
                                             h3(strong("Google Colab")),
                                             img(src = "colab.png", style = "display: inline; float: left;", width = "140px"),
                                             withMathJax(), 
                                             p("Google Colab Colaboratory, or “Colab” for short, is a product from Google Research. Colab allows anybody to write and execute arbitrary python code through the browser, and is especially well suited to machine learning, data analysis and education. We used Google Colab to gather weather information behind the Google Earth Engine.")),
                                      column(6,
+                                            align="justify",
                                             h3(strong("GitHub")),
                                             img(src = "github.png", style = "display: inline; float: left;", width = "140px"),
                                             withMathJax(), 
                                             p("GitHub, Inc. is a provider of Internet hosting for software development and version control using Git. It offers the distributed version control and source code management functionality of Git, plus its own features. We used GitHub to host our data and codes. ")),
                                        
                                      column(6,
+                                            align="justify",
                                               h3(strong("2021 DSPG - Zimbabwe Project")),
                                               img(src = "DSPG_black-01.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
                                               p("We used the the MPI computed from the 2021 DSPG Zimbabwe project", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), "to analyse the link with weather information from the Google Earth Engine.")),
                                        
                                        column(6,
+                                              align="justify",
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
@@ -499,13 +516,18 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
                                      fluidRow(h1(strong("Enhanced Vegetation Index"), align = "center"),
-                                       box(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
+                                              style = "margin-left: 10px; margin-right: 10px;",
+                                              h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"),
+                                              column(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
+                                              align="justify",
+                                             
                                          title = "Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons",
                                          width = 8,
                                          height = 600
                                        ),
-                                         box(
-                                           
+                                         column(
+                                           h3("Description"),
+                                           align="justify",
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
@@ -513,33 +535,44 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            p("After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
                                            p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
                                      
+                                     br(),
                                      
                                      fluidRow(
-                                       style = "margin-left: 100px; margin-right: 100px;",
-                                       h1(strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"), 
-                                          style = "font-size:35px;")
+                                       style = "margin-left: 10px; margin-right: 10px;",
+                                       h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"), 
+                                          style = "font-size:35px;"
                                        #align = "center",
                                      ),
-                                     #fluidRow(
-                                       #style = "margin-left: 100px; margin-right: 100px;",
-                                       #h1(strong("Enhanced Vegetation Index (EVI) 2011"), 
-                                          #style = "font-size:35px;"),
-                                       #align = "center"),
-                                     
+                                    
                                      fluidRow(
                                        
                                        column(
                                        8,
-                                       withSpinner(slickROutput("my_slick_evi"))
+                                       #withSpinner(slickROutput("my_slick_evi"))
+                                       img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                       div(tags$caption("Figure: 2011"),align="center")
                                      ),
+                                     
                                      column(
-                                       width = 3,
+                                       align="justify",
+                                       width = 4,
                                        withMathJax(),
                                        title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
                                        p(h3("Description")),
-                                       p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February. The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+                                       p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
+                                       p("The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
                                        
                                      )
+                                     
+                                     
+                                     ),
+                                     
+                                     fluidRow(
+                                       column(
+                                         8,
+                                         img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                         div(tags$caption("Figure: 2017"),align="center")
+                                       )
                                      
                                      
                                      )
