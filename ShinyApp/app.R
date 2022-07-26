@@ -1054,9 +1054,14 @@ navbarMenu(strong("MPI and Indices"),
                       column(4,
                              align="justify",
                              p(
-                               "Table 1:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figure 1:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the 
+                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
+                               level. Similarly, cumulative rainfall across all the months of the growing season have negative associations with poverty headcount, ceteris paribus, and the estimated coefficients 
+                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
+                               important implications for the socio-economic conditions of the people.
+                               "
                              ),
                              p(
                                "Table 2:
