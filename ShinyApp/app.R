@@ -247,9 +247,11 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           
-                                          div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
-                                          withSpinner(tableOutput("table")),
-                                          div(tags$caption("Source: FAO")),
+                                          img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe"), align="center"),
+                                          #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                                          #withSpinner(tableOutput("table")),
+                                          #div(tags$caption("Source: FAO")),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
                                           p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
@@ -280,7 +282,17 @@ ui <- navbarPage(title = "Zimbabwe",
                                           
                                           )
                                           ),
-                          
+                          fluidRow(
+                            column(
+                              align="center",
+                              12,
+                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                              withSpinner(tableOutput("table")),
+                              div(tags$caption("Source: FAO")),
+                            )
+                          ),
+                          br(),
+                          br(),
 
                           
                           fluidRow(align = "center",
@@ -755,8 +767,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          ),
                                      
                                      fluidRow(
-                                       box(
-                                         
+                                       column(
+                                         align="justify",
+                                         h3("Description"),
                                          width = 6,
                                          withMathJax(),
                                          title = "Description",
@@ -772,7 +785,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          ),
                                          p("In this study, we use MPI that has been calculated using k=3 as the threshold.
 For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
-                                       box(
+                                       
+                                       column(
+                                         align="justify",
+                                         h3("Descriptive Analysis"),
                                          withMathJax(),
                                          title = strong("Descriptive Analysis"),
                                          width = 6,
@@ -831,7 +847,7 @@ Our study uses district-level measures of various MPI components to explore thei
                                               
                                               fluidRow(
                                                 box(
-                                                  
+                                                  align="justify",
                                                   width = 12,
                                                   withMathJax(),
                                                   title = "Description",
@@ -855,7 +871,7 @@ Our study uses district-level measures of various MPI components to explore thei
                                               
                                               fluidRow(
                                                 box(
-                                                  
+                                                  align="justify",
                                                   width = 12,
                                                   withMathJax(),
                                                   title = "Description",
@@ -976,6 +992,7 @@ navbarMenu(strong("MPI and Indices"),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    column(3),
                                    column(6,
+                                          align="justify",
                                           h1(strong("Takeaways"),align="center"),
                                           p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe. We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view the explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
                                           p("EVI: The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
@@ -998,6 +1015,7 @@ navbarMenu(strong("MPI and Indices"),
                                    h1(strong("Project Team"), align = "center"),
                                    br(),
                                    h4(strong("VT Data Science for the Public Good"), align = "center"),
+                                   align="justify",
                                    p("The", a(href = 'https://aaec.vt.edu/academics/undergraduate/beyond-classroom/dspg.html', 'Data Science for the Public Good (DSPG) Young Scholars program', target = "_blank"),
                                      "is a summer immersive program offered by the", a(href = 'https://aaec.vt.edu/index.html', 'Virginia Tech Department of Agricultural and Applied Economics'), 
                                      "In its third year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
