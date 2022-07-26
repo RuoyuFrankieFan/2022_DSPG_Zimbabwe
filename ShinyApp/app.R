@@ -994,9 +994,10 @@ navbarMenu(strong("MPI and Indices"),
                         width = 5,
                         withMathJax(),
                         title = strong("Summary Statistics and Correlations", align="center"),
-                        p(h3("Description")),
-                        p("some text"), 
-                        p("more text")
+                        p(h3("Summary Statistics")),
+                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in 2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
+
+In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum EVI is also higher in 2016-17 compared that in 2010-11."), 
                         
                       )
                       
@@ -1007,9 +1008,18 @@ navbarMenu(strong("MPI and Indices"),
                         7,
                         img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
                         div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                      ),
+                      
+                      column(
+                        align="justify",
+                        width = 5,
+                        withMathJax(),
+                        title = strong("Summary Statistics and Correlations", align="center"),
+                        p(h3("Correlation Matrices")),
+                        
+                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
+                        
                       )
-                      
-                      
                       
                     ),
                     
