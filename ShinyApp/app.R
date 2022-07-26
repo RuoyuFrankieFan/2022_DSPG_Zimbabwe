@@ -247,11 +247,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           
-                                          img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe"), align="center"),
+                                          fluidRow(
+                                          img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"), align="center",
+                                          div(tags$caption("Figure 1: Sensing Data"), align="center"),
                                           #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
                                           #withSpinner(tableOutput("table")),
                                           #div(tags$caption("Source: FAO")),
+                                          ),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
                                           p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
@@ -264,7 +266,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                             p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
                                           
                                           img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                          div(tags$caption("Figure 1: Livelihood zones in Zimbabwe"), align="center"),
+                                          div(tags$caption("Figure 2: Livelihood zones in Zimbabwe"), align="center"),
                                           br(),
                                             p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive.")),
                                    
@@ -276,7 +278,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           
                                           #h3(em("Regional Specificity"), align = "center"),
                                           img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
-                                          div(tags$caption("Figure 2: Agro-ecological regions of Zimbabwe"), align="center"),
+                                          div(tags$caption("Figure 3: Agro-ecological regions of Zimbabwe"), align="center"),
                                           p(""),
                                           p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
                                           
@@ -314,8 +316,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                          p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019)."),
                                          
                                          fluidRow(
-                                         img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
-                                         div(tags$caption("Figure 3: Remote Sensing"),align="center")),
+                                         img(src = "spectralfingerprints.jpg", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
+                                         div(tags$caption("Figure 4: Spectral signatures of different Earth features within the visible light spectrum. Credit: Jeannie Allen."),align="center")),
                                          
                                          br(),
                                          p("In this project we source data for the following remote sensed data:"),
