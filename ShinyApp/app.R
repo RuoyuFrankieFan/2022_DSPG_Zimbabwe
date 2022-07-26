@@ -248,11 +248,11 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           
                                           fluidRow(
-                                          img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"), align="center",
-                                          div(tags$caption("Figure 1: Sensing Data"), align="center"),
+                                            div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe"), align="center"),
+                                            img(src = "stat_agregion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "80%"), align="center",
                                           #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
                                           #withSpinner(tableOutput("table")),
-                                          #div(tags$caption("Source: FAO")),
+                                          div(tags$caption("Source: FAO"))
                                           ),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
@@ -313,14 +313,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019)."),
+                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
+                                         #fluidRow(
+                                         #img(src = "spectralfingerprints.jpg", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
+                                         #div(tags$caption("Figure 4: Spectral signatures of different Earth features within the visible light spectrum. Credit: Jeannie Allen."),align="center")),
                                          
-                                         fluidRow(
-                                         img(src = "spectralfingerprints.jpg", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
-                                         div(tags$caption("Figure 4: Spectral signatures of different Earth features within the visible light spectrum. Credit: Jeannie Allen."),align="center")),
-                                         
-                                         br(),
-                                         p("In this project we source data for the following remote sensed data:"),
+                                         #br(),
+                                         #p("In this project we source data for the following remote sensed data:"),
                                          #h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
