@@ -311,14 +311,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019)."),
-                                         
-                                         fluidRow(
-                                         img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
-                                         div(tags$caption("Figure 3: Remote Sensing"),align="center")),
-                                         
-                                         br(),
-                                         p("In this project we source data for the following remote sensed data:"),
+                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
                                          #h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
@@ -610,8 +603,6 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 align = "center"
                               ),
                               fluidRow(
-                                h1(strong("Comparison of Average Rainfall between 2010 & 2016 Growing Season"), 
-                                   style ="font-size: 25px;"),
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 p(strong("3-month observation 2011-17"))
                               ),
@@ -621,11 +612,14 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 
                               ),
                               fluidRow(
-                                align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                p("These maps are looking at rain distribution at average daily level. Zimbabwe generally follows previous analysis of  its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. 
-        The Southern region on the other hand receives less rainfall (Nkomozepi & Chung, 2012). In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize. 
-        A day is considered wet if it exceeds 2.95 mm of precipitation. ")
+                                p("Although the overview of this map is difficult to understand, context will help with that. This map is showing Average Daily Precipitation in December 2010. So given that the map is looking at rain distribution at a daily level most regions we’re seeing similar amounts of rainfall or a lack of variability per region. A day is considered wet if it exceeds 2.95 mm of precipitation based this we can infer that all regions on average were consider to have wet days.
+                                                                  This map is showing Average Daily Precipitation (mm) in January 2011. In contrast from December 2010, We start see higher levels of rainfall which lines up the what literature describes to be the wet season Nov – May. We see a concentration of rainfall in North-East regions
+                                                                  This is showing that most regions are seeing about 0-2mm of rainfall in February 2011 mentioned in the literature; a day is consider to be dry if the value is less than 2.95 mm. Indicating low levels rain except in region IIA where they’re receive a good amount of rain.
+                                                                  This is showing that most regions are seeing about 2-8mm of rainfall in December 2016 according to the literature these region are receiving healthy levels of rainfall and this month is considered to have on average number of wet days among the regions.
+                                                                  This is showing that most regions are seeing about 6-12mm of rainfall in January 2017. Generally, this is lining up with what literature considers to be the wet season.
+                                                                  This is showing that most regions are seeing about 4-8mm of rainfall in February 2017. Generally, this is lining up with what literature considers to be the wet season.
+                                                                  In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize.")
                               ),
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
@@ -639,18 +633,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 align = "left"
                               ),
                               fluidRow(
-                                align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 column(12, p(strong("Description")) , 
-                                       p("
-               These visualizations show us the total rainfall during the two growing seasons,  
-               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with past Literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
-               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
-               "))
+                                       p("This is showing us the total rainfall in the 2010-11 growing season. For Maize production, the ideal range of rainfall is 600-700 mm. Regions I,IIA,IIB, & III at the North-East are observed as receiving more rainfall than its South-Western counterparts. However, It should be noted that Region IV still received the minimum rainfall for an average yield of Maize.This is showing that in all regions minus region v have received a health range of rainfall within the 2016-17 growing season. It should be noted that in region I, exceeded 1000 mm threshold that indicates the maize yield may have declined for this region. In the same light regions IIA,IIB, & III received up towards 1000 mm of rainfall which may have lead to an increase in the maize yield."))
                                 
                               ),
                               fluidRow(
@@ -667,19 +652,11 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(12, 
-                                       align="justify",
-                                       p(strong("Description")) ,
-                                       p("
-               This shows the number of dry spells; A dry spell is described to be a 
-               consecutive series of dry days between 10 to 20 days or 20 days or more. 
-               Dry spells play a significant role in agricultural success by indicating 
-               plant stress exposure while their length and severity can result in the decreased 
-               yields or complete failure of a crop (Nyakudya et al., 2011;Mhizha et al., 2014).  
+                                column(12, p(strong("Description")) ,
+                                       p("This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction a growing season or flat out crop failure.
+               This is showing the count of dry spells; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days and more. In a given month within this growing season all regions experienced one if not multiple dry spells that lasted more than 20 days. In literature, we have found that dry spells play a significant role on agricultural success. The degree and frequency of dry spells before or during can indicate reduction of a growing season or flat out crop failure. In contrast, 2016-18 growing season has experience a lower frequency of dry spells but they seem to have more wide spread of dry spells that were 20 days and more among all the regions.
                "))
-                              )
-                              
-                            ),
+                              )),
                             
                             
                             tabPanel(strong("Soil Moisture"),
