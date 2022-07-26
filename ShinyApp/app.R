@@ -1510,7 +1510,7 @@ output$MPI_map_2011 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
     domain = NULL,
-    reverse = F)
+    reverse = TRUE)
   
   leaflet(joined_zim) %>% addTiles() %>%  
     addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m0_k3, digits = 3)),
@@ -1695,7 +1695,8 @@ output$compo_MPI_11_m2 <- renderLeaflet({
 output$compo_MPI_17 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = NULL)
+    domain = NULL,
+    reverse = TRUE)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
     addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
@@ -1742,7 +1743,8 @@ output$compo_MPI_17 <- renderLeaflet({
 output$compo_MPI_17_m1 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = NULL)
+    domain = NULL,
+    reverse = TRUE)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
     addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_max_k3, digits = 3)),
@@ -1790,7 +1792,8 @@ output$compo_MPI_17_m1 <- renderLeaflet({
 output$compo_MPI_17_m2 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = NULL)
+    domain = NULL,
+    reverse = TRUE)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
     addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_max_k3, digits = 3)),
