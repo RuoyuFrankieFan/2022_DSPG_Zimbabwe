@@ -33,16 +33,17 @@ library(zoo)
 library(stringr)
 library(sp)
 library(directlabels)
+library(slickR)
 #gpclibPermit()
 
 ## FORMATTING-------------------------------------------------------------------
 prettyblue <- "#232D4B"
 navBarBlue <- '#427EDC'
-options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 7)
+options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinner.size = 3, spinner.type = 1)
 
 colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a","#e6a01d","#e57200","#fdfdfd")
 
-# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY------
 jscode <- "function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -99,43 +100,109 @@ zim_region <- rename(zim_region, Region = "nat_region")
 #Map palette
 mypal <- colorNumeric(
   palette = "viridis",
-  domain = NULL)
+  domain = NULL,
+  reverse = TRUE)
 
 
 #EVI DATA
 #agregion
 GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
 GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
+#GrSs2011 <- rename(GrSs2011, region="Region")
+#GrSs2017 <- rename(GrSs2017, region="Region")
+
 EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
 GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+#GrSs2011Line <- rename(GrSs2011Line, region="Region")
+#GrSs2017Line <- rename(GrSs2017Line, region="Region")
+
 
 EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
 EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
-
+my_images_evi <- c("Max EVI 2011.png", "Max EVI 2017.png")
 
 
 #PRECIPITATION DATA
+my_images <- c("av_dec_compared_up.jpg","av_jan_compared_up.jpg","av_feb_compared_up.jpg")
+
+
+
 
 #SOIL DATA
-mydatXL2 <- read_csv(paste0(getwd(),"/data/agregion/soil/soil_ts_Zimb.csv"))
-mydat_long <- readRDS("./data/agregion/soil/mydat_long.RDS")
+SurfMapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
+SurfBarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
+SurfLineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+SurfMapDataPre <-rename(SurfMapDataPre, Region = "region")
 
-df2 <- readRDS("./data/agregion/soil/soil_hist.RDS")
-total <- readRDS("./data/agregion/soil/soil_map.RDS")
+PercMapDataPre <- read.csv("data/agregion/soil/PercSoilMapPlotData.csv")
+PercBarData <- read.csv("data/agregion/soil/PercSoilBarPlotData.csv")
+PercLineData <- read.csv("data/agregion/soil/PercSoilLinePlotData.csv")
+PercMapDataPre <-rename(PercMapDataPre, Region = "region")
+
+
+#zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
+#zim_region <-rename(zim_region, region = nat_region)
+
+SurfMapDataTwo <- list(zim_region, SurfMapDataPre)
+SurfMapDataFin <- SurfMapDataTwo %>% reduce(full_join, by='Region')
+
+PercMapDataTwo <- list(zim_region, PercMapDataPre)
+PercMapDataFin <- PercMapDataTwo %>% reduce(full_join, by='Region')
+
+# Set axis limits c(min, max) on plot
+Surfmin <- as.yearmon("20161119", "%Y%m")
+Surfmax <- as.yearmon("20161219", "%Y%m")
+Surfmin <- as.Date("2016-11-19")
+Surfmax <- as.Date("2016-12-19")
+
+# Set axis limits c(min, max) on plot
+Percmin <- as.yearmon("20161219", "%Y%m")
+Percmax <- as.yearmon("20170529", "%Y%m")
+Percmin <- as.Date("2016-12-19")
+Percmax <- as.Date("2017-05-29")
+
+
+
+# MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
+# BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
+# LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
+# MapDataPre <-rename(MapDataPre, Region = "region")
+# 
+# #BarData <-rename(BarData, Region = "region")
+# #zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
+# #zim_region <-rename(zim_region, Region = nat_region)
+# 
+# MapDataTwo <- list(zim_region, MapDataPre)
+# MapDataFin <- MapDataTwo %>% reduce(full_join, by='Region')
+# 
+# # Set axis limits c(min, max) on plot
+# min <- as.yearmon("20161119", "%Y%m")
+# max <- as.yearmon("20161219", "%Y%m")
+# min <- as.Date("2016-11-19")
+# max <- as.Date("2016-12-19")
 
 
 
 #MPI DATA
-MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
-MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
+MPI <- read.csv("./data/MPI/MPI_Dataset.csv")
+MPI_2011 <- MPI[which(MPI$year=="2011"),]
+MPI_2017 <- MPI[which(MPI$year=="2017"),]
+MPI_2011 <- rename(MPI_2011, District_ID="district_id")
+MPI_2017 <- rename(MPI_2017, District_ID="district_id")
 
+#MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
+#MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
 
-
-
-
+my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
+my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
+my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
+my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png")
+my_images6 <- c("stats_v2_2011.png", "stats_2017.png")
+my_images7 <- c("mpi_precip1.png","mpi_precip2.png","mpi_precip3.png","mpi_precip4.png"
+                ,"mpi_precip5.png","mpi_precip6.png","mpi_precip7.png")
 
 ##Join data
 zim_district <- rename(zim_district, District_name = "NAME_2")
@@ -167,8 +234,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                   # fluidRow(style = "margin: 2px;",
-                                   #          img(src = "Zimbabwe_Flag.png", height="100", width="200", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    fluidRow(style = "margin: 2px;",
+                                             img(src = "corn-field.jpg", height="100", width="1000", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -176,303 +243,206 @@ ui <- navbarPage(title = "Zimbabwe",
                           ),
                           
                           fluidRow(style = "margin: 6px;",
-                                   column(4,
+                                   column(6,
+                                          align="justify",
                                           h2(strong("Project Overview"), align = "center"),
-                                          p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, an ill-conceived fast-track land reform beginning in 2000 led to the decapitalization of the commercial agriculture sector."),
-                                          p("In this project, we identify the publicly available remotely sensed climate-related data available and suitable for Zimbabwe. These are the Enhanced Vegetation Index, Precipitation, and Soil Moisture. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. And we analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe. We disaggregate our analysis to the 60 administrative district-level to study the association between poverty and climate indicators. To do this, we augment the climate data with poverty variables constructed from the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."),
-                                          p("We then use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles. Still, it contains little geographic specificity in an incredibly diverse agricultural economy. Our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.")),
+                                          p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
+                                          p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
+                                          br(),
+                                          fluidRow(
+                                            img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align="center",
+                                            div(tags$caption("Figure 1: Project Timeline"), align="center"),
+                                          #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                                          #withSpinner(tableOutput("table")),
+                                          #div(tags$caption("Source: FAO"))
+                                          ),
+                                          br(),
+                                          p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To perform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
-                                   column(4,
+                                   column(6,
+                                          align="justify",
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
-                                          p("Nestled in the Southeastern tip of Africa, Zimbabwe neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by Prime Minister and eventually President Robert Mugabe until his resignation in 2017.
-                                            After gaining independence in 1980, there was widespread hope that the economic and labor exploitation Africans suffered at the hands of an imperial Great Britain would diminish. 
-                                            While initial trends were encouraging, this hope dwindled as many factors sent the Zimbabwean economy into decline. Most prominent among these factors was the central government’s inconsistent policy, 
-                                            which resulted in vague and evolving strategies for combatting poverty."),
-                                            p("A scientific socialist policy approach was applied between 1980 and 1990 to address poverty but was ineffective and abandoned due to a 
-                                            financial downturn coupled with a prolonged drought which forced agricultural workers into the cities where they faced even greater poverty due to unemployment. In an attempt to revamp the economy, 
-                                            Zimbabwe sought help from the International Monetary Fund (IMF) and the World Bank (WB), which led to adopting a different approach to economic development. The costs of necessities, including food, water, and education, 
-                                            went up, harming and expanding the already existing poor population. The late 1990s and 2000s brought greater poverty and financial distress to Zimbabwe ever."), 
-                                            p("A continuing government budget deficit mixed with a fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation. 
-                                            In turn, this increased the economic crisis as foreign investment dropped and Zimbabwean currency crashed. During this time, unemployment skyrocketed, and a massive informal sector of the economy emerged. 
-                                            In 2009, Zimbabwe adopted the US dollar along with a handful of other currencies. Though this move somewhat stabilized the economy initially, a 2013 shift in government rendered these efforts futile. 
-                                            By 2017, inflation increased significantly, as did the overall economic crisis and poverty."), 
-                                            p("Presently, Emmerson Mnangagwa holds office. The country is home to roughly 14,830,000 inhabitants, 10% of whom live in the capital city of Harare. Although large agglomerations exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is relatively evenly dispersed throughout the country otherwise. Zimbabwe’s central government is responsible for regulating its ten provinces, and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."), 
-                                          p("Arable land is plenty, and  67.5 percent of the labor force works in agriculture growing sugar cane, tobacco, fruit, and vegetables, among other things. Another 7.3% of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufacturing wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment and severe underemployment. Many individuals are either overqualified for the jobs they have or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
-                                          p("Monetary poverty measures in 2017 revealed that roughly 63% of Zimbabwean households lived in poverty. Together with the high poverty rate, the country experiences income inequality, malnourishment, low life expectancy, high infant/maternal mortality rates, difficulty accessing health and education resources, and overall low living standards.")),
-                                   
-                                   column(4,
-                                          h2(strong("Agricultural Profile"), align = "center"),
-                                          p("89% of farmers in Zimbabwe are smallholders who rely on rain for their agriculture and less than 1% of whom have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to have a negative impact on agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
-                                          h3(em("Regional Specificity"), align = "center"),
-                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "110%"),
-                                          div(tags$caption("Figure 1: Agro-ecological regions of Zimbabwe")),
-                                          p(""),
-                                          p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
+                                          p("Zimbabwe is located at the Southeastern part of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
+                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
                                           
-                                          )
+                                          img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "105%"),
+                                          div(tags$caption("Figure 2: Livelihood zones in Zimbabwe"), align="center"),
+                                          br(),
+                                            p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."))),
+                                   
+                          br(),
+                          br(),
+                                   
+                                   fluidRow(
+                                   column(6,
+                                          align="justify",
+                                          h2(strong("Agricultural Profile"), align = "center"),
+                                          p("89% of farmers in Zimbabwe are smallholders (farmers with limited resources that work on small plots of land, have little technology, and typically rely on family for labor, and rain for their crops (Kuhudzayi & Mattos, 2018)) who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
+                                          p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
+                                          
+                                          #h3(em("Regional Specificity"), align = "center"),
+                                          img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
+                                          div(tags$caption("Figure 3: Agro-ecological regions of Zimbabwe"), align="center"),
+                                          p("")
+                                          #p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well"),
+                                          
+                                          ),
+
+                                   
+                                   column(align="justify",
+                                     6,
+                                     fluidRow(
+                                     div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
+                                     withSpinner(tableOutput("table")),
+                                     div(tags$caption("Source: FAO"))),
+                                     br(),
+                                     
+                                     p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well")
+                                   )
                                    
                                    
                                    
                                    
-                          ),
+                                   
+                                          ),
+                          # fluidRow(
+                          #   column(
+                          #     align="center",
+                          #     6,
+                          #     div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
+                          #     withSpinner(tableOutput("table")),
+                          #     div(tags$caption("Source: FAO")),
+                          #   )
+                          # ),
+                          br(),
+                          br(),
+
+                          
                           fluidRow(align = "center",
                                    p(tags$small(em('Last updated: August 2022'))))
                  ),
                  
-                 ## Tab data and methodology ----------------------------------------------------
-                 navbarMenu(strong("Data & Methodology"), 
-                            
-                            tabPanel(strong("Data"), 
-                                     fluidPage(#h1(strong("Data"), align = "center"),
-                                       box(
-                                         width = 6,
-                                       h2(strong("Description of the Remote Sensed Data")),
-                                       withMathJax(),
-                                       h3(strong("EVI")),
-                                       p("Description of EVI"),
-                                       
-                                       h3(strong("Precipitation")),
-                                       p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
-                                       
-                                       h3(strong("Soil Moisture")),
-                                       p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
-                                       ),
-                                       
-                                      # br(),
-                                       
-                                       box(
-                                         width = 6,
-                                       h2(strong("Description of the PICES DATA")),
-                                       withMathJax(),  
-                                       p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
-                                       h3(strong("Description of the Variables/Components")),
-                                       img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                       withMathJax(), 
-                                       p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
-                                       p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
-                                       p("For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence Lack of Electricity and Lack of Toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
-                                       p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.  "),
-                                       p("Lack of Household Assets is given a dimension weight of 1 in both rural and urban areas. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:  "),
-                                       
-                                       
-                                       p(" \\(PAI = 2 * motor vehicle + motorcycle + bicycle + television + radio + fridge + landline phone\\)   ", align = "center"),
-                                       p("\\( D = 1 \\)", " if ","\\(PAI < 2 \\)", align = "center"),
-                                       p("For rural households, agricultural assets are essential indicators of wellbeing and agricultural activity capabilities. The dimension weight is 1.5, with three component variables usually given a weight of 0.5 each. The first variable, Lack of Land, uses a threshold of 0.25 hectares, which is sufficiently low to represent effective deprivation of landholding in rural Zimbabwe. The second variable on livestock is measured in Tropical Livestock Units (TLU), an indicator of wealth that can be used to insulate households from negative idiosyncratic and covariateshocks. A TLU deprivation threshold of 1 indicates  Lack of Livestock. The third variable is the Lack of Rural Equipment. An agricultural equipment index (AEI) is created as follows:  "),
-                                       p("\\( AEI = plough + wheelbarrow + scotchcart + tractor + griding mill \\)", align = "center"),
-                                       p("\\( D = 1 \\)", " if ","\\(AEI < 1 \\)", align = "center"),
-                                       p("The agricultural asset dimension is not included for households in urban areas.  "),
-                                       p("The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access."),
-                                       p("**Note: The livestock data were not available in the 2011-12 wave, which limited our ability to compare the change in livestock dimension across time. To account for this, we have assigned the Lack of Livestock variable a weight of zero and divided the weight proportionally between the other two agricultural asset variables. We use this adjusted index to compare the MPI for 2011 and 2017."))
-                                     )
-                            ),
-                            
-                            
-                            tabPanel(strong("Methodology"), 
-                                     fluidRow(
-                                       box(
-                                         withMathJax(),
-                                         title = h3(strong("Remote Sensed data Methodology")),
-                                         width = 6,
-                                         em(h4("A brief overview of the wrangling of the Remote Sensed data")), tags$br(),
-                                         h3(strong("EVI")),
-                                         p("Description of EVI"),
-                                         h3(strong("Precipitation")),
-                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
-                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
-                                         p("To produce maize, a season must see 600-700 mm of rain (Mugyio et al, 2021). If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016).  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress the timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
-                                         p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
-                                         h3(strong("Soil Moisture")),
-                                         p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
-                                        #br(), 
-p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
-
-p("-   15-20mm are normally the best for vigorous field activity."),
-
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
-                                       ),
-                                       box(
-                                         withMathJax(),
-                                         title = h3(strong("MPI Methodology")),
-                                         width = 6,
-                                         em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
-                                         p("The aggregate methodology for determining the multidimensional poverty 
-       indices proposed by Alkine and Foster in 2011 involve a matrix with \\(n\\) 
-       rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
-       state and \\(d\\) is the number of dimensions for assessing poverty. There 
-       are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
-       The A-F method employed in this study contains eight dimensions of poverty. 
-       Within each dimension, there are one or two variables that indicate whether 
-       an individual is deprived in that area. Each variable has a specific
-       weight associated with it depending on its contribution to overall poverty
-       and how it pertains to rural and urban communities differently. For a given 
-       individual, the total number of deprivations are added up and if he or she falls
-       above a given threshold, \\(k\\), then that individual is considered poor. 
-       Having multiple dimensions of poverty allows us to decompose the original 
-       measure into its individual variables to identify which are contributing 
-       most to the overall index of poverty."),
-                                         tags$br(),
-                                         p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
-       ratio is simply the number of individuals considered to be poor divided by
-       the entire population. The \\(M_{0}\\) index adjusts for the multidimensionality
-       of the algorithm by multiplying the simple headcount ratio, \\(H\\), by the 
-       average deprivation share, \\(A\\). This metric can be thought of as a more
-       accurate measure of the simple headcount ratio."),
-                                         tags$br(),
-                                         p("The \\(M_{1}\\) index is known as the Adjusted Poverty Gap. This examines the distance
-       between the prescribed threshold, \\(k\\), and an individual","'","s true number of 
-       deprivations. This helps examine the subset of poor individuals to efficiently
-       assess which individuals are the poorest in the country."),
-                                         tags$br(),
-                                         p("The \\(M_{2}\\) index is known as the Adjusted Poverty Severity. This is
-       simply the square of the distance between a poor individual and the poverty
-       threshold, \\(k\\). The advantage of using this metric is that it weights
-       poorer individuals who fall farther from the poverty line more heavily to 
-       provide a more obvious descriptor for the poorest people in a given area."),
-                                         tags$br(),
-                                       #),
-                                       box(
-                                         width = 6,
-                                         h5(strong("Headcount Ratio")),
-                                         h3("\\(H = \\frac{n_{poor}}{n_{pop}}\\)"),
-                                         tags$br(),
-                                         h5(strong("Average Deprivation Share")),
-                                         h3("\\(A = \\frac{n_{deprivations}}{n_{potential}}\\)"),
-                                         tags$br(),
-                                         h5(strong("Deprivation Threshold")),
-                                         h5(em("\\(k\\) = Threshold (If an index is above threshold, k, then the individual is considered poor)")),
-                                         tags$br(),
-                                         h5(strong("Dimensional Aggregation")),
-                                         h4("\\(D_{total} = \\sum_{i=1}^{d}\\sum_{j=1}^{v_{d}} w_{i, j}\\)"),
-                                         em(p("\\(d = \\) Number of Dimensions")),
-                                         em(p("\\(v_{d} = \\) Number of variables for a Specific Dimension")),
-                                         em(p("\\(w_{i,j} = \\) Weight of a Specific Variable for a Specific Dimension"))
-                                         
-                                         
-                                       ),
-                                       box(
-                                         width = 6,
-                                         h5(strong("Poverty Index")),
-                                         h4("\\(M_{0}= H * A\\)"),
-                                         tags$br(),
-                                         h5(strong("Adjusted Poverty Gap")),
-                                         h4("\\(M_{1} = μ(g^{1}(k))\\)"),
-                                         h4("\\(g^{1}_{i} = k - \\frac{\\sum deprivations}{\\sum possible\\ deprivations}\\)   if   \\(g^{1}_{i} > 0\\)"),
-                                         h4("Else \\(g^{1}_{i} = 0\\)"),
-                                         tags$br(),
-                                         h5(strong("Adjusted Poverty Severity")),
-                                         h4("\\(M_{2} = μ(g^{2}(k))\\)"),
-                                         h4("\\(g^{2}_{i} = [k - \\frac{\\sum deprivations}{\\sum possible\\ deprivations}]^{2}\\) if \\(g^{2}_{i} > 0\\)"),
-                                         h4("Else \\(g^{2}_{i} = 0\\)")
-                                         
-                                       )
-                                     )
-                            )),
-                            
-                            
-                            
-                            tabPanel(strong("Resources"), 
-                                     fluidPage(
-                                       column(4,
-                                              h3(strong("Google Earth Engine")),
-                                              img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
-                                              withMathJax(),  
-                                              p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
-                                       
-                                       column(4,
-                                              h3(strong("Google Maps")),
-                                              img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
-                                              withMathJax(), 
-                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
-                                       
-                                       column(4,
-                                              h3(strong("ZimStat")),
-                                              img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
-                                              withMathJax(), 
-                                              p("Zimbabwe National Statistics Agency (ZimStat) is a corporate body established through the Census and Statistics Act of 2007 and the main source of official statistics in Zimbabwe We used the the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."))
-                                       
-                                       )),
-                            
-                            
-                            
-                            
-                 ),
-                 
-                 
-                 ## Tab X Data-----------------------
+                 ## Tab Data & Methodology-----------------------
                  tabPanel(strong("Data & Methodology"),
                           tabsetPanel(
                             tabPanel(strong("Data"),
                                     
                                      fluidRow(
-                                       box(
+                                       column(
+                                         h1(strong("Remote Sensed Data")),
+                                         align="justify",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         h4(em("Description of the Remote Sensed Data")),
+                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
+                                         
+                                         fluidRow(
+                                         img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
+                                         div(tags$caption("Figure 4: Remote Sensing"),align="center"),
+                                         p(tags$small(em('Source: NASA')))),
+                                         #br(),
+                                         #p("In this project we source data for the following remote sensed data:"),
+                                         #h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
-                                         h3(strong("EVI")),
-                                         p("Description of EVI"),
+                                         h3(strong("Enhanced Vegetation Index (EVI)")),
+                                         p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
+                                         #br(),
+                                         #fluidRow(
+                                         #img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
+                                         #div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
+                                         #),
+                                         br(),
+                                         withMathJax(),
+                                         p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
                                          
                                          h3(strong("Precipitation")),
-                                         p("TRMM 3B42 is a Google Earth Engine (GEE) indicator to observe and record all forms of tropical precipitation such as snow, rain, drizzle, & etc. The dataset is provided by NASA GES DISC at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates results in a dataset. The data is produced over a 3-hour period and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
+                                         p("Tropical Rainfall Measuring Mission (TRMM) 3B42 is a Google Earth Engine (GEE) index containing observations on all forms of tropical precipitation such as snow, rain, and drizzle. The dataset is provided by NASA Goddard Earth Sciences Data and Information Services Center (GES DISC) at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm, in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates result in a dataset. The data is produced over a 3-hour period, and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                          
                                          h3(strong("Soil Moisture")),
-                                         p("Our data set, the NASA-USDA Enhanced SMAP Global soil moisture data, provides global soil moisture information at a 10km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model which are then corrected through the integration of satellite derived Soil Moisture Active Passive (SMAP) soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The integration of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)."),
+                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This correction is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012).")),
                                          
-                                         br()),
+                                         #br(),
                                          
-                                         box(
-                                           
+                                         column(
+                                           h1(strong("PICES Data")),
+                                           align="justify",
                                            width = 6,
                                            withMathJax(),
                                            title = h1(strong("PICES Data")),
                                            p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
-                                           h3(strong("Description of the Variables/Components")),
-                                           img(src = "variables.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
-                                           withMathJax(), 
-                                           p("To construct the multidimensional poverty index based on the Alkire-Foster method, we consider eight   poverty dimensions consisting of 14 variables relevant to identifying poverty status. The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. We assess the sensitivity of the MPI by broadening these measures to nobody in the household having completed secondary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5), along with the two health variables that make up the second health dimension (2 out of 9.5). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
-                                           p("Unemployment, defined as one member of the household having been unemployed as their main occupation in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.  "),
-                                           p("For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence Lack of Electricity and Lack of Toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
-                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.  ")
-                                           
+                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently.  The first dimension, education, consists of two variables – Max Education and Education Dropout. The Max Education variable refers to nobody in the household having completed primary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each of the sub-dimensions), along with the two health variables that make up the second health dimension (2 out of 9.5; a weight of 1 for each of the sub-dimensions). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
+                                           p("Unemployment, defined as a member of the household being unemployed in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.
+For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence lack of electricity and lack of toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5.
+"),
+                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.
+Lack of Household Assets is given a dimension weight of 1 in both rural and urban areas. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:
+"),
+                                           p(" \\(PAI = 2 * motor vehicle + motorcycle + bicycle + television + radio + fridge + landline phone\\)   ", align = "center"),
+                                           p("\\( D = 1 \\)", " if ","\\(PAI < 2 \\)", align = "center"),
+                                           p("For rural households, agricultural assets are essential indicators of wellbeing and agricultural activity capabilities. The dimension weight is 1.5, with three component variables usually given a weight of 0.5 each. The first variable, Lack of Land, uses a threshold of 0.25 hectares. The second variable on livestock is measured in Tropical Livestock Units (TLU), an indicator of wealth that can be used to insulate households from negative idiosyncratic and covariate shocks. A TLU deprivation threshold of 1 indicates Lack of Livestock. The third variable is the Lack of Rural Equipment. An agricultural equipment index (AEI) is created as follows:"),
+                                           p("\\( AEI = plough + wheelbarrow + scotchcart + tractor + griding mill \\)", align = "center"),
+                                           p("\\( D = 1 \\)", " if ","\\(AEI < 1 \\)", align = "center"),
+                                           p("The agricultural asset dimension is not included for households in urban areas.
+The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access.
+**Note: The livestock data were not available in the 2011-12 wave, so a weight of zero has been assigned to this variable. More details can be found here:", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
                                            
                                            ))),
                             
                             tabPanel(strong("Methodology"),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(
+                                      fluidRow(
+                                        column(
+                                          12,
+                                          #align="justify",
+                                          h1(strong("Overview of Methodology")),
+                                          img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                          div(tags$caption("Figure 4: Overview of Methodology"),align="center")
+                                        ),
+                                        br(),
+                                       column(
+                                         h3(strong("Remote Sensed data Methodology")),
+                                         align="justify",
                                          withMathJax(),
                                          title = h3(strong("Remote Sensed data Methodology")),
                                          width = 6,
-                                         em(h4("A brief overview of the wrangling of the Remote Sensed data")),
+                                         em(h4("A brief overview of the wrangling/processing of the Remote Sensed data")),
                                          h4(strong("Enhanced Vegetation Index")),
-                                         p("text"),
-                                         
+                                         p("The Enhanced Vegetation Index (EVI) has a dynamic range and high sensitivity in dense vegetation, it becomes particularly suitable to map the cropping density in Zimbabwe. As high EVI values correspond to crops at their peak growth stage, we used maximum EVI values in each agro-ecological region during the growing seasons in 2011 and 2017 to observe the variation in crop growth in different periods. Because the daily EVI values are too high-frequency to represent vegetation stages, we aggregated the data into a monthly level as a better approach. We conduct a spatial mapping of the agroecological regions in Zimbabwe depicting the maximum EVI values. We additionally focus on maize which is the prominent crop grown in Zimbabwe."),
+                                         br(),
                                          h4(strong("Precipitation")),
-                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
-                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rain and the opposite is true for the Southern regions (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
+                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks like political unrests. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
+                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand recieve lesser rainfall (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
                                          p("To produce maize, a season must see 600-700 mm of rain (Mugyio et al, 2021). If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016).  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress the timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
                                          p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
                                          
+                                         br(),
                                          h4(strong("Soil Moisture")),
+                                                h5(strong("Why Soil Moisture?")),
+                                                p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the period we have chosen to focus on for the surface soil moisture section of our study.")
+                                         ,
+                                         
+                                         
+                                                h5(strong("Ideal soil type for maize production")),
+                                                p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."),
+                                         
                                          p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
 
-For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018c). To be specific, soil moisture levels of:"),
+For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
                                         #br(), 
 p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
 
 p("-   15-20mm are normally the best for vigorous field activity."),
 
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018c)."),
+p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
                                          tags$br(),
                                        ),
-                                       box(
+                                       column(
+                                         h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
+                                         align="justify",
                                          withMathJax(),
-                                         title = h3(strong("MPI Methodology")),
+                                         title = h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
                                          width = 6,
                                          em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
                                          p("The aggregate methodology for determining the multidimensional poverty 
@@ -480,16 +450,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
        rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
        state and \\(d\\) is the number of dimensions for assessing poverty. There 
        are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
-       The A-F method employed in this study contains eight dimensions of poverty. 
-       Within each dimension, there are one or two variables that indicate whether 
-       an individual is deprived in that area. Each variable has a specific
-       weight associated with it depending on its contribution to overall poverty
-       and how it pertains to rural and urban communities differently. For a given 
-       individual, the total number of deprivations are added up and if he or she falls
-       above a given threshold, \\(k\\), then that individual is considered poor. 
-       Having multiple dimensions of poverty allows us to decompose the original 
-       measure into its individual variables to identify which are contributing 
-       most to the overall index of poverty."),
+       The A-F method employed in this study utilizes the eight dimensions of poverty introduced in the Data tab. A given individual is considered poor if their total number of deprivations is greater than a prescribed threshold, \\(k\\). The multiple dimensions of poverty can be decomposed to their original measures of the individual variables."),
                                          tags$br(),
                                          p("The \\(M_{0}\\) index is known as the Adjusted Headcount Ratio. The simple headcount
        ratio is simply the number of individuals considered to be poor divided by
@@ -549,26 +510,48 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             tabPanel(strong("Resources"), 
                                      fluidPage(
-                                       column(4,
+                                       column(6,
+                                              align="justify",
                                               h3(strong("Google Earth Engine")),
                                               img(src = "data-google-earth.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(),  
                                               p("Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface. We used it to collect data on NDVI, EVI, precipitation and Soil moisture in Zimbabwe.")),
                                        
-                                       column(4,
+                                       column(6,
+                                              align="justify",
                                               h3(strong("Google Maps")),
                                               img(src = "data-gmaps.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
-                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine.")),
+                                              p("Google Maps is a comprehensive web mapping service created by Google. Its goal is to provide an interactive map of all the geographical contents of the world. This resource has a variety of uses, ranging from examining all service locations within a city to finding the quickest route between locations. It provides data at latitude and longitude level. We used Google Maps to visualize weather information behind the Google Earth Engine."))),
+                                     column(6,
+                                            align="justify",
+                                            h3(strong("Google Colab")),
+                                            img(src = "colab.png", style = "display: inline; float: left;", width = "140px"),
+                                            withMathJax(), 
+                                            p("Google Colab Colaboratory, or “Colab” for short, is a product from Google Research. Colab allows anybody to write and execute arbitrary python code through the browser, and is especially well suited to machine learning, data analysis and education. We used Google Colab to gather weather information behind the Google Earth Engine.")),
+                                     column(6,
+                                            align="justify",
+                                            h3(strong("GitHub")),
+                                            img(src = "github.png", style = "display: inline; float: left;", width = "140px"),
+                                            withMathJax(), 
+                                            p("GitHub, Inc. is a provider of Internet hosting for software development and version control using Git. It offers the distributed version control and source code management functionality of Git, plus its own features. We used GitHub to host our data and codes. ")),
                                        
-                                       column(4,
+                                     column(6,
+                                            align="justify",
+                                              h3(strong("2021 DSPG - Zimbabwe Project")),
+                                              img(src = "DSPG_black-01.png", style = "display: inline; float: left;", width = "140px"),
+                                              withMathJax(), 
+                                              p("We used the the MPI computed from the 2021 DSPG Zimbabwe project", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), "to analyse the link with weather information from the Google Earth Engine.")),
+                                       
+                                       column(6,
+                                              align="justify",
                                               h3(strong("ZimStat")),
                                               img(src = "zimstat_logo.png", style = "display: inline; float: left;", width = "140px"),
                                               withMathJax(), 
                                               p("Zimbabwe National Statistics Agency (ZimStat) is a corporate body established through the Census and Statistics Act of 2007 and the main source of official statistics in Zimbabwe We used the the national Poverty, Income, Consumption, Expenditure Survey (PICES) conducted in 2011 and 2017."))
                                        
                                      ))
-                          )),
+                          ),
                  
                  
 
@@ -576,315 +559,866 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Remote Sensed Data"), 
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
-                                     fluidRow(
-                                       box(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
-                                         title = "Enhanced Vegetation Index (EVI)",
-                                         width = 6,
+                                     fluidRow(h1(strong("Enhanced Vegetation Index"), align = "center"),
+                                              style = "margin-left: 10px; margin-right: 10px;",
+                                              h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"),
+                                              column(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
+                                              align="justify",
+                                             
+                                         title = "Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons",
+                                         width = 8,
                                          height = 600
                                        ),
-                                         box(
-                                           
+                                         column(
+                                           h3("Description"),
+                                           align="justify",
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:")))),
-                            
-                            tabPanel(strong("Precipitation (Rainfall)"),
+                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The graphs above show the maximum EVI (which corresponds to the density of crops) in Zimbabwe during the growing seasons in 2011 and 2017, respectively. In both graphs, we could see that the maximum EVI value is at its highest in Region IIA, which, according to United Nations’ Food and Agriculture Organisation, is suitable for intensive farming."), 
+                                           p("After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
+                                           p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
                                      
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
+                                     br(),
+                                     
                                      fluidRow(
-                                       box(withSpinner(plotOutput("myplot2")),
-                                         title = "Precipitation (Rainfall)",
-                                         width = 6,
-                                         height = 600
-                                         ),
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of the Precipitation for the Zimbabwean districts and broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:")))),
+                                       style = "margin-left: 10px; margin-right: 10px;",
+                                       h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"), 
+                                          style = "font-size:35px;"
+                                       #align = "center",
+                                     ),
+                                    
+                                     fluidRow(
+                                       
+                                       column(
+                                       8,
+                                       #withSpinner(slickROutput("my_slick_evi"))
+                                       img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                       div(tags$caption("Figure: 2011"),align="center")
+                                     ),
+                                     
+                                     column(
+                                       align="justify",
+                                       width = 4,
+                                       withMathJax(),
+                                       title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
+                                       p(h3("Description")),
+                                       p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
+                                       p("The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+                                       
+                                     )
+                                     
+                                     
+                                     ),
+                                     
+                                     fluidRow(
+                                       column(
+                                         8,
+                                         img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                         div(tags$caption("Figure: 2017"),align="center")
+                                       )
+                                     
+                                     
+                                     )
+                                     
+                                     
+                                       
+                                       
+                                       ),
+                            
+                            tabPanel(
+                              strong("Precipitation"),
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                h1(strong("Precipitation Index (TRMM 3B42)"), 
+                                   style = "font-size:35px;"),
+                                align = "center"
+                              ),
+                              fluidRow(
+                                h1(strong("Comparison of Average Rainfall between 2010 & 2016 Growing Season"), 
+                                   style ="font-size: 25px;"),
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                p(strong("3-month observation 2011-17"))
+                              ),
+                              fluidRow(
+                                style = "margin-left: 0px; margin-right: 0px;",
+                                column(12, slickROutput("my_slick"), offset = 0, br(),br(),br())
+                                
+                              ),
+                              fluidRow(
+                                align="justify",
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                p("These maps are looking at rain distribution at average daily level. Zimbabwe generally follows previous analysis of  its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. 
+        The Southern region on the other hand receives less rainfall (Nkomozepi & Chung, 2012). In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize. 
+        A day is considered wet if it exceeds 2.95 mm of precipitation. ")
+                              ),
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Season"), 
+                                   style ="font-size: 25px;"),
+                                align = "left"
+                              ),
+                              fluidRow(
+                                style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "totalrainfall_compared.jpg"),
+                                align = "left"
+                              ),
+                              fluidRow(
+                                align="justify",
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, p(strong("Description")) , 
+                                       p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                                
+                              ),
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
+                                   style = "font-size: 25px;"),
+                                align = "left"
+                              ),
+                              fluidRow(
+                                style = "margin-left: 70px; margin-right: 100px;",
+                                column(12, img(src = "dry_compared.jpg", height = "100%", width = "100%")),
+                                align = "center"
+                              ),
+                              
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, 
+                                       align="justify",
+                                       p(strong("Description")) ,
+                                       p("
+               This shows the number of dry spells; A dry spell is described to be a 
+               consecutive series of dry days between 10 to 20 days or 20 days or more. 
+               Dry spells play a significant role in agricultural success by indicating 
+               plant stress exposure while their length and severity can result in the decreased 
+               yields or complete failure of a crop (Nyakudya et al., 2011;Mhizha et al., 2014).  
+               "))
+                              )
+                              
+                            ),
                             
                             
                             tabPanel(strong("Soil Moisture"),
+                                     tabsetPanel(
                                      tabPanel("Surface Soil Moisture",
                                               fluidRow(style = "margin: 6px;",
-                                                       h1(strong("Surface Soil Moisture "), align = "center"),
-                                                       p("", style = "padding-top:10px;"),
+                                                       #h1(strong("Surface Soil Moisture "), align = "center"),
+                                                       p("", style = "padding-top:10px;")
                                                        
-                                                       column(6,
-                                                              h4(strong("Why Soil Moisture?")),
-                                                              p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the time period we have chosen to focus on for the Surface soil moisture section of our study.")
-                                                              ),
                                                        
-                                                       column(6,
-                                                              h4(strong("Ideal soil type for maize production")),
-                                                              p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."))
-                                              )),
+                                              ),
+                                              
+                                              
                                      fluidRow(
-                                       box(withSpinner(leafletOutput("soil_map_leaflet", height=520)),
-                                           title = "Average Soil Moisture",
-                                           width = 7
-                                           #height = 600
+                                       box(withSpinner(leafletOutput("SurfMapGraph", height=520)),
+                                           title = h1(strong("Average Surface Soil Moisture During Planting for the 2016-17 Growing Season"), 
+                                                      style ="font-size: 25px;"),
+                                           width = 8,
+                                           height = 600
                                        ),
                                        box(
+                                         align="justify",
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From the visualization we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm). These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
+                                         p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From the visualization, we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm)."),
+                                         p("These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
                                      
-#                                      fluidRow(
-#                                        box(withSpinner(plotOutput("soil_map")),
-#                                          title = "Average Soil Moisture",
-#                                          width = 8,
-#                                          height = 600
-#                                        ),
-#                                          box(
-#                                            width = 4,
-#                                            withMathJax(),
-#                                            title = "Description",
-#                                            p("This graphic shows a detailed visualization of the soil moisture for the Zimbabwean districts and broken up # into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. There are three layers to this graph:"))),
-                                    
-                                     #fluidRow(
-                                       box(withSpinner(plotOutput("soil_hist")),
-                                           title = "Soil Moisture At Planting",
-                                           width = 8
-                                           #height = 600
+                                     
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilBar.png", height = "100%", width = "100%"),
+                                           title = h1(strong("Surface Soil Moisture period conditions"), 
+                                                      style ="font-size: 25px;"),
+                                          width = 8,
                                        ),
                                        box(
-                                         width = 4,
+                                         align="justify",
                                          withMathJax(),
-                                         title = "Description",
-                                         p("This grouped bar chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of three-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that none of the regions experienced any wet days, and region V is unique in not experiencing any ideal days. Furthermore, Regions one through three all had either 4 or 5 ideal days, while region four only had 2. This aligns with the previous visualization’s findings of regions I-III having more soil moisture on average than regions IV and V.")),
-                                       
-                                     #fluidRow(  
-                                     box(withSpinner(plotOutput("soil_line")),
-                                           title = "Soil Moisture at Planting Times",
-                                           width = 8
-                                           #height = 600
+                                           width = 4,
+                                           title = "Description",
+                                           p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
+                                           p("From this visualization we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III having more soil moisture on average than regions IV and V."))),
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilLine.png", height = "100%", width = "100%"),
+                                           title = h1(strong("Surface Soil Moisture Across Time"),
+                                                      style ="font-size: 25px;"),
+                                           width = 8,
                                        ),
                                        box(
-                                         width = 4,
+                                         align="justify",
                                          withMathJax(),
-                                         title = "Description",
-                                         p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 20th to December 20th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))
-                                       
-                                       
-                                      )),
+                                           width = 4,
+                                           title = "Description",
+                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season."),
+                                           p("In addition, while regions I , II, and III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th, regions IV and V do not reach those levels until December 9th.")))
+                                     
+                                     
+                                     ),
+                                     
+
+#                                       #fluidRow(
+#                                         box(withSpinner(plotOutput("SurfBarGraph")),
+#                                             title = "Soil Moisture At Planting",
+#                                             width = 8
+#                                             #height = 600
+#                                         ),
+#                                         box(
+#                                           width = 4,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of 3-day periods is  # taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
+#                                           p("From this visualization, we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. #  Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization’s findings of Regions I through III having more #  soil moisture on average than regions IV and V.")),
+#                                         
+#                                       #fluidRow(  
+#                                       box(withSpinner(plotOutput("SurfLineGraph")),
+#                                             title = "Soil Moisture at Planting Times",
+#                                             width = 8
+#                                             #height = 600
+#                                         ),
+#                                         box(
+#                                           width = 4,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to #  December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the period."),
+#                                           p("the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In#   addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))),
+                                        
+
+                  tabPanel("Percent Soil Moisture",
+                           fluidRow(
+                             #h1(strong("Percent Soil Moisture"), align = "center"),
+                                    box(withSpinner(leafletOutput("PercMapGraph", height=520)),
+                                        title = h1(strong("Average Percent Soil Moisture Map"),
+                                                   style ="font-size: 25px;"),
+                                        width = 8,
+                                        height = 600
+                                    ),
+                                    box(align="justify",
+                                      withMathJax(),
+                                        width = 4,
+                                        title = "Description",
+                                        p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017. From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average percent soil moisture decreases in order when going from region I to V. "))),
+                           fluidRow(
+                             box(img(src = "PercentSoilBar.png", height = "100%", width = "100%"),
+                                 title = h1(strong("Percent Soil Moisture period conditions"),
+                                            style ="font-size: 25px;"),
+                                 width = 8,
+                             ),
+                             box(align="justify",
+                               withMathJax(),
+                                 width = 4,
+                                 title = "Description",
+                                 p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
+                                 p("From the chart, we can see that the number of wet days decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly, Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days as well as having no wet days."))),
+                           fluidRow(
+                             box(img(src = "PercentSoilLine.png", height = "100%", width = "100%"),
+                                 title = h1(strong("Percent Soil Moisture Across Time"),
+                                            style ="font-size: 25px;"),
+                                 width = 8,
+                             ),
+                             box(align="justify",
+                               withMathJax(),
+                                 width = 4,
+                                 title = "Description",
+                                 p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
+                                 p("From the chart, we can see that the relative rankings for regions percent soil moisture remains consistent for the most part although there is a greater range in values across regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. "))))
+                           
+
+                                        
+                                      ))
+                            ), 
+                                      
                             
                             
                             #),
-                 
-                 ## Tab 2------
-                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
-                            tabPanel(strong("Multidimensional Poverty Index"),
-                                     
-                                     tabsetPanel(
-                                     tabPanel(title = "2011",
-                                     fluidRow(
-                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
-                                         title = "Multidimensional Poverty Index",
-                                         width = 8,
-                                         height = 600
-                                       ),
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
-                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-                                           tags$ul(  
-                                             tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
-                                                     " and considers all of the dimensions described in the methodology section."),
-                                             tags$li("\\(M_{1}\\)
-                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-                                             tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
-                                             
-                                           ),
-                                           p("To adjust the threshold cutoff, k, by which an individual is considered poor,
-                                      we use k=3 as our threshold."))),
-                                     
-                                     fluidRow(
-                                       box(
-                                         withMathJax(),
-                                         title = strong("Descriptive Analysis"),
-                                         width = 12,
-                                         p("\\(M_{0}\\)"),
-                                         p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
-                                         
-                                         p("\\(M_{1}\\)"),
-                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
-                                         p("\\(M_{2}\\)"),
-                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
-                                         p("")
-                                       )
-                                     )),
-                                     
-                                     tabPanel(title = "2017",
-                                              fluidRow(
-                                                box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
-                                                    title = "Multidimensional Poverty Index",
-                                                    width = 8,
-                                                    height = 600
-                                                ),
-                                                box(
-                                                  
-                                                  width = 4,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
-                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-                                                  tags$ul(  
-                                                    tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
-                                                            " and considers all of the dimensions described in the methodology section."),
-                                                    tags$li("\\(M_{1}\\)
-                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-                                                    tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
-                                                    
-                                                  ),
-                                                  p("To adjust the threshold cutoff, k, by which an individual is considered poor,
-                                      we use k=3 as our threshold."))),
-                                              
-                                              fluidRow(
-                                                box(
-                                                  withMathJax(),
-                                                  title = strong("Descriptive Analysis"),
-                                                  width = 12,
-                                                  p("\\(M_{0}\\)"),
-                                                  p("Looking at the original poverty index and focusing on the \\(M_{0}\\) index, we can see that for low k-threshold values, a large portion of the population can be considered multidimensionally poor. Additionally, urban districts and urban households tend to have lower \\(M_{0}\\) scores than their rural counterparts. As we increase the k-threshold values, thereby increasing the criteria to be labeled multidimensionally poor, fewer people across the country can be identified as such. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
-                                                  
-                                                  p("\\(M_{1}\\)"),
-                                                  p("When we focus on the depth of poverty (\\(M_{1}\\) index ), if the k-thresholdvalues are low, poverty throughout much of Zimbabwe can be considered deep.  A majority of \\(M_{1}\\) values exceed the national \\(M_{1}\\) value. Similar to the \\(M_{0}\\) trends, urban districts tend to have lower \\(M_{1}\\) values than rural districts, implying deeper poverty in rural districts. Although the number of districts portraying deep poverty generally decreases as k-threshold values increase, this is not the case for rural districts neighboring Harare, including Bindura, Goromonzi, and Marondera. These areas maintain high \\(M_{1}\\) values as k-threshold values increase, as do a cluster of districts in the country’s southeastern region."),
-                                                  p("\\(M_{2}\\)"),
-                                                  p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Low k-threshold values render high rates of poverty severity across a large proportion of Zimbabwe’s population. As k-threshold values increase, \\(M_{2}\\) values fall throughout most of the country but remain substantially high in the western portion of the country and around Harare, implying a greater number of impoverished households are further away from the poverty line than other impoverished households in these regions. If we distinguish between urban and rural, we can see that urban districts tend to have less severe poverty than rural districts, excluding the urban aggregates in Umguza, Bubi, and Mutasa. "),
-                                                  p("")
-                                                )
-                                              ),
-                                     
-                                     ))),
-                            
-                            
-                            
-                            tabPanel(strong("Components of the MPI"),
-                                     
-                                     tabsetPanel(
-                                       tabPanel(title = "2011",
-                                     fluidRow(
-                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
-                                         title = "Components of the MPI",
-                                         width = 8,
-                                         height = 600
-                                       ),
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))),
-                                     
-                                     tabPanel(title = "2017",
-                                              fluidRow(
-                                                box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
-                                                    title = "Components of the MPI",
-                                                    width = 8,
-                                                    height = 600
-                                                ),
-                                                box(
-                                                  
-                                                  width = 4,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))
-                                     
-                                     )),
-                            
-                            
-                            tabPanel(strong("Tab 3"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(withSpinner(plotOutput("myplot4", height = 520)),
-                                         title = "Tab 3",
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:")))))),
-                            
-                            
-                 
-                 ## Tab 3
-                 navbarMenu(strong("MPI and Indices"), 
-                            tabPanel(strong("MPI & EVI"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(
-                                         title = "MPI & EVI",
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
-                            
-                            tabPanel(strong("MPI & Precipitation"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(
-                                         title = "MPI & Precipitation",
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
-                            
-                            
-                            tabPanel(strong("MPI & Soil Moisture"),
-                                     
-                                     # tabName = "91_Dist",
-                                     # # Everything has to be put in a row or column
-                                     fluidRow(
-                                       box(
-                                         title = "MPI & Soil Moisture",
-                                         
-                                         box(
-                                           
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"))))),
-                            
-                            
-                 ),
-                 
 
+                 ## Tab 4 ------
+                 navbarMenu(strong("Poverty and Components"), 
+                 tabPanel(strong("Multidimensional Poverty Index"),
+                    
+                          tabPanel(title = "2011",
+                                   fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center")),
+                                   fluidRow(
+                                     column(
+                                       align="justify",
+                                       #h3("Description"),
+                                       width = 12,
+                                       withMathJax(),
+                                       title = "Description",
+                                       p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct", strong("district-level"), "analysis in our study using the 60 districts. There are three layers to this graph:
+                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+                                       tags$ul(  
+                                         tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
+                                                 " and considers all of the dimensions described in the methodology section."),
+                                         tags$li("\\(M_{1}\\)
+                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+                                         tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
+                                         
+                                       ),
+                                       p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
+                                     
+                                     
+                                   ),
+                                   
+                                   
+                                   fluidRow(#h1(strong("Multidimensional Poverty Index"), align = "center"),
+                                            column(
+                                              h3("Multidimensional Poverty Index 2011"),
+                                              withSpinner(leafletOutput("MPI_map_2011", height=520)),
+                                                title = "Multidimensional Poverty Index 2011",
+                                                width = 6,
+                                                height = 600
+                                            ),
+                                            column(
+                                              h3("Multidimensional Poverty Index 2017"),
+                                              withSpinner(leafletOutput("MPI_map_2017", height=520)),
+                                                title = "Multidimensional Poverty Index 2017",
+                                                width = 6,
+                                                height = 600
+                                                
+                                            )),
+                                   
+                                   fluidRow(
+                                   column(
+                                     align="justify",
+                                     h3("Descriptive Analysis"),
+                                     withMathJax(),
+                                     title = strong("Descriptive Analysis"),
+                                     width = 12,
+                                     p("\\(M_{0}\\)"),
+                                     p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                     
+                                     p("\\(M_{1}\\)"),
+                                     p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
+                                     p("\\(M_{2}\\)"),
+                                     p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
+                                     p("")
+                                   ))
+                                   
+                                   
+                                   )),
+                 
+                 tabPanel(strong("Components"),
+                          
+                          tabPanel(title = "\\(M_{0}\\)",
+                                   
+                                   fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                            column(
+                                              align="justify",
+                                            width = 12,
+                                            withMathJax(),
+                                            title = "Description",
+                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". 
+                                     Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
+                                              tags$ul(
+                                                tags$li("Max Education"),
+                                                tags$li("Education Dropout"),
+                                                tags$li("Chronic Illness"),
+                                                tags$li("Lack of Health Visit"),
+                                                tags$li("Lack of Household Assets"),
+                                                tags$li("Lack of Access to Services")
+                                                
+                                              ),
+                                             # p("Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                              p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence  (\\(M_{0}\\))."),#, gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))."),
+                                            p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)), please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
+                                                                                )),
+                                   
+                                   fluidRow(
+                                     box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
+                                       title = "Components of the MPI for 2011",
+                                       width = 6,
+                                       height = 600
+                                     ),
+                                     box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
+                                         title = "Components of the MPI for 2017",
+                                         width = 6,
+                                         height = 600
+                                     )))),
+                 
+                 
+                 
+                 ),
+
+                ## Tab 5 ------
+              navbarMenu(strong("Analysis"), 
+              tabPanel(strong("Correlation Analysis"),
+                       fluidRow(
+                         h1(strong("Correlations"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         column(12
+                                
+                                
+                                )),
+                    ),
+              
+              tabPanel(strong("Regression Analysis"),
+                       fluidRow(
+                         h1(strong("Regressions"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         column(12
+                                
+                                
+                         )),
+                       
+                       fluidRow(
+                         h4(strong("MPI & Precipitation"),align="left", 
+                            style = "margin-left: 100px; margin-right: 100px;"),
+                         column(
+                           10,
+                           style = "margin-left: 100px; margin-right: 100px;",
+                           align="justify",
+                           withMathJax(),
+                           p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                           p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+                           p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                           p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+                           p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+                           
+                         ))
+                       
+                       
+                       ),
+              
+              tabPanel(strong("Precipitation"),
+                       
+                       fluidRow(
+                         h1(strong("District Level Rainfall"), align = "center"),
+                         column(
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = "Description",
+                           p(""))
+                         
+                       ),
+                       fluidRow(
+                         column(6,
+                         #style = "margin-left: 5px; margin-right: 100px;",
+                         img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                         div(tags$caption("Figure: 2011"),align="center")
+                         #align = "left"
+                       ),
+                       column(6,
+                              #style = "margin-left: 5px; margin-right: 100px;",
+                              img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                              div(tags$caption("Figure: 2011"),align="center")
+                              #align = "left"
+                       
+                       )),
+                       
+                       
+                       
+                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the maximum EVI during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
+                       )
+                       
+                       )
+              
+              
+              ),
+
+
+
+#                 ## Tab 2------
+#                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
+#                            tabPanel(strong("Multidimensional Poverty Index"),
+#                                     
+#                                     
+#                                     tabPanel(title = "2011",
+#                                     fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center"),
+#                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
+#                                         title = "Multidimensional Poverty Index 2011",
+#                                         width = 6,
+#                                         height = 600
+#                                       ),
+#                                       box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
+#                                           title = "Multidimensional Poverty Index 2017",
+#                                           width = 6,
+#                                           height = 600
+#                                         
+#                                       )
+#                                         ),
+#                                     
+#                                     fluidRow(
+#                                       column(
+#                                         align="justify",
+#                                         h3("Description"),
+#                                         width = 6,
+#                                         withMathJax(),
+#                                         title = "Description",
+#                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time #the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to #this graph:
+#                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+#                                         tags$ul(  
+#                                           tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method#/","Sabina Alkire and James Foster",target="_blank"),
+#                                                   " and considers all of the dimensions described in the methodology section."),
+#                                           tags$li("\\(M_{1}\\)
+#                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+#                                           tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are #farther away from the poverty line. Thus, this index measures severity of poverty.")
+#                                           
+#                                         ),
+#                                         p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+#For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
+#                                       
+#                                       column(
+#                                         align="justify",
+#                                         h3("Descriptive Analysis"),
+#                                         withMathJax(),
+#                                         title = strong("Descriptive Analysis"),
+#                                         width = 6,
+#                                         p("\\(M_{0}\\)"),
+#                                         p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be #considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national #average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+#                                         
+#                                         p("\\(M_{1}\\)"),
+#                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
+#                                         p("\\(M_{2}\\)"),
+#                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large #proportion of Zimbabwe’s population."),
+#                                         p("")
+#                                       )
+#                                     ))),
+#                            
+#                            
+#                            
+#                            tabPanel(strong("Components of the MPI"),
+#                                     
+#                                     tabsetPanel(
+#                                       tabPanel(title = "\\(M_{0}\\)",
+#                                     fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
+#                                         title = "Components of the MPI for 2011",
+#                                         width = 6,
+#                                         height = 600
+#                                       ),
+#                                       box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
+#                                           title = "Components of the MPI for 2017",
+#                                           width = 6,
+#                                           height = 600
+#                                       )),
+#                                         
+#                                     fluidRow(
+#                                     box(
+#                                           
+#                                           width = 12,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                           p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the #incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                           ))),
+#                                     
+#                                     tabPanel(title = "\\(M_{1}\\)",
+#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
+#                                                           title = "Components of the MPI for 2011",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       ),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
+#                                                           title = "Components of the MPI for 2017",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       )),
+#                                              
+#                                              fluidRow(
+#                                                box(
+#                                                  align="justify",
+#                                                  width = 12,
+#                                                  withMathJax(),
+#                                                  title = "Description",
+#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                                ))),
+#                                     
+#                                     tabPanel(title = "\\(M_{2}\\)",
+#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
+#                                                           title = "Components of the MPI for 2011",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       ),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
+#                                                           title = "Components of the MPI for 2017",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       )),
+#                                              
+#                                              fluidRow(
+#                                                box(
+#                                                  align="justify",
+#                                                  width = 12,
+#                                                  withMathJax(),
+#                                                  title = "Description",
+#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                                )))
+#                                     
+#                                     
+#                                     
+#                                     ))),
+#                            
+#                            
+                 
+                 ## Tab 3------------------
+navbarMenu(strong("MPI and Indices"),
+           tabPanel(strong("Summary Statistics"),
+                    fluidRow(
+                      h1(strong("Summary Statistics"), 
+                         style = "font-size:35px;"), align="center",
+                    style = "margin-left: 0px; margin-right: 0px;",
+                    column(12, slickROutput("my_slick5"))),
+                    
+                    
+                    fluidRow(
+                      column(
+                        7,
+                        img(src = "stats_v2_2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                        div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+                      ),
+                      
+                      column(
+                        align="justify",
+                        width = 5,
+                        withMathJax(),
+                        title = strong("Summary Statistics and Correlations", align="center"),
+                        p(h3("Summary Statistics")),
+                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in 2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
+
+In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum EVI is also higher in 2016-17 compared that in 2010-11."), 
+                        
+                      )
+                      
+                    ),
+                    
+                    fluidRow(
+                      column(
+                        7,
+                        img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                        div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                      ),
+                      
+                      column(
+                        align="justify",
+                        width = 5,
+                        withMathJax(),
+                        title = strong("Summary Statistics and Correlations", align="center"),
+                        p(h3("Correlation Matrices")),
+                        
+                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
+                        
+                      )
+                      
+                    ),
+                    
+                    #fluidRow(
+                    #column(12,
+                    #p("Summary Statistics and Correlations"))),
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+           ),
+                    
+                    
+                    
+           tabPanel(strong("MPI & Precipitation"),
+                    tabsetPanel(
+                      tabPanel(strong("Tables"),
+                    fluidRow(
+                      h1(strong("MPI & Precipitation"),align="center", 
+                         style = "font-size:35px;"),
+                      column(
+                        10,
+                        style = "margin-left: 100px; margin-right: 100px;",
+                        align="justify",
+                        withMathJax(),
+                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+                      
+                      )),
+                    
+                    br(),
+                    
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick2")),
+                      column(4,
+                             align="justify",
+                             p(
+                               "
+                               Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                               "
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                  )
+                  ,
+                  tabPanel(strong("Regressions"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick7")),
+                      column(4, 
+                             p(
+                               "
+                               Figure 1: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the 
+                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
+                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients 
+                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
+                               important implications for the socio-economic conditions of the people.  
+                               "
+                             ),
+                             p(
+                               "
+                               Figure 2: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and 
+                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting 
+                               (Nov-Dec) has the highest absolute magnitude.  
+                               "
+                             ),
+                             p(
+                               "
+                              Figure 3:  
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and 
+                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
+                               "
+                             ),
+                             p(
+                               "
+                               Figures 4 – 7: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of 
+                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services 
+                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
+                               "
+                             )
+                             )
+                    )
+                    )
+                  )
+           
+                    
+           ),
+           tabPanel(strong("MPI & EVI"),
+                    fluidRow(
+                      h1(strong("MPI & EVI"), 
+                         style = "font-size:35px;"), align="center",
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick3")),
+                      column(4,
+                             align="justify",
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           ),
+           tabPanel(strong("MPI & Soil Moisture"),
+                    fluidRow(
+                      h1(strong("MPI & Soil Moisture"), 
+                         style = "font-size:35px;"), align="center",
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick4")),
+                      column(4,
+                             align="justify",
+                             p(
+                               "Table 1:
+                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
+                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                    
+           )
+           
+           
+           
+           
+           
+),
+                            
+                            
+                 
                   ## Tab Takeaways --------------
 
                  tabPanel(strong("Takeaways"),
                           
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
+                          fluidRow(style = "margin-left: 80px; margin-right: 80px;",
                                    column(3),
                                    column(6,
+                                          align="justify",
                                           h1(strong("Takeaways"),align="center"),
-                                          p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe. We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view the explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
-                                          p("From our analyses, we see that EVI... "),
-                                          p("We note that precipitation ..."),
-                                          p("We note that Soil Moisture ..."),
-                                          p("We note that MPI ..."),
-                                          p("Finally,"),
+                                          p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe."),
+                                          p("We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view and explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
+                                          p("EVI: The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
+                                          p("Precipitation: Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted."),
+                                          p("We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate.")
+                                          #p("We note that MPI ..."),
+                                          #p("Finally,"),
                                    )
                                    
                           )
@@ -900,6 +1434,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                    h1(strong("Project Team"), align = "center"),
                                    br(),
                                    h4(strong("VT Data Science for the Public Good"), align = "center"),
+                                   align="justify",
                                    p("The", a(href = 'https://aaec.vt.edu/academics/undergraduate/beyond-classroom/dspg.html', 'Data Science for the Public Good (DSPG) Young Scholars program', target = "_blank"),
                                      "is a summer immersive program offered by the", a(href = 'https://aaec.vt.edu/index.html', 'Virginia Tech Department of Agricultural and Applied Economics'), 
                                      "In its third year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
@@ -910,35 +1445,57 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                    p("", style = "padding-top:10px;")
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
-                                   column(6, align = "center",
-                                          h4(strong("DSPG Team Members")),
+                                   column(4, align = "center",
+                                          h4(strong("Graduate Fellows")),
                                           p("", style = "padding-top:10px;"),
                                           img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "team-Poonam.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          
                                           p("", style = "padding-top:10px;"),
-                                          p(a(href = 'https://aaec.vt.edu/people/graduatestudents/index/quaye-leonard-allen.html', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, PHD);"),
-                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, BSE PHD);"),
-                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Virginia Tech, Computational Modeling and Data Analytics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Major, Data and Decisions minor);"),
-                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
-                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Philosophy, Politics, & Economics)."),
+                                          p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
+', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
+                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
+                                          #p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
+                                          #p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
+                                          #p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
+                                          
                                           p("", style = "padding-top:10px;")
                                           
                                    ),
-                                   column(6, align = "center",
-                                          h4(strong("Virginia Tech Faculty Members")),
+                                   column(4, align = "center",
+                                          h4(strong("Undergraduate Interns")),
                                           p("", style = "padding-top:10px;"),
-                                          img(src = "faculty-posadas.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
-                                          img(src = "faculty-chen.jpg", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
+                                          #img(src = "team-Poonam.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          
+                                          p("", style = "padding-top:10px;"),
+                                          #p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.);"),
+                                          #p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
+                                          p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
+                                          p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
+                                          p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
+                                          
+                                          p("", style = "padding-top:10px;")
+                                          
+                                   ),
+                                   column(4, align = "center",
+                                          h4(strong("Faculty & Associate Team Members")),
+                                          p("", style = "padding-top:10px;"),
+                                          img(src = "faculty-posadas.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "faculty-chen.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
                                           img(src = "faculty-alwang.jpg", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-naveen.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics)."),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics)."),
+                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                    )
                           ),
@@ -953,10 +1510,11 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Acknowledgement"), align = "center"),
-                                   p("We would like to thank ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," of Stellenbosch University for providing us with consultative insights on Zimbabwe and support on this project;"),
-                                   p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech); "),
+                                   p("We would like to thank:"),
+                                   p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," (Stellenbosch University);"),
+                                   p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
                                    p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
-                                   p("We also thank ZimStat for providing 2011 and 2017 PICES data for this project.")
+                                   p("We also thank Grown Chirongwe of Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
                                    
                           )
                  ),
@@ -977,16 +1535,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                  p("Nkomozepi, T., & Chung, S.-O. (2012). Assessing the trends and uncertainty of maize net irrigation water requirement estimated from climate change projections for Zimbabwe. Agricultural Water Management, 111, 60–67. https://doi.org/10.1016/j.agwat.2012.05.004 "),
                                  p("Nyakudya, I. W., & Stroosnijder, L. (2011). Water management options based on rainfall analysis for rainfed maize (Zea mays L.) production in Rushinga district, Zimbabwe. Agricultural Water Management, 98(10), 1649–1659. https://doi.org/10.1016/j.agwat.2011.06.002 "),
                                  p("Tadross, M. A., Hewitson, B. C., & Usman, M. T. (2005). The Interannual Variability of the Onset of the Maize Growing Season over South Africa and Zimbabwe. Journal of Climate, 18(16), 3356–3372. https://doi.org/10.1175/jcli3423.1 "),
-                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html "),
-                                 p("Reference"),
-                                 p("Reference"),
-                                 p("Reference")
+                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html ")
 
-                                 
-                                 
-                                 
-                                 
-                                 
+                                
                                  )
                  ),
                  inverse = T)
@@ -999,29 +1550,36 @@ server <- function(input, output) {
   # Run JavaScript Code
   runjs(jscode)
   
-output$myplot <- renderPlot({
-    ggplot(mtcars, aes(disp, mpg)) + geom_point()
-      #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
-  })
-  
-output$myplot2 <- renderPlot({
-    ggplot(mtcars, aes(disp, mpg)) + geom_point()
-    #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
-  })
-  
-  
-output$myplot3 <- renderPlot({
-  ggplot(mtcars, aes(disp, mpg)) + geom_point()
-  #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
-})
 
-output$myplot4 <- renderPlot({
-  ggplot(mtcars, aes(disp, mpg)) + geom_point()
-  #ggtitle(sprintf("%s's plot in %s", input$name, input$state))
-})
+#Reading Tables  for front page
+output$table <- renderTable({
+    
+    table <- read_excel("./data/table.xlsx")
+    table
+  }, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2)  
+  
+
+#correlation for 2011
+output$table11 <- renderTable({
+  
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet2")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
 
 
-# EVI OUTPUTS-------
+#Correlation for 2017
+output$table17 <- renderTable({
+  
+  table <- read_excel("./data/Correlation matrices.xlsx", 
+                      sheet = "Sheet3")
+  table
+}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
+
+
+
+  
+  # EVI OUTPUTS-------
 output$evi_map_leaflet <- renderLeaflet({
   leaflet(EVIGrow2011) %>% addTiles() %>%  
     addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = paste("Region -", EVIGrow2011$Region,":", round(EVIGrow2011$MaxEVI, digits = 3)),
@@ -1043,70 +1601,164 @@ output$evi_map_leaflet <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6)
 })
 
+output$my_slick_evi <- renderSlickR(
+  slickR(
+    my_images_evi,
+    width = "90%"
+  )
+)
 
-# SOIL MOISTURE OUTPUTS-------
-output$soil_map_leaflet <- renderLeaflet({
+
+#output$evi_line11 <- renderPlot({
+#  GrSs2011Line <- EVI_region_long %>% 
+#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+#           Year == 2010|Year == 2011) %>% 
+#    filter(!(Year == 2010 & Month == "03")) %>% 
+#    filter(!(Year == 2010 & Month == "04")) %>%
+#    filter(!(Year == 2010 & Month == "05")) %>%
+#    filter(!(Year == 2010 & Month == "02")) %>% 
+#    filter(!(Year == 2010 & Month == "01")) %>% 
+#    filter(!(Year == 2011 & Month == "10")) %>% 
+#    filter(!(Year == 2011 & Month == "11")) %>%
+#    filter(!(Year == 2011 & Month == "12")) %>% 
+#    group_by(Region, Month) %>% 
+#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+#                               Month =="11" ~ "2",
+#                               Month =="12" ~ "3",
+#                               Month =="01" ~ "4",
+#                               Month =="02" ~ "5",
+#                               Month =="03" ~ "6",
+#                               Month =="04" ~ "7",
+#                               Month =="05" ~ "8"))
+#  
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
+#  GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
+#  
+#  GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
+#  GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
+#  GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
+#  
+# 
+#  # Max EVI
+#  GrSs2011Line %>% 
+#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+#    geom_line()+
+#    #theme(axis.text.x = element_text(angle = 315)) +
+#    scale_colour_discrete(guide = 'none') +
+#    scale_x_discrete(expand=c(0, 1)) +
+#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+#    scale_color_viridis_d(option = "H") +
+#    labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+#    xlab("Time(Month)") +
+#    ylab("Max EVI")
+#  
+#})
+#
+#output$evi_line17 <- renderPlot({
+#  GrSs2017Line <- EVI_region_long %>% 
+#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
+#           Year == 2016|Year == 2017) %>% 
+#    filter(!(Year == 2016 & Month == "03")) %>% 
+#    filter(!(Year == 2016 & Month == "04")) %>%
+#    filter(!(Year == 2016 & Month == "05")) %>%
+#    filter(!(Year == 2016 & Month == "02")) %>% 
+#    filter(!(Year == 2016 & Month == "01")) %>% 
+#    filter(!(Year == 2017 & Month == "10")) %>% 
+#    filter(!(Year == 2017 & Month == "11")) %>%
+#    filter(!(Year == 2017 & Month == "12")) %>% 
+#    group_by(Region, Month) %>% 
+#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
+#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+#                               Month =="11" ~ "2",
+#                               Month =="12" ~ "3",
+#                               Month =="01" ~ "4",
+#                               Month =="02" ~ "5",
+#                               Month =="03" ~ "6",
+#                               Month =="04" ~ "7",
+#                               Month =="05" ~ "8"))
+#  
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
+#  GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
+#  
+#  GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
+#  GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
+#  GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
+#  
+#  
+#  #write.csv(GrSs2017Line, file = "eviline2017.csv")
+#  #GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
+#  
+#  
+#  
+#  # Max EVI
+#  GrSs2017Line %>% 
+#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
+#    geom_line()+
+#    #theme(axis.text.x = element_text(angle = 315)) +
+#    scale_colour_discrete(guide = 'none') +
+#    scale_x_discrete(expand=c(0, 1)) +
+#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
+#    scale_color_viridis_d(option = "H") +
+#    labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+#    xlab("Time(Month)") +
+#    ylab("Max EVI") 
+#  
+#  
+#})
+
+
+## PRECIPITATION OUTPUTS
+output$my_slick <- renderSlickR(
+  slickR(
+    my_images,
+    width = "90%"
+  )
+)
+
+
+## SOIL MOISTURE OUTPUTS-------
+output$SurfMapGraph <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = total$AvgSurfaceMoisture)
+    domain = NULL,
+    reverse = TRUE)
   
-  leaflet(total) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region -", total$region,":", round(total$AvgSurfaceMoisture, digits = 3)),
+  leaflet(SurfMapDataFin) %>% addTiles() %>%
+    addPolygons(color = ~mypal(SurfMapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", SurfMapDataFin$Region, ":", round(SurfMapDataFin$AvgSurfaceMoisture, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE)) %>% 
-    addLegend(pal = mypal,position = "bottomright",values = total$AvgSurfaceMoisture,
-              opacity = .6,title= paste("Average Soil Moisture (mm)"))%>%
-    
-    addPolylines(data = total$geometry, color = "black", opacity = 2, weight = 2,)%>% 
-    setView(lat = -19.0154, lng=29.1549 , zoom =6)
-})
-
-output$soil_hist <- renderPlot({
-  # Grouped
-  ggplot(df2, aes(fill=time, y=value, x=region)) + 
+                                                    bringToFront = TRUE)) %>%
+    addPolylines(data = SurfMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = SurfMapDataFin$AvgSurfaceMoisture, opacity = .6,
+              title= paste("Average Surface </br> Soil Moisture (mm)"))
+})       
+output$SurfBarGraph <- renderPlot({
+  ggplot(SurfBarData, aes(fill=time, y=value, x=region)) + 
     geom_bar(position="dodge", stat="identity")+ 
     labs(color="time") +
     xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
-    ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
+    ggtitle("Surface Soil Moisture Conditions during Planting in 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
     scale_fill_viridis(discrete=TRUE, direction=-1)
-  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition  
-})  
+  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+})
 
-output$soil_line <- renderPlot({
+output$SurfLineGraph <- renderPlot({
   
-  #Generate categories for soil moisture
-  mydat_longg <- mydat_long %>% 
-    mutate(
-      Wet = case_when(Moisture > 25 ~ 1,
-                      TRUE ~ 0),
-      
-      Ideal = case_when(Moisture >= 15 & Moisture <=25 ~ 1,
-                        TRUE ~ 0),
-      
-      Dry = case_when(Moisture >10 & Moisture <15 ~ 1,
-                      TRUE ~ 0),
-      
-      ExtremelyDry = case_when(Moisture <=10 ~ 1,
-                               TRUE ~ 0),
-    )
-  
-  # Make sure that the data is in columns for each region. This step will group by column to get the desired wide dataset.
-  #Put into columns by group
-  mydat_long2 <- transform(mydat_longg,                                 # Create ID by group
-                           ID = as.numeric(factor(region))) %>% select(-c(region)) %>% reshape(idvar = "newDate", 
-                                                                                               timevar = "ID", direction = "wide")
-  # Now let us look at the first month of the growing season. This means we will subset our sample to the first 30 days of planting in the 2016-17 Growing Season. We set this with the min and max variables below.
-  # Set limits to first thirty days of the growing season: c(min, max)
-  min <- as.yearmon("20161119", "%Y%m")
-  max <- as.yearmon("20161219", "%Y%m")
-  
-  # Set axis limits c(min, max) on plot
-  min <- as.Date("2016-11-19")
-  max <- as.Date("2016-12-19")
-  
-ggplot(mydat_long2, aes(newDate, y = value, color = variable)) + 
+  ggplot(SurfLineData, aes(as.Date(newDate), y = value, color = variable)) + 
     geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
     geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
     geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
@@ -1115,45 +1767,129 @@ ggplot(mydat_long2, aes(newDate, y = value, color = variable)) +
     geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
     labs(color="Agro-ecological Region") +
     xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
-    ggtitle("Planting Time During The 2016-17 Growing Season") +
+    ggtitle("Surface Soil Moisture During Planting in 2016-17 Growing Season") +
     theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
-    scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+    scale_x_date(limits = c(Surfmin, Surfmax)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
   
-})  
+})
+
+output$PercMapGraph <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL,
+    reverse = TRUE)
   
+  leaflet(PercMapDataFin) %>% addTiles() %>%
+    addPolygons(color = ~mypal(PercMapDataFin$AvgPercentMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", PercMapDataFin$Region, ":", round(PercMapDataFin$AvgPercentMoisture, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE)) %>%
+    addPolylines(data = PercMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = PercMapDataFin$AvgPercentMoisture, opacity = .6,
+              title= paste("Average Percent </br> Soil Moisture (mm)"))
+})       
+output$PercBarGraph <- renderPlot({
+  ggplot(PercBarData, aes(fill=time, y=value, x=region)) + 
+    geom_bar(position="dodge", stat="identity")+ 
+    labs(color="time") +
+    xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
+    ggtitle("Percent Soil Moisture Conditions After Planting in 2016-17 Growing Season") +
+    guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
+    scale_fill_viridis(discrete=TRUE, direction=-1)
+  #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+})
+
+output$PercLineGraph <- renderPlot({
+  
+  ggplot(PercLineData, aes(as.Date(newDate), y = value, color = variable)) + 
+    geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
+    labs(color="Agro-ecological Region") +
+    xlab("Percent Soil Moisture: After Planting Time") + ylab("Percent Soil Moisture Index") + 
+    ggtitle("Percent Soil moisture After Planting in 2016-17 Growing Season") +
+    theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
+    scale_x_date(limits = c(Percmin, Percmax)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+  
+})
 
 
-# #Add maps
-# output$soil_map <- renderPlot({
-#   ggplot(data = total) +
-#     geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
-#     xlab("Longitude") + ylab("Latitude") +
-#     coord_sf() +
-#     scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,14), breaks=c(6,8,10,12,14), labels=c("6","8", "10", "12", "14")) +
-#     ggtitle("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
-#     guides(fill=guide_legend(title="Average Soil Moisture (mm)"))+theme_bw()
+
+
+
+
+
+# output$MapGraph <- renderLeaflet({
+#   mypal <- colorNumeric(
+#     palette = "viridis",
+#     domain = NULL,
+#     reverse = TRUE)
+#   
+#   leaflet(MapDataFin) %>% addTiles() %>%
+#     addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$Region, ":", round(MapDataFin$AvgSurfaceMoisture# , digits = 3)),
+#                 opacity = 1.0, fillOpacity = 0.5,
+#                 highlightOptions = highlightOptions(color = "black", weight = 2,
+#                                                     bringToFront = TRUE)) %>%
+#     addPolylines(data = MapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
+#     addLegend(pal = mypal,position = "bottomleft",values = MapDataFin$AvgSurfaceMoisture, opacity = .6,
+#               title= paste("Average Soil Moisture (mm)"))
+# })       
+# output$BarGraph <- renderPlot({
+#   ggplot(BarData, aes(fill=time, y=value, x=region)) + 
+#     geom_bar(position="dodge", stat="identity")+ 
+#     labs(color="time") +
+#     xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
+#     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
+#     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
+#     scale_fill_viridis(discrete=TRUE, direction=-1)
+#   #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
+# })
+# 
+# output$LineGraph <- renderPlot({
+#   
+#   ggplot(LineData, aes(as.Date(newDate), y = value, color = variable)) + 
+#     geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
+#     geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
+#     geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
+#     geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
+#     geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
+#     geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
+#     labs(color="Agro-ecological Region") +
+#     xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
+#     ggtitle("Planting Time During The 2016-17 Growing Season") +
+#     theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
+#     scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
+#   
 # })
 
 
 #MPI OUTPUTS -----
 output$MPI_map_2011 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL,
+    reverse = TRUE)
+  
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$M0_k3,
-              opacity = .6,title= paste("MPI 2011")) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m1_k3,
+              opacity = .6,title= paste("2011 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
@@ -1164,22 +1900,22 @@ output$MPI_map_2011 <- renderLeaflet({
 output$MPI_map_2017 <- renderLeaflet({
 
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(color = ~mypal(M0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M0_k3, digits = 3)),
+    addPolygons(color = ~mypal(m0_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m0_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M0") %>%
-    addPolygons(color = ~mypal(M1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M1_k3, digits = 3)),
+    addPolygons(color = ~mypal(m1_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m1_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M1")  %>%  
-    addPolygons(color = ~mypal(M2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim$M2_k3, digits = 3)),
+    addPolygons(color = ~mypal(m2_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$m2_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="M2") %>%
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$M0_k3,
-              opacity = .6,title= paste("MPI 2017")) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$m0_k3,
+              opacity = .6,title= paste("2017 MPI")) %>% 
     addLayersControl(baseGroups = c("M0", "M1", "M2"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
@@ -1187,61 +1923,324 @@ output$MPI_map_2017 <- renderLeaflet({
     hideGroup("M2")
 })
 
+#M0
 output$compo_MPI_11 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name.x, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
     addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomleft",values = joined_zim$g0_edu_max_k3,
-              opacity = .6,title= paste("k=3")) %>% 
-    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness"), 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g0_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
     hideGroup("Education Dropout")%>% 
-    hideGroup("Chronic Ilness")
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
 })
+
+#M1
+output$compo_MPI_11_m1 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+#M2
+output$compo_MPI_11_m2 <- renderLeaflet({
+  leaflet(joined_zim) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>% 
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+})
+
+
+
 
 output$compo_MPI_17 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
-    domain = NULL)
+    domain = NULL,
+    reverse = TRUE)
   
   leaflet(joined_zim17) %>% addTiles() %>%  
-    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(g0_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_max_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Max Education") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Education Dropout")  %>%  
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
     addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
-    addLegend(pal = mypal,position = "bottomleft",values = joined_zim17$g0_edu_max_k3,
-              opacity = .6,title= paste("k=3")) %>% 
-    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness"), 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g0_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
     hideGroup("Education Dropout")%>% 
-    hideGroup("Chronic Ilness")
-  
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
   
 })
+
+#M1
+output$compo_MPI_17_m1 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL,
+    reverse = TRUE)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g1_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g1_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g1_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g1_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+#M2
+output$compo_MPI_17_m2 <- renderLeaflet({
+  mypal <- colorNumeric(
+    palette = "viridis",
+    domain = NULL,
+    reverse = TRUE)
+  
+  leaflet(joined_zim17) %>% addTiles() %>%  
+    addPolygons(fillColor = ~mypal(g2_edu_max_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_max_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Max Education") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_dropout_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_chronic_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Chronic Ilness") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_visit_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_visit_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Health Visit") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_assets_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_assets_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Household Assets") %>%
+    addPolygons(fillColor = ~mypal(joined_zim17$g2_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g2_services_k3, digits = 3)),
+                opacity = 1.0, fillOpacity = 0.5,
+                highlightOptions = highlightOptions(color = "black", weight = 2,
+                                                    bringToFront = TRUE), group="Service Access") %>%
+    
+    addPolylines(data = joined_zim17$geometry, color = "black", opacity = 2, weight = 2,)%>% 
+    setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
+    addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g2_edu_max_k3,
+              opacity = .6,title= paste("MPI Component Value")) %>% 
+    addLayersControl(baseGroups = c("Max Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+                     options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
+    #hideGroup("M0")%>% 
+    hideGroup("Education Dropout")%>% 
+    hideGroup("Chronic Ilness") %>%
+    hideGroup("Health Visit") %>% 
+    hideGroup("Household Assets") %>% 
+    hideGroup("Service Access")
+  
+})
+
+
+
+
+
+
+
+output$my_slick2 <- renderSlickR(
+  slickR(
+    my_images2,
+    width = "90%"
+  )
+)
+output$my_slick3 <- renderSlickR(
+  slickR(
+    my_images3,
+    width = "90%"
+  )
+)
+output$my_slick4 <- renderSlickR(
+  slickR(
+    my_images4,
+    width = "90%"
+  )
+)
+
+output$my_slick5 <- renderSlickR(
+  slickR(
+    my_images5,
+    width = "90%"
+  )
+)
+
+output$my_slick_corr <- renderSlickR(
+  slickR(
+    my_images6,
+    width = "90%"
+  )
+)
+output$my_slick7 <- renderSlickR(
+  slickR(
+    my_images7,
+    width = "60%"
+  )
+)
 
 
 }
