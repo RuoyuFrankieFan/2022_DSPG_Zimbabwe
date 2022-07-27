@@ -264,7 +264,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                    column(4,
                                           align="justify",
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
-                                          p("Zimbabwe is located at the Southeastern tip of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence from Great Britain in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
+                                          p("Zimbabwe is located at the Southeastern part of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
                                             p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
                                           
                                           img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
@@ -1085,7 +1085,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                              p(
                                "
                                Figure 1: 
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the 
                                first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
                                level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients 
                                are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
@@ -1095,7 +1095,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                              p(
                                "
                                Figure 2: 
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (M1). Similar to Figure 1, the coefficients are all negative and 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and 
                                statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting 
                                (Nov-Dec) has the highest absolute magnitude.  
                                "
@@ -1103,7 +1103,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                              p(
                                "
                               Figure 3:  
-                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (M2). Once again, the coefficients are all negative and 
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and 
                               statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
                                "
                              ),
@@ -1518,7 +1518,7 @@ output$SurfMapGraph <- renderLeaflet({
                                                     bringToFront = TRUE)) %>%
     addPolylines(data = SurfMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
     addLegend(pal = mypal,position = "bottomright",values = SurfMapDataFin$AvgSurfaceMoisture, opacity = .6,
-              title= paste("Average Surface Soil Moisture (mm)"))
+              title= paste("Avg Surface Soil Moisture (mm)"))
 })       
 output$SurfBarGraph <- renderPlot({
   ggplot(SurfBarData, aes(fill=time, y=value, x=region)) + 
@@ -1561,7 +1561,7 @@ output$PercMapGraph <- renderLeaflet({
                                                     bringToFront = TRUE)) %>%
     addPolylines(data = PercMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
     addLegend(pal = mypal,position = "bottomright",values = PercMapDataFin$AvgPercentMoisture, opacity = .6,
-              title= paste("Average Percent Soil Moisture (mm)"))
+              title= paste("Avg Percent Soil Moisture (mm)"))
 })       
 output$PercBarGraph <- renderPlot({
   ggplot(PercBarData, aes(fill=time, y=value, x=region)) + 
