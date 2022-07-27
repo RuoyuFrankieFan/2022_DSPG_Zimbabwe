@@ -845,7 +845,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  tabPanel(strong("Multidimensional Poverty Index"),
                     
                           tabPanel(title = "2011",
-                                   fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center")),
+                                   fluidRow(h1(strong("District-Level Multidimensional Poverty Index"), align = "center")),
                                    fluidRow(
                                      column(
                                        align="justify",
@@ -952,8 +952,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
 
                 ## Tab 5 ------
               navbarMenu(strong("Analysis"), 
-              tabPanel(strong("Correlation Analysis"),
-     
+              tabPanel(strong("Correlations"),
                        fluidRow(
                          h1(strong("Correlations"), 
                             style = "font-size:35px;"), align="center",
@@ -963,63 +962,59 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                 
                                 )),
                        
-                       
                        fluidRow(
-                         column(
-                           8,
-                           img(src = "MPICorr2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
-                         ),
-                         
-                         
-                         
+                         h1(strong("District Level Rainfall"), align = "center"),
                          column(
                            align="justify",
-                           width = 4,
+                           width = 12,
                            withMathJax(),
-                           title = strong("Summary Statistics and Correlations", align="center"),
-                           p(h3("Correlation Matrices")),
-                           
-                           p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
-                           
-                         )
-      
-
-                       ),
-                       
-                       fluidRow(
+                           title = "Description",
+                           p(""))
                          
-                         column(
-                           8,
-                           img(src = "MPICorr2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
-                         ),
-                         column(
-                           align="justify",
-                           width = 4,
-                           withMathJax(),
-                           title = strong("Summary Statistics and Correlations", align="center"),
-                           p(h3("Summary Statistics")),
-                           p("The average poverty headcount (M0) was higher in 2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
-
-In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum EVI is also higher in 2016-17 compared that in 2010-11."), 
-                           
-                         )
                        ),
+                       fluidRow(
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                h3("Total Rainfall By District 2011"),
+                                img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                         ),
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                h3("Total Rainfall By District 2017"),
+                                img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                                
+                         )),
+                       
+                       
                        
                        fluidRow(
-                       column(12, 
-                              slickROutput("my_slick5"))),
-                       
-                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
                        )
                        
-                       ),
+                       
+                       
+                       
+                       
+                       ,
+                    ),
               
-              
-              
-              
-              tabPanel(strong("Regression Analysis"),
+              tabPanel(strong("Regression"),
                        fluidRow(
                          h1(strong("Regressions"), 
                             style = "font-size:35px;"), align="center",
@@ -1048,52 +1043,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                        
                        ),
               
-              tabPanel(strong("Precipitation"),
-                       
-                       fluidRow(
-                         h1(strong("District Level Rainfall"), align = "center"),
-                         column(
-                           align="justify",
-                           width = 12,
-                           withMathJax(),
-                           title = "Description",
-                           p(""))
-                         
-                       ),
-                       fluidRow(
-                         column(6,
-                         #style = "margin-left: 5px; margin-right: 100px;",
-                         img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                         div(tags$caption("Figure: 2011"),align="center")
-                         #align = "left"
-                       ),
-                       column(6,
-                              #style = "margin-left: 5px; margin-right: 100px;",
-                              img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                              div(tags$caption("Figure: 2011"),align="center")
-                              #align = "left"
-                       
-                       )),
-                       
-                       
-                       
-                       fluidRow(
-                         align="justify",
-                         style = "margin-left: 100px; margin-right: 100px;",
-                         column(12, p(strong("Description")) , 
-                                p("
-               These visualizations show us the maximum EVI during the two growing seasons,  
-               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
-               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
-               "))
-                         
-                       )
-                       
-                       )
+
               
               
               ),
@@ -1306,7 +1256,8 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                     
                     
            tabPanel(strong("MPI & Precipitation"),
-                  tabPanel(strong("Tables"),
+                    tabsetPanel(
+                      tabPanel(strong("Tables"),
                     fluidRow(
                       h1(strong("MPI & Precipitation"),align="center", 
                          style = "font-size:35px;"),
@@ -1327,9 +1278,41 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                     
                     fluidRow(
                       style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick7")),
+                      column(8, slickROutput("my_slick2")),
                       column(4,
                              align="justify",
+                             p(
+                               "
+                               Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
+                               "
+                             ),
+                             p(
+                               "Table 2:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 3:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             ),
+                             p(
+                               "Table 4:
+                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
+                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                             )
+                      )
+                      
+                    )
+                  )
+                  ,
+                  tabPanel(strong("Regressions"),
+                    fluidRow(
+                      style = "margin-left: 0px; margin-right: 0px;",
+                      column(8, slickROutput("my_slick7")),
+                      column(4, 
                              p(
                                "
                                Figure 1: 
@@ -1363,12 +1346,10 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                                are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
                                "
                              )
-                             
-                      )
-                      
+                             )
+                    )
                     )
                   )
-                    
            
                     
            ),
