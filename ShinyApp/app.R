@@ -243,12 +243,12 @@ ui <- navbarPage(title = "Zimbabwe",
                           ),
                           
                           fluidRow(style = "margin: 6px;",
-                                   column(4,
+                                   column(6,
                                           align="justify",
                                           h2(strong("Project Overview"), align = "center"),
                                           p("In Zimbabwe, agriculture is a mainstay of the economy and livelihood for most rural poor. Zimbabwe has experienced increased social and economic unrest since 2000, with macroeconomic instability and diseases contributing to the problem. Extreme droughts in 2003 and 2016 contributed to increased food insecurity and a significant increase in rural poverty. Additionally, a fast-track land reform program beginning in 2000 contributed to the decapitalization of the commercial agriculture sector."),
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
-                                          
+                                          br(),
                                           fluidRow(
                                             img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align="center",
                                             div(tags$caption("Figure 1: Project Timeline"), align="center"),
@@ -261,40 +261,61 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
-                                   column(4,
+                                   column(6,
                                           align="justify",
                                           h2(strong("Introduction to Zimbabwe"), align = "center"),
                                           p("Zimbabwe is located at the Southeastern part of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
                                             p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
                                           
-                                          img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"),
+                                          img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "105%"),
                                           div(tags$caption("Figure 2: Livelihood zones in Zimbabwe"), align="center"),
                                           br(),
-                                            p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive.")),
+                                            p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."))),
                                    
-                                   column(4,
+                          br(),
+                          br(),
+                                   
+                                   fluidRow(
+                                   column(6,
                                           align="justify",
                                           h2(strong("Agricultural Profile"), align = "center"),
-                                          p("89% of farmers in Zimbabwe are smallholders (farmers with limited recources that work on small plots of land, have little technology, and typically rely on family for labor, and rain for their crops (Kuhudzayi & Mattos, 2018)) who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
+                                          p("89% of farmers in Zimbabwe are smallholders (farmers with limited resources that work on small plots of land, have little technology, and typically rely on family for labor, and rain for their crops (Kuhudzayi & Mattos, 2018)) who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
                                           p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
                                           
                                           #h3(em("Regional Specificity"), align = "center"),
                                           img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
                                           div(tags$caption("Figure 3: Agro-ecological regions of Zimbabwe"), align="center"),
-                                          p(""),
-                                          p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well"),
+                                          p("")
+                                          #p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well"),
                                           
-                                          )
                                           ),
-                          fluidRow(
-                            column(
-                              align="center",
-                              12,
-                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
-                              withSpinner(tableOutput("table")),
-                              div(tags$caption("Source: FAO")),
-                            )
-                          ),
+
+                                   
+                                   column(align="justify",
+                                     6,
+                                     fluidRow(
+                                     div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
+                                     withSpinner(tableOutput("table")),
+                                     div(tags$caption("Source: FAO"))),
+                                     br(),
+                                     
+                                     p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well")
+                                   )
+                                   
+                                   
+                                   
+                                   
+                                   
+                                          ),
+                          # fluidRow(
+                          #   column(
+                          #     align="center",
+                          #     6,
+                          #     div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
+                          #     withSpinner(tableOutput("table")),
+                          #     div(tags$caption("Source: FAO")),
+                          #   )
+                          # ),
                           br(),
                           br(),
 
@@ -319,8 +340,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                          fluidRow(
                                          img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
-                                         div(tags$caption("Figure 4: Remote Sensing"),align="center")),
-                                         
+                                         div(tags$caption("Figure 4: Remote Sensing"),align="center"),
+                                         p(tags$small(em('Source: NASA')))),
                                          #br(),
                                          #p("In this project we source data for the following remote sensed data:"),
                                          #h4(em("Selected Remote Sensed Data")),
@@ -1518,7 +1539,7 @@ output$SurfMapGraph <- renderLeaflet({
                                                     bringToFront = TRUE)) %>%
     addPolylines(data = SurfMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
     addLegend(pal = mypal,position = "bottomright",values = SurfMapDataFin$AvgSurfaceMoisture, opacity = .6,
-              title= paste("Avg Surface Soil Moisture (mm)"))
+              title= paste("Average Surface </br> Soil Moisture (mm)"))
 })       
 output$SurfBarGraph <- renderPlot({
   ggplot(SurfBarData, aes(fill=time, y=value, x=region)) + 
@@ -1561,7 +1582,7 @@ output$PercMapGraph <- renderLeaflet({
                                                     bringToFront = TRUE)) %>%
     addPolylines(data = PercMapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
     addLegend(pal = mypal,position = "bottomright",values = PercMapDataFin$AvgPercentMoisture, opacity = .6,
-              title= paste("Avg Percent Soil Moisture (mm)"))
+              title= paste("Average Percent </br> Soil Moisture (mm)"))
 })       
 output$PercBarGraph <- renderPlot({
   ggplot(PercBarData, aes(fill=time, y=value, x=region)) + 
