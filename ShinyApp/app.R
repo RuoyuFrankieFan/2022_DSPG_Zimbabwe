@@ -1268,7 +1268,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                                           img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           
                                           p("", style = "padding-top:10px;"),
-                                          #p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
+                                          #p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.);"),
                                           #p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
                                           p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
                                           p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
@@ -1286,9 +1286,9 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                                           img(src = "team-naveen.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics)."),
-                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.)."),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics)."),
+                                          p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                    )
                           ),
