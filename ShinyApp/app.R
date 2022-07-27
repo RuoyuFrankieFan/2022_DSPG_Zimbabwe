@@ -235,7 +235,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
                                     fluidRow(style = "margin: 2px;",
-                                             img(src = "corn-field.jpg", height="100", width="1000", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                             img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -397,7 +397,7 @@ The final dimension of wellbeing – with a weight of 1 – is Lack of Access to
                                           12,
                                           #align="justify",
                                           h1(strong("Overview of Methodology")),
-                                          img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+                                          img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "85%"), align ="center",
                                           div(tags$caption("Figure 4: Overview of Methodology"),align="center")
                                         ),
                                         br(),
@@ -845,7 +845,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  tabPanel(strong("Multidimensional Poverty Index"),
                     
                           tabPanel(title = "2011",
-                                   fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center")),
+                                   fluidRow(h1(strong("District-Level Multidimensional Poverty Index"), align = "center")),
                                    fluidRow(
                                      column(
                                        align="justify",
@@ -907,7 +907,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                    
                                    )),
                  
-                 tabPanel(strong("Components"),
+                 tabPanel(strong("Components of the MPI"),
                           
                           tabPanel(title = "\\(M_{0}\\)",
                                    
@@ -917,8 +917,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                             width = 12,
                                             withMathJax(),
                                             title = "Description",
-                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". 
-                                     Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
+                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". Our study uses ", strong("district-level")," measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
                                               tags$ul(
                                                 tags$li("Max Education"),
                                                 tags$li("Education Dropout"),
@@ -952,7 +951,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
 
                 ## Tab 5 ------
               navbarMenu(strong("Analysis"), 
-              tabPanel(strong("Correlation Analysis"),
+              tabPanel(strong("Correlations"),
                        fluidRow(
                          h1(strong("Correlations"), 
                             style = "font-size:35px;"), align="center",
@@ -961,9 +960,89 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                 
                                 
                                 )),
+                       
+                       fluidRow(
+                         column(
+                           
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = strong("Summary Statistics and Correlations", align="center"),
+                           p(h3("Correlation Matrices")),
+                           p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level."))
+                       ),
+                       
+                       fluidRow(
+                         column(
+                           6,
+                           img(src = "MPICorr2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                           
+                           div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+                         ),
+                         column(
+                           6,
+                           img(src = "MPICorr2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                           
+                           div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                           ),
+                         
+                         br(),
+                         
+                         
+                       ),
+                       
+                       fluidRow(
+                         h3(strong("Correlations with District-Level Rainfall"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         #h3(strong("District Level Rainfall"), align = "left"),
+                         column(
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = "Description",
+                           p(""))
+                         
+                       ),
+                       
+                       fluidRow(
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                         ),
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                                
+                         )),
+                       
+                       
+                       
+                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
+                       ),
+                       
+                        
+                       
                     ),
               
-              tabPanel(strong("Regression Analysis"),
+              tabPanel(strong("Regressions"),
                        fluidRow(
                          h1(strong("Regressions"), 
                             style = "font-size:35px;"), align="center",
@@ -981,65 +1060,61 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                            style = "margin-left: 100px; margin-right: 100px;",
                            align="justify",
                            withMathJax(),
-                           p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                           p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using", strong("district-level"), "data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
                            p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
                            p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
                            p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
                            p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
                            
-                         ))
-                       
-                       
-                       ),
-              
-              tabPanel(strong("Precipitation"),
-                       
+                         )),
+                       br(),
+                       br(),
                        fluidRow(
-                         h1(strong("District Level Rainfall"), align = "center"),
-                         column(
-                           align="justify",
-                           width = 12,
-                           withMathJax(),
-                           title = "Description",
-                           p(""))
-                         
-                       ),
-                       fluidRow(
-                         column(6,
-                         #style = "margin-left: 5px; margin-right: 100px;",
-                         img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                         div(tags$caption("Figure: 2011"),align="center")
-                         #align = "left"
-                       ),
-                       column(6,
-                              #style = "margin-left: 5px; margin-right: 100px;",
-                              img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                              div(tags$caption("Figure: 2011"),align="center")
-                              #align = "left"
+                         h4(strong("Selected Regressions"),align="left", 
+                            style = "margin-left: 100px; margin-right: 100px;"),
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         column(8, slickROutput("my_slick7")),
+                         column(4,
+                                align="justify",
+                                p(
+                                  "
+                               Figure 1:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the
+                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent
+                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients
+                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have
+                               important implications for the socio-economic conditions of the people.
+                               "
+                                ),
                        
-                       )),
+                                p(
+                                  "
+                               Figure 2:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and
+                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting
+                               (Nov-Dec) has the highest absolute magnitude.
+                               "
+                                ),
+                                p(
+                                  "
+                              Figure 3:
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and
+                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.
+                               "
+                                ),
+                                p(
+                                  "
+                               Figures 4 – 7:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of
+                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services
+                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season.
+                               "
+                                )
                        
                        
-                       
-                       fluidRow(
-                         align="justify",
-                         style = "margin-left: 100px; margin-right: 100px;",
-                         column(12, p(strong("Description")) , 
-                                p("
-               These visualizations show us the maximum EVI during the two growing seasons,  
-               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
-               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
-               "))
-                         
-                       )
-                       
-                       )
+                       )))
               
-              
+ 
               ),
 
 
@@ -1185,223 +1260,223 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
 #                            
                  
                  ## Tab 3------------------
-navbarMenu(strong("MPI and Indices"),
-           tabPanel(strong("Summary Statistics"),
-                    fluidRow(
-                      h1(strong("Summary Statistics"), 
-                         style = "font-size:35px;"), align="center",
-                    style = "margin-left: 0px; margin-right: 0px;",
-                    column(12, slickROutput("my_slick5"))),
-                    
-                    
-                    fluidRow(
-                      column(
-                        7,
-                        img(src = "stats_v2_2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                        div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
-                      ),
-                      
-                      column(
-                        align="justify",
-                        width = 5,
-                        withMathJax(),
-                        title = strong("Summary Statistics and Correlations", align="center"),
-                        p(h3("Summary Statistics")),
-                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in 2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
-
-In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum EVI is also higher in 2016-17 compared that in 2010-11."), 
-                        
-                      )
-                      
-                    ),
-                    
-                    fluidRow(
-                      column(
-                        7,
-                        img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                        div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
-                      ),
-                      
-                      column(
-                        align="justify",
-                        width = 5,
-                        withMathJax(),
-                        title = strong("Summary Statistics and Correlations", align="center"),
-                        p(h3("Correlation Matrices")),
-                        
-                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
-                        
-                      )
-                      
-                    ),
-                    
-                    #fluidRow(
-                    #column(12,
-                    #p("Summary Statistics and Correlations"))),
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-           ),
-                    
-                    
-                    
-           tabPanel(strong("MPI & Precipitation"),
-                    tabsetPanel(
-                      tabPanel(strong("Tables"),
-                    fluidRow(
-                      h1(strong("MPI & Precipitation"),align="center", 
-                         style = "font-size:35px;"),
-                      column(
-                        10,
-                        style = "margin-left: 100px; margin-right: 100px;",
-                        align="justify",
-                        withMathJax(),
-                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
-                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
-                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
-                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
-                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
-                      
-                      )),
-                    
-                    br(),
-                    
-                    fluidRow(
-                      style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick2")),
-                      column(4,
-                             align="justify",
-                             p(
-                               "
-                               Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
-                               "
-                             ),
-                             p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 3:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 4:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             )
-                      )
-                      
-                    )
-                  )
-                  ,
-                  tabPanel(strong("Regressions"),
-                    fluidRow(
-                      style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick7")),
-                      column(4, 
-                             p(
-                               "
-                               Figure 1: 
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the 
-                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
-                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients 
-                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
-                               important implications for the socio-economic conditions of the people.  
-                               "
-                             ),
-                             p(
-                               "
-                               Figure 2: 
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and 
-                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting 
-                               (Nov-Dec) has the highest absolute magnitude.  
-                               "
-                             ),
-                             p(
-                               "
-                              Figure 3:  
-                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and 
-                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
-                               "
-                             ),
-                             p(
-                               "
-                               Figures 4 – 7: 
-                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of 
-                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services 
-                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
-                               "
-                             )
-                             )
-                    )
-                    )
-                  )
-           
-                    
-           ),
-           tabPanel(strong("MPI & EVI"),
-                    fluidRow(
-                      h1(strong("MPI & EVI"), 
-                         style = "font-size:35px;"), align="center",
-                      style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick3")),
-                      column(4,
-                             align="justify",
-                             p(
-                               "Table 1:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             )
-                      )
-                      
-                    )
-                    
-           ),
-           tabPanel(strong("MPI & Soil Moisture"),
-                    fluidRow(
-                      h1(strong("MPI & Soil Moisture"), 
-                         style = "font-size:35px;"), align="center",
-                      style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick4")),
-                      column(4,
-                             align="justify",
-                             p(
-                               "Table 1:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             )
-                      )
-                      
-                    )
-                    
-           )
-           
-           
-           
-           
-           
-),
-                            
-                            
-                 
+#navbarMenu(strong("MPI and Indices"),
+#           tabPanel(strong("Summary Statistics"),
+#                    fluidRow(
+#                      h1(strong("Summary Statistics"), 
+#                         style = "font-size:35px;"), align="center",
+#                    style = "margin-left: 0px; margin-right: 0px;",
+#                    column(12, slickROutput("my_slick5"))),
+#                    
+#                    
+#                    fluidRow(
+#                      column(
+#                        7,
+#                        img(src = "stats_v2_2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+#                        div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+#                      ),
+#                      
+#                      column(
+#                        align="justify",
+#                        width = 5,
+#                        withMathJax(),
+#                        title = strong("Summary Statistics and Correlations", align="center"),
+#                        p(h3("Summary Statistics")),
+#                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in #2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory #screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
+#
+#In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum #EVI is also higher in 2016-17 compared that in 2010-11."), 
+#                        
+#                      )
+#                      
+#                    ),
+#                    
+#                    fluidRow(
+#                      column(
+#                        7,
+#                        img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
+#                        div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+#                      ),
+#                      
+#                      column(
+#                        align="justify",
+#                        width = 5,
+#                        withMathJax(),
+#                        title = strong("Summary Statistics and Correlations", align="center"),
+#                        p(h3("Correlation Matrices")),
+#                        
+#                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season #exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that #rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
+#                        
+#                      )
+#                      
+#                    ),
+#                    
+#                    #fluidRow(
+#                    #column(12,
+#                    #p("Summary Statistics and Correlations"))),
+#                    
+#                    
+#                    
+#                    
+#                    
+#                    
+#                    
+#           ),
+#                    
+#                    
+#                    
+#           tabPanel(strong("MPI & Precipitation"),
+#                    tabsetPanel(
+#                      tabPanel(strong("Tables"),
+#                    fluidRow(
+#                      h1(strong("MPI & Precipitation"),align="center", 
+#                         style = "font-size:35px;"),
+#                      column(
+#                        10,
+#                        style = "margin-left: 100px; margin-right: 100px;",
+#                        align="justify",
+#                        withMathJax(),
+#                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We #estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+#                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+#                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - #Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+#                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+#                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+#                      
+#                      )),
+#                    
+#                    br(),
+#                    
+#                    fluidRow(
+#                      style = "margin-left: 0px; margin-right: 0px;",
+#                      column(8, slickROutput("my_slick2")),
+#                      column(4,
+#                             align="justify",
+#                             p(
+#                               "
+#                               Table 2:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:
+#                               "
+#                             ),
+#                             p(
+#                               "Table 2:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
+#                             ),
+#                             p(
+#                               "Table 3:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
+#                             ),
+#                             p(
+#                               "Table 4:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
+#                             )
+#                      )
+#                      
+#                    )
+#                  )
+#                  ,
+#                  tabPanel(strong("Regressions"),
+#                    fluidRow(
+#                      style = "margin-left: 0px; margin-right: 0px;",
+#                      column(8, slickROutput("my_slick7")),
+#                      column(4, 
+#                             p(
+#                               "
+#                               Figure 1: 
+#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of #rain in the 
+#                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 #percent 
+#                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated #coefficients 
+#                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall #may have 
+#                               important implications for the socio-economic conditions of the people.  
+#                               "
+#                             ),
+#                             p(
+#                               "
+#                               Figure 2: 
+#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all #negative and 
+#                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month #of planting 
+#                               (Nov-Dec) has the highest absolute magnitude.  
+#                               "
+#                             ),
+#                             p(
+#                               "
+#                              Figure 3:  
+#                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). #Once again, the coefficients are all negative and 
+#                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
+#                               "
+#                             ),
+#                             p(
+#                               "
+#                               Figures 4 – 7: 
+#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with #these measures of 
+#                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max #Educ. and Lack of Access to Services 
+#                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
+#                               "
+#                             )
+#                             )
+#                    )
+#                    )
+#                  )
+#           
+#                    
+#           ),
+#           tabPanel(strong("MPI & EVI"),
+#                    fluidRow(
+#                      h1(strong("MPI & EVI"), 
+#                         style = "font-size:35px;"), align="center",
+#                      style = "margin-left: 0px; margin-right: 0px;",
+#                      column(8, slickROutput("my_slick3")),
+#                      column(4,
+#                             align="justify",
+#                             p(
+#                               "Table 1:
+#                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES, 
+#                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph#:"
+#                             ),
+#                             p(
+#                               "Table 2:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
+#                             )
+#                      )
+#                      
+#                    )
+#                    
+#           ),
+#           tabPanel(strong("MPI & Soil Moisture"),
+#                    fluidRow(
+#                      h1(strong("MPI & Soil Moisture"), 
+#                         style = "font-size:35px;"), align="center",
+#                      style = "margin-left: 0px; margin-right: 0px;",
+#                      column(8, slickROutput("my_slick4")),
+#                      column(4,
+#                             align="justify",
+#                             p(
+#                               "Table 1:
+#                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES, 
+#                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph#:"
+#                             ),
+#                             p(
+#                               "Table 2:
+#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
+#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
+#                             )
+#                      )
+#                      
+#                    )
+#                    
+#           )
+#           
+#           
+#           
+#           
+#           
+#),
+#                            
+#                            
+#                 
                   ## Tab Takeaways --------------
 
                  tabPanel(strong("Takeaways"),
