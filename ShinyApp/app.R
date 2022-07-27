@@ -839,146 +839,350 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             
                             
                             #),
-                 
-                 ## Tab 2------
-                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
-                            tabPanel(strong("Multidimensional Poverty Index"),
-                                     
-                                     
-                                     tabPanel(title = "2011",
-                                     fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center"),
-                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
-                                         title = "Multidimensional Poverty Index 2011",
-                                         width = 6,
-                                         height = 600
-                                       ),
-                                       box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
-                                           title = "Multidimensional Poverty Index 2017",
-                                           width = 6,
-                                           height = 600
-                                         
-                                       )
-                                         ),
-                                     
-                                     fluidRow(
-                                       column(
-                                         align="justify",
-                                         h3("Description"),
-                                         width = 6,
-                                         withMathJax(),
-                                         title = "Description",
-                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to this graph:
+
+                 ## Tab 4 ------
+                 navbarMenu(strong("Poverty and Components"), 
+                 tabPanel(strong("Multidimensional Poverty Index"),
+                    
+                          tabPanel(title = "2011",
+                                   fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center")),
+                                   fluidRow(
+                                     column(
+                                       align="justify",
+                                       #h3("Description"),
+                                       width = 12,
+                                       withMathJax(),
+                                       title = "Description",
+                                       p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct", strong("district-level"), "analysis in our study using the 60 districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-                                         tags$ul(  
-                                           tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
-                                                   " and considers all of the dimensions described in the methodology section."),
-                                           tags$li("\\(M_{1}\\)
+                                       tags$ul(  
+                                         tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
+                                                 " and considers all of the dimensions described in the methodology section."),
+                                         tags$li("\\(M_{1}\\)
                                       is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-                                           tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
-                                           
-                                         ),
-                                         p("In this study, we use MPI that has been calculated using k=3 as the threshold.
-For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
-                                       
-                                       column(
-                                         align="justify",
-                                         h3("Descriptive Analysis"),
-                                         withMathJax(),
-                                         title = strong("Descriptive Analysis"),
-                                         width = 6,
-                                         p("\\(M_{0}\\)"),
-                                         p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                         tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are farther away from the poverty line. Thus, this index measures severity of poverty.")
                                          
-                                         p("\\(M_{1}\\)"),
-                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
-                                         p("\\(M_{2}\\)"),
-                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
-                                         p("")
-                                       )
-                                     ))),
-                            
-                            
-                            
-                            tabPanel(strong("Components of the MPI"),
+                                       ),
+                                       p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
                                      
-                                     tabsetPanel(
-                                       tabPanel(title = "\\(M_{0}\\)",
-                                     fluidRow(h1(strong("Components of the MPI"), align = "center"),
-                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
-                                         title = "Components of the MPI for 2011",
+                                     
+                                   ),
+                                   
+                                   
+                                   fluidRow(#h1(strong("Multidimensional Poverty Index"), align = "center"),
+                                            column(
+                                              h3("Multidimensional Poverty Index 2011"),
+                                              withSpinner(leafletOutput("MPI_map_2011", height=520)),
+                                                title = "Multidimensional Poverty Index 2011",
+                                                width = 6,
+                                                height = 600
+                                            ),
+                                            column(
+                                              h3("Multidimensional Poverty Index 2017"),
+                                              withSpinner(leafletOutput("MPI_map_2017", height=520)),
+                                                title = "Multidimensional Poverty Index 2017",
+                                                width = 6,
+                                                height = 600
+                                                
+                                            )),
+                                   
+                                   fluidRow(
+                                   column(
+                                     align="justify",
+                                     h3("Descriptive Analysis"),
+                                     withMathJax(),
+                                     title = strong("Descriptive Analysis"),
+                                     width = 12,
+                                     p("\\(M_{0}\\)"),
+                                     p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                     
+                                     p("\\(M_{1}\\)"),
+                                     p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
+                                     p("\\(M_{2}\\)"),
+                                     p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
+                                     p("")
+                                   ))
+                                   
+                                   
+                                   )),
+                 
+                 tabPanel(strong("Components"),
+                          
+                          tabPanel(title = "\\(M_{0}\\)",
+                                   
+                                   fluidRow(h1(strong("Components of the MPI"), align = "center"),
+                                            column(
+                                              align="justify",
+                                            width = 12,
+                                            withMathJax(),
+                                            title = "Description",
+                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". 
+                                     Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
+                                              tags$ul(
+                                                tags$li("Max Education"),
+                                                tags$li("Education Dropout"),
+                                                tags$li("Chronic Illness"),
+                                                tags$li("Lack of Health Visit"),
+                                                tags$li("Lack of Household Assets"),
+                                                tags$li("Lack of Access to Services")
+                                                
+                                              ),
+                                             # p("Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                              p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence  (\\(M_{0}\\))."),#, gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))."),
+                                            p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)), please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
+                                                                                )),
+                                   
+                                   fluidRow(
+                                     box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
+                                       title = "Components of the MPI for 2011",
+                                       width = 6,
+                                       height = 600
+                                     ),
+                                     box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
+                                         title = "Components of the MPI for 2017",
                                          width = 6,
                                          height = 600
-                                       ),
-                                       box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
-                                           title = "Components of the MPI for 2017",
-                                           width = 6,
-                                           height = 600
-                                       )),
-                                         
-                                     fluidRow(
-                                     box(
-                                           
-                                           width = 12,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-                                           p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                           ))),
-                                     
-                                     tabPanel(title = "\\(M_{1}\\)",
-                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
-                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
-                                                           title = "Components of the MPI for 2011",
-                                                           width = 6,
-                                                           height = 600
-                                                       ),
-                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
-                                                           title = "Components of the MPI for 2017",
-                                                           width = 6,
-                                                           height = 600
-                                                       )),
-                                              
-                                              fluidRow(
-                                                box(
-                                                  align="justify",
-                                                  width = 12,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                                ))),
-                                     
-                                     tabPanel(title = "\\(M_{2}\\)",
-                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
-                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
-                                                           title = "Components of the MPI for 2011",
-                                                           width = 6,
-                                                           height = 600
-                                                       ),
-                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
-                                                           title = "Components of the MPI for 2017",
-                                                           width = 6,
-                                                           height = 600
-                                                       )),
-                                              
-                                              fluidRow(
-                                                box(
-                                                  align="justify",
-                                                  width = 12,
-                                                  withMathJax(),
-                                                  title = "Description",
-                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-                                                )))
-                                     
-                                     
-                                     
-                                     ))),
-                            
-                            
+                                     )))),
+                 
+                 
+                 
+                 ),
+
+                ## Tab 5 ------
+              navbarMenu(strong("Analysis"), 
+              tabPanel(strong("Correlation Analysis"),
+                       fluidRow(
+                         h1(strong("Correlations"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         column(12
+                                
+                                
+                                )),
+                    ),
+              
+              tabPanel(strong("Regression Analysis"),
+                       fluidRow(
+                         h1(strong("Regressions"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         column(12
+                                
+                                
+                         )),
+                       
+                       fluidRow(
+                         h4(strong("MPI & Precipitation"),align="left", 
+                            style = "margin-left: 100px; margin-right: 100px;"),
+                         column(
+                           10,
+                           style = "margin-left: 100px; margin-right: 100px;",
+                           align="justify",
+                           withMathJax(),
+                           p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
+                           p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
+                           p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                           p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
+                           p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
+                           
+                         ))
+                       
+                       
+                       ),
+              
+              tabPanel(strong("Precipitation"),
+                       
+                       fluidRow(
+                         h1(strong("District Level Rainfall"), align = "center"),
+                         column(
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = "Description",
+                           p(""))
+                         
+                       ),
+                       fluidRow(
+                         column(6,
+                         #style = "margin-left: 5px; margin-right: 100px;",
+                         img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                         div(tags$caption("Figure: 2011"),align="center")
+                         #align = "left"
+                       ),
+                       column(6,
+                              #style = "margin-left: 5px; margin-right: 100px;",
+                              img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                              div(tags$caption("Figure: 2011"),align="center")
+                              #align = "left"
+                       
+                       )),
+                       
+                       
+                       
+                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the maximum EVI during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
+                       )
+                       
+                       )
+              
+              
+              ),
+
+
+
+#                 ## Tab 2------
+#                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
+#                            tabPanel(strong("Multidimensional Poverty Index"),
+#                                     
+#                                     
+#                                     tabPanel(title = "2011",
+#                                     fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center"),
+#                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
+#                                         title = "Multidimensional Poverty Index 2011",
+#                                         width = 6,
+#                                         height = 600
+#                                       ),
+#                                       box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
+#                                           title = "Multidimensional Poverty Index 2017",
+#                                           width = 6,
+#                                           height = 600
+#                                         
+#                                       )
+#                                         ),
+#                                     
+#                                     fluidRow(
+#                                       column(
+#                                         align="justify",
+#                                         h3("Description"),
+#                                         width = 6,
+#                                         withMathJax(),
+#                                         title = "Description",
+#                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time #the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to #this graph:
+#                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
+#                                         tags$ul(  
+#                                           tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method#/","Sabina Alkire and James Foster",target="_blank"),
+#                                                   " and considers all of the dimensions described in the methodology section."),
+#                                           tags$li("\\(M_{1}\\)
+#                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
+#                                           tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are #farther away from the poverty line. Thus, this index measures severity of poverty.")
+#                                           
+#                                         ),
+#                                         p("In this study, we use MPI that has been calculated using k=3 as the threshold.
+#For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
+#                                       
+#                                       column(
+#                                         align="justify",
+#                                         h3("Descriptive Analysis"),
+#                                         withMathJax(),
+#                                         title = strong("Descriptive Analysis"),
+#                                         width = 6,
+#                                         p("\\(M_{0}\\)"),
+#                                         p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be #considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national #average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+#                                         
+#                                         p("\\(M_{1}\\)"),
+#                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
+#                                         p("\\(M_{2}\\)"),
+#                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large #proportion of Zimbabwe’s population."),
+#                                         p("")
+#                                       )
+#                                     ))),
+#                            
+#                            
+#                            
+#                            tabPanel(strong("Components of the MPI"),
+#                                     
+#                                     tabsetPanel(
+#                                       tabPanel(title = "\\(M_{0}\\)",
+#                                     fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
+#                                         title = "Components of the MPI for 2011",
+#                                         width = 6,
+#                                         height = 600
+#                                       ),
+#                                       box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
+#                                           title = "Components of the MPI for 2017",
+#                                           width = 6,
+#                                           height = 600
+#                                       )),
+#                                         
+#                                     fluidRow(
+#                                     box(
+#                                           
+#                                           width = 12,
+#                                           withMathJax(),
+#                                           title = "Description",
+#                                           p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                           p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the #incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                           ))),
+#                                     
+#                                     tabPanel(title = "\\(M_{1}\\)",
+#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
+#                                                           title = "Components of the MPI for 2011",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       ),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
+#                                                           title = "Components of the MPI for 2017",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       )),
+#                                              
+#                                              fluidRow(
+#                                                box(
+#                                                  align="justify",
+#                                                  width = 12,
+#                                                  withMathJax(),
+#                                                  title = "Description",
+#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                                ))),
+#                                     
+#                                     tabPanel(title = "\\(M_{2}\\)",
+#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
+#                                                           title = "Components of the MPI for 2011",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       ),
+#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
+#                                                           title = "Components of the MPI for 2017",
+#                                                           width = 6,
+#                                                           height = 600
+#                                                       )),
+#                                              
+#                                              fluidRow(
+#                                                box(
+#                                                  align="justify",
+#                                                  width = 12,
+#                                                  withMathJax(),
+#                                                  title = "Description",
+#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
+#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
+#                                                )))
+#                                     
+#                                     
+#                                     
+#                                     ))),
+#                            
+#                            
                  
                  ## Tab 3------------------
 navbarMenu(strong("MPI and Indices"),
