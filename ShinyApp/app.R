@@ -1308,8 +1308,7 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                     
                     
            tabPanel(strong("MPI & Precipitation"),
-                    tabsetPanel(
-                      tabPanel(strong("Tables"),
+                  tabPanel(strong("Tables"),
                     fluidRow(
                       h1(strong("MPI & Precipitation"),align="center", 
                          style = "font-size:35px;"),
@@ -1330,41 +1329,9 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                     
                     fluidRow(
                       style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick2")),
+                      column(8, slickROutput("my_slick7")),
                       column(4,
                              align="justify",
-                             p(
-                               "
-                               Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:
-                               "
-                             ),
-                             p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 3:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 4:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             )
-                      )
-                      
-                    )
-                  )
-                  ,
-                  tabPanel(strong("Regressions"),
-                    fluidRow(
-                      style = "margin-left: 0px; margin-right: 0px;",
-                      column(8, slickROutput("my_slick7")),
-                      column(4, 
                              p(
                                "
                                Figure 1: 
@@ -1398,10 +1365,12 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                                are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
                                "
                              )
-                             )
-                    )
+                             
+                      )
+                      
                     )
                   )
+                    
            
                     
            ),
