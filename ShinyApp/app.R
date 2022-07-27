@@ -953,10 +953,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                 ## Tab 5 ------
               navbarMenu(strong("Analysis"), 
               tabPanel(strong("Correlation Analysis"),
-                       
-                       
-                      
-                       
+     
                        fluidRow(
                          h1(strong("Correlations"), 
                             style = "font-size:35px;"), align="center",
@@ -1011,12 +1008,8 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                        ),
                        
                        fluidRow(
-                       column(12, slickROutput("my_slick5")))
-                       
-                       
-                       
-                       
-                       
+                       column(12, 
+                              slickROutput("my_slick5")))
                        
                        
                     ),
