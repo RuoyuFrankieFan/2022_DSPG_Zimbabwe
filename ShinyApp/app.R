@@ -961,6 +961,57 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                 
                                 
                                 )),
+                       
+                       fluidRow(
+                         h1(strong("District Level Rainfall"), align = "center"),
+                         column(
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = "Description",
+                           p(""))
+                         
+                       ),
+                       fluidRow(
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                h3("Total Rainfall By District 2011"),
+                                img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                         ),
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                h3("Total Rainfall By District 2017"),
+                                img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption("Figure: 2011"),align="center")
+                                #align = "left"
+                                
+                         )),
+                       
+                       
+                       
+                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
+                       )
+                       
+                       
+                       
+                       
+                       
+                       ,
                     ),
               
               tabPanel(strong("Regression"),
@@ -992,55 +1043,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        
                        ),
               
-              tabPanel(strong("Precipitation"),
-                       
-                       fluidRow(
-                         h1(strong("District Level Rainfall"), align = "center"),
-                         column(
-                           align="justify",
-                           width = 12,
-                           withMathJax(),
-                           title = "Description",
-                           p(""))
-                         
-                       ),
-                       fluidRow(
-                         column(6,
-                         #style = "margin-left: 5px; margin-right: 100px;",
-                         h3("Total Rainfall By District 2011"),
-                         img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                         div(tags$caption("Figure: 2011"),align="center")
-                         #align = "left"
-                       ),
-                       column(6,
-                              #style = "margin-left: 5px; margin-right: 100px;",
-                              h3("Total Rainfall By District 2017"),
-                              img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                              div(tags$caption("Figure: 2011"),align="center")
-                              #align = "left"
-                       
-                       )),
-                       
-                       
-                       
-                       fluidRow(
-                         align="justify",
-                         style = "margin-left: 100px; margin-right: 100px;",
-                         column(12, p(strong("Description")) , 
-                                p("
-               These visualizations show us the total rainfall during the two growing seasons,  
-               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
-               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
-               "))
-                         
-                       )
-                       
-                       )
-              
+
               
               ),
 
