@@ -1,0 +1,123 @@
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(ggplot2)
+library(viridis)
+rm(list = ls())
+```
+
+
+```{r}
+data1011_long <- gather(as.data.frame(read_csv("Data/PRECIP3hravg_ts_Zimb (2010-2012).csv")), Date, Precipitation, '3B42_20101120_00_7_precipitation': '3B42_20110531_21_7_precipitation') %>%
+  dplyr::select(Date, Precipitation, NAME_2) %>%
+  dplyr::rename(District = NAME_2) %>%
+  separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>%
+  dplyr::select(-Pre, -useless,-useless2)
+
+sum1011_long <- data1011_long %>% group_by(Date, District) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3
+sum1011_long$Rain_Dry <- ifelse(sum1011_long$dailyPRECIP < 2.95,1,0)
+sum1011_long <- transform(sum1011_long,                                 # Create ID by group
+                      ID = as.numeric(factor(District)))    #this is long and this is for shiny
+sum1011_long$newDate <- as.Date(sum1011_long$Date, "%Y%m%d")
+sum1011_long$month <- format(sum1011_long$newDate, "%m")
+sum1011_long$year <- 2010
+
+#Switch to wide form for later
+sum1011_long4 <- reshape(sum1011_long, idvar = "Date", #this is wide
+                           timevar = "ID", direction = "wide")
+sum1011_long4$newDate <- as.Date(sum1011_long4$Date, "%Y%m%d")
+sum1011_long4<- select(sum1011_long4,-c(Date))
+
+#Repeat for 16-17 data
+data1617_long <- gather(as.data.frame(read_csv("Data/PRECIP3hravg_ts_Zimb  (2016-2018).csv")), Date, Precipitation, '3B42_20161120_00_7_precipitation': '3B42_20170531_21_7_precipitation') %>% select(Date, Precipitation, NAME_2) %>% rename(District = NAME_2) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+sum1617_long <- data1617_long %>% group_by(Date, District) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+sum1617_long$dailyPRECIP <- sum1617_long$dailyPRECIP * 3
+sum1617_long$Rain_Dry <- ifelse(sum1617_long$dailyPRECIP < 2.95,1,0)
+sum1617_long <- transform(sum1617_long,                                 # Create ID by group
+                      ID = as.numeric(factor(District)))    #this is long and this is for shiny
+sum1617_long$newDate <- as.Date(sum1617_long$Date, "%Y%m%d")
+sum1617_long$month <- format(sum1617_long$newDate, "%m")
+sum1617_long$year <- 2016
+
+
+sum1617_long4 <- reshape(sum1617_long, idvar = "Date", #this is wide
+                           timevar = "ID", direction = "wide")
+sum1617_long4$newDate <- as.Date(sum1617_long4$Date, "%Y%m%d")
+sum1617_long4<- select(sum1617_long4,-c(Date))
+
+RainDat <- rbind(sum1011_long,sum1617_long)
+
+
+#write.csv(RainDat,"C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/RainDat.csv", row.names = FALSE) 
+write.csv(RainDat, "Data/RainDat.csv", row.names = FALSE)
+
+#RainDat <- read.csv(file="C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/RainDat.csv")  #Shiny app
+RainDat <- read.csv('Data/RainDat.csv')
+```
+
+
+```{r DrawRainMaps1}
+
+SumRainMapDat <-function(Rmin,Rmax,yyear,season){
+  
+  GetSum <- data.frame(RainDat) %>% 
+  filter(RainDat$year==yyear) %>% 
+  group_by(District) %>% 
+  filter(newDate >= Rmin & newDate <= Rmax) %>% 
+  group_by(District)  %>% 
+  dplyr::summarize(TotalRainfall = round(sum(dailyPRECIP, na.rm = TRUE),0))     
+
+ zim_District <- st_read("Shapefiles/Zim_D60.shp") #SHAPE files Shiny app
+ zim_District <-dplyr::rename(zim_District, District = NAME_2)
+ df_list <- list(zim_District, GetSum)
+
+ #merge all data frames in list - note this is now a SHAPE file so can map
+ map <- df_list %>% reduce(full_join, by='District')
+  
+  
+   ggplot(data = map) +
+     geom_sf(size = 0.15, color = "black", aes(fill = TotalRainfall)) +
+    xlab("Longitude") + ylab("Latitude") +
+   coord_sf() +
+    scale_fill_viridis(option = "viridis", direction = -1, limits = c(200, 1400), breaks=c(200,400,600,800,1000,1200, 1400)) +
+     ggtitle(season) + guides(fill=guide_legend(title="Rainfall (mm)"))
+}
+
+#DRAW TOTAL RAINFALL MAPS
+#Growing Season 2010-11
+yyear=2010
+season = "Total Rainfall (mm) In The Growing Season 2010-11"
+min <- as.Date("2010-11-20")
+max <- as.Date("2011-05-31")
+#year<-RainMap$year
+map201011G <- SumRainMapDat(min,max,yyear,season)
+
+
+# #Growing Season 2016-17
+yyear=2016
+season = "Total Rainfall (mm) In The Growing Season 2016-17"
+min <- as.Date("2016-11-20")
+max <- as.Date("2017-05-31")
+map201617G <- SumRainMapDat(min,max,yyear,season)
+
+
+
+map201011G
+map201617G
+```
+
