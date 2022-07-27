@@ -234,8 +234,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                    #fluidRow(style = "margin: 2px;",
-                                             #img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    fluidRow(style = "margin: 2px;",
+                                             img(src = "corn-field.jpg", height="100", width="1000", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -257,8 +257,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                           #div(tags$caption("Source: FAO"))
                                           ),
                                           br(),
-                                          p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To preform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
-                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provides a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention.This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
+                                          p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To perform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
                                    column(4,
@@ -282,7 +282,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
                                           div(tags$caption("Figure 3: Agro-ecological regions of Zimbabwe"), align="center"),
                                           p(""),
-                                          p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with Millet and sorghum being the most common crops and maize being grown as well"),
+                                          p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well"),
                                           
                                           )
                                           ),
@@ -290,7 +290,7 @@ ui <- navbarPage(title = "Zimbabwe",
                             column(
                               align="center",
                               12,
-                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
+                              div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
                               withSpinner(tableOutput("table")),
                               div(tags$caption("Source: FAO")),
                             )
@@ -316,9 +316,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
                                          p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we source data for the following remote sensed data:"),
-                                         #fluidRow(
-                                         #img(src = "spectralfingerprints.jpg", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "50%"), align ="center",
-                                         #div(tags$caption("Figure 4: Spectral signatures of different Earth features within the visible light spectrum. Credit: Jeannie Allen."),align="center")),
+                                         
+                                         fluidRow(
+                                         img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
+                                         div(tags$caption("Figure 4: Remote Sensing"),align="center")),
                                          
                                          #br(),
                                          #p("In this project we source data for the following remote sensed data:"),
@@ -648,10 +649,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        p("
                These visualizations show us the total rainfall during the two growing seasons,  
                which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with past Literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
                Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
                For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for V met the minimum amount of rain necessary for an average maize yield, 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
                with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
                "))
                                 
@@ -723,12 +724,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          withMathJax(),
                                            width = 4,
                                            title = "Description",
-                                           p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture 
-                                                                      condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season,
-                                                                      which takes place from November 19th to December 19th of 2016. From this visualization we can see that none of the regions experienced any wet periods,
-                                                                      and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods,
-                                                                      while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III 
-                                                                        having more soil moisture on average than regions IV and V."))),
+                                           p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
+                                           p("From this visualization we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III having more soil moisture on average than regions IV and V."))),
                                      fluidRow(
                                        box(img(src = "SurfaceSoilLine.png", height = "100%", width = "100%"),
                                            title = h1(strong("Surface Soil Moisture Across Time"),
@@ -740,12 +737,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          withMathJax(),
                                            width = 4,
                                            title = "Description",
-                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season,
-                                                                            which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking
-                                                                            of soil moisture levels by region remains largely consistent over the time period, the difference between the region
-                                                                            with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season.
-                                                                            In addition, while regions I -- III experience soil moisture levels above the extremely dry threshold (10mm) as early
-                                                                            as November 24th, regions IV and V do not reach those levels until December 9th.")))
+                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season."),
+                                           p("In addition, while regions I , II, and III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th, regions IV and V do not reach those levels until December 9th.")))
                                      
                                      
                                      ),
@@ -779,49 +772,43 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                         
 
                   tabPanel("Percent Soil Moisture",
-                           fluidRow(h1(strong("Percent Soil Moisture"), align = "center"),
+                           fluidRow(
+                             #h1(strong("Percent Soil Moisture"), align = "center"),
                                     box(withSpinner(leafletOutput("PercMapGraph", height=520)),
                                         title = h1(strong("Average Percent Soil Moisture Map"),
                                                    style ="font-size: 25px;"),
                                         width = 8,
                                         height = 600
                                     ),
-                                    box(withMathJax(),
+                                    box(align="justify",
+                                      withMathJax(),
                                         width = 4,
                                         title = "Description",
-                                        p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over 
-                                                                                  the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017.
-                                                                                  From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average 
-                                                                                  percent soil moisture decreases in order when going from region I to V. "))),
+                                        p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017. From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average percent soil moisture decreases in order when going from region I to V. "))),
                            fluidRow(
                              box(img(src = "PercentSoilBar.png", height = "100%", width = "100%"),
                                  title = h1(strong("Percent Soil Moisture period conditions"),
                                             style ="font-size: 25px;"),
                                  width = 8,
                              ),
-                             box(withMathJax(),
+                             box(align="justify",
+                               withMathJax(),
                                  width = 4,
                                  title = "Description",
-                                 p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture 
-                                                                             condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, 
-                                                                             which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the number of wet days 
-                                                                             decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly,
-                                                                             Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days 
-                                                                             as well as having no wet days."))),
+                                 p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
+                                 p("From the chart, we can see that the number of wet days decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly, Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days as well as having no wet days."))),
                            fluidRow(
                              box(img(src = "PercentSoilLine.png", height = "100%", width = "100%"),
                                  title = h1(strong("Percent Soil Moisture Across Time"),
                                             style ="font-size: 25px;"),
                                  width = 8,
                              ),
-                             box(withMathJax(),
+                             box(align="justify",
+                               withMathJax(),
                                  width = 4,
                                  title = "Description",
-                                 p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days,
-                                                                             which takes place from December 19th of 2016 to May 29th of 2017. From the chart, we can see that the relative rankings
-                                                                             for regions percent soil moisture remains consistent for the most part although there is a greater range in values across
-                                                                             regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture
-                                                                             around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. "))))
+                                 p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
+                                 p("From the chart, we can see that the relative rankings for regions percent soil moisture remains consistent for the most part although there is a greater range in values across regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. "))))
                            
 
                                         
@@ -859,7 +846,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 6,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 91 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to this graph:
+                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
                                          tags$ul(  
                                            tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
@@ -1097,43 +1084,36 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
                       column(4, 
                              p(
                                "
-                               Figure 1:
+                               Figure 1: 
                                This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (M0). All else constant, an additional 100 mm of rain in the 
                                first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent 
-                               level. Similarly, cumulative rainfall across all the months of the growing season have negative associations with poverty headcount, ceteris paribus, and the estimated coefficients 
+                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients 
                                are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have 
-                               important implications for the socio-economic conditions of the people.
+                               important implications for the socio-economic conditions of the people.  
                                "
                              ),
                              p(
-                               "Table 2:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figure 2: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (M1). Similar to Figure 1, the coefficients are all negative and 
+                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting 
+                               (Nov-Dec) has the highest absolute magnitude.  
+                               "
                              ),
                              p(
-                               "Table 3:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                              Figure 3:  
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (M2). Once again, the coefficients are all negative and 
+                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
+                               "
                              ),
                              p(
-                               "Table 4:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 5:
-                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES, 
-                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 6:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
-                             ),
-                             p(
-                               "Table 7:
-                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In 2017 PICES
-                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph:"
+                               "
+                               Figures 4 – 7: 
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of 
+                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services 
+                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
+                               "
                              )
                              )
                     )
@@ -1201,15 +1181,17 @@ In contrast, the growing season of 2016-17 received more rain and encountered fe
 
                  tabPanel(strong("Takeaways"),
                           
-                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
+                          fluidRow(style = "margin-left: 80px; margin-right: 80px;",
                                    column(3),
                                    column(6,
                                           align="justify",
                                           h1(strong("Takeaways"),align="center"),
-                                          p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe. We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view the explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
+                                          p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe."),
+                                          p("We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view and explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
                                           p("EVI: The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
                                           p("Precipitation: Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
-                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted.")
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted."),
+                                          p("We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate.")
                                           #p("We note that MPI ..."),
                                           #p("Finally,"),
                                    )
