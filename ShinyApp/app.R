@@ -700,7 +700,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                consecutive series of dry days between 10 to 20 days or 20 days or more. 
                Dry spells play a significant role in agricultural success by indicating 
                plant stress exposure while their length and severity can result in the decreased 
-               yields or complete failure of a crop (Nyakudya et al., 2011;Mhizha et al., 2014).  
+               yields or complete failure of a crop (Nyakudya et al., 2011; Mhizha et al., 2014).  
                "))
                               )
                               
@@ -919,12 +919,12 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                             title = "Description",
                                             p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". Our study uses ", strong("district-level")," measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
                                               tags$ul(
-                                                tags$li("Max Education"),
-                                                tags$li("Education Dropout"),
-                                                tags$li("Chronic Illness"),
-                                                tags$li("Lack of Health Visit"),
-                                                tags$li("Lack of Household Assets"),
-                                                tags$li("Lack of Access to Services")
+                                                tags$li("No Priamry Education (previously labelled as Max Education): nobody in the household having completed primary school"),
+                                                tags$li("Education Dropout: an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school."),
+                                                tags$li("Chronic Illness: the presence of a chronically ill individual within the household"),
+                                                tags$li("Lack of Health Visit: a household member who has been sick in the past 30 days without receiving a necessary healthcare"),
+                                                tags$li("Lack of Household Assets: stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold "),
+                                                tags$li("Lack of Access to Services: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation).")
                                                 
                                               ),
                                              # p("Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
@@ -968,8 +968,8 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                            width = 12,
                            withMathJax(),
                            title = strong("Summary Statistics and Correlations", align="center"),
-                           p(h3("Correlation Matrices")),
-                           p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level."))
+                           p(h3("District-Level Correlation Matrices")),
+                           p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and \\(M_{0}\\) was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level."))
                        ),
                        
                        fluidRow(
@@ -1015,7 +1015,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                          column(6,
                                 #style = "margin-left: 5px; margin-right: 100px;",
                                 img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                                div(tags$caption("Figure: 2011"),align="center")
+                                div(tags$caption("Figure: 2017"),align="center")
                                 #align = "left"
                                 
                          )),
@@ -1027,13 +1027,13 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                          style = "margin-left: 100px; margin-right: 100px;",
                          column(12, p(strong("Description")) , 
                                 p("
-               These visualizations show us the total rainfall during the two growing seasons,  
-               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               These visualizations show us the district-level total rainfall during the two growing seasons,  
+               which when compared indicate that every district received a higher amount of rainfall in 2016-17 than in 2010-11. 
                This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               Rainfall patterns are also consistent, as North-East districts (regions) typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
                For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               This means that in both growing seasons, All regions except for districts falling within Region V met the minimum amount of rain necessary for an average maize yield, 
+               with districts falling within Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
                "))
                          
                        ),
@@ -1053,7 +1053,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                          )),
                        
                        fluidRow(
-                         h4(strong("MPI & Precipitation"),align="left", 
+                         h4(strong("District-Level MPI & Precipitation"),align="left", 
                             style = "margin-left: 100px; margin-right: 100px;"),
                          column(
                            10,
@@ -1062,7 +1062,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                            withMathJax(),
                            p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using", strong("district-level"), "data. We estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
                            p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
-                           p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
+                           p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - No Priamry Education (Max Educ), Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
                            p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
                            p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
                            
@@ -1486,14 +1486,15 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                    column(6,
                                           align="justify",
                                           h1(strong("Takeaways"),align="center"),
-                                          p("The analysis presented here provides an interactive way to present remote sensed data and a multidimensional poverty index along different components. We display the remote sensed data: Enhanced Vegetation Index, Precipitation, and Soil Moisture from the Google Earth Engine and  the MPIs in maps. We allow users to assess the remote sensed data by district and the agroecological regions in Zimbabwe."),
-                                          p("We allow users to explore the  decomposed MPIs into selected components, allowing users to look at the poverty indices of the individual components and their link to the remote sensed data. Finally, we offer users the ability to view and explore changes between the two most recent waves of PICES surveys (2011 & 2017). "),
-                                          p("EVI: The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
-                                          p("Precipitation: Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
+                                          p("Last Year, the VT DSPG in collaboration with ZimStat and the World Bank, created Poverty Indices at the district level for 2011 and 2017. We used national household PICES data to conduct this exercise. This year we show how these values that we created at the district level, can be used extended to answer questions related to climate change."),
+                                          p("We do so by extending the reach of these data using freely available data remotely sensed data from Google Earth Engine. We study precipitation, EVI, and soil moisture and their association with poverty and other district-level socioeconomic variables."),
+                                          p(" We find that for:"),
+                                          p(strong("Enhanced Vegetation Index (EVI):"), "The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
+                                          p(strong("Precipitation:"), "Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
                                           p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted."),
-                                          p("We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate.")
-                                          #p("We note that MPI ..."),
-                                          #p("Finally,"),
+                                          p(strong("Correlations:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
+                                          p("In conclusion, the PICES data at lower levers of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how PICES can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
+                                          p("")
                                    )
                                    
                           )
@@ -1524,15 +1525,19 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           h4(strong("Graduate Fellows")),
                                           p("", style = "padding-top:10px;"),
                                           img(src = "team-Leo.png", style = "display: inline;  border: 0px solid #C0C0C0;", width = "150px"),
+                                          p("", style = "padding-top:10px;"),
+                                          p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
+', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.)"),
+                                          br(),
                                           img(src = "team-Poonam.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
+                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.)"),
                                           #img(src = "team-Frankie.png", style = "display: inline; border: 0px solid #C0C0C0;", width = "150px"),
                                           #img(src = "team-Ari.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           #img(src = "team-Josue.png", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
                                           
-                                          p("", style = "padding-top:10px;"),
-                                          p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye
-', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Microeconomics, Ph.D.);"),
-                                          p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
+                                          #p("", style = "padding-top:10px;"),
+                                          #p(a(href = 'https://www.linkedin.com/in/leonard-allen-quaye', 'Leonard-Allen Quaye', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.);"),
+                                          #p(a(href = 'https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html', 'Poonam Tajanpure', target = '_blank'), "(Virginia Tech, Biological Systems Engineering, Ph.D.);"),
                                           #p(a(href = 'https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D', 'Frankie Fan', target = '_blank'), "(Smith College & Brown University, Math and Data Science);"),
                                           #p(a(href = 'https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Ari Liverpool', target = '_blank'), "(Virginia Tech, Applied Economics Management);"),
                                           #p( a(href = 'https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D', 'Josue Navarrete', target = '_blank'), "(MiraCosta College, Computer Science Major)."),
