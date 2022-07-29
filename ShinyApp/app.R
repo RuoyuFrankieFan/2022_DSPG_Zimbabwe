@@ -559,13 +559,13 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                  navbarMenu(strong("Remote Sensed Data"), 
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
-                                     fluidRow(h1(strong("Enhanced Vegetation Index"), align = "center"),
+                                     fluidRow(h1(strong("Enhanced Vegetation Index"), style ="font-size: 25px;", align = "center"),
                                               style = "margin-left: 10px; margin-right: 10px;",
-                                              h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"),
+                                              h3(strong("Maximum Enhanced Vegetation Index During Growing Seasons")),
                                               column(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
                                               align="justify",
                                              
-                                         title = "Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons",
+                                         title = "Maximum Enhanced Vegetation Index During Growing Seasons",
                                          width = 8,
                                          height = 600
                                        ),
@@ -583,7 +583,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      
                                      fluidRow(
                                        style = "margin-left: 10px; margin-right: 10px;",
-                                       h3("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons"), 
+                                       h3(strong("Maximum Enhanced Vegetation Index During Growing Seasons")), 
                                           style = "font-size:35px;"
                                        #align = "center",
                                      ),
@@ -601,7 +601,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        align="justify",
                                        width = 4,
                                        withMathJax(),
-                                       title = strong("Maximum Enhanced Vegetation Index During 2011 & 2017 Growing Seasons", align="center"),
+                                       title = strong("Maximum Enhanced Vegetation Index During Growing Seasons", align="center"),
                                        p(h3("Description")),
                                        p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
                                        p("The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
@@ -635,10 +635,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 align = "center"
                               ),
                               fluidRow(
-                                h1(strong("Comparison of Average Rainfall between 2010 & 2016 Growing Season"), 
+                                h1(strong("Comparison of Average Rainfall between Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                p(strong("3-month observation 2011-17"))
+                                
                               ),
                               fluidRow(
                                 style = "margin-left: 0px; margin-right: 0px;",
@@ -654,7 +654,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Seasons"), 
+                                h1(strong("Comparison of Total Rainfall between Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 align = "left"
                               ),
@@ -685,7 +685,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison of Average Rainfall between 2010 & 2016 Growing Seasons"), 
+                                h1(strong("Comparison of Average Rainfall between Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 align = "left"
                               ),
@@ -887,7 +887,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                             #),
 
                  ## Tab 4 ------
-                 navbarMenu(strong("Poverty and Components"), 
+                 navbarMenu(strong("Poverty & Components"), 
                  tabPanel(strong("Multidimensional Poverty Index"),
                     
                           tabPanel(title = "2011",
