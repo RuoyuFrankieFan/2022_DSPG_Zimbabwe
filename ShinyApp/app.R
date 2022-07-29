@@ -975,13 +975,15 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        fluidRow(
                          column(
                            6,
-                           img(src = "MPICorr2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                           img(src = "MPICorr2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                           
+                           
                            
                            div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
                          ),
                          column(
                            6,
-                           img(src = "MPICorr2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                           img(src = "MPICorr2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
                            
                            div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
                            ),
