@@ -100,7 +100,7 @@ SumRainMapDat <-function(Rmin,Rmax,yyear,season){
 #DRAW TOTAL RAINFALL MAPS
 #Growing Season 2010-11
 yyear=2010
-season = "Total Rainfall (mm) In The Growing Season 2010-11"
+season = "Total Rainfall (mm) in the Growing Season 2010-11"
 min <- as.Date("2010-11-20")
 max <- as.Date("2011-05-31")
 #year<-RainMap$year
@@ -109,7 +109,7 @@ map201011G <- SumRainMapDat(min,max,yyear,season)
 
 # #Growing Season 2016-17
 yyear=2016
-season = "Total Rainfall (mm) In The Growing Season 2016-17"
+season = "Total Rainfall (mm) in the Growing Season 2016-17"
 min <- as.Date("2016-11-20")
 max <- as.Date("2017-05-31")
 map201617G <- SumRainMapDat(min,max,yyear,season)
@@ -144,37 +144,37 @@ MeanRainMapDat <-function(Rmin,Rmax,yyear,ttitle){
 
 #December 2010
 yyear=2010
-ttitle = "Average Rainfall (mm) In December 2010"
+ttitle = "Average Rainfall (mm) in December 2010"
 min <- as.Date("2010-12-01")
 max <- as.Date("2010-12-31")
 map2010_12 <- MeanRainMapDat(min,max,yyear,ttitle)
 
 #January 2011
-ttitle = "Average Rainfall (mm) In January 2011"
+ttitle = "Average Rainfall (mm) in January 2011"
 min <- as.Date("2011-01-01")
 max <- as.Date("2011-01-31")
 map2011_1 <- MeanRainMapDat(min,max,yyear,ttitle)
 
 #February 2011
-ttitle = "Average Rainfall (mm) In February 2011"
+ttitle = "Average Rainfall (mm) in February 2011"
 min <- as.Date("2011-02-01")
 max <- as.Date("2011-02-28")
 map2011_2 <- MeanRainMapDat(min,max,yyear,ttitle)
 
 
 #December 2016
-ttitle = "Average Rainfall (mm) In December 2016"
+ttitle = "Average Rainfall (mm) in December 2016"
 yyear=2016
 min <- as.Date("2016-12-01")
 max <- as.Date("2016-12-31")
 map2016_12 <- MeanRainMapDat(min,max,yyear,ttitle) 
 #January 2017
-ttitle = "Average Rainfall (mm) In January 2017"
+ttitle = "Average Rainfall (mm) in January 2017"
 min <- as.Date("2017-01-01")
 max <- as.Date("2017-01-31")
 map2017_1 <- MeanRainMapDat(min,max,yyear,ttitle)
 #February 2017
-ttitle = "Average Rainfall (mm) In February 2017"
+ttitle = "Average Rainfall (mm) in February 2017"
 min <- as.Date("2017-02-01")
 max <- as.Date("2017-02-28")
 map2017_2 <- MeanRainMapDat(min,max,yyear,ttitle)
@@ -368,7 +368,7 @@ spell_barchart %>% # code for Shiny app
      labs(color="time") +
      scale_y_continuous(limits = c(0,3)) +
      xlab("Regions") + ylab("Number Of Dry Spells") + 
-    ggtitle("Number Of Dry Spells In The 2010-11 Growing Season") +
+    ggtitle("Number Of Dry Spells in the 2010-11 Growing Season") +
     guides(fill=guide_legend(title="Length Of Spell")) +
     scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
 
@@ -380,7 +380,7 @@ spell_barchart %>% # code for Shiny app
      labs(color="time") +
      scale_y_continuous(limits = c(0,3)) +
      xlab("Regions") + ylab("Number Of Dry Spells") + 
-    ggtitle("Number Of Dry Spells In The 2016-17 Growing Season") +
+    ggtitle("Number Of Dry Spells in the 2016-17 Growing Season") +
     guides(fill=guide_legend(title="Length Of Spell")) +
     scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
      
