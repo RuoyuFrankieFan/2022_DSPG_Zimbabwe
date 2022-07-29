@@ -250,7 +250,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           br(),
                                           fluidRow(
-                                            img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align="center",
+                                            img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "95%"), align="center",
                                             div(tags$caption("Figure 1: Project Timeline"), align="center"),
                                           #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
                                           #withSpinner(tableOutput("table")),
@@ -275,7 +275,7 @@ ui <- navbarPage(title = "Zimbabwe",
                           br(),
                           br(),
                                    
-                                   fluidRow(
+                                   fluidRow(style = "margin: 6px;",
                                    column(6,
                                           align="justify",
                                           h2(strong("Agricultural Profile"), align = "center"),
@@ -1022,21 +1022,20 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        fluidRow(
                          column(
                            6,
-                           img(src = "MPICorr2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                           
-                           
-                           
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+                           div(tags$caption("Table 2: Correlation Matrix for PICES 2011"),align="left"),
+                           img(src = "MPICorr2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center"
+                        
                          ),
                          column(
                            6,
-                           img(src = "MPICorr2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                           div(tags$caption("Table 3: Correlation Matrix for PICES 2017"),align="left"),
+                           img(src = "MPICorr2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center"
                            
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                           
                            ),
                          
                          br(),
-                         
+                         br(),
                          
                        ),
                        
@@ -1540,7 +1539,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           p(" We find that for:"),
                                           p(strong("Enhanced Vegetation Index (EVI):"), "The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
                                           p(strong("Precipitation:"), "Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
-                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted."),
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting. However, farmers in regions IV and V are likely to be more severely impacted."),
                                           p(strong("Correlations:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
                                           p("In conclusion, the PICES data at lower levers of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how PICES can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
                                           p("")
@@ -1623,7 +1622,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
                                           p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics)."),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
                                           p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                    )
