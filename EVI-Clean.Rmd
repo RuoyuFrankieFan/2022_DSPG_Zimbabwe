@@ -107,7 +107,7 @@ GrSs2011Line %>%
   scale_x_discrete(expand=c(0, 1)) +
   geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
   scale_color_viridis_d(option = "H") +
-  labs(title = "Maximum EVI During Growing Season 2011", color =  "Region") +
+  labs(title = "Maximum EVI During Growing Season 2010-2011", color =  "Region") +
   xlab("Time(Month)") +
   ylab("Maximum EVI") 
 
@@ -159,7 +159,7 @@ GrSs2017Line %>%
   scale_x_discrete(expand=c(0, 1)) +
   geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
   scale_color_viridis_d(option = "H") +
-  labs(title = "Maximum EVI During Growing Season 2017", color =  "Region") +
+  labs(title = "Maximum EVI During Growing Season 2016-2017", color =  "Region") +
   xlab("Time(Month)") +
   ylab("Maximum EVI") 
 
@@ -183,7 +183,7 @@ RgMaxEVI2011 <- EVIGrow2011 %>%
   geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
   scale_fill_viridis_c(option = "D", direction = -1, limits = c(0.36, 0.52), breaks=c(0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52)) +
-  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2011")
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2010-2011")
 
 RgMaxEVI2011
 ```
@@ -201,7 +201,7 @@ RgMaxEVI2017 <- EVIGrow2017 %>%
   geom_sf(size = 0.15, color = "black", aes(fill = MaxEVI)) +
   coord_sf() +
   scale_fill_viridis_c(option = "D", direction = -1, limits = c(0.36, 0.52), breaks=c(0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52)) +
-  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2017")
+  ggtitle("Maximum EVI in Zimbabwe-Growing Season 2016-2017")
 
 RgMaxEVI2017
 ```
