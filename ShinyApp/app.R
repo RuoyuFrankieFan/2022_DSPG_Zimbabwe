@@ -126,7 +126,7 @@ my_images_evi <- c("Max EVI 2011.png", "Max EVI 2017.png")
 
 
 #PRECIPITATION DATA
-my_images <- c("av_dec_compared_up.jpg","av_jan_compared_up.jpg","av_feb_compared_up.jpg")
+my_images <- c("av_dec_compared_up.png","av_jan_compared_up.png","av_feb_compared_up.png")
 
 
 
@@ -664,7 +664,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 5px; margin-right: 100px;",
-                                img(src = "totalrainfall_compared.jpg", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                img(src = "totalrainfall_compared.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                 align = "left"
                               ),
                               fluidRow(
@@ -696,17 +696,13 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                              
                               fluidRow(
+                                style = "margin-left: 70px; margin-right: 100px;",
                                 column(
-                                  6,
-                                  img(src = "AvRain2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                                  
-           
-                                ),
-                                column(
-                                  6,
-                                  img(src = "AvRain2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                  12,
+                                  img(src = "av-line-compared.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                   
                                 ),
+                                align = "center",
                                 
                                 br(),
                                 
@@ -736,7 +732,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 70px; margin-right: 100px;",
-                                column(12, img(src = "dry_compared.jpg", height = "100%", width = "100%")),
+                                column(12, img(src = "dry_compared.png", height = "100%", width = "100%")),
                                 align = "center"
                               ),
                               
