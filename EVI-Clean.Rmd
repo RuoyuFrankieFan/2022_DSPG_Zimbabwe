@@ -84,14 +84,14 @@ GrSs2011Line <- EVI_region_long %>%
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
                              
-GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
-GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "Oct 2010"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "Nov 2010"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "Dec 2010"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "Jan 2011"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Feb 2011"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "Mar 2011"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "Apr 2011"
+GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May 2011"
 
 GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
 GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
@@ -103,14 +103,13 @@ write.csv(GrSs2011Line,"./Data/GrSs2011Line.csv", row.names = FALSE)
 GrSs2011Line %>% 
   ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
   geom_line()+
-  theme(axis.text.x = element_text(angle = 315)) +
   scale_colour_discrete(guide = 'none') +
   scale_x_discrete(expand=c(0, 1)) +
   geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-  scale_color_viridis_d(option = "D") +
-  labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Maximum EVI During Growing Season 2011", color =  "Region") +
   xlab("Time(Month)") +
-  ylab("Max EVI") 
+  ylab("Maximum EVI") 
 
 ```
 
@@ -138,14 +137,14 @@ GrSs2017Line <- EVI_region_long %>%
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
                              
-GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
-GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "Oct 2016"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "Nov 2016"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "Dec 2016"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "Jan 2017"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Feb 2017"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "Mar 2017"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "Apr 2017"
+GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May 2017"
 
 GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
 GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
@@ -156,14 +155,13 @@ GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
 GrSs2017Line %>% 
   ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
   geom_line()+
-  theme(axis.text.x = element_text(angle = 315)) +
   scale_colour_discrete(guide = 'none') +
   scale_x_discrete(expand=c(0, 1)) +
   geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-  scale_color_viridis_d(option = "D") +
-  labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
+  scale_color_viridis_d(option = "H") +
+  labs(title = "Maximum EVI During Growing Season 2017", color =  "Region") +
   xlab("Time(Month)") +
-  ylab("Max EVI") 
+  ylab("Maximum EVI") 
 
 ```
 
