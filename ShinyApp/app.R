@@ -234,8 +234,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    align = "center",
                                    br(""),
                                    h1(strong("Using Remotely Sensed Data for Social & Economic Decision Making in Zimbabwe")),
-                                    fluidRow(style = "margin: 2px;",
-                                             img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                    #fluidRow(style = "margin: 2px;",
+                                    #         img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
@@ -654,13 +654,13 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Season"), 
+                                h1(strong("Comparison of Total Rainfall between 2010 & 2016 Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 align = "left"
                               ),
                               fluidRow(
                                 style = "margin-left: 5px; margin-right: 100px;",
-                                img(src = "totalrainfall_compared.jpg"),
+                                img(src = "totalrainfall_compared.jpg", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                 align = "left"
                               ),
                               fluidRow(
@@ -674,7 +674,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
                For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
                This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
-               with region 1 having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               with Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
                "))
                                 
                               ),
@@ -685,7 +685,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison of Average Rainfall between 2011 & 2017 Growing Season"), 
+                                h1(strong("Comparison of Average Rainfall between 2010 & 2016 Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 align = "left"
                               ),
@@ -700,7 +700,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 ),
                                 column(
                                   6,
-                                  img(src = "AvRain2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                                  img(src = "AvRain2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                   
                                 ),
                                 
@@ -714,7 +714,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 column(12, p(strong("Description")) , 
                                        p("
-               some text here   
+               These visualizations (line charts) show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. As it relates to precipitation the Regions I,II,and III are typically the ones to receive the most rainfall. Regions IV and V on the other hand receives less rainfall. In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal average level.   
                "))
                                 
                               ),
