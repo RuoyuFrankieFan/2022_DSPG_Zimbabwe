@@ -678,6 +678,51 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                "))
                                 
                               ),
+                              
+                              
+                              
+                              
+                              
+                              fluidRow(
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                h1(strong("Comparison of Average Rainfall between 2011 & 2017 Growing Season"), 
+                                   style ="font-size: 25px;"),
+                                align = "left"
+                              ),
+                              
+                             
+                              fluidRow(
+                                column(
+                                  6,
+                                  img(src = "AvRain2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                  
+           
+                                ),
+                                column(
+                                  6,
+                                  img(src = "AvRain2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                                  
+                                ),
+                                
+                                br(),
+                                
+                                
+                              ),
+                        
+                              fluidRow(
+                                align="justify",
+                                style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, p(strong("Description")) , 
+                                       p("
+               some text here   
+               "))
+                                
+                              ),
+                              
+                              
+                              
+                      
+                              
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
