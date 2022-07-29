@@ -126,7 +126,7 @@ my_images_evi <- c("Max EVI 2011.png", "Max EVI 2017.png")
 
 
 #PRECIPITATION DATA
-my_images <- c("av_dec_compared_up.jpg","av_jan_compared_up.jpg","av_feb_compared_up.jpg")
+my_images <- c("av_dec_compared_up.png","av_jan_compared_up.png","av_feb_compared_up.png")
 
 
 
@@ -250,12 +250,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                           p("In this project, we identify the remotely sensed climate-related data that are publicly available and suitable for Zimbabwe. These are the Enhanced Vegetation Index (EVI), Precipitation, and Soil Moisture datasets. We use these indices to provide a geospatial analysis of the five agro-ecological regions in the 2010-11 and 2016-17 growing seasons. We then analyze the climatic conditions ideal for maize, the primary crop grown in Zimbabwe."),
                                           br(),
                                           fluidRow(
+                                            column(12,
                                             img(src = "timeline.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align="center",
                                             div(tags$caption("Figure 1: Project Timeline"), align="center"),
                                           #div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),
                                           #withSpinner(tableOutput("table")),
                                           #div(tags$caption("Source: FAO"))
-                                          ),
+                                          )),
                                           br(),
                                           p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To perform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
                                           p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
@@ -274,8 +275,10 @@ ui <- navbarPage(title = "Zimbabwe",
                                    
                           br(),
                           br(),
+                          br(),
+                          br(),
                                    
-                                   fluidRow(
+                                   fluidRow(style = "margin: 6px;",
                                    column(6,
                                           align="justify",
                                           h2(strong("Agricultural Profile"), align = "center"),
@@ -661,7 +664,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 5px; margin-right: 100px;",
-                                img(src = "totalrainfall_compared.jpg", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                img(src = "totalrainfall_compared.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                 align = "left"
                               ),
                               fluidRow(
@@ -693,17 +696,13 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                              
                               fluidRow(
+                                style = "margin-left: 70px; margin-right: 100px;",
                                 column(
-                                  6,
-                                  img(src = "AvRain2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                                  
-           
-                                ),
-                                column(
-                                  6,
-                                  img(src = "AvRain2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                  12,
+                                  img(src = "av-line-compared.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                   
                                 ),
+                                align = "center",
                                 
                                 br(),
                                 
@@ -733,7 +732,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               ),
                               fluidRow(
                                 style = "margin-left: 70px; margin-right: 100px;",
-                                column(12, img(src = "dry_compared.jpg", height = "100%", width = "100%")),
+                                column(12, img(src = "dry_compared.png", height = "100%", width = "100%")),
                                 align = "center"
                               ),
                               
@@ -941,13 +940,10 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                      withMathJax(),
                                      title = strong("Descriptive Analysis"),
                                      width = 12,
-                                     p("\\(M_{0}\\)"),
-                                     p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
+                                     p("\\(M_{0}\\): Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for our k-threshold of 3."),
                                      
-                                     p("\\(M_{1}\\)"),
-                                     p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
-                                     p("\\(M_{2}\\)"),
-                                     p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
+                                     p("\\(M_{1}\\): When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
+                                     p("\\(M_{2}\\): A look at the \\(M_{2}\\) values of the index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
                                      p("")
                                    ))
                                    
@@ -1022,21 +1018,20 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        fluidRow(
                          column(
                            6,
-                           img(src = "MPICorr2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                           
-                           
-                           
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
+                           div(tags$caption("Table 2: Correlation Matrix for PICES 2011"),align="left"),
+                           img(src = "MPICorr2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center"
+                        
                          ),
                          column(
                            6,
-                           img(src = "MPICorr2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center",
+                           div(tags$caption("Table 3: Correlation Matrix for PICES 2017"),align="left"),
+                           img(src = "MPICorr2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center"
                            
-                           div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
+                           
                            ),
                          
                          br(),
-                         
+                         br(),
                          
                        ),
                        
@@ -1540,7 +1535,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           p(" We find that for:"),
                                           p(strong("Enhanced Vegetation Index (EVI):"), "The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
                                           p(strong("Precipitation:"), "Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
-                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting; however, farmers in regions IV and V are likely to be more severely impacted."),
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting. However, farmers in regions IV and V are likely to be more severely impacted."),
                                           p(strong("Correlations:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
                                           p("In conclusion, the PICES data at lower levers of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how PICES can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
                                           p("")
@@ -1623,7 +1618,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           p("", style = "padding-top:10px;"),
                                           p(a(href = "https://www.linkedin.com/in/briannaposadas/", 'Dr. Brianna Posadas', target = '_blank'), "(Virginia Tech, School of Plant and Environmental Sciences);"),
                                           p(a(href = "https://aaec.vt.edu/people/faculty/chen-susan.html", 'Dr. Susan Chen', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics)."),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/alwang-jeffrey.html", 'Dr. Jeffrey Alwang', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics);"),
                                           p( a(href = 'https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D', 'Naveen Abedin', target = '_blank'), "(Virginia Tech, Agricultural and Applied Economics, Ph.D.)."),
                                           p("", style = "padding-top:10px;")
                                    )
@@ -2209,7 +2204,7 @@ output$compo_MPI_17 <- renderLeaflet({
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Household Assets") %>%
-    addPolygons(fillColor = ~mypal(joined_zim17$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name.x, ":", round(joined_zim17$g0_services_k3, digits = 3)),
+    addPolygons(fillColor = ~mypal(joined_zim17$g0_services_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_services_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
                                                     bringToFront = TRUE), group="Service Access") %>%
