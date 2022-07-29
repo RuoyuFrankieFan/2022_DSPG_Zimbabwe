@@ -648,10 +648,11 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               fluidRow(
                                 align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
+                                column(12, p(strong("Description")) , 
                                 p("These maps are looking at rain distribution at average daily level. Zimbabwe generally follows previous analysis of  its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. 
         The Southern region on the other hand receives less rainfall (Nkomozepi & Chung, 2012). In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize. 
         A day is considered wet if it exceeds 2.95 mm of precipitation. ")
-                              ),
+                              )),
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Total Rainfall between Growing Seasons"), 
@@ -726,7 +727,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison of Dryspells between 2010 & 2016 Growing Season"),
+                                h1(strong("Comparison of Dryspells between Growing Seasons"),
                                    style = "font-size: 25px;"),
                                 align = "left"
                               ),
@@ -782,7 +783,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      
                                      fluidRow(
                                        box(img(src = "SurfaceSoilBar.png", height = "100%", width = "100%"),
-                                           title = h1(strong("Surface Soil Moisture period conditions"), 
+                                           title = h1(strong("Surface Soil Moisture Period Conditions"), 
                                                       style ="font-size: 25px;"),
                                           width = 8,
                                        ),
