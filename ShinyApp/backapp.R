@@ -233,7 +233,7 @@ ui <- navbarPage(title = "Zimbabwe",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
                                    br(""),
-                                   h1(strong("Using Remote Sensed Data For Social & Economic Decision Making In Zimbabwe")),
+                                   h1(strong("Using Remote Sensed Data for Social & Economic Decision Making in Zimbabwe")),
                                     fluidRow(style = "margin: 2px;",
                                              img(src = "corn-field.jpg", height="100", width="800", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
                                    h4("Data Science for the Public Good Program"),
@@ -258,20 +258,20 @@ ui <- navbarPage(title = "Zimbabwe",
                                           #div(tags$caption("Source: FAO"))
                                           )),
                                           br(),
-                                          p("Our analysis is further disaggregated to the district-level to study the association between poverty and climate indicators. To perform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
-                                          p("Finally, we use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
+                                          p("Our analysis is disaggregated to the 60 administrative district-level in order to study the association between poverty and climate indicators. To perform this study, we augment the climate data with poverty variables constructed from the national Poverty Income Consumption Expenditure Survey (PICES) conducted in 2011 and 2017."),
+                                          p("Finally, we  use these data in a statistical model to examine the association between district-level poverty and climatic conditions. The results of our analysis provide a spatially disaggregated look at whether climate data can be used to identify at-risk regions for potential policy intervention. This is useful because while the Zimbabwean government has recently approved an agricultural policy framework based on climate-smart principles, it contains little geographic specificity for an incredibly diverse agricultural economy.")),
                                    
                                    
                                    column(6,
                                           align="justify",
-                                          h2(strong("Introduction To Zimbabwe"), align = "center"),
-                                          p("Zimbabwe is located in the Southeastern part of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence, there were efforts to address poverty. Still, they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities. In the city, they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit, and fiscal policy focused on increasing the amount of money in circulation, which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts, and the overall economic crisis and poverty worsened."), 
-                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture, growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe's rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from unemployment and severe underemployment. Many individuals are either overqualified for their jobs or are not engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
+                                          h2(strong("Introduction to Zimbabwe"), align = "center"),
+                                          p("Zimbabwe is located at the Southeastern part of Africa and neighbors South Africa, Mozambique, Zambia, and Botswana. Zimbabwe gained independence in 1980 and was ruled by former Prime Minister President Robert Mugabe until his resignation in 2017. In the first decade after independence there were efforts to address poverty, but they were ineffective and abandoned due to a financial downturn coupled with a prolonged drought that forced agricultural workers into the cities where they faced even greater poverty due to unemployment. Efforts to restore the economy led to a budget deficit and fiscal policy focused on increasing the amount of money in circulation which resulted in hyperinflation (extremely high prices). Adopting the US dollar stabilized the economy initially, but in 2013 the government shifted efforts and the overall economic crisis and poverty worsened."), 
+                                            p("Zimbabwe has vast amounts of arable land, and about 67.5 percent of the labor force works in agriculture growing maize, sugar cane, tobacco, fruit, and vegetables. Another 7.3 percent of the labor force takes advantage of Zimbabwe’s rich natural resources and participates in mining. Zimbabwe exports coal, gold, platinum, copper, and other metals and manufactures wood products, cement, chemicals, fertilizer, and food. Despite being relatively well-educated and highly literate, the population suffers from both unemployment, and severe underemployment. Many individuals are either overqualified for the jobs they have, or are engaging in full-time work. Together with low wages, this creates an obstacle to economic growth."),
                                           
                                           img(src = "SelectedRegion.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "105%"),
                                           div(tags$caption("Figure 2: Livelihood zones in Zimbabwe"), align="center"),
                                           br(),
-                                            p("Currently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is relatively evenly dispersed throughout the country. Zimbabwe's central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe's terrain consists mainly of a flat plateau upon which forests thrive."))),
+                                            p("Presently, President Emmerson Mnangagwa holds office. Zimbabwe is home to roughly 15 million inhabitants, 10% of whom live in the capital city of Harare. Although large clusters exist in other major urban areas, including Bulawayo and Chitungwiza, the population distribution is otherwise relatively evenly dispersed throughout the country. Zimbabwe’s central government is responsible for regulating its ten provinces and 59 further subdivided districts. Zimbabwe’s terrain consists mainly of a flat plateau upon which forests thrive."))),
                                    
                           br(),
                           br(),
@@ -282,12 +282,12 @@ ui <- navbarPage(title = "Zimbabwe",
                                    column(6,
                                           align="justify",
                                           h2(strong("Agricultural Profile"), align = "center"),
-                                          p("Eighty-nine percent of farmers in Zimbabwe are smallholders, defined as farmers with limited resources that work on small plots of land, have little technology, and typically rely on family for labor and rain for their crops (Kuhudzayi & Mattos, 2018). Less than one percent have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). Limited access to water affects food production and leads to food insecurity issues, especially during droughts exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods, droughts, and changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, et al., 2019)."),
-                                          p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors, including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
+                                          p("89% of farmers in Zimbabwe are smallholders (farmers with limited resources that work on small plots of land, have little technology, and typically rely on family for labor, and rain for their crops (Kuhudzayi & Mattos, 2018)) who rely on rain for their agriculture and less than 1% of them have access to irrigation (Milne, Mekonnen, & Benitez Ponce, 2019). This limited access to water affects food production and leads to food insecurity issues, especially during droughts which are exacerbated by irrigation and water storage infrastructure being in a state of disrepair (Milne, Mekonnen, & Benitez Ponce, 2019). Climate change is anticipated to harm agriculture due to more floods and droughts in addition to changing temperatures and precipitation patterns. Without adequate adaptation, a drier climate is projected to decrease GDP due to agriculture sector losses by 2 percent (Milne, Mekonnen, & Benitez Ponce, 2019)."),
+                                          p("There are five agro-ecological (or natural) regions in Zimbabwe that are separated based on multiple factors including rainfall patterns, vegetation, temperature, and soil quality (ZIMSTAT, 2017). While the government of Zimbabwe and this project uses the official Agro-ecological Regions, there is government interest in updating the map of the regions since they no longer accurately reflect current realities due to social and biophysical environment changes (Milne et al., 2019). Such changes include factors like climate projections predicting a hotter and drier Zimbabwe, less predictable rainfall, a shorter growing period, soil and ground cover loss, changes to land use, and a decrease in runoff (Milne et al., 2019)."),
                                           
                                           #h3(em("Regional Specificity"), align = "center"),
                                           img(src = "AgroRegionZim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"),
-                                          div(tags$caption("Figure 3: Agro-ecological Regions Of Zimbabwe"), align="center"),
+                                          div(tags$caption("Figure 3: Agro-ecological regions of Zimbabwe"), align="center"),
                                           p("")
                                           #p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well"),
                                           
@@ -297,12 +297,12 @@ ui <- navbarPage(title = "Zimbabwe",
                                    column(align="justify",
                                      6,
                                      fluidRow(
-                                     div(tags$caption("Table 1: Agro-ecological Regions In Zimbabwe")),align="left",
+                                     div(tags$caption("Table 1: Agro-ecological regions in Zimbabwe")),align="left",
                                      withSpinner(tableOutput("table")),
                                      div(tags$caption("Source: FAO"))),
                                      br(),
                                      
-                                     p("Depending on the region, certain crops are more suited than others, with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns. In contrast, regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). Region I is suitable for fruit, forestry, and intensive livestock production. Region II can grow maize, cotton, flue-cured tobacco, sugar, beans, coffee, sorghum, seed maize, barley, groundnuts, and horticultural crops. Region III is suitable for beef ranching. Commercial farm production is primarily maize. Regions IV and V require irrigation for successful crop production due to their dryness. Communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops but some maize being produced as well")
+                                     p("Depending on the region, certain crops are more suited than others with regions I, II, and III being better suited to producing commercial crops due to their better rainfall patterns, while regions IV and V are better suited to livestock farming and irrigated agriculture (Milne, Mekonnen, & Benitez Ponce, 2019). To be more specific, Region I is suitable for fruit, forestry, and intensive livestock production; Region II can grow maize, cotton, flue cured tobacco, sugar, beans, and coffee and grows sorghum, seed maize, barley, groundnuts, and various horticultural crops as well; Region III is mostly used for extensive beef ranching and commercial farm production is primarily consisted of Maize; while regions IV and V require irrigation for successful crop production due to their dryness, communal farmers must grow crops without access to irrigation anyway, with millet and sorghum being the most common crops and maize being grown as well")
                                    )
                                    
                                    
@@ -339,7 +339,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          width = 6,
                                          withMathJax(),
                                          title = h1(strong("Remote Sensed Data")),
-                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA, which observes Earth's reflected or emitted energy through sensors on aircraft or satellites (NASA, 2019). In this project, we sourced data from Google Earth Engine (GEE) for the following remotely sensed data:"),
+                                         p("Remote sensing is the process of getting information from a distance. Our remotely sensed datasets are sourced from NASA who observes Earth’s reflected or emitted energy through sensors on aircrafts or satellites (NASA, 2019). In this project we sourced data from Google Earth Engine (GEE) for the following remotely sensed data:"),
                                          
                                          fluidRow(
                                          img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
@@ -350,7 +350,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                          #h4(em("Selected Remote Sensed Data")),
                                          withMathJax(),
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
-                                         p("Enhanced Vegetation Index (EVI) can quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy. This increased responsiveness is helpful in vegetation monitoring because 70% of Earth's terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences and decoupling the canopy background signal. This improves sensitivity when monitoring vegetation in high biomass areas (Huete et al., 2002)."),
+                                         p("Enhanced Vegetation Index (EVI) can be used to quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy.This increased responsiveness is useful in vegetation monitoring because 70% of Earth’s terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences, and decoupling the canopy background signal. This leads to improved sensitivity in high biomass areas as well as improved vegetation monitoring (Huete et al., 2002)."),
                                          #br(),
                                          #fluidRow(
                                          #img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
@@ -358,13 +358,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                          #),
                                          br(),
                                          withMathJax(),
-                                         p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands, which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). The surface spectral reflectance data are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
+                                         p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). To improve the accuracy of the dataset, the surface spectral reflectance observations used to produce it are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
                                          
                                          h3(strong("Precipitation")),
-                                         p("Tropical Rainfall Measuring Mission (TRMM) 3B42 is a Google Earth Engine (GEE) index containing observations on all forms of tropical precipitation such as snow, rain, and drizzle. The dataset is provided by NASA Goddard Earth Sciences Data and Information Services Center (GES DISC) at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm, in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates result in a dataset. The data is collected in 3-hour periods and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
+                                         p("Tropical Rainfall Measuring Mission (TRMM) 3B42 is a Google Earth Engine (GEE) index containing observations on all forms of tropical precipitation such as snow, rain, and drizzle. The dataset is provided by NASA Goddard Earth Sciences Data and Information Services Center (GES DISC) at NASA Goddard Space Flight Center. It has undergone processing through their TMPA (TRMM Multi-satellite Precipitation Analysis) Algorithm, in which merged high quality (HQ)/infrared (IR) precipitation and root-mean-square (RMS) precipitation-error estimates result in a dataset. The data is produced over a 3-hour period, and rendered at a resolution of 27830 meters (about 17.29 mi) observed around the global belt (50° North and South). The unit of measurement provided is in millimeters per hour (TRMM, 2012)."),
                                          
                                          h3(strong("Soil Moisture")),
-                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data, provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery is done using an Ensemble Kalman Filter (EnKF) method. The filter is designed to correct model-based predictions for damaging impacts due to rainfall-forcing errors. This applies especially to parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). The correction is of great importance as the quality of the assimilation depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012)")),
+                                         p("Our dataset, the NASA-USDA Enhanced Soil Moisture Active Passive (SMAP) Global soil moisture data provides global soil moisture information at a 10 km spatial resolution and includes five indices: Surface and Subsurface soil moisture, Soil moisture profile (percent soil moisture), and surface and subsurface soil moisture anomalies from 2015 to 2022. The dataset is derived by taking predictions from the modified Palmer two-layer model, which are then corrected through the integration of satellite-derived SMAP soil moisture observations (Bolten, Sazib, & Mladenova, 2021). The assimilation of the SMAP imagery into the Palmer model is done using an Ensemble Kalman Filter (EnKF) method, and is designed specifically to correct model-based predictions for damaging impacts due to rainfall-forcing errors; especially for parts of the world without exhaustive rain gauge instrumentation (Bolten, Sazib, & Mladenova, 2018c). This correction is of great importance as the quality of the assimilation greatly depends on the accuracy of observational and model estimates, meaning that proper evaluation of the soil moisture uncertainty is vital for the best integration of the satellite observations (Maggioni, Anagnostou, & Reichle, 2012).")),
                                          
                                          #br(),
                                          
@@ -374,17 +374,22 @@ ui <- navbarPage(title = "Zimbabwe",
                                            width = 6,
                                            withMathJax(),
                                            title = h1(strong("PICES Data")),
-                                           p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels and are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include household demographics, education, employment, healthcare, migration, housing characteristics, asset ownership, access to services, and agricultural activities."),
-                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently. The first dimension, education, consists of two variables – No Primary Education (Max Educ) and Education Dropout. The No Primary Education (Max Educ) variable refers to nobody in the household having completed primary school. The Education Dropout variable indicates whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each sub-dimension). The two health variables are also heavily weighted, with the second health dimension being the highest (2 out of 9.5; a weight of 1 for each sub-dimension). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving necessary healthcare."),
-                                           p("Unemployment, defined as a member of the household being unemployed in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas. For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residents who lack electricity and a toilet. In urban areas, where lack of electricity indicates a more significant state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
-                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered deprived if their primary water source is an unprotected well, a river, another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or' other' (not electricity, paraffin, gas, coal) as cooking fuel. Lack of Household Assets is given a dimension weight of 1. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:
+                                           p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels, and they are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include information on household demographics, education, employment, healthcare, migration, housing characteristics, assets ownership, access to services, and agricultural activities."),
+                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently.  The first dimension, education, consists of two variables – No Primary Education (Max Educ) and Education Dropout. The No Primary Education (Max Educ) variable refers to nobody in the household having completed primary school. The Education Dropout variable is an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each of the sub-dimensions), along with the two health variables that make up the second health dimension (2 out of 9.5; a weight of 1 for each of the sub-dimensions). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving a necessary healthcare."),
+                                           p("Unemployment, defined as a member of the household being unemployed in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas.
+For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residence lack of electricity and lack of toilet indicators underlying the dimension. In urban areas, where lack of electricity indicates a greater state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5.
+"),
+                                           p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered to be deprived if their main water source is an unprotected well, a river, or another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or ’other’ (not electricity, paraffin, gas, coal) as cooking fuel.
+Lack of Household Assets is given a dimension weight of 1 in both rural and urban areas. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:
 "),
                                            p(" \\(PAI = 2 * motor vehicle + motorcycle + bicycle + television + radio + fridge + landline phone\\)   ", align = "center"),
                                            p("\\( D = 1 \\)", " if ","\\(PAI < 2 \\)", align = "center"),
-                                           p("For rural households, agricultural assets are essential indicators of wellbeing and agricultural activity capabilities. The dimension weight is 1.5, with three component variables usually given a weight of 0.5 each. The first variable, Lack of Land, uses a threshold of 0.25 hectares. The second variable on livestock is measured in Tropical Livestock Units (TLU), an indicator of wealth that can be used to insulate households against negative idiosyncratic and covariate shocks. A TLU deprivation threshold of 1 indicates a Lack of Livestock. The third variable is the Lack of Rural Equipment. An agricultural equipment index (AEI) is created as follows:"),
+                                           p("For rural households, agricultural assets are essential indicators of wellbeing and agricultural activity capabilities. The dimension weight is 1.5, with three component variables usually given a weight of 0.5 each. The first variable, Lack of Land, uses a threshold of 0.25 hectares. The second variable on livestock is measured in Tropical Livestock Units (TLU), an indicator of wealth that can be used to insulate households from negative idiosyncratic and covariate shocks. A TLU deprivation threshold of 1 indicates Lack of Livestock. The third variable is the Lack of Rural Equipment. An agricultural equipment index (AEI) is created as follows:"),
                                            p("\\( AEI = plough + wheelbarrow + scotchcart + tractor + griding mill \\)", align = "center"),
                                            p("\\( D = 1 \\)", " if ","\\(AEI < 1 \\)", align = "center"),
-                                           p("The agricultural asset dimension is not included for households in urban areas. The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access. **Note: The livestock data were unavailable in the 2011-12 wave, so a weight of zero has been assigned to this variable. More details can be found here:", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
+                                           p("The agricultural asset dimension is not included for households in urban areas.
+The final dimension of wellbeing – with a weight of 1 – is Lack of Access to Services, where remoteness indicates deprivation. Households are considered deprived if they are far from two or more of seven recorded services in the data. The distance thresholds employed are 5 km for a primary school, 15 km for a secondary school, 15 km for a hospital, 5 km for shops, 6 km for a hammer mill, 15 km for a post office, and 5 km for a bus stop, respectively. These distance thresholds are halved in urban areas, where services tend to be closer, but distance still represents a barrier to access.
+**Note: The livestock data were not available in the 2011-12 wave, so a weight of zero has been assigned to this variable. More details can be found here:", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
                                            
                                            ))),
                             
@@ -394,39 +399,44 @@ ui <- navbarPage(title = "Zimbabwe",
                                         column(
                                           12,
                                           #align="justify",
-                                          h1(strong("Overview Of Methodology")),
+                                          h1(strong("Overview of Methodology")),
                                           img(src = "Method.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "85%"), align ="center",
                                           div(tags$caption("Figure 5: Overview of Methodology"),align="center")
                                         ),
                                         br(),
                                        column(
-                                         h3(strong("Remote Sensed Data Methods")),
+                                         h3(strong("Remote Sensed data Methodology")),
                                          align="justify",
                                          withMathJax(),
-                                         title = h3(strong("Remote Sensed Data Methods")),
+                                         title = h3(strong("Remote Sensed data Methodology")),
                                          width = 6,
-                                         em(h4("Processing Remote Sensed Data")),
+                                         em(h4("A brief overview of the wrangling/processing of the Remote Sensed data")),
                                          h4(strong("Enhanced Vegetation Index")),
-                                         p("The Enhanced Vegetation Index (EVI) has a dynamic range and high sensitivity in dense vegetation. It is particularly suitable for mapping the cropping density in Zimbabwe. As high EVI values correspond to crops at their peak growth stage, we used maximum EVI values in each agro-ecological region during the growing seasons in 2010-11 and 2016-17 to observe the variation in crop growth in different periods. We aggregated the daily EVI to the monthly level. We then conduct a spatial mapping of the EVI to agro-ecological regions in Zimbabwe. In our analysis, we focus on the growing seasons and patterns that are ideal for maize. Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011). We will use this growing season to analyze this and all other climatic indicators."),
+                                         p("The Enhanced Vegetation Index (EVI) has a dynamic range and high sensitivity in dense vegetation, it becomes particularly suitable to map the cropping density in Zimbabwe. As high EVI values correspond to crops at their peak growth stage, we used maximum EVI values in each agro-ecological region during the growing seasons in 2011 and 2017 to observe the variation in crop growth in different periods. Because the daily EVI values are too high-frequency to represent vegetation stages, we aggregated the data into a monthly level as a better approach. We conduct a spatial mapping of the agroecological regions in Zimbabwe depicting the maximum EVI values. We additionally focus on maize which is the prominent crop grown in Zimbabwe."),
                                          br(),
                                          h4(strong("Precipitation")),
-                                         p("Our geospatial analysis of precipitation occurs by agro-ecological region. We aggregate the 3-hour precipitation data to the daily and monthly levels. We analyze these data with respect to the ideal conditions and growing season for maize. Similar to previous analyses of precipitation, we see that the Northern region typically receives the most rainfall. In contrast, the Southern region receives less (Nkomozepi & Chung, 2012). A season must see 600-700 mm of rain for successful maize production(Mugyio et al., 2021). If a season receives a maximum of 1000 mm of precipitation, yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016). In regions with rainfed agriculture, the timing of the most optimal planting period can dictate the success of a season's yield. Planting prematurely can lead to crop failure, particularly if there are extensive dry spells in the middle of the growing season. Alternatively, planting late can reduce the growing season. Both scenarios will result in reduced yield (Mugyio et al., 2021)."),
-                                         p("In addition to the total amount of rainfall, we also examine the length of dry spells, another condition that may affect maize production. We construct measures of dry and wet days. A day is dry if the precipitation value is less than 2.95mm. A wet day is a day receiving more than 2.95mm of rain (Mugyio et al., 2021). We then use these wet and dry days to construct dry spells. Dry spell analysis is important in assessing the performance of the growing seasons. A dry spell consists of 14 or more consecutive dry days (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
-                                         
+                                         p("In this project, we subset the data to investigate over Zimbabwe and within a timeframe that parallels PICES data records from 2011 and 2017. As well as making connection with other events with our timeframe such as severe drought episodes and social/economic shocks like political unrests. We decided to limit the timeframe of the indicator due to the 3-hourly characteristic of the data and then aggregate the data to daily averages of precipitation."),
+                                         p("Zimbabwe’s agriculture sector is the economic backbone that provides livelihoods to its people. With respect to this, we have decided to transition the spatial mapping of Zimbabwe to an agro-ecological region level to accurately depict precipitation in meaningful way. Additionally, to further narrow our examination of the country we decided to focus on the production of a single primary crop, maize. Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand recieve lesser rainfall (Nkomozepi & Chung, 2012). Past literature defines the growing season of maize to start in October and continue into May the following year (Nyakudya & Stroosnijder, 2011)."),
+                                         p("To produce maize, a season must see 600-700 mm of rain (Mugyio et al, 2021). If a certain season receives a maximum of 1000 mm of rain, then yields may increase. However, yields may decline if the total rainfall exceeds 1000 mm for a season (Mushore et al., 2016).  In regions with rainfed agriculture and rain patterns becoming more variable as the years progress the timing of the most optimal planting period in a season can dictate the success of a season’s yield. Planting prematurely can lead to crop failure; this may be due to an extensive dry spell mid-season."),
+                                         p("Alternatively, planting late can reduce the growing season, considering both situations the yield will be reduced as a by-product (Mugyio et al., 2021). In a day, we need to characterize the possible types of conditions that may affect the production of maize. For this project, we will only examine what is a dry or wet day. A day is determined to be wet if the precipitation value is less than 2.95mm. The opposite can describe a wet day as receiving more than 2.95mm of rain (Mugyio et al., 2021). A derived measurement to indicate a dry spell is important in understanding the performance of the growing seasons. A dry spell consists of 14 consecutive dry days or more (Mupangwa et al., 2011; Mugiyo et al., 2021)."),
                                          
                                          br(),
                                          h4(strong("Soil Moisture")),
                                                 h5(strong("Why Soil Moisture?")),
-                                                p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities. For most crops, too little soil moisture during planting stifles seed germination. Too much soil moisture prevents fieldwork as heavy machinery cannot access the field (Bolten et al.,  2018). We have chosen to focus on surface soil moisture during the first 30 days of the growing season since this is when most planting activities occur.")
+                                                p("Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten, Sazib, & Mladenova, 2018). Because most planting activities take place during the first 30 days of the growing season, this is the period we have chosen to focus on for the surface soil moisture section of our study.")
                                          ,
                                          
-                                                p("The germination of maize seeds is dependent to a large extent on soil and environmental conditions. Warm, moist conditions result in seedling emergence at 6 to 10 days, while cool or dry conditions slow emergence to two weeks or longer. The optimum moisture level of the soil is approximately 60% of the total capacity, while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to drought and waterlogging; therefore, poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four weeks spanning flowering, can lead to high yield losses; therefore, some form of water conservation is beneficial."),
                                          
-                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
-                                        #br(), 
-p("-   20-25mm are best for germinating and emergence of a new crop but can halt fieldwork or damage a newly seeded crop in the wet environment for a prolonged period."),
+                                                h5(strong("Ideal soil type for maize production")),
+                                                p("The germination of maize seeds is dependent to a large extent on soil and environmental condition with warm, moist conditions resulting in seedling emergence of 6 to 10 days, while cool or dry conditions slowing emergence to two weeks or longer. The optimum moisture levels of the soil is approximately 60% of the total capacity while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to both drought and water logging and therefore poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four-week period spanning flowering, can lead to high yield losses and resultingly some form of water conservation is beneficial."),
+                                         
+                                         p("Surface soil moisture is the water that is in the upper 10cm of soil and responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022).
 
-p("-   15-20mm are best for vigorous field activity."),
+For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
+                                        #br(), 
+p("-   20-25mm are best for the germination and emergence of a new crop but can halt fieldwork or damage a newly seeded crop that is in the wet environment for a prolonged period."),
+
+p("-   15-20mm are normally the best for vigorous field activity."),
 
 p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
                                          tags$br(),
@@ -437,9 +447,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          withMathJax(),
                                          title = h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
                                          width = 6,
-                                         em(h4("A Brief Overview Of The Mathematics Behind The Multidimensional Poverty Index")), tags$br(),
-                                         p("The methodology for determining the multidimensional poverty 
-       indices proposed by Alkire and Foster in 2011 involve a matrix with \\(n\\) 
+                                         em(h4("A brief overview of the Mathematics behind the Multidimensional Poverty Index")), tags$br(),
+                                         p("The aggregate methodology for determining the multidimensional poverty 
+       indices proposed by Alkine and Foster in 2011 involve a matrix with \\(n\\) 
        rows and \\(d\\) columns, where \\(n\\) is the number of people within the 
        state and \\(d\\) is the number of dimensions for assessing poverty. There 
        are three main measurements denoted on the \\(M\\) scale: \\(M_{0}, M_{1}\\) and \\(M_{2}\\).
@@ -473,7 +483,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          h3("\\(A = \\frac{n_{deprivations}}{n_{potential}}\\)"),
                                          tags$br(),
                                          h5(strong("Deprivation Threshold")),
-                                         h5(em("\\(k\\) = Threshold (If an index is above the threshold, k, then the individual is considered poor)")),
+                                         h5(em("\\(k\\) = Threshold (If an index is above threshold, k, then the individual is considered poor)")),
                                          tags$br(),
                                          h5(strong("Dimensional Aggregation")),
                                          h4("\\(D_{total} = \\sum_{i=1}^{d}\\sum_{j=1}^{v_{d}} w_{i, j}\\)"),
@@ -568,9 +578,9 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                            width = 4,
                                            withMathJax(),
                                            title = "Description",
-                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The maps show the maximum EVI (which is a measure of the density of crops) during the growing seasons in 2011 and 2017, respectively. Both graphs show that the maximum EVI value is at its highest in Region IIA, which, according to United Nations' Food and Agriculture Organisation, is suitable for intensive farming."), 
-                                           p("Region V is next with an EVI that aligns with its production being mostly ranching cattle. Region IV has the lowest maximum EVI value, and the FAO describes it as a farming region suitable for resistant fodder crops (FAO, 2020)."),
-                                           p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the EVI during the growing season in 2017 is higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
+                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The graphs above show the maximum EVI (which corresponds to the density of crops) in Zimbabwe during the growing seasons in 2011 and 2017, respectively. In both graphs, we could see that the maximum EVI value is at its highest in Region IIA, which, according to United Nations’ Food and Agriculture Organisation, is suitable for intensive farming."), 
+                                           p("After Region IIA, Region V has the next highest maximum EVI value, which matches up with its farming system of extensive farming with cattle ranching. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops (FAO, 2020)."),
+                                           p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the overall range of maximum EVI during the growing season in 2017 is also higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
                                      
                                      br(),
                                      
@@ -597,7 +607,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        title = strong("Maximum Enhanced Vegetation Index During Growing Seasons", align="center"),
                                        p(h3("Description")),
                                        p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
-                                       p("The months align well with cropping cycle in Zimbabwe: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+                                       p("The reason for this could be due to the cropping cycle: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
                                        
                                      )
                                      
@@ -628,7 +638,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 align = "center"
                               ),
                               fluidRow(
-                                h1(strong("Monthly Comparison Of Average Rainfall In The Growing Seasons For 2010-11 And 2016-17"), 
+                                h1(strong("Comparison of Average Rainfall between Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 
@@ -641,12 +651,14 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               fluidRow(
                                 align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(12, p(h3("Description")) , 
-                                p("The maps show the spatial distribution of the monthly average daily rainfall. Each profile compares the same month in 2010-11 with its counterpart in 2016-17. This is done for the first three months of the growing season, which can be seen by advancing through the slide deck using the arros on the left or right. The Northern regions in Zimbabwe are typically the ones to receive the most rainfall. A month-on-month comparison of the 2010-11 and 2016-17 shows more precipitation in the 2016-17 growing period. This could possibly result in a higher yield for maize.")
+                                column(12, p(strong("Description")) , 
+                                p("These maps are looking at rain distribution at average daily level. Zimbabwe generally follows previous analysis of  its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. 
+        The Southern region on the other hand receives less rainfall (Nkomozepi & Chung, 2012). In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal level and month by month level. This could possibly indicate a higher yield for maize. 
+        A day is considered wet if it exceeds 2.95 mm of precipitation. ")
                               )),
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                h1(strong("Comparison Of Total Rainfall In The Growing Seasons For 2010-11 And 2016-17"), 
+                                h1(strong("Comparison of Total Rainfall between Growing Seasons"), 
                                    style ="font-size: 25px;"),
                                 align = "left"
                               ),
@@ -658,10 +670,21 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               fluidRow(
                                 align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(10, p(h3("Description")) , 
-                                       p("The maps show the total rainfall during the two growing seasons. Comparing the two growing seasons shows that every agro-ecological region received more rainfall in 2016-17. This is consistent with the research literature, which indicates that Zimbabwe experienced severe drought during 2015-2016. Rainfall patterns are also consistent with other research, showing that the North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). The ideal range of rainfall for maize production is 600-700 mm, with an excess of 1000 mm potentially leading to a decline in maize yields. This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, with Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.  
-                              "))
+                                column(12, p(strong("Description")) , 
+                                       p("
+               These visualizations show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, 
+               with Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                                
                               ),
+                              
+                              
+                              
                               
                               
                               fluidRow(
@@ -689,11 +712,18 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               fluidRow(
                                 align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(12, p(h3("Description")) , 
-                                       p("These graphs show the total rainfall during the two growing seasons by agro-ecological regions. They depict the same patterning explained above with the maps. A higher amount of rainfall in 2016-17. Regions I, II, and III received the most rainfall."))
-                                ),
+                                column(12, p(strong("Description")) , 
+                                       p("
+               These visualizations (line charts) show us the total rainfall during the two growing seasons,  
+               which when compared indicate that every region received a higher amount of rainfall in 2016-17 than in 2010-11. As it relates to precipitation the Regions I,II,and III are typically the ones to receive the most rainfall. Regions IV and V on the other hand receives less rainfall. In comparison, 2010-11 vs 2016-17 we are seeing slightly more precipitation in 2016-17 growing period on a seasonal average level.   
+               "))
+                                
+                              ),
                               
-                            
+                              
+                              
+                      
+                              
                               fluidRow(
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 h1(strong("Comparison of Dryspells between Growing Seasons"),
@@ -710,70 +740,26 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                 style = "margin-left: 100px; margin-right: 100px;",
                                 column(12, 
                                        align="justify",
-                                       p(h3("Description")) ,
-                                       p("The bar plot shows the number of dry spells across regions during the growing season for maize; A dry spell is described to be a consecutive series of dry days between 10 to 20 days or 20 days or more. There were more dry spells in the 2010-11 growing season."))
-                              ),
-                              
-                              br(),
-                              
-                              fluidRow(
-                                h3(strong("Correlations with District-Level Rainfall"), 
-                                   style = "font-size:35px;"), align="center",
-                                style = "margin-left: 0px; margin-right: 0px;",
-                                #h3(strong("District Level Rainfall"), align = "left"),
-                                column(
-                                  align="justify",
-                                  width = 12,
-                                  withMathJax(),
-                                  title = "Description",
-                                  p(""))
-                                
-                              ),
-                              
-                              fluidRow(
-                                column(6,
-                                       #style = "margin-left: 5px; margin-right: 100px;",
-                                       img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                                       div(tags$caption(""),align="center")
-                                       #align = "left"
-                                ),
-                                column(6,
-                                       #style = "margin-left: 5px; margin-right: 100px;",
-                                       img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
-                                       div(tags$caption(""),align="center")
-                                       #align = "left"
-                                       
-                                )),
-                              
-                              
-                              
-                              fluidRow(
-                                align="justify",
-                                style = "margin-left: 100px; margin-right: 100px;",
-                                column(12, p(strong("Description")) , 
+                                       p(strong("Description")) ,
                                        p("
-               We further disaggregate rainfall to the district level for our statistical analysis. The district level maps show the total rainfall during the two growing seasons.  
-               Every district received a higher amount of rainfall in 2016-17 than in 2010-11. 
-               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
-               Rainfall patterns are also consistent, as North-East districts (regions) typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
-               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
-               This means that in both growing seasons, All regions except for districts falling within Region V met the minimum amount of rain necessary for an average maize yield, 
-               with districts falling within Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               This shows the number of dry spells; A dry spell is described to be a 
+               consecutive series of dry days between 10 to 20 days or 20 days or more. 
+               Dry spells play a significant role in agricultural success by indicating 
+               plant stress exposure while their length and severity can result in the decreased 
+               yields or complete failure of a crop (Nyakudya et al., 2011; Mhizha et al., 2014).  
                "))
-                                
-                              ),
+                              )
                               
-                              
-                              
-                              ),
+                            ),
                             
-                              tabPanel(strong("Soil Moisture"),
+                            
+                            tabPanel(strong("Soil Moisture"),
                                      tabsetPanel(
                                      tabPanel("Surface Soil Moisture",
                                               fluidRow(style = "margin: 6px;",
                                                        #h1(strong("Surface Soil Moisture "), align = "center"),
                                                        p("", style = "padding-top:10px;")
-                                                   
+                                                       
                                                        
                                               ),
                                               
@@ -790,7 +776,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          width = 4,
                                          withMathJax(),
                                          title = "Description",
-                                         p("This map shows the average surface soil moisture (in mm) by agro-ecological region. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. Regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm)."),
+                                         p("This visualization shows the average surface soil moisture (in mm) by Zimbabwe’s natural regions. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From the visualization, we can see that regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm)."),
                                          p("These soil moisture levels suggest that while farmers in all regions of Zimbabwe are likely to experience stifled germination upon planting during the 2016/2017 growing season, farmers in regions IV and V are likely to be more impacted than their counterparts in the other regions."))),
                                      
                                      
@@ -805,8 +791,8 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          withMathJax(),
                                            width = 4,
                                            title = "Description",
-                                           p("The bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
-                                           p("The chart shows that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III having more soil moisture on average than regions IV and V."))),
+                                           p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
+                                           p("From this visualization we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III having more soil moisture on average than regions IV and V."))),
                                      fluidRow(
                                        box(img(src = "SurfaceSoilLine.png", height = "100%", width = "100%"),
                                            title = h1(strong("Surface Soil Moisture Across Time"),
@@ -818,7 +804,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                          withMathJax(),
                                            width = 4,
                                            title = "Description",
-                                           p("This line chart shows that the ranking of soil moisture levels by region remains largely consistent over the time period. The difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season."),
+                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the time period, the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season."),
                                            p("In addition, while regions I , II, and III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th, regions IV and V do not reach those levels until December 9th.")))
                                      
                                      
@@ -913,7 +899,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        width = 12,
                                        withMathJax(),
                                        title = "Description",
-                                       p("This graphic shows a map of poverty (MPI) by ",strong("district")," for 2011 and 2017. There are three layers to this graph:
+                                       p("This graphic shows a detailed visualization of MPI across 60 administrative districts. In 2011 Zimbabwe was divided into 60 administrative districts. For this reason, we conduct", strong("district-level"), "analysis in our study using the 60 districts. There are three layers to this graph:
                                       \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
                                        tags$ul(  
                                          tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method/","Sabina Alkire and James Foster",target="_blank"),
@@ -954,7 +940,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                      withMathJax(),
                                      title = strong("Descriptive Analysis"),
                                      width = 12,
-                                     p("\\(M_{0}\\): When we focus on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for our k-threshold of 3."),
+                                     p("\\(M_{0}\\): Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for our k-threshold of 3."),
                                      
                                      p("\\(M_{1}\\): When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
                                      p("\\(M_{2}\\): A look at the \\(M_{2}\\) values of the index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large proportion of Zimbabwe’s population."),
@@ -974,7 +960,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                             width = 12,
                                             withMathJax(),
                                             title = "Description",
-                                            p("This graphic shows a map of the relevant components of MPI at the", strong("district-level"),". Our study uses ", strong("district-level")," measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
+                                            p("This graphic shows a detailed visualization of the relevant components of MPI at the", strong("district-level"),". Our study uses ", strong("district-level")," measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
                                               tags$ul(
                                                 tags$li(strong("No Primary Education (Max Education):")," nobody in the household having completed primary school"),
                                                 tags$li(strong("Education Dropout (Unenrolled Child):")," an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school."),
@@ -1026,7 +1012,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                            withMathJax(),
                            title = strong("Summary Statistics and Correlations", align="center"),
                            p(h3("District-Level Correlation Matrices")),
-                           p("We examined the correlation between our climate indices and our measures of poverty and its socioeconomic components at the ", strong("district-level"),". The following matrices present the Pearson Correlation Coefficients of the weather indices and these poverty measures. The statistical significance can be gleaned by observing the color coding within the matrix. Overall, total rainfall in the growing season exhibits consistently signficant correlation with the poverty measures. For example, in 2011, the correlation coefficient between total rainfall and poverty was -0.295 which means that as rainfall increases the incidence of poverty decreases. The coefficient is also statistically significant at the 5 percent level."))
+                           p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and \\(M_{0}\\) was -0.295 which means that rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level."))
                        ),
                        
                        fluidRow(
@@ -1049,7 +1035,52 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                          
                        ),
                        
-
+                       fluidRow(
+                         h3(strong("Correlations with District-Level Rainfall"), 
+                            style = "font-size:35px;"), align="center",
+                         style = "margin-left: 0px; margin-right: 0px;",
+                         #h3(strong("District Level Rainfall"), align = "left"),
+                         column(
+                           align="justify",
+                           width = 12,
+                           withMathJax(),
+                           title = "Description",
+                           p(""))
+                         
+                       ),
+                       
+                       fluidRow(
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "TotalRainfallByDistrict2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption(""),align="center")
+                                #align = "left"
+                         ),
+                         column(6,
+                                #style = "margin-left: 5px; margin-right: 100px;",
+                                img(src = "TotalRainfallByDistrict2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
+                                div(tags$caption(""),align="center")
+                                #align = "left"
+                                
+                         )),
+                       
+                       
+                       
+                       fluidRow(
+                         align="justify",
+                         style = "margin-left: 100px; margin-right: 100px;",
+                         column(12, p(strong("Description")) , 
+                                p("
+               These visualizations show us the district-level total rainfall during the two growing seasons,  
+               which when compared indicate that every district received a higher amount of rainfall in 2016-17 than in 2010-11. 
+               This is consistent  with literature, which indicates that Zimbabwe experienced a severe drought during 2015-2016. 
+               Rainfall patterns are also consistent, as North-East districts (regions) typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). 
+               For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
+               This means that in both growing seasons, All regions except for districts falling within Region V met the minimum amount of rain necessary for an average maize yield, 
+               with districts falling within Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
+               "))
+                         
+                       ),
                        
                         
                        
@@ -1091,8 +1122,9 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                 align="justify",
                                 p(
                                   "
-                               Figure 1 presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the
-                               first month of the growing season (Nov-Dec) is associated with a a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent
+                               Figure 1:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of rain in the
+                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 percent
                                level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated coefficients
                                are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall may have
                                important implications for the socio-economic conditions of the people.
@@ -1101,20 +1133,23 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        
                                 p(
                                   "
-                               Figure 2 presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and
-                               statistically significant, meaning that more rainfall is associated with a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting
+                               Figure 2:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all negative and
+                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month of planting
                                (Nov-Dec) has the highest absolute magnitude.
                                "
                                 ),
                                 p(
                                   "
-                              Figure 3: presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and
-                              statistically significant, meaning that more rainfall is associated with a lower adjusted poverty severity.
+                              Figure 3:
+                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). Once again, the coefficients are all negative and
+                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.
                                "
                                 ),
                                 p(
                                   "
-                               Figures 4 – 7 presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall has an important association with these measures of
+                               Figures 4 – 7:
+                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with these measures of
                                deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max Educ. and Lack of Access to Services
                                are particularly prominent relative to that with cumulative monthly rainfall in later months of the season.
                                "
@@ -1495,14 +1530,14 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                    column(6,
                                           align="justify",
                                           h1(strong("Takeaways"),align="center"),
-                                          p("Last year, the VT DSPG in collaboration with ZimStat and the World Bank, created Poverty Indices at the district level for 2011 and 2017. We used national household PICES data to conduct this exercise. This year, we show how the district level measures can be used to answer questions related to climate change."),
-                                          p("We do so by extending the reach of the PICES data using freely available data remotely sensed data from Google Earth Engine. We study precipitation, EVI, and soil moisture and their association with poverty and other district-level socioeconomic variables."),
+                                          p("Last year, the VT DSPG in collaboration with ZimStat and the World Bank, created Poverty Indices at the district level for 2011 and 2017. We used national household PICES data to conduct this exercise. This year, we show how these values that we created at the district level, can be used extended to answer questions related to climate change."),
+                                          p("We do so by extending the reach of these data using freely available data remotely sensed data from Google Earth Engine. We study precipitation, EVI, and soil moisture and their association with poverty and other district-level socioeconomic variables."),
                                           p(" We find that for:"),
                                           p(strong("Enhanced Vegetation Index (EVI):"), "The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
                                           p(strong("Precipitation:"), "Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
-                                          p("Soil Moisture: The 2016-17 average soil moisture readings show that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting. However, farmers in regions IV and V are likely to be more severely impacted."),
-                                          p(strong("Correlations With Poverty:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both PICES years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
-                                          p("In conclusion, the PICES data at lower levels of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how district level PICES data can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
+                                          p("Soil Moisture: From the 2016-17 average soil moisture readings, we can see that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting. However, farmers in regions IV and V are likely to be more severely impacted."),
+                                          p(strong("Correlations:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
+                                          p("In conclusion, the PICES data at lower levers of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how PICES can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
                                           p("")
                                    )
                                    
