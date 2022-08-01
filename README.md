@@ -3,9 +3,11 @@
 ## About the repo:
 This is the 2022 DSPG Zimbabwe Project #2022_DSPG_Zimbabwe. This code repository contains R-scripts, shapefiles, images, and data that are used as a framework for building our ShinyApp project.
 We use the Google Earth Engine using the Python API to get weather data. These codes are currently in use for the 'Data Science for Public Good' program taught at Virginia Tech in the summer of 2022 and are available for use. Users are encouraged to work with their local environment, but the Google Earth Engine data are run on Google Colab (other prefered python based platform).
+# 
 
 # Files
 ## Codes
+To view the code we used to process our weather indices and other data please visit:
 
 ## Data
 ### Google Earth Data
@@ -21,6 +23,13 @@ We use the data from the [2021 Zimbabwe project](https://dspgtools.shinyapps.io/
 The images we used and generated are in the www folder within our ShinyApp folder.
 
 
+## Shiny App
+To view the code we used to render our our Shiny App please visit the app.R file.
+
+
+
+
+# 
 For further questions, please reach out to
 
 # Project Team
