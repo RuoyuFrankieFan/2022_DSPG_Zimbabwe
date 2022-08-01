@@ -435,17 +435,25 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                          p(strong("Surface soil moisture"), "is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018)."),
                                          p("For this project we defined the Surface Soil Moisture thresholds to be:"),
-                                        
-p("-   Wet is defined as greater than 25mm"),
-p("-   Ideal is defined as 15 to 25mm"),
-p("-   Dry is defined as 10 to 15mm"),
-p("-   Extremely dry is defined as less than 10mm"),
+                                         tags$ul(
+                                           tags$li("Wet is defined as greater than 25mm"),
+                                           tags$li("Ideal is defined as 15 to 25mm"),
+                                           tags$li("Dry is defined as 10 to 15mm"),
+                                           tags$li("Extremely dry is defined as less than 10mm")
+                                         ),
+
   
 p(strong("Percent soil moisture"), "is the water available in both surface and subsurface soil layers divided by the total soil’s water holding capacity (Bolten et al., 2018b). For our dataset, Percent soil moisture estimates the amount of water available within the crops root zone, which is defined as one meter or less and therefore is best used to monitor an established crop (Bolten, Sazib, & Mladenova, 2018a). Percent Soil Moisture is a percentage and for this project, we defined the thresholds to be:"),
-p("-   Wet is defined as greater than 80%"),
-p("-   Ideal is defined as 50% to 80%"),
-p("-   Dry is defined as 40% to 50%"),
-p("-   Extremely dry is defined as less than 40%"),
+                                  tags$ul(
+                                    tags$li("Wet is defined as greater than 80%"),
+                                    tags$li("Ideal is defined as 50% to 80%"),
+                                    tags$li("Dry is defined as 40% to 50%"),
+                                    tags$li("Extremely dry is defined as less than 40%")
+                                  ),
+
+
+
+
 
 
 tags$br(),
