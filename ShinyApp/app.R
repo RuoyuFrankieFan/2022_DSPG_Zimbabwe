@@ -835,17 +835,23 @@ tags$br(),
                                                        
                                               ),
                                               
+                                              fluidRow(
+                                                style = "margin-left: 100px; margin-right: 100px;",
+                                                h1(strong("Average Surface Soil Moisture During Planting for the 2016-17 Growing Season"),
+                                                   style = "font-size: 25px;"),
+                                                align = "left"
+                                              ),   
                                               
+                                                    
                                      fluidRow(
-                                       box(img(src = "SurfSoilM.png", height = "100%", width = "100%"),
-                                           title = h1(strong("Average Surface Soil Moisture During Planting for the 2016-17 Growing Season"), 
-                                                      style ="font-size: 25px;"),
-                                           width = 8,
+                                       box(img(src = "SurfSoilM.png", height = "80%", width = "80%"),
+                                           
+                                           width = 7,
                                            height = 600
                                        ),
                                        box(
                                          align="justify",
-                                         width = 4,
+                                         width = 5,
                                          withMathJax(),
                                          title = "Description",
                                          p("This map shows the average surface soil moisture (in mm) by agro-ecological region. The average is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016. Regions I, IIa, IIb, and III have dry surface soil moisture (10-15mm), while regions IV and V have extremely dry surface soil moisture (>10mm)."),
@@ -853,28 +859,46 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-                                       box(img(src = "SurfaceSoilBar.png", height = "100%", width = "100%"),
-                                           title = h1(strong("Surface Soil Moisture Period Conditions"), 
-                                                      style ="font-size: 25px;"),
-                                          width = 8,
+                                       style = "margin-left: 100px; margin-right: 100px;",
+                                       h1(strong("Surface Soil Moisture Period Conditions"),
+                                          style = "font-size: 25px;"),
+                                       align = "left"
+                                     ), 
+                                     
+                                     
+                                     
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilBar.png", height = "80%", width = "80%"),
+                                           
+                                          width = 7,
                                        ),
                                        box(
                                          align="justify",
                                          withMathJax(),
-                                           width = 4,
+                                           width = 5,
                                            title = "Description",
                                            p("The bar chart shows the number of 3-day periods by region that fall within each of the four surface soil moisture condition categories. The number of 3-day periods is taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
                                            p("The chart shows that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization's findings of Regions I through III having more soil moisture on average than regions IV and V."))),
+                                     
+                                     
+                                     
                                      fluidRow(
-                                       box(img(src = "SurfaceSoilLine.png", height = "100%", width = "100%"),
-                                           title = h1(strong("Surface Soil Moisture Across Time"),
-                                                      style ="font-size: 25px;"),
-                                           width = 8,
+                                       style = "margin-left: 100px; margin-right: 100px;",
+                                       h1(strong("Surface Soil Moisture Across Time"),
+                                          style = "font-size: 25px;"),
+                                       align = "left"
+                                     ), 
+                                     
+                                     
+                                     fluidRow(
+                                       box(img(src = "SurfaceSoilLine.png", height = "80%", width = "80%"),
+                                           
+                                           width = 7,
                                        ),
                                        box(
                                          align="justify",
                                          withMathJax(),
-                                           width = 4,
+                                           width = 5,
                                            title = "Description",
                                            p("This line chart shows that the ranking of soil moisture levels by region remains largely consistent over the time period. The difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season."),
                                            p("In addition, while regions I , II, and III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th, regions IV and V do not reach those levels until December 9th.")))
@@ -884,40 +908,64 @@ tags$br(),
                                      
 
                   tabPanel("Percent Soil Moisture",
+                           
+                           fluidRow(
+                             style = "margin-left: 100px; margin-right: 100px;",
+                             h1(strong("Average Percent Soil Moisture Map"),
+                                style = "font-size: 25px;"),
+                             align = "left"
+                           ), 
+                           
                            fluidRow(
                              #h1(strong("Percent Soil Moisture"), align = "center"),
-                                    box(img(src = "PercSoilM.png", height = "100%", width = "100%"),
-                                        title = h1(strong("Average Percent Soil Moisture Map"),
-                                                   style ="font-size: 25px;"),
-                                        width = 8,
+                                    box(img(src = "PercSoilM.png", height = "80%", width = "80%"),
+                                        
+                                        width = 7,
                                         height = 600
                                     ),
                                     box(align="justify",
                                       withMathJax(),
-                                        width = 4,
+                                        width = 5,
                                         title = "Description",
                                         p("This visualization shows the average Percent soil moisture by Zimbabwe's natural regions. The average is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017. From the visual, we can see that all regions except for V have ideal percent soil moisture (50-80%) and the average percent soil moisture decreases in order when going from region I to V. "))),
+                           
+      
                            fluidRow(
-                             box(img(src = "PercentSoilBar.png", height = "100%", width = "100%"),
-                                 title = h1(strong("Percent Soil Moisture period conditions"),
-                                            style ="font-size: 25px;"),
-                                 width = 8,
+                             style = "margin-left: 100px; margin-right: 100px;",
+                             h1(strong("Percent Soil Moisture period conditions"),
+                                style = "font-size: 25px;"),
+                             align = "left"
+                           ), 
+                           
+                           
+                           fluidRow(
+                             box(img(src = "PercentSoilBar.png", height = "80%", width = "80%"),
+                                 
+                                 width = 7,
                              ),
                              box(align="justify",
                                withMathJax(),
-                                 width = 4,
+                                 width = 5,
                                  title = "Description",
                                  p("This Grouped Bar chart shows the number of 3-day periods by region that fall within each of the four percent soil moisture condition categories. The number of 3-day periods is taken over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
                                  p("From the chart, we can see that the number of wet days decreased in order when going from Region I to V, with region V having none at all. Furthermore, we can see that surprisingly, Region V has the largest number of Ideal days, but this may be offset by it also having the largest number of Extremely dry days as well as having no wet days."))),
+                          
                            fluidRow(
-                             box(img(src = "PercentSoilLine.png", height = "100%", width = "100%"),
-                                 title = h1(strong("Percent Soil Moisture Across Time"),
-                                            style ="font-size: 25px;"),
-                                 width = 8,
+                             style = "margin-left: 100px; margin-right: 100px;",
+                             h1(strong("Percent Soil Moisture Across Time"),
+                                style = "font-size: 25px;"),
+                             align = "left"
+                           ), 
+                           
+                           
+                            fluidRow(
+                             box(img(src = "PercentSoilLine.png", height = "80%", width = "80%"),
+                            
+                                 width = 7,
                              ),
                              box(align="justify",
                                withMathJax(),
-                                 width = 4,
+                                 width = 5,
                                  title = "Description",
                                  p("This line chart shows by region the percent soil moisture over the 2016-17 growing season after the first 30 days, which takes place from December 19th of 2016 to May 29th of 2017."),
                                  p("From the chart, we can see that the relative rankings for regions percent soil moisture remains consistent for the most part although there is a greater range in values across regions at the start of the period than at the end. Furthermore, while all regions see a sharp decrease in percent soil moisture around the biggining of March, region V’s decrease begins around 2 weeks before the other regions. "))))
