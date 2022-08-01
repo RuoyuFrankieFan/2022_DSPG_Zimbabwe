@@ -430,16 +430,18 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                                 p("The germination of maize seeds is dependent to a large extent on soil and environmental conditions. Warm, moist conditions result in seedling emergence at 6 to 10 days, while cool or dry conditions slow emergence to two weeks or longer. The optimum moisture level of the soil is approximately 60% of the total capacity, while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to drought and waterlogging; therefore, poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four weeks spanning flowering, can lead to high yield losses; therefore, some form of water conservation is beneficial."),
                                          
-                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018)."),
-                                        #br(), 
-p("For this project we defined the Surface Soil Moisture thresholds to be:"),
+                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). For this project we defined the Surface Soil Moisture thresholds to be:"),
+                                        
 p("-   Wet is defined as greater than 25mm"),
 p("-   Ideal is defined as 15 to 25mm"),
 p("-   Dry is defined as 10 to 15mm"),
 p("-   Extremely dry is defined as less than 10mm"),
   
-
-
+p("Percent soil moisture is the water available in both surface and subsurface soil layers divided by the total soil’s water holding capacity (Bolten et al., 2018b). For our dataset, Percent soil moisture estimates the amount of water available within the crops root zone, which is defined as one meter or less and therefore is best used to monitor an established crop (Bolten, Sazib, & Mladenova, 2018a). Percent Soil Moisture is a percentage and for this project, we defined the thresholds to be:"),
+p("-   Wet is defined as greater than 80%"),
+p("-   Ideal is defined as 50% to 80%"),
+p("-   Dry is defined as 40% to 50%"),
+p("-   Extremely dry is defined as less than 40%"),
 
 
 tags$br(),
@@ -768,7 +770,7 @@ tags$br(),
                                 h3(strong("Correlations with District-Level Rainfall"), 
                                    style = "font-size:35px;"), align="center",
                                 style = "margin-left: 0px; margin-right: 0px;",
-                                #h3(strong("District Level Rainfall"), align = "left"),
+                                
                                 column(
                                   align="justify",
                                   width = 12,
@@ -868,33 +870,6 @@ tags$br(),
                                      
                                      ),
                                      
-
-#                                       #fluidRow(
-#                                         box(withSpinner(plotOutput("SurfBarGraph")),
-#                                             title = "Soil Moisture At Planting",
-#                                             width = 8
-#                                             #height = 600
-#                                         ),
-#                                         box(
-#                                           width = 4,
-#                                           withMathJax(),
-#                                           title = "Description",
-#                                           p("This histogram chart shows the number of 3-day periods by region that fall within each of the four soil condition categories. The number of 3-day periods is  # taken over the first 30 days of the 2016-17 growing season, which takes place from November 19th to December 19th of 2016."),
-#                                           p("From this visualization, we can see that none of the regions experienced any wet periods, and Region V is unique in not experiencing any ideal periods. #  Furthermore, Regions I through III all had either four or five ideal 3-day periods, while Region IV only had two. This aligns with the previous visualization’s findings of Regions I through III having more #  soil moisture on average than regions IV and V.")),
-#                                         
-#                                       #fluidRow(  
-#                                       box(withSpinner(plotOutput("SurfLineGraph")),
-#                                             title = "Soil Moisture at Planting Times",
-#                                             width = 8
-#                                             #height = 600
-#                                         ),
-#                                         box(
-#                                           width = 4,
-#                                           withMathJax(),
-#                                           title = "Description",
-#                                           p("This line chart shows by region the surface soil moisture in mm over the first 30 days of the 2016-17 growing season, which takes place from November 19th to #  December 19th of 2016. From this visualization we can see that the ranking of soil moisture levels by region remains largely consistent over the period."),
-#                                           p("the difference between the region with the highest soil moisture and the region with the lowest roughly doubles over the first 30 days of the growing season. In#   addition, while regions I – III experience soil moisture levels above the extremely dry threshold (10mm) as early as November 24th*, regions IV and V do not reach those levels until December 9th*."))),
-                                        
 
                   tabPanel("Percent Soil Moisture",
                            fluidRow(
