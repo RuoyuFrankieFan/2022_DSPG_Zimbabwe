@@ -14,19 +14,19 @@ We use the Google Earth Engine using the Python API to get weather data. These c
 
 For further questions, please email
 
-Project Team
+# Project Team
 
-Graduate Fellows:
-Leonard-Allen Quaye (Virginia Tech, Agricultural and Applied Economics);
-Poonam Tajanpure (Virginia Tech, Biological Systems Engineering).
+## Graduate Fellows:
+- Leonard-Allen Quaye (Virginia Tech, Agricultural and Applied Economics);
+- Poonam Tajanpure (Virginia Tech, Biological Systems Engineering).
 
-Undergraduate Interns:
-Frankie Fan (Smith College & Brown University, Math and Data Science);
-Ari Liverpool (Virginia Tech, Applied Economics Management);
-Josue Navarrete (MiraCosta College, Computer Science Major).
+##Undergraduate Interns:
+- Frankie Fan (Smith College & Brown University, Math and Data Science);
+- Ari Liverpool (Virginia Tech, Applied Economics Management);
+- Josue Navarrete (MiraCosta College, Computer Science Major).
 
-Faculty & Associate Team Members:
-Dr. Brianna Posadas (Virginia Tech, School of Plant and Environmental Sciences);
-Dr. Susan Chen (Virginia Tech, Agricultural and Applied Economics);
-Dr. Jeffrey Alwang (Virginia Tech, Agricultural and Applied Economics);
-Naveen Abedin (Virginia Tech, Agricultural and Applied Economics).
+## Faculty & Associate Team Members:
+- Dr. Brianna Posadas (Virginia Tech, School of Plant and Environmental Sciences);
+- Dr. Susan Chen (Virginia Tech, Agricultural and Applied Economics);
+- Dr. Jeffrey Alwang (Virginia Tech, Agricultural and Applied Economics);
+- Naveen Abedin (Virginia Tech, Agricultural and Applied Economics).
