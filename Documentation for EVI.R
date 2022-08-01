@@ -1,15 +1,13 @@
 ---
-title: "Futher processing for EVI"
+title: "Documentation for EVI"
 author: "Frankie Fan"
-date: '2022-06-28'
+date: '2022-08-01'
 output: html_document
 ---
+  
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r, include=FALSE}
+
 library(readxl)
 library(dplyr)
 library(tidyverse)
@@ -21,42 +19,70 @@ library(leaflet)
 library(directlabels)
 
 library(ggrepel)
-```
 
-## Info for EVI:
 
-Pixel: 463.313 meters\
-Satellite: MODIS\
-generated from the MODIS/006/MOD09GA surface reflectance composites
+# Info for EVI:
+# 
+# Pixel: 463.313 meters\
+# Satellite: MODIS\
+# generated from the MODIS/006/MOD09GA surface reflectance composites
+
+
+
+## Data Cleaning for EVI by Region
+
+EVI_region_source<- read_csv("./Data/EVI_ts_Zimb_region.csv") # imports the source cvs file
+
+
+# 1. Drop some unessential columns 
+#This is in wide format
+EVI_region_wide <- EVI_region_source %>% 
+  select(nat_region, `2005_03_01_EVI`:`2021_12_30_EVI`) %>% #select needed columns--Districts and observations
+  rename(Region = nat_region) #rename column
+
+#2. Transform it to long format
+
+# Parsed through the date with "_". Might need to change the code when it comes with different format
+# Here the format for observation is yyyy_mm_dd_EVI. Modify it if your observation comes with a different format.
+EVI_region_long <- gather(EVI_region_wide, Date, EVI, `2005_03_01_EVI`:`2021_12_30_EVI`)%>% 
+  separate( col=Date, into=c('Year', 'Month', "Day", "EVI11"), sep='_') %>% # Parsed it into Year/Month/Day
+  select(-EVI11) #drop the _NDVI string segment
+
+EVI_region_processed <-  EVI_region_long %>% 
+  group_by(Region, Year, Month) %>%   # Group by district, year and month
+  summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
+            MaxEVI = max(EVI, na.rm=TRUE),
+            MinEVI = min(EVI, na.rm=TRUE),
+            MedianEVI = median(EVI, na.rm=TRUE))
+
+# write.csv(EVI_region_long,"./Data/EVI_region_long.csv", row.names = FALSE)
+# write.csv(EVI_region_processed,"./Data/EVI_region_processed.csv", row.names = FALSE)
+# This will write the processed data frames in csv files and save it to the `Data` folder under the working directory.
+
 
 
 ### read in the files
 
-```{r, echo=FALSE, include=FALSE}
-EVI_monthly <- read_csv("./Data/EVI_monthly.csv")
-AnnualEVI <- read_csv("./Data/EVI_annual.csv")
-zim_district <- st_read("./Shapefiles/Zim_D60.shp")  
-EVI_long <- read_csv("./Data/EVI_long.csv") 
-zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp")
-
-```
+## Refer to the data processing section earlier for data processing. It's the same thing, just substituted the regions for districts.
+EVI_monthly <- read_csv("./Data/EVI_monthly.csv") # This reads in the processed EVI dataset at district level-- aggregated EVI to monthly data
+zim_district <- st_read("./Shapefiles/Zim_D60.shp") # This is the shapefile for Zimbabwe at region-level
+EVI_long <- read_csv("./Data/EVI_long.csv") # This reads in the long-format EVI dataset at district level
+zim_region <- st_read("./Shapefiles/agro-ecological-regions.shp") # This is the shapefile for Zimbabwe at region-level
 
 
-```{r, echo=FALSE, include=FALSE}
+
+
 # Rename cols to match
 zim_district <- rename(zim_district, District = NAME_2)
-```
 
 
-```{r, echo=FALSE, include=FALSE}
 zim_district <- zim_district %>% 
-  select(District)
+  select(District) # select the useful columns
+MonthlyEVIbyDis <-full_join (zim_district, `EVI_monthly`, by = "District") # joining two dataframes by district
 
-MonthlyEVIbyDis <-full_join (zim_district, `EVI_monthly`, by = "District")
-```
 
-## 1. Monthly map for Year 2011 and 2017
-```{r, echo=FALSE}
+## 1. Monthly EVI map for Year 2011 and 2017
+
 # Maximum evi by month
 MaxMonthlyEVI2011 <- MonthlyEVIbyDis %>% 
   filter(Year == 2011) %>% 
@@ -112,8 +138,8 @@ AnnualEVI %>%
   facet_wrap(~Year)+
   geom_boxplot() +
   labs(title = "Distribution of EVI, Year 2011 & 2017") +
-    xlab("Statistics") +
-    ylab("EVI")
+  xlab("Statistics") +
+  ylab("EVI")
 
 ```
 
@@ -161,7 +187,7 @@ EVISelectedYears <- EVI_monthly %>%
   filter(!(Year == 2017 & Month == "11")) %>%
   filter(!(Year == 2017 & Month == "12")) %>% 
   mutate(GrowingSeason = if_else(Year == 2010|Year==2011, "2011", "2017"))
-  
+
 EVISelectedYears$YM <- paste(EVISelectedYears$Year, EVISelectedYears$Month, sep="-")
 
 
@@ -255,7 +281,7 @@ GrowingSsonEVIbyDis2011 <-full_join (zim_district, `EVI2011`, by = "District")
 ## 4. Spatial Visualization for growing seasons 2011&2017
 ```{r}
 GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>% 
-    mutate(GSOrder = case_when(Month =="10" ~ "1", 
+  mutate(GSOrder = case_when(Month =="10" ~ "1", 
                              Month =="11" ~ "2",
                              Month =="12" ~ "3",
                              Month =="01" ~ "4",
@@ -263,7 +289,7 @@ GrowEVI2011 <- GrowingSsonEVIbyDis2011 %>%
                              Month =="03" ~ "6",
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
-                             
+
 GrowEVI2011$Month[which(GrowEVI2011$Month=="10")] <- "October"
 GrowEVI2011$Month[which(GrowEVI2011$Month=="11")] <- "November"
 GrowEVI2011$Month[which(GrowEVI2011$Month=="12")] <- "December"
@@ -296,7 +322,7 @@ GrowEVI2017 <- GrowingSsonEVIbyDis2017 %>%
                              Month =="03" ~ "6",
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
-                             
+
 GrowEVI2017$Month[which(GrowEVI2017$Month=="10")] <- "October"
 GrowEVI2017$Month[which(GrowEVI2017$Month=="11")] <- "November"
 GrowEVI2017$Month[which(GrowEVI2017$Month=="12")] <- "December"
@@ -323,7 +349,26 @@ GrowEVI2017
 The EVI partially matches up with the growing season in Zim--sowing in Oct, but it seems that in May there isnt that much lost. 
 
 
+## Leaflet (Not Ready Yet)
 
+```{r}
+
+# Notes for adding layer--DONT RUN
+
+addTiles(group = "OSM (default)") %>%
+  addProviderTiles(providers$Stamen.Toner, group = "Toner") %>%
+  addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite") %>%
+  # Overlay groups
+  addCircles(~long, ~lat, ~10^mag/5, stroke = F, group = "Quakes") %>%
+  addPolygons(data = outline, lng = ~long, lat = ~lat,
+              fill = F, weight = 2, color = "#FFFFCC", group = "Outline") %>%
+  # Layers control
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
+    overlayGroups = c("Quakes", "Outline"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+```
 
 ```{r, Leaflet for GrowingSeason2011}
 mypal <- colorNumeric(
@@ -337,18 +382,20 @@ mypal(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
 leaflet(GrowingSsonEVIbyDis2011) %>%
   addTiles() %>% 
   addPolygons(color = ~mypal(MaxEVI), weight = 1, smoothFactor = 0.5, label = ~MaxEVI,
-    opacity = 1.0, fillOpacity = 0.5,
-    highlightOptions = highlightOptions(color = "white", weight = 2,
-      bringToFront = TRUE)) %>% 
+              opacity = 1.0, fillOpacity = 0.5,
+              highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                  bringToFront = TRUE)) %>% 
   addLegend( labFormat = labelFormat(transform = function(MaxEVI) sort(MaxEVI, decreasing = TRUE)),
-    position = "bottomleft",
-    pal = mypal,
-    values = GrowingSsonEVIbyDis2011$MaxEVI,
-    title = "Max EVI in Zimbabwe - Growing Seaon 2011")
+             position = "bottomleft",
+             pal = mypal,
+             values = GrowingSsonEVIbyDis2011$MaxEVI,
+             title = "Max EVI in Zimbabwe - Growing Seaon 2011")
 ```
 
 
 
+
+## Leaflet--Map w/ 15 layers 
 
 
 
@@ -415,9 +462,9 @@ EVI_region_long <- gather(EVI_region_wide, Date, EVI, `2005_03_01_EVI`:`2021_12_
 EVI_region_processed <-  EVI_region_long %>% 
   group_by(Region, Year, Month) %>%   # Group by district, year and month
   summarise(AverageEVI = mean(EVI, na.rm=TRUE),   # Find the mean, max, min by district
-         MaxEVI = max(EVI, na.rm=TRUE),
-         MinEVI = min(EVI, na.rm=TRUE),
-         MedianEVI = median(EVI, na.rm=TRUE))
+            MaxEVI = max(EVI, na.rm=TRUE),
+            MinEVI = min(EVI, na.rm=TRUE),
+            MedianEVI = median(EVI, na.rm=TRUE))
 
 # write.csv(EVI_region_long,"./Data/EVI_region_long.csv", row.names = FALSE)
 # write.csv(EVI_region_processed,"./Data/EVI_region_processed.csv", row.names = FALSE)
@@ -692,7 +739,7 @@ EVIGrSs3 <- EVI_region_long %>%
                              Month =="03" ~ "6",
                              Month =="04" ~ "7",
                              Month =="05" ~ "8"))
-                             
+
 EVIGrSs3$Month[which(EVIGrSs3$Month=="10")] <- "October"
 EVIGrSs3$Month[which(EVIGrSs3$Month=="11")] <- "November"
 EVIGrSs3$Month[which(EVIGrSs3$Month=="12")] <- "December"
@@ -754,7 +801,7 @@ RegionMap <- zim_region %>%
   coord_sf() +
   scale_fill_viridis_d(option = "H") +
   theme(legend.title = element_text(size = 10), 
-               legend.text = element_text(size = 10)) +
+        legend.text = element_text(size = 10)) +
   labs(title = "Agro-ecological regions in Zimbabwe", color =  "Agro-ecological regions")
 
 RegionMap
