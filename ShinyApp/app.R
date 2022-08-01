@@ -785,12 +785,11 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        
                                 )),
                               
-                              
-                              
                               fluidRow(
-                                align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(12, p(strong("Description")) , 
+                                column(12, 
+                                       align="justify",
+                                       p(h3("Description")) ,
                                        p("
                We further disaggregate rainfall to the district level for our statistical analysis. The district level maps show the total rainfall during the two growing seasons.  
                Every district received a higher amount of rainfall in 2016-17 than in 2010-11. 
@@ -799,13 +798,10 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                For maize production, the ideal range of rainfall is 600-700 mm with excess of 1000 mm potentially leading  to a decline in maize yields. 
                This means that in both growing seasons, All regions except for districts falling within Region V met the minimum amount of rain necessary for an average maize yield, 
                with districts falling within Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.   
-               "))
-                                
-                              ),
-                              
-                              
-                              
-                              ),
+               ")   
+                                       ),
+               
+                              )),
                             
                               tabPanel(strong("Soil Moisture"),
                                      tabsetPanel(
