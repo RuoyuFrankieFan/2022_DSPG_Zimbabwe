@@ -437,8 +437,17 @@ p("-   20-25mm are best for germinating and emergence of a new crop but can halt
 p("-   15-20mm are best for vigorous field activity."),
 
 p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
-                                         tags$br(),
+                                         
+
+
+
+
+
+tags$br(),
                                        ),
+
+
+
                                        column(
                                          h3(strong("Multidimensional Poverty Index (MPI) Methodology")),
                                          align="justify",
@@ -815,7 +824,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                               
                                               
                                      fluidRow(
-                                       box(withSpinner(leafletOutput("SurfMapGraph", height=520)),
+                                       box(img(src = "SurfSoilM.png", height = "100%", width = "100%"),
                                            title = h1(strong("Average Surface Soil Moisture During Planting for the 2016-17 Growing Season"), 
                                                       style ="font-size: 25px;"),
                                            width = 8,
@@ -891,7 +900,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                   tabPanel("Percent Soil Moisture",
                            fluidRow(
                              #h1(strong("Percent Soil Moisture"), align = "center"),
-                                    box(withSpinner(leafletOutput("PercMapGraph", height=520)),
+                                    box(img(src = "PercSoilM.png", height = "100%", width = "100%"),
                                         title = h1(strong("Average Percent Soil Moisture Map"),
                                                    style ="font-size: 25px;"),
                                         width = 8,
