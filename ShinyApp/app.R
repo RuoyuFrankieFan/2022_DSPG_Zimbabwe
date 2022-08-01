@@ -664,7 +664,7 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                               fluidRow(
                                 align="justify",
                                 style = "margin-left: 100px; margin-right: 100px;",
-                                column(10, p(h3("Description")) , 
+                                column(12, p(h3("Description")) , 
                                        p("The maps show the total rainfall during the two growing seasons. Comparing the two growing seasons shows that every agro-ecological region received more rainfall in 2016-17. This is consistent with the research literature, which indicates that Zimbabwe experienced severe drought during 2015-2016. Rainfall patterns are also consistent with other research, showing that the North-East regions typically receive more rainfall than their South-Western counterparts (Nkomozepi & Chung, 2012). The ideal range of rainfall for maize production is 600-700 mm, with an excess of 1000 mm potentially leading to a decline in maize yields. This means that in both growing seasons, All regions except for Region V met the minimum amount of rain necessary for an average maize yield, with Region I having an excess of rain in growing season 2016-17 that may lead to decreases in yield.  
                               "))
                               ),
@@ -1557,7 +1557,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                           p(strong("Enhanced Vegetation Index (EVI):"), "The maximum EVI is highest in Region IIA, which, according to United Nations’ Food and Agriculture Organization, is suitable for intensive farming. Region IV has the lowest maximum EVI value, and the FAO describes it as the “semi-extensive” farming region, suitable for resistant fodder crops."),
                                           p(strong("Precipitation:"), "Zimbabwe generally follows previous analysis of its weather pattern but as it relates to precipitation the Northern regions are typically the ones to receive the most rainfall. The Southern region on the other hand receive less rainfall."),
                                           p(strong("Soil Moisture:"), "The 2016-17 average soil moisture readings show that regions I through III have dry, and regions IV and V have extremely dry, surface soil moisture levels during planting time. These levels suggest that farmers in all regions are likely to experience stifled germination upon planting. However, farmers in regions IV and V are likely to be more severely impacted."),
-                                          p(strong("Correlations With Poverty:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both PICES years, However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
+                                          p(strong("Correlations With Poverty:"), "We observe a negative correlation between total rainfall and the average  poverty rate in both PICES years. However, we do not find a significant correlation between other weather indices and the average  poverty rate."),
                                           p("In conclusion, the PICES data at lower levels of geographical granularity can be combined with publicly available data to study many interesting and policy-relevant questions. In this project, we demonstrate how district level PICES data can be used to assess the usefulness of remotely sensed data specific to Zimbabwe."),
                                           p("")
                                    )
@@ -1646,20 +1646,21 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Project Stakeholders"), align = "center"),
-                                   p("The World Bank"),
-                                   #p(a(href="https://www.linkedin.com/in/dhiraj-sharma-aa029024/?originalSubdomain=np","Dhiraj Sharma",target='_blank')," (World Bank); "),
-                                   # p("TAWANDA CHINGOZHA (STELLENBOSCH UNIVERSITY) ",a(href="https://www.zimstat.co.zw/","(Zimbabwe National Statistics Agency)",target="_blank")),
-                                   
-                                   p(em("Disclaimer: "),("This project is an academic exercise conducted by VT-Data Science for the Public Good. The findings, interpretations, and conclusions expressed here do not necessarily reflect the views of the World Bank or the Zimbabwe Statistical Agency."))
+                                   #p("The World Bank"),
+                                   p(a(href="https://www.linkedin.com/in/dhiraj-sharma-aa029024/?originalSubdomain=np","Dhiraj Sharma",target='_blank')," (World Bank); "),
+                                   p("Grown Chirongwe",a(href="https://www.zimstat.co.zw/","(Zimbabwe National Statistics Agency)",target="_blank")),
+                                   br(),
+                                   p(strong(em("Disclaimer: ")),("This project is an academic exercise conducted by VT-Data Science for the Public Good. The findings, interpretations, and conclusions expressed here do not necessarily reflect the views of the World Bank or the Zimbabwe Statistical Agency."))
                                    
                           ),
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Acknowledgement"), align = "center"),
-                                   p("We would like to thank:"),
+                                   #p("We would like to thank:"),
                                    p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," (Stellenbosch University);"),
                                    p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
-                                   p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); "),
-                                   p("We also thank Grown Chirongwe of Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
+                                   p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); ")
+                                   #,
+                                   #p("We also thank Grown Chirongwe of Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
                                    
                           )
                  ),
