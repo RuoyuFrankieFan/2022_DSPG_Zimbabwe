@@ -561,25 +561,56 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                      fluidRow(h1(strong("Enhanced Vegetation Index"), style ="font-size: 25px;", align = "center"),
                                               style = "margin-left: 10px; margin-right: 10px;",
                                               h3(strong("Maximum Enhanced Vegetation Index During Growing Seasons")),
-                                              column(withSpinner(leafletOutput("evi_map_leaflet", height=520)),
+                                              column(
                                               align="justify",
                                              
                                          title = "Maximum Enhanced Vegetation Index During Growing Seasons",
-                                         width = 8,
+                                         width = 12,
                                          height = 600
+                                       )),
+                                     
+                                     
+                                     fluidRow(
+                                       column(
+                                         6,
+                                         
+                                         img(src = "Max2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center"
+                                         
                                        ),
-                                         column(
-                                           h3("Description"),
-                                           align="justify",
-                                           width = 4,
-                                           withMathJax(),
-                                           title = "Description",
-                                           p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The maps show the maximum EVI (which is a measure of the density of crops) during the growing seasons in 2011 and 2017, respectively. Both graphs show that the maximum EVI value is at its highest in Region IIA, which, according to United Nations' Food and Agriculture Organisation, is suitable for intensive farming."), 
-                                           p("Region V is next with an EVI that aligns with its production being mostly ranching cattle. Region IV has the lowest maximum EVI value, and the FAO describes it as a farming region suitable for resistant fodder crops (FAO, 2020)."),
-                                           p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the EVI during the growing season in 2017 is higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))),
+                                       column(
+                                         6,
+                                         
+                                         img(src = "Max2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center"
+                                         
+                                         
+                                       ),
+                                       
+                                       br(),
+                                       br(),
+                                       
+                                     ),
+                                     
+                                     
+                                     fluidRow(
+                                       style = "margin-left: 10px; margin-right: 10px;",
+                                     column(
+                                       h3("Description"),
+                                       align="justify",
+                                       width = 12,
+                                       withMathJax(),
+                                       title = "Description",
+                                       p("This graphic shows a detailed visualization of the Enhanced Vegetation Index for the Zimbabwean agro-ecological regions. The maps show the maximum EVI (which is a measure of the density of crops) during the growing seasons in 2011 and 2017, respectively. Both graphs show that the maximum EVI value is at its highest in Region IIA, which, according to United Nations' Food and Agriculture Organisation, is suitable for intensive farming."), 
+                                       p("Region V is next with an EVI that aligns with its production being mostly ranching cattle. Region IV has the lowest maximum EVI value, and the FAO describes it as a farming region suitable for resistant fodder crops (FAO, 2020)."),
+                                       p("Compared to the growing season in 2011, the maps show that almost every region has a higher maximum EVI during the growing season of 2017. By solely looking at the data, we can also observe that the EVI during the growing season in 2017 is higher than in 2011, with the approximate minimum value being 0.4 (higher than 0.38 in 2011) and the approximate maximum value being 0.5 (higher than 0.48 from 2011)."))
+                                     ),
+                                     
+                                     
                                      
                                      br(),
                                      
+                                     
+                                     
+  
                                      fluidRow(
                                        style = "margin-left: 10px; margin-right: 10px;",
                                        h3(strong("Maximum Enhanced Vegetation Index During Growing Seasons")), 
@@ -587,43 +618,44 @@ p("-   10mm or less will not support the early growth potential for a newly emer
                                        #align = "center",
                                      ),
                                     
-                                     fluidRow(
-                                       
-                                       column(
-                                       8,
-                                       #withSpinner(slickROutput("my_slick_evi"))
-                                       img(src = "Max EVI 2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                                       div(tags$caption("Figure: 2011"),align="center")
-                                     ),
                                      
-                                     column(
-                                       align="justify",
-                                       width = 4,
-                                       withMathJax(),
-                                       title = strong("Maximum Enhanced Vegetation Index During Growing Seasons", align="center"),
-                                       p(h3("Description")),
-                                       p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
-                                       p("The months align well with cropping cycle in Zimbabwe: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
-                                       
-                                     )
-                                     
-                                     
-                                     ),
                                      
                                      fluidRow(
                                        column(
-                                         8,
-                                         img(src = "Max EVI 2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-                                         div(tags$caption("Figure: 2017"),align="center")
-                                       )
-                                     
-                                     
-                                     )
-                                     
-                                     
-                                       
-                                       
+                                         6,
+                                         
+                                         img(src = "Max EVI 2011.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center"
+                                         
                                        ),
+                                       column(
+                                         6,
+                                         
+                                         img(src = "Max EVI 2017.png", height = "100%", width = "100%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "90%"), align ="center"
+                                         
+                                         
+                                       ),
+                                       
+                                       br(),
+                                       br(),
+                                       
+                                     ),
+                                     
+                                     
+                                     fluidRow(
+                                       style = "margin-left: 10px; margin-right: 10px;",
+                                       column(
+                                         h3("Description"),
+                                         align="justify",
+                                         width = 12,
+                                         withMathJax(),
+                                         title = "Description",
+                                         p("The line graphs show the variation in maximum EVI in each agro-ecological region during the growing season in the years 2011 and 2017, respectively. We could see a general pattern of descending maximum EVI going from Region I to Region V, which matches up with the initial purpose of zoning. The maximum EVI is at its trough in October, and peaks from January to February."), 
+                                         p("The months align well with cropping cycle in Zimbabwe: farmers plow the field in October before sowing; the rainy season comes in November, with higher precipitation, crops grow gradually, and finally are at their peak growth stage during February and March, before the rainy season ends. Compare to the growing season in 2011, the highest maximum EVI value in 2017 is higher for almost all districts. This indicates significantly denser vegetation, thus a higher crop yield.")
+
+                                           ),
+                                    
+                                       
+                                       )),
                             
                             tabPanel(
                               strong("Precipitation"),
