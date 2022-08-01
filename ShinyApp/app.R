@@ -241,7 +241,9 @@ ui <- navbarPage(title = "Zimbabwe",
                                    br(""),
                                    h1(strong("Using Remote Sensed Data For Social & Economic Decision Making In Zimbabwe")),
                                     fluidRow(style = "margin: 2px;",
-                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")),
+                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;"),
+                                             p(tags$small(em('["Corn is Knee High by the Fourth of July" by Lynn Friedman is licensed under CC BY-NC-ND 2.0.]')))
+                                             ),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
                                    h4("Department of Agricultural and Applied Economics")
