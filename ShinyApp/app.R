@@ -869,7 +869,7 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-                                       column(img(src = "SurfaceSoilBar.png", height = "80%", width = "80%"),
+                                       column(img(src = "SurfaceSoilBar.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                            
                                           width = 8,
                                        ),
@@ -893,7 +893,7 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-                                       column(img(src = "SurfaceSoilLine.png", height = "80%", width = "80%"),
+                                       column(img(src = "SurfaceSoilLine.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                            
                                            width = 8,
                                        ),
@@ -944,7 +944,7 @@ tags$br(),
                            
                            
                            fluidRow(
-                             column(img(src = "PercentSoilBar.png", height = "80%", width = "80%"),
+                             column(img(src = "PercentSoilBar.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                                  
                                  width = 8,
                              ),
@@ -965,7 +965,7 @@ tags$br(),
                            
                            
                             fluidRow(
-                              column(img(src = "PercentSoilLine.png", height = "80%", width = "80%"),
+                              column(img(src = "PercentSoilLine.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
                             
                                  width = 8,
                              ),
