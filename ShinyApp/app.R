@@ -844,13 +844,9 @@ tags$br(),
                                               
                                                     
                                      fluidRow(
-<<<<<<< HEAD
-                                       box(img(src = "SurfSoilM.png", height = "90%", width = "90%"),
-=======
+
                                        column(img(src = "SurfSoilM.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
-                                           
-                                           width = 8
+                                       width = 8
                                            #height = 600
                                        ),
                                        column(
@@ -873,11 +869,9 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-<<<<<<< HEAD
-                                       box(img(src = "SurfaceSoilBar.png", height = "90%", width = "90%"),
-=======
+
                                        column(img(src = "SurfaceSoilBar.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
+
                                            
                                           width = 8,
                                        ),
@@ -901,11 +895,9 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-<<<<<<< HEAD
-                                       box(img(src = "SurfaceSoilLine.png", height = "90%", width = "90%"),
-=======
+
+
                                        column(img(src = "SurfaceSoilLine.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
                                            
                                            width = 8,
                                        ),
@@ -934,12 +926,9 @@ tags$br(),
                            
                            fluidRow(
                              #h1(strong("Percent Soil Moisture"), align = "center"),
-<<<<<<< HEAD
-                                    box(img(src = "PercSoilM.png", height = "90%", width = "90%"),
-=======
+
                                     column(img(src = "PercSoilM.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
-                                        
+
                                         width = 8
                                         #height = 600
                                     ),
@@ -960,11 +949,9 @@ tags$br(),
                            
                            
                            fluidRow(
-<<<<<<< HEAD
-                             box(img(src = "PercentSoilBar.png", height = "90%", width = "90%"),
-=======
+
                              column(img(src = "PercentSoilBar.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
+
                                  
                                  width = 8,
                              ),
@@ -985,11 +972,9 @@ tags$br(),
                            
                            
                             fluidRow(
-<<<<<<< HEAD
-                             box(img(src = "PercentSoilLine.png", height = "90%", width = "90%"),
-=======
+
                               column(img(src = "PercentSoilLine.png", height = "100%", width = "80%", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "100%"), align ="center",
->>>>>>> 55bb49e34b3d47d74ad8703d7634f50cec92ae71
+
                             
                                  width = 8,
                              ),
