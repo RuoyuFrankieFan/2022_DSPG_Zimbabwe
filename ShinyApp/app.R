@@ -241,8 +241,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    br(""),
                                    h1(strong("Using Remote Sensed Data For Social & Economic Decision Making In Zimbabwe")),
                                     fluidRow(style = "margin: 2px;",
-                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;"),
-                                             p(tags$small(em('["Corn is Knee High by the Fourth of July" by Lynn Friedman is licensed under CC BY-NC-ND 2.0.]')))
+                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")
+                                            
                                              ),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
@@ -329,7 +329,10 @@ ui <- navbarPage(title = "Zimbabwe",
                           # ),
                           br(),
                           br(),
-
+                          fluidRow(
+                            column(6,
+                            align="left",
+                            p(tags$small(em('Banner Source: "Corn is Knee High by the Fourth of July" by Lynn Friedman is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd-nc/2.0/jp/?ref=openverse.'))))),
                           
                           fluidRow(align = "center",
                                    p(tags$small(em('Last updated: August 2022'))))
@@ -430,14 +433,15 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                                 p("The germination of maize seeds is dependent to a large extent on soil and environmental conditions. Warm, moist conditions result in seedling emergence at 6 to 10 days, while cool or dry conditions slow emergence to two weeks or longer. The optimum moisture level of the soil is approximately 60% of the total capacity, while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to drought and waterlogging; therefore, poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four weeks spanning flowering, can lead to high yield losses; therefore, some form of water conservation is beneficial."),
                                          
-                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). For this project we defined the Surface Soil Moisture thresholds to be:"),
+                                         p(strong("Surface soil moisture"), "is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018)."),
+                                         p("For this project we defined the Surface Soil Moisture thresholds to be:"),
                                         
 p("-   Wet is defined as greater than 25mm"),
 p("-   Ideal is defined as 15 to 25mm"),
 p("-   Dry is defined as 10 to 15mm"),
 p("-   Extremely dry is defined as less than 10mm"),
   
-p("Percent soil moisture is the water available in both surface and subsurface soil layers divided by the total soil’s water holding capacity (Bolten et al., 2018b). For our dataset, Percent soil moisture estimates the amount of water available within the crops root zone, which is defined as one meter or less and therefore is best used to monitor an established crop (Bolten, Sazib, & Mladenova, 2018a). Percent Soil Moisture is a percentage and for this project, we defined the thresholds to be:"),
+p(strong("Percent soil moisture"), "is the water available in both surface and subsurface soil layers divided by the total soil’s water holding capacity (Bolten et al., 2018b). For our dataset, Percent soil moisture estimates the amount of water available within the crops root zone, which is defined as one meter or less and therefore is best used to monitor an established crop (Bolten, Sazib, & Mladenova, 2018a). Percent Soil Moisture is a percentage and for this project, we defined the thresholds to be:"),
 p("-   Wet is defined as greater than 80%"),
 p("-   Ideal is defined as 50% to 80%"),
 p("-   Dry is defined as 40% to 50%"),
@@ -1202,7 +1206,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        tabPanel(strong("Sensitivity Analysis 1"),
                                 
                                 fluidRow(
-                                  h1(strong("Using the Adjusted MPI Measure"), 
+                                  h1(strong("Using the Education-Adjusted MPI Measure"), 
                                      style = "font-size:35px;"), align="center",
                                   style = "margin-left: 0px; margin-right: 0px;",
                                   column(9, 
@@ -1232,7 +1236,8 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                   column(3,
                                          h3("Description"),
                                          align="justify",
-                                         p("We also estimated the education-adjusted rural MPI measures that were calculated using only the sub-sample of rural households from PICES. The coefficient estimates from the regression models are presented in Figures 1B, 2B and 3B. Once again, our findings remain consistent - more rainfall is associated with lower rural poverty headcount, poverty gap, as well as squared poverty gap."))
+                                         p("We also estimated the education-adjusted rural MPI measures that were calculated using only the sub-sample of rural households from PICES."),
+                                         p("The coefficient estimates from the regression models are presented in Figures 1B, 2B and 3B. Once again, our findings remain consistent - more rainfall is associated with lower rural poverty headcount, poverty gap, as well as squared poverty gap."))
                                 )
                                 
                                 
