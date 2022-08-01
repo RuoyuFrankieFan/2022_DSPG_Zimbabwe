@@ -1713,6 +1713,11 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                  h1(strong("References"), align = "center"),
                                  p("Barron, J., Rockström, J., Gichuki, F., & Hatibu, N. (2003). Dry spell analysis and maize yields for two semi-arid locations in east Africa. Agricultural and Forest Meteorology, 117(1-2), 23–37. https://doi.org/10.1016/s0168-1923(03)00037-6 "),
                                  p("Bolten, J. D., Sazib, N., & Mladenova, I. E. (2018). *Surface_Soil_Moisture_SMAP.pdf*. NASA Goddard Space Flight Center Retrieved from https://gimms.gsfc.nasa.gov/SMOS/SMAP/SoilMoisture_Profile_SMAP.pdf"),
+                                 p("Didan, K., Maccherone, B., & Frazier, S. MODIS Vegetation Index Products (NDVI and EVI): Overview. Retrieved from https://modis.gsfc.nasa.gov/data/dataprod/mod13.php"),
+                                 p("Drought.gov. (2022, 6/30/22). Soil Moisture. Retrieved from https://www.drought.gov/topics/soil-moisture"),
+                                 p("Huete, A., Didan, K., Miura, T., Rodriguez, E. P., Gao, X., & Ferreira, L. G. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. Remote Sensing of Environment, 83(1), 195-213. doi:https://doi.org/10.1016/S0034-4257(02)00096-2"),
+                                 p("Kuhudzayi, B., & Mattos, D. (2018). A Model for Farmer Support in Zimbabwe - Opportunity for Change. CORNHUSKER ECONOMICS."),
+                                 p("Maggioni, V., Anagnostou, E., & Reichle, R. (2012). The impact of model and rainfall forcing errors on characterizing soil moisture uncertainty in land surface modeling. Hydrology and Earth System Sciences, 16, 3499-3515. doi:10.5194/hess-16-3499-2012"),
                                  p("Milne, G., Mekonnen, A. F., & Benitez Ponce, P. C. (2019). Zimbabwe-Climate Smart Agriculture Investment Plan."),
                                  p("Mugiyo, H., Mhizha, T., Chimonyo, Vimbayi. G. P., & Mabhaudhi, T. (2021). Investigation of the optimum planting dates for maize varieties using a hybrid approach: A case of Hwedza, Zimbabwe. Heliyon, 7(2), e06109. https://doi.org/10.1016/j.heliyon.2021.e06109 "),
                                  p("Mupangwa, W., Walker, S., & Twomlow, S. (2011). Start, end and dry spells of the growing season in semi-arid southern Zimbabwe. Journal of Arid Environments, 75(11), 1097–1104. https://doi.org/10.1016/j.jaridenv.2011.05.011 "),
@@ -1720,7 +1725,9 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                  p("Nkomozepi, T., & Chung, S.-O. (2012). Assessing the trends and uncertainty of maize net irrigation water requirement estimated from climate change projections for Zimbabwe. Agricultural Water Management, 111, 60–67. https://doi.org/10.1016/j.agwat.2012.05.004 "),
                                  p("Nyakudya, I. W., & Stroosnijder, L. (2011). Water management options based on rainfall analysis for rainfed maize (Zea mays L.) production in Rushinga district, Zimbabwe. Agricultural Water Management, 98(10), 1649–1659. https://doi.org/10.1016/j.agwat.2011.06.002 "),
                                  p("Tadross, M. A., Hewitson, B. C., & Usman, M. T. (2005). The Interannual Variability of the Onset of the Maize Growing Season over South Africa and Zimbabwe. Journal of Climate, 18(16), 3356–3372. https://doi.org/10.1175/jcli3423.1 "),
-                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html ")
+                                 p("TRMM. (2012). Nasa.gov. https://trmm.gsfc.nasa.gov/3b42.html "),
+                                 p("Vermote, E., Wolfe, R. (2015). MOD09GA MODIS/Terra Surface Reflectance Daily L2G Global 1kmand 500m SIN Grid V006 [Data set].  Retrieved 2022-07-18, from NASA EOSDIS Land Processes DAAC https://doi.org/10.5067/MODIS/MOD09GA.006"),
+                                 p("(ZIMSTAT), Z. N. S. A. (2017). Zimbabwe Smallholder Agricultural Productivity Survey 2017 Report Retrieved from http://www.zimstat.co.zw/wp-content/uploads/publications/Economic/Agriculture/APM/APM-2017-Report.pdf")
 
                                 
                                  )
