@@ -241,8 +241,8 @@ ui <- navbarPage(title = "Zimbabwe",
                                    br(""),
                                    h1(strong("Using Remote Sensed Data For Social & Economic Decision Making In Zimbabwe")),
                                     fluidRow(style = "margin: 2px;",
-                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;"),
-                                             p(tags$small(em('["Corn is Knee High by the Fourth of July" by Lynn Friedman is licensed under CC BY-NC-ND 2.0.]')))
+                                             img(src = "maize.jpg", height="200", width="750", alt="Image", style="display: block; margin-left: auto; margin-right: auto; border: 1px solid #000000;")
+                                            
                                              ),
                                    h4("Data Science for the Public Good Program"),
                                    h4("Virginia Tech"),
@@ -329,7 +329,10 @@ ui <- navbarPage(title = "Zimbabwe",
                           # ),
                           br(),
                           br(),
-
+                          fluidRow(
+                            column(6,
+                            align="left",
+                            p(tags$small(em('Banner Source: "Corn is Knee High by the Fourth of July" by Lynn Friedman is licensed under CC BY-NC-ND 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-nd-nc/2.0/jp/?ref=openverse.'))))),
                           
                           fluidRow(align = "center",
                                    p(tags$small(em('Last updated: August 2022'))))
@@ -1179,7 +1182,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                        tabPanel(strong("Sensitivity Analysis 1"),
                                 
                                 fluidRow(
-                                  h1(strong("Using the Adjusted MPI Measure"), 
+                                  h1(strong("Using the Education-Adjusted MPI Measure"), 
                                      style = "font-size:35px;"), align="center",
                                   style = "margin-left: 0px; margin-right: 0px;",
                                   column(9, 
@@ -1209,7 +1212,8 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                   column(3,
                                          h3("Description"),
                                          align="justify",
-                                         p("We also estimated the education-adjusted rural MPI measures that were calculated using only the sub-sample of rural households from PICES. The coefficient estimates from the regression models are presented in Figures 1B, 2B and 3B. Once again, our findings remain consistent - more rainfall is associated with lower rural poverty headcount, poverty gap, as well as squared poverty gap."))
+                                         p("We also estimated the education-adjusted rural MPI measures that were calculated using only the sub-sample of rural households from PICES."),
+                                         p("The coefficient estimates from the regression models are presented in Figures 1B, 2B and 3B. Once again, our findings remain consistent - more rainfall is associated with lower rural poverty headcount, poverty gap, as well as squared poverty gap."))
                                 )
                                 
                                 
