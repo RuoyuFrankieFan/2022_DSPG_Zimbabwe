@@ -430,15 +430,14 @@ ui <- navbarPage(title = "Zimbabwe",
                                          
                                                 p("The germination of maize seeds is dependent to a large extent on soil and environmental conditions. Warm, moist conditions result in seedling emergence at 6 to 10 days, while cool or dry conditions slow emergence to two weeks or longer. The optimum moisture level of the soil is approximately 60% of the total capacity, while optimum soil texture is between 10-30% clay content. Maize grows best in fertile, deep, well-drained soils where total annual rainfall is greater than 500mm. Maize is susceptible to drought and waterlogging; therefore, poorly drained soils should be avoided. Furthermore, drought during silking and tasseling, which occurs during the four weeks spanning flowering, can lead to high yield losses; therefore, some form of water conservation is beneficial."),
                                          
-                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018). To be specific, soil moisture levels of:"),
+                                         p("Surface soil moisture is the water in the upper 10cm of soil that responds quickly to heavy precipitation and rapidly drying events (Drought.gov, 2022). For our dataset, the surface soil moisture is assumed to hold a maximum of one inch of water, meaning the top layer soil depth varies based on soil texture. Appropriate Surface soil moisture levels are necessary for the success of planting and harvesting activities for most crops, with too little soil moisture during planting stifling the seed germination and too much soil moisture preventing fieldwork or heavy machinery access to the field (Bolten et al., 2018)."),
                                         #br(), 
-p("-   20-25mm are best for germinating and emergence of a new crop but can halt fieldwork or damage a newly seeded crop in the wet environment for a prolonged period."),
-
-p("-   15-20mm are best for vigorous field activity."),
-
-p("-   10mm or less will not support the early growth potential for a newly emerged crop or seed germination (Bolten et al., 2018)."),
-                                         
-
+p("For this project we defined the Surface Soil Moisture thresholds to be:"),
+p("-   Wet is defined as greater than 25mm"),
+p("-   Ideal is defined as 15 to 25mm"),
+p("-   Dry is defined as 10 to 15mm"),
+p("-   Extremely dry is defined as less than 10mm"),
+  
 
 
 
