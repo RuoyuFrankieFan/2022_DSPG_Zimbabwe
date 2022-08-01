@@ -1,18 +1,14 @@
-Using Remote Sensed Data for Social &amp; Economic Decision Making in Zimbabwe
+# Using Remote Sensed Data for Social &amp; Economic Decision Making in Zimbabwe
 
-#2022_DSPG_Zimbabwe
-
-This is the 2022 DSPG Zimbabwe Project with the Team members:
-
-
-
-
-About the repo:
-This code repository contains R-scripts, shapefiles, images, and data that are used as a framework for building our ShinyApp project.
-
+## About the repo:
+This is the 2022 DSPG Zimbabwe Project #2022_DSPG_Zimbabwe. This code repository contains R-scripts, shapefiles, images, and data that are used as a framework for building our ShinyApp project.
 We use the Google Earth Engine using the Python API to get weather data. These codes are currently in use for the 'Data Science for Public Good' program taught at Virginia Tech in the summer of 2022 and are available for use. Users are encouraged to work with their local environment, but the Google Earth Engine data are run on Google Colab (other prefered python based platform).
 
-For further questions, please email
+
+
+
+
+For further questions, please reach out to
 
 # Project Team
 
