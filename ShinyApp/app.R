@@ -1174,10 +1174,10 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                   h1(strong("Using the Adjusted MPI Measure"), 
                                      style = "font-size:35px;"), align="center",
                                   style = "margin-left: 0px; margin-right: 0px;",
-                                  column(8, 
+                                  column(9, 
                                          tags$small("(Refresh if nothing loads)", align = "left",  style = "margin-left: 100px; margin-right: 100px;"),
                                          slickROutput("my_slick9")),
-                                  column(4,
+                                  column(3,
                                          h3("Description"),
                                          align="justify",
                                          p("We conducted additional sensitivity analysis to check the robustness of our findings pertaining to the association between poverty measures and precipitation."),
@@ -1195,10 +1195,10 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                   h1(strong("Analysis on Rural Areas Only"), 
                                      style = "font-size:35px;"), align="center",
                                   style = "margin-left: 0px; margin-right: 0px;",
-                                  column(8, 
+                                  column(9, 
                                          tags$small("(Refresh if nothing loads)", align = "right",  style = "margin-left: 100px; margin-right: 100px;"),
                                          slickROutput("my_slick8")),
-                                  column(4,
+                                  column(3,
                                          h3("Description"),
                                          align="justify",
                                          p("We also estimated the education-adjusted rural MPI measures that were calculated using only the sub-sample of rural households from PICES. The coefficient estimates from the regression models are presented in Figures 1B, 2B and 3B. Once again, our findings remain consistent - more rainfall is associated with lower rural poverty headcount, poverty gap, as well as squared poverty gap."))
@@ -2423,14 +2423,16 @@ output$my_slick7 <- renderSlickR(
 output$my_slick8 <- renderSlickR(
   slickR(
     my_images8,
-    width = "60%"
+    width = "50%",
+    height = "50%"
   )
 )
 
 output$my_slick9 <- renderSlickR(
   slickR(
     my_images9,
-    width = "60%"
+    width = "50%",
+   height = "50%"
   )
 )
 
