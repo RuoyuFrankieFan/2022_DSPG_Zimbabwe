@@ -1,4 +1,13 @@
-#Load Libraries
+#==========DSPG 2022============Zimbabwe========================================
+#This dashboard is arranged in the following way:
+#1. Loading Packages
+#2. Loading the data
+#3. JSCODE for website features (DSPG logo at the top left) 
+#4. USER INTERFACE (UI)
+#5. Server for making the visualizations
+
+
+#Load Libraries------
 library(shiny)
 library(leaflet)
 library(tidyverse)
