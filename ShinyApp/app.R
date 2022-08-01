@@ -836,7 +836,7 @@ tags$br(),
                                               
                                                     
                                      fluidRow(
-                                       box(img(src = "SurfSoilM.png", height = "80%", width = "80%"),
+                                       box(img(src = "SurfSoilM.png", height = "90%", width = "90%"),
                                            
                                            width = 7,
                                            height = 600
@@ -860,7 +860,7 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-                                       box(img(src = "SurfaceSoilBar.png", height = "80%", width = "80%"),
+                                       box(img(src = "SurfaceSoilBar.png", height = "90%", width = "90%"),
                                            
                                           width = 7,
                                        ),
@@ -883,7 +883,7 @@ tags$br(),
                                      
                                      
                                      fluidRow(
-                                       box(img(src = "SurfaceSoilLine.png", height = "80%", width = "80%"),
+                                       box(img(src = "SurfaceSoilLine.png", height = "90%", width = "90%"),
                                            
                                            width = 7,
                                        ),
@@ -910,7 +910,7 @@ tags$br(),
                            
                            fluidRow(
                              #h1(strong("Percent Soil Moisture"), align = "center"),
-                                    box(img(src = "PercSoilM.png", height = "80%", width = "80%"),
+                                    box(img(src = "PercSoilM.png", height = "90%", width = "90%"),
                                         
                                         width = 7,
                                         height = 600
@@ -931,7 +931,7 @@ tags$br(),
                            
                            
                            fluidRow(
-                             box(img(src = "PercentSoilBar.png", height = "80%", width = "80%"),
+                             box(img(src = "PercentSoilBar.png", height = "90%", width = "90%"),
                                  
                                  width = 7,
                              ),
@@ -951,7 +951,7 @@ tags$br(),
                            
                            
                             fluidRow(
-                             box(img(src = "PercentSoilLine.png", height = "80%", width = "80%"),
+                             box(img(src = "PercentSoilLine.png", height = "90%", width = "90%"),
                             
                                  width = 7,
                              ),
