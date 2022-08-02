@@ -1900,7 +1900,7 @@ output$compo_MPI_17_m2 <- renderLeaflet({
 
 
 
-#Rndering the slideshows
+#Rendering the slideshows
 
 
 output$my_slick2 <- renderSlickR(
