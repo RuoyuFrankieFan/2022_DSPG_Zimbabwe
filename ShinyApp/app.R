@@ -225,7 +225,7 @@ ui <- navbarPage(title = "Zimbabwe",
                  # header.append('<div style=\"float:right\"><ahref=\"URL\"><img src=\"github.png\" alt=\"alt\" style=\"float:right;width:33px;height:41px;padding-top:10px;\"> </a>`</div>');
                  #     console.log(header)")
                  #                  ),
-                 ## Tab Overview -----------------------------------------------------------
+                 ## Tab 1 Overview -----------------------------------------------------------
                  tabPanel(strong("Overview"), value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
@@ -329,7 +329,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                    p(tags$small(em('Last updated: August 2022'))))
                  ),
                  
-                 ## Tab Data & Methodology-----------------------
+                 ## Tab 2 Data & Methodology-----------------------
                  tabPanel(strong("Data & Methodology"),
                           tabsetPanel(
                             tabPanel(strong("Data"),
@@ -569,7 +569,7 @@ tags$br(),
                  
                  
 
-                 ## Remote Sensed Data---------------------
+                 ## Tab 3 Remote Sensed Data---------------------
                  navbarMenu(strong("Remote Sensed Data"), 
                             tabPanel(strong("Enhanced Vegetation Index"),
                                      
@@ -986,7 +986,7 @@ tags$br(),
                             
                             #),
 
-                 ## Tab 4 ------
+                 ## Tab 4 Poverty & Components------
                  navbarMenu(strong("Poverty & Components"), 
                  tabPanel(strong("Multidimensional Poverty Index"),
                     
@@ -1092,7 +1092,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                  
                  ),
 
-                ## Tab 5 ------
+                ## Tab 5 Analysis------
               navbarMenu(strong("Analysis"), 
               tabPanel(strong("Correlations"),
                        fluidRow(
@@ -1266,7 +1266,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
 
 
 
-                  ## Tab Takeaways --------------
+                  ## Tab 6 Takeaways --------------
 
                  tabPanel(strong("Takeaways"),
                           
@@ -1293,7 +1293,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                  
                  
                  
-                 ## Tab DSPG Team------------------------------------------------
+                 ## Tab 7 DSPG Team------------------------------------------------
                  tabPanel(strong("Our Team"), 
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h1(strong("Project Team"), align = "center"),
