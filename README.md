@@ -38,10 +38,10 @@ For further questions, please reach out to
 - Leonard-Allen Quaye (Virginia Tech, Agricultural and Applied Economics);
 - Poonam Tajanpure (Virginia Tech, Biological Systems Engineering).
 
-##Undergraduate Interns:
+## Undergraduate Interns:
 - Frankie Fan (Smith College & Brown University, Math and Data Science);
 - Ari Liverpool (Virginia Tech, Applied Economics Management);
-- Josue Navarrete (MiraCosta College, Computer Science Major).
+- Josue Navarrete (MiraCosta College, Computer Science).
 
 ## Faculty & Associate Team Members:
 - Dr. Brianna Posadas (Virginia Tech, School of Plant and Environmental Sciences);
