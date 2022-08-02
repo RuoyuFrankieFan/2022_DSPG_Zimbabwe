@@ -1,5 +1,5 @@
 #==========DSPG 2022============Zimbabwe========================================
-#This dashboard is arranged in the following way:
+#This dashboard is arranged as follows:
 #1. Loading Packages
 #2. Loading the data
 #3. JSCODE for website features (DSPG logo at the top left) 
@@ -101,9 +101,12 @@ jscode <- "function getUrlVars() {
 
 # LOADING DATA-----------------------------------------------
 #SHAPEFILES
-zim_district <- st_read("./data/shapefiles/Zim_D60.shp")  
-zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
 
+#60 District shapefile 
+zim_district <- st_read("./data/shapefiles/Zim_D60.shp")
+
+#5 agregions shapefile; rename the region name to merge with data
+zim_region <- st_read("./data/shapefiles/agro-ecological-regions.shp")
 zim_region <- rename(zim_region, Region = "nat_region")
 
 #Map palette
@@ -113,24 +116,22 @@ mypal <- colorNumeric(
   reverse = TRUE)
 
 
-#EVI DATA
-#agregion
+#EVI DATA for the 5 agregions
 GrSs2011 <- read_csv("./data/agregion/evi/EVI_region_GrSs2011.csv")
 GrSs2017 <- read_csv("./data/agregion/evi/EVI_region_GrSs2017.csv")
-#GrSs2011 <- rename(GrSs2011, region="Region")
-#GrSs2017 <- rename(GrSs2017, region="Region")
 
+#EVI DATA for the 5 agregions in long format
 EVI_region_long <- read_csv("./data/agregion/evi/EVI_region_long.csv")
 
+#Processed Data to make line graphs for the EVI
 GrSs2011Line <- read.csv("./data/agregion/evi/eviline2011.csv")
 GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
-#GrSs2011Line <- rename(GrSs2011Line, region="Region")
-#GrSs2017Line <- rename(GrSs2017Line, region="Region")
 
-
+#Merging the EVI Data with the shapefile of the 5 agregions
 EVIGrow2011 <- full_join(zim_region, GrSs2011, by = "Region")
 EVIGrow2017 <- full_join(zim_region, GrSs2017, by = "Region")
 
+#Max EVI maps for the 5 agregions
 my_images_evi <- c("Max EVI 2011.png", "Max EVI 2017.png")
 
 
@@ -175,24 +176,6 @@ Percmax <- as.Date("2017-05-29")
 
 
 
-# MapDataPre <- read.csv("data/agregion/soil/SoilMapPlotData.csv")
-# BarData <- read.csv("data/agregion/soil/SoilBarPlotData.csv")
-# LineData <- read.csv("data/agregion/soil/SoilLinePlotData.csv")
-# MapDataPre <-rename(MapDataPre, Region = "region")
-# 
-# #BarData <-rename(BarData, Region = "region")
-# #zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
-# #zim_region <-rename(zim_region, Region = nat_region)
-# 
-# MapDataTwo <- list(zim_region, MapDataPre)
-# MapDataFin <- MapDataTwo %>% reduce(full_join, by='Region')
-# 
-# # Set axis limits c(min, max) on plot
-# min <- as.yearmon("20161119", "%Y%m")
-# max <- as.yearmon("20161219", "%Y%m")
-# min <- as.Date("2016-11-19")
-# max <- as.Date("2016-12-19")
-
 
 
 #MPI DATA
@@ -202,9 +185,8 @@ MPI_2017 <- MPI[which(MPI$year=="2017"),]
 MPI_2011 <- rename(MPI_2011, District_ID="district_id")
 MPI_2017 <- rename(MPI_2017, District_ID="district_id")
 
-#MPI_2011 <- read_excel("./data/MPI/2011_MPI_w_components.xlsx")
-#MPI_2017 <- read_excel("./data/MPI/2017_MPI_w_components.xlsx")
 
+#Loading the generated Images
 my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
 my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
 my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
@@ -219,7 +201,7 @@ my_images9 <- c("mpiadj_precip1.png","mpiadj_precip2.png","mpiadj_precip3.png")
 
 
 
-##Join data
+##Join data MPI and district data
 zim_district <- rename(zim_district, District_name = "NAME_2")
 zim_district <- zim_district %>% 
   arrange(District_name) %>% 
@@ -1284,364 +1266,6 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
 
 
 
-#                 ## Tab 2------
-#                 navbarMenu(strong("Multidimensional Poverty Index (MPI)"), 
-#                            tabPanel(strong("Multidimensional Poverty Index"),
-#                                     
-#                                     
-#                                     tabPanel(title = "2011",
-#                                     fluidRow(h1(strong("Multidimensional Poverty Index"), align = "center"),
-#                                       box(withSpinner(leafletOutput("MPI_map_2011", height=520)),
-#                                         title = "Multidimensional Poverty Index 2011",
-#                                         width = 6,
-#                                         height = 600
-#                                       ),
-#                                       box(withSpinner(leafletOutput("MPI_map_2017", height=520)),
-#                                           title = "Multidimensional Poverty Index 2017",
-#                                           width = 6,
-#                                           height = 600
-#                                         
-#                                       )
-#                                         ),
-#                                     
-#                                     fluidRow(
-#                                       column(
-#                                         align="justify",
-#                                         h3("Description"),
-#                                         width = 6,
-#                                         withMathJax(),
-#                                         title = "Description",
-#                                         p("This graphic shows a detailed visualization of MPI across 60 administrative districts. Zimbabwe currently has 59 administrative districts. However, at the time #the 2011 PICES was being conducted, there were 60 administrative districts in Zimbabwe. For this reason, we conduct district-level analysis in our study using the 60 districts. There are three layers to #this graph:
-#                                      \\(M_{0}\\), \\(M_{1}\\), and \\(M_{2}\\)."), 
-#                                         tags$ul(  
-#                                           tags$li("\\(M_{0}\\) is the ",strong("adjusted headcount ratio")," designed by",a(href="https://ophi.org.uk/research/multidimensional-poverty/alkire-foster-method#/","Sabina Alkire and James Foster",target="_blank"),
-#                                                   " and considers all of the dimensions described in the methodology section."),
-#                                           tags$li("\\(M_{1}\\)
-#                                      is the ",strong("adjusted poverty gap")," an index to show how far below the poor people are from the poverty line."),
-#                                           tags$li("\\(M_{2}\\) is the ",strong("square of the adjusted poverty gap."),"By squaring the poverty gaps, this measure puts a higher weight on those who are #farther away from the poverty line. Thus, this index measures severity of poverty.")
-#                                           
-#                                         ),
-#                                         p("In this study, we use MPI that has been calculated using k=3 as the threshold.
-#For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")),
-#                                       
-#                                       column(
-#                                         align="justify",
-#                                         h3("Descriptive Analysis"),
-#                                         withMathJax(),
-#                                         title = strong("Descriptive Analysis"),
-#                                         width = 6,
-#                                         p("\\(M_{0}\\)"),
-#                                         p("Looking at the poverty index and focusing on the \\(M_{0}\\) index, we can see that for our k-threshold value, a large portion of the population can be #considered multidimensionally poor. The greater Harare and Bulawayo areas have low \\(M_{0}\\) values for low k-thresholds. Still, their \\(M_{0}\\) values for higher k-thresholds are above the national #average, implying that while those districts are better on average, some of the most poverty-stricken households reside within their bounds (particularly the Epworth district)."),
-#                                         
-#                                         p("\\(M_{1}\\)"),
-#                                         p("When we focus on the depth of poverty (\\(M_{1}\\) index ), for our k-threshold value, poverty throughout much of Zimbabwe can be considered deep."),
-#                                         p("\\(M_{2}\\)"),
-#                                         p("A look at the \\(M_{2}\\) values of the original index reveals much of the same. Our k-threshold value render high rates of poverty severity across a large #proportion of Zimbabwe’s population."),
-#                                         p("")
-#                                       )
-#                                     ))),
-#                            
-#                            
-#                            
-#                            tabPanel(strong("Components of the MPI"),
-#                                     
-#                                     tabsetPanel(
-#                                       tabPanel(title = "\\(M_{0}\\)",
-#                                     fluidRow(h1(strong("Components of the MPI"), align = "center"),
-#                                       box(withSpinner(leafletOutput("compo_MPI_11", height = 520)),
-#                                         title = "Components of the MPI for 2011",
-#                                         width = 6,
-#                                         height = 600
-#                                       ),
-#                                       box(withSpinner(leafletOutput("compo_MPI_17", height = 520)),
-#                                           title = "Components of the MPI for 2017",
-#                                           width = 6,
-#                                           height = 600
-#                                       )),
-#                                         
-#                                     fluidRow(
-#                                     box(
-#                                           
-#                                           width = 12,
-#                                           withMathJax(),
-#                                           title = "Description",
-#                                           p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-#                                           p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the #incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-#                                           ))),
-#                                     
-#                                     tabPanel(title = "\\(M_{1}\\)",
-#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
-#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m1", height = 520)),
-#                                                           title = "Components of the MPI for 2011",
-#                                                           width = 6,
-#                                                           height = 600
-#                                                       ),
-#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m1", height = 520)),
-#                                                           title = "Components of the MPI for 2017",
-#                                                           width = 6,
-#                                                           height = 600
-#                                                       )),
-#                                              
-#                                              fluidRow(
-#                                                box(
-#                                                  align="justify",
-#                                                  width = 12,
-#                                                  withMathJax(),
-#                                                  title = "Description",
-#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence ( (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-#                                                ))),
-#                                     
-#                                     tabPanel(title = "\\(M_{2}\\)",
-#                                              fluidRow(h1(strong("Components of the MPI"), align = "center"),
-#                                                       box(withSpinner(leafletOutput("compo_MPI_11_m2", height = 520)),
-#                                                           title = "Components of the MPI for 2011",
-#                                                           width = 6,
-#                                                           height = 600
-#                                                       ),
-#                                                       box(withSpinner(leafletOutput("compo_MPI_17_m2", height = 520)),
-#                                                           title = "Components of the MPI for 2017",
-#                                                           width = 6,
-#                                                           height = 600
-#                                                       )),
-#                                              
-#                                              fluidRow(
-#                                                box(
-#                                                  align="justify",
-#                                                  width = 12,
-#                                                  withMathJax(),
-#                                                  title = "Description",
-#                                                  p("This graphic shows a detailed visualization of the relevant components of MPI at the district-level. 
-#Our study uses district-level measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal #weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For #example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural #districts. The components we examine in this study are: Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
-#                                                  p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented #for the incidence (\\(M_{0}\\)), gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)).")
-#                                                )))
-#                                     
-#                                     
-#                                     
-#                                     ))),
-#                            
-#                            
-                 
-                 ## Tab 3------------------
-#navbarMenu(strong("MPI and Indices"),
-#           tabPanel(strong("Summary Statistics"),
-#                    fluidRow(
-#                      h1(strong("Summary Statistics"), 
-#                         style = "font-size:35px;"), align="center",
-#                    style = "margin-left: 0px; margin-right: 0px;",
-#                    column(12, slickROutput("my_slick5"))),
-#                    
-#                    
-#                    fluidRow(
-#                      column(
-#                        7,
-#                        img(src = "stats_v2_2011.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-#                        div(tags$caption("Figure: Correlation Matrix for PICES 2011"),align="center")
-#                      ),
-#                      
-#                      column(
-#                        align="justify",
-#                        width = 5,
-#                        withMathJax(),
-#                        title = strong("Summary Statistics and Correlations", align="center"),
-#                        p(h3("Summary Statistics")),
-#                        p("The table presents summary statistics for the variables of interest in our statistical analysis using 60 district-level data. The average poverty headcount (M0) was higher in #2017 (0.325) compared to that in 2011 (0.272). Similarly, average adjusted poverty gap (M1) and average adjusted poverty severity (M2) were also higher in 2017 compared to those in 2011. A cursory #screening of the selected MPI components indicates that the main drivers of this discrepancy were Chronic Illness, Lack of HH Assets and Lack of Services.  
-#
-#In contrast, the growing season of 2016-17 received more rain and encountered fewer dry spells on average compared to the growing season of 2010-11. As a result of good seasonal rain, the average maximum #EVI is also higher in 2016-17 compared that in 2010-11."), 
-#                        
-#                      )
-#                      
-#                    ),
-#                    
-#                    fluidRow(
-#                      column(
-#                        7,
-#                        img(src = "stats_2017.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "75%"), align ="center",
-#                        div(tags$caption("Figure: Correlation Matrix for PICES 2017"),align="center")
-#                      ),
-#                      
-#                      column(
-#                        align="justify",
-#                        width = 5,
-#                        withMathJax(),
-#                        title = strong("Summary Statistics and Correlations", align="center"),
-#                        p(h3("Correlation Matrices")),
-#                        
-#                        p("The following matrices present the Pearson Correlation Coefficients of the weather indices and the MPI measures and components. Overall, total rainfall in the growing season #exhibit the strongest correlation with the poverty measures relative to the other weather indices. For example, in 2011, the correlation coefficient of total rainfall and M0 was -0.295 which means that #rainfall and poverty headcount are inversely associated. The coefficient is also statistically significant at the 5 percent level.")
-#                        
-#                      )
-#                      
-#                    ),
-#                    
-#                    #fluidRow(
-#                    #column(12,
-#                    #p("Summary Statistics and Correlations"))),
-#                    
-#                    
-#                    
-#                    
-#                    
-#                    
-#                    
-#           ),
-#                    
-#                    
-#                    
-#           tabPanel(strong("MPI & Precipitation"),
-#                    tabsetPanel(
-#                      tabPanel(strong("Tables"),
-#                    fluidRow(
-#                      h1(strong("MPI & Precipitation"),align="center", 
-#                         style = "font-size:35px;"),
-#                      column(
-#                        10,
-#                        style = "margin-left: 100px; margin-right: 100px;",
-#                        align="justify",
-#                        withMathJax(),
-#                      p("In this section, we present the results from regression analysis of total precipitation (measured in 100 mm) on MPI and its selected components, using district-level data. We #estimate the following regression model using Ordinary Least Squares (OLS) Estimation method:"),
-#                      p("\\(poverty_{i}\\ = \\beta_{0}\\ + year_{i} \\beta_{1}\\ + rain_{i} \\beta_{2}\\ + \\epsilon\\) where \\(i\\) denotes the districts and ϵ is the error term."),
-#                      p("\\(poverty_{i}\\) denotes the dependent variables: Poverty Headcount Ratio (\\(M_{0}\\)), Poverty Gap (\\(M_{1}\\)), Square of Poverty Gap (\\(M_{2}\\)) and the MPI components - #Max Educ, Chronic Illness, Lack of Household Assets and Lack of Access to Services."),
-#                      p("\\(year_{i}\\) is a dummy variable that takes the value 0 if the year is 2011 and 1 if the year is 2017."),
-#                      p("\\(rain_{i}\\) represents monthly cumulative precipitation (in 100 mm) from the start of planting in November to the end of the growing season in May.")
-#                      
-#                      )),
-#                    
-#                    br(),
-#                    
-#                    fluidRow(
-#                      style = "margin-left: 0px; margin-right: 0px;",
-#                      column(8, slickROutput("my_slick2")),
-#                      column(4,
-#                             align="justify",
-#                             p(
-#                               "
-#                               Table 2:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:
-#                               "
-#                             ),
-#                             p(
-#                               "Table 2:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
-#                             ),
-#                             p(
-#                               "Table 3:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
-#                             ),
-#                             p(
-#                               "Table 4:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
-#                             )
-#                      )
-#                      
-#                    )
-#                  )
-#                  ,
-#                  tabPanel(strong("Regressions"),
-#                    fluidRow(
-#                      style = "margin-left: 0px; margin-right: 0px;",
-#                      column(8, slickROutput("my_slick7")),
-#                      column(4, 
-#                             p(
-#                               "
-#                               Figure 1: 
-#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for poverty headcount ratio (\\(M_{0}\\)). All else constant, an additional 100 mm of #rain in the 
-#                               first month of the growing season (Nov-Dec) corresponds to a decrease in poverty headcount by -0.029 units. This estimated coefficient is statistically significant at the 10 #percent 
-#                               level. Similarly, cumulative rainfall across all the months of the growing season has a negative association with poverty headcount, ceteris paribus, and the estimated #coefficients 
-#                               are always statistically significant. The greatest absolute magnitude of the coefficient occurs during the first month of planting, suggesting that sufficient early rainfall #may have 
-#                               important implications for the socio-economic conditions of the people.  
-#                               "
-#                             ),
-#                             p(
-#                               "
-#                               Figure 2: 
-#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty gap (\\(M_{1}\\)). Similar to Figure 1, the coefficients are all #negative and 
-#                               statistically significant, meaning that more rainfall corresponds to a lower adjusted poverty gap. Again, we see that the estimated coefficient of rainfall in the first month #of planting 
-#                               (Nov-Dec) has the highest absolute magnitude.  
-#                               "
-#                             ),
-#                             p(
-#                               "
-#                              Figure 3:  
-#                              This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for adjusted poverty severity or the square of adjusted poverty gap (\\(M_{2}\\)). #Once again, the coefficients are all negative and 
-#                              statistically significant, meaning that more rainfall corresponds to lower adjusted poverty severity.  
-#                               "
-#                             ),
-#                             p(
-#                               "
-#                               Figures 4 – 7: 
-#                               This presents the estimated coefficients of monthly cumulative precipitation (in 100 mm) for the selected MPI components. Rainfall clearly has an important association with #these measures of 
-#                               deprivation as all coefficients are consistently negative and statistically significant. The associations between rainfall in the first month of planting (Nov-Dec) and Max #Educ. and Lack of Access to Services 
-#                               are particularly prominent relative to that with cumulative monthly rainfall in later months of the season. 
-#                               "
-#                             )
-#                             )
-#                    )
-#                    )
-#                  )
-#           
-#                    
-#           ),
-#           tabPanel(strong("MPI & EVI"),
-#                    fluidRow(
-#                      h1(strong("MPI & EVI"), 
-#                         style = "font-size:35px;"), align="center",
-#                      style = "margin-left: 0px; margin-right: 0px;",
-#                      column(8, slickROutput("my_slick3")),
-#                      column(4,
-#                             align="justify",
-#                             p(
-#                               "Table 1:
-#                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES, 
-#                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph#:"
-#                             ),
-#                             p(
-#                               "Table 2:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
-#                             )
-#                      )
-#                      
-#                    )
-#                    
-#           ),
-#           tabPanel(strong("MPI & Soil Moisture"),
-#                    fluidRow(
-#                      h1(strong("MPI & Soil Moisture"), 
-#                         style = "font-size:35px;"), align="center",
-#                      style = "margin-left: 0px; margin-right: 0px;",
-#                      column(8, slickROutput("my_slick4")),
-#                      column(4,
-#                             align="justify",
-#                             p(
-#                               "Table 1:
-#                      This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES, 
-#                      the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this graph#:"
-#                             ),
-#                             p(
-#                               "Table 2:
-#                        This graphic shows a detailed visualization of Zimbabwean districts/provinces, broken up into distinct regions. In 2011 Zimbabwe was divided into 60 administrative districts. In #2017 PICES
-#                        , the districts were redefined to include specific urban areas as separate districts, thus increasing the administrative boundaries to 91 districts. There are three layers to this #graph:"
-#                             )
-#                      )
-#                      
-#                    )
-#                    
-#           )
-#           
-#           
-#           
-#           
-#           
-#),
-#                            
-#                            
-#                 
                   ## Tab Takeaways --------------
 
                  tabPanel(strong("Takeaways"),
@@ -1758,7 +1382,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                                    #p("We would like to thank:"),
                                    p(" ",a(href="https://www.researchgate.net/profile/Tawanda-Chingozha","Tawanda Chingoza",target='_blank')," (Stellenbosch University);"),
                                    p(a(href="https://tw.linkedin.com/in/kuo-hao-lai","Kuo-Hao Lai",target='_blank')," (Virginia Tech, Computer Science, MEng); "),
-                                   p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC); ")
+                                   p(a(href="http://www.uwyo.edu/wygisc/people/yang_di/di-short-cv.html","Dr. Di Yang",target='_blank')," (Wyoming Geographic Information Science Center - WyGISC).")
                                    #,
                                    #p("We also thank Grown Chirongwe of Zimbabwe National Statistical Agency (ZimStat) for providing 2011 and 2017 PICES data for this project.")
                                    
@@ -1812,24 +1436,6 @@ output$table <- renderTable({
   }, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2)  
   
 
-#correlation for 2011
-output$table11 <- renderTable({
-  
-  table <- read_excel("./data/Correlation matrices.xlsx", 
-                      sheet = "Sheet2")
-  table
-}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
-
-
-#Correlation for 2017
-output$table17 <- renderTable({
-  
-  table <- read_excel("./data/Correlation matrices.xlsx", 
-                      sheet = "Sheet3")
-  table
-}, striped = TRUE, hover = TRUE, bordered = TRUE, width = "100%", align = "l", colnames = T, digits = 2) 
-
-
 
   
   # EVI OUTPUTS-------
@@ -1861,116 +1467,6 @@ output$my_slick_evi <- renderSlickR(
   )
 )
 
-
-#output$evi_line11 <- renderPlot({
-#  GrSs2011Line <- EVI_region_long %>% 
-#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-#           Year == 2010|Year == 2011) %>% 
-#    filter(!(Year == 2010 & Month == "03")) %>% 
-#    filter(!(Year == 2010 & Month == "04")) %>%
-#    filter(!(Year == 2010 & Month == "05")) %>%
-#    filter(!(Year == 2010 & Month == "02")) %>% 
-#    filter(!(Year == 2010 & Month == "01")) %>% 
-#    filter(!(Year == 2011 & Month == "10")) %>% 
-#    filter(!(Year == 2011 & Month == "11")) %>%
-#    filter(!(Year == 2011 & Month == "12")) %>% 
-#    group_by(Region, Month) %>% 
-#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
-#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
-#                               Month =="11" ~ "2",
-#                               Month =="12" ~ "3",
-#                               Month =="01" ~ "4",
-#                               Month =="02" ~ "5",
-#                               Month =="03" ~ "6",
-#                               Month =="04" ~ "7",
-#                               Month =="05" ~ "8"))
-#  
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="10")] <- "October"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="11")] <- "November"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="12")] <- "December"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="01")] <- "January"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="02")] <- "Febuary"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="03")] <- "March"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="04")] <- "April"
-#  GrSs2011Line$Month[which(GrSs2011Line$Month=="05")] <- "May"
-#  
-#  GrSs2011Line$Month <- reorder(GrSs2011Line$Month, as.numeric(GrSs2011Line$GSOrder))
-#  GrSs2011Line$Month <- as.factor(GrSs2011Line$Month)
-#  GrSs2011Line$Region <- as.factor(GrSs2011Line$Region)
-#  
-# 
-#  # Max EVI
-#  GrSs2011Line %>% 
-#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-#    geom_line()+
-#    #theme(axis.text.x = element_text(angle = 315)) +
-#    scale_colour_discrete(guide = 'none') +
-#    scale_x_discrete(expand=c(0, 1)) +
-#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-#    scale_color_viridis_d(option = "H") +
-#    labs(title = "Max EVI in Zim During Growing Season 2011", color =  "Region") +
-#    xlab("Time(Month)") +
-#    ylab("Max EVI")
-#  
-#})
-#
-#output$evi_line17 <- renderPlot({
-#  GrSs2017Line <- EVI_region_long %>% 
-#    filter(Month == "05"|Month == "04"|Month =="03"|Month =="02"|Month =="01"|Month =="10"|Month =="11"|Month =="12", 
-#           Year == 2016|Year == 2017) %>% 
-#    filter(!(Year == 2016 & Month == "03")) %>% 
-#    filter(!(Year == 2016 & Month == "04")) %>%
-#    filter(!(Year == 2016 & Month == "05")) %>%
-#    filter(!(Year == 2016 & Month == "02")) %>% 
-#    filter(!(Year == 2016 & Month == "01")) %>% 
-#    filter(!(Year == 2017 & Month == "10")) %>% 
-#    filter(!(Year == 2017 & Month == "11")) %>%
-#    filter(!(Year == 2017 & Month == "12")) %>% 
-#    group_by(Region, Month) %>% 
-#    summarise(MaxEVI = max(EVI, na.rm = TRUE)) %>% 
-#    mutate(GSOrder = case_when(Month =="10" ~ "1", 
-#                               Month =="11" ~ "2",
-#                               Month =="12" ~ "3",
-#                               Month =="01" ~ "4",
-#                               Month =="02" ~ "5",
-#                               Month =="03" ~ "6",
-#                               Month =="04" ~ "7",
-#                               Month =="05" ~ "8"))
-#  
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="10")] <- "October"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="11")] <- "November"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="12")] <- "December"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="01")] <- "January"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="02")] <- "Febuary"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="03")] <- "March"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="04")] <- "April"
-#  GrSs2017Line$Month[which(GrSs2017Line$Month=="05")] <- "May"
-#  
-#  GrSs2017Line$Month <- reorder(GrSs2017Line$Month, as.numeric(GrSs2017Line$GSOrder))
-#  GrSs2017Line$Month <- as.factor(GrSs2017Line$Month)
-#  GrSs2017Line$Region <- as.factor(GrSs2017Line$Region)
-#  
-#  
-#  #write.csv(GrSs2017Line, file = "eviline2017.csv")
-#  #GrSs2017Line <- read.csv("./data/agregion/evi/eviline2017.csv")
-#  
-#  
-#  
-#  # Max EVI
-#  GrSs2017Line %>% 
-#    ggplot(aes(x = Month, y = MaxEVI, group = as.factor(Region), color = as.factor(Region))) +
-#    geom_line()+
-#    #theme(axis.text.x = element_text(angle = 315)) +
-#    scale_colour_discrete(guide = 'none') +
-#    scale_x_discrete(expand=c(0, 1)) +
-#    geom_dl(aes(label = Region), method = list(dl.combine("first.points", "last.points")), cex = 0.8) +
-#    scale_color_viridis_d(option = "H") +
-#    labs(title = "Max EVI in Zim During Growing Season 2017", color =  "Region") +
-#    xlab("Time(Month)") +
-#    ylab("Max EVI") 
-#  
-#  
-#})
 
 
 ## PRECIPITATION OUTPUTS
@@ -2069,54 +1565,6 @@ output$PercLineGraph <- renderPlot({
   
 })
 
-
-
-
-
-
-
-# output$MapGraph <- renderLeaflet({
-#   mypal <- colorNumeric(
-#     palette = "viridis",
-#     domain = NULL,
-#     reverse = TRUE)
-#   
-#   leaflet(MapDataFin) %>% addTiles() %>%
-#     addPolygons(color = ~mypal(MapDataFin$AvgSurfaceMoisture), weight = 1, smoothFactor = 0.5, label = paste("Region ", MapDataFin$Region, ":", round(MapDataFin$AvgSurfaceMoisture# , digits = 3)),
-#                 opacity = 1.0, fillOpacity = 0.5,
-#                 highlightOptions = highlightOptions(color = "black", weight = 2,
-#                                                     bringToFront = TRUE)) %>%
-#     addPolylines(data = MapDataFin$geometry, color = "black", opacity = 2, weight = 2) %>% 
-#     addLegend(pal = mypal,position = "bottomleft",values = MapDataFin$AvgSurfaceMoisture, opacity = .6,
-#               title= paste("Average Soil Moisture (mm)"))
-# })       
-# output$BarGraph <- renderPlot({
-#   ggplot(BarData, aes(fill=time, y=value, x=region)) + 
-#     geom_bar(position="dodge", stat="identity")+ 
-#     labs(color="time") +
-#     xlab("Agro-ecological Region") + ylab("Number Of 3-Day Periods") + 
-#     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
-#     guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
-#     scale_fill_viridis(discrete=TRUE, direction=-1)
-#   #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
-# })
-# 
-# output$LineGraph <- renderPlot({
-#   
-#   ggplot(LineData, aes(as.Date(newDate), y = value, color = variable)) + 
-#     geom_line(aes(y = Moisture.1, col = "Region I"), size=1.25) + 
-#     geom_line(aes(y = Moisture.2, col = "Region IIA"), size=1.25) + 
-#     geom_line(aes(y = Moisture.3, col = "Region IIB"), size=1.25) + 
-#     geom_line(aes(y = Moisture.4, col = "Region III"), size=1.25) + 
-#     geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
-#     geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
-#     labs(color="Agro-ecological Region") +
-#     xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
-#     ggtitle("Planting Time During The 2016-17 Growing Season") +
-#     theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
-#     scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
-#   
-# })
 
 
 #MPI OUTPUTS -----
@@ -2452,8 +1900,7 @@ output$compo_MPI_17_m2 <- renderLeaflet({
 
 
 
-
-
+#Rndering the slideshows
 
 
 output$my_slick2 <- renderSlickR(
