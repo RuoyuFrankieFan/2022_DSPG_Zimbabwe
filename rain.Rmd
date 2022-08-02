@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+Add a necessary packages 
 ```{r}
 library(dplyr)
 library(moderndive)
@@ -20,16 +20,17 @@ rm(list = ls())
 ```
 
 
+# Read & process the 3hr-ly precipitation data:
 ```{r}
-data1011_long <- gather(as.data.frame(read_csv("PRECIP3hravg_ts_Zimb (2010-2012).csv")), Date, Precipitation, '3B42_20101120_00_7_precipitation': '3B42_20110531_21_7_precipitation') %>%
-  dplyr::select(Date, Precipitation, nat_region) %>%
-  dplyr::rename(Region = nat_region) %>%
-  separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>%
-  dplyr::select(-Pre, -useless,-useless2)
+data1011_long <- gather(as.data.frame(read_csv("PRECIP3hravg_ts_Zimb (2010-2012).csv")), Date, Precipitation, '3B42_20101120_00_7_precipitation': '3B42_20110531_21_7_precipitation') %>% #long data frame 
+  dplyr::select(Date, Precipitation, nat_region) %>% #select the following columns.
+  dplyr::rename(Region = nat_region) %>% 
+  separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_')%>%
+  dplyr::select(-Pre, -useless,-useless2) #column Date into individual columns like Date & Hour and remove unnecessary information.
 
-sum1011_long <- data1011_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
-sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3
-sum1011_long$Rain_Dry <- ifelse(sum1011_long$dailyPRECIP < 2.95,1,0)
+sum1011_long <- data1011_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE)) #Create a new column called dailyPRECIP by summing up the 3hr-ly Avg precipitation value.
+sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3 #Multiply that same column by 3 to adjust for the Average.
+sum1011_long$Rain_Dry <- ifelse(sum1011_long$dailyPRECIP < 2.95,1,0) #condition statement that evaluates if a day is dry or wet by the following threshold of 2.95mm.
 sum1011_long <- transform(sum1011_long,                                 # Create ID by group
                       ID = as.numeric(factor(Region)))    #this is long and this is for shiny
 sum1011_long$newDate <- as.Date(sum1011_long$Date, "%Y%m%d")
@@ -70,6 +71,7 @@ RainDat <- read.csv('./RainDat.csv')
 ```
 
 
+# Total Rainfall
 ```{r DrawRainMaps1}
 
 SumRainMapDat <-function(Rmin,Rmax,yyear,season){
@@ -116,7 +118,7 @@ map201617G <- SumRainMapDat(min,max,yyear,season)
 ```
 
 
-
+# Avgerage Rainfall
 ```{r DrawRainMaps2}
 MeanRainMapDat <-function(Rmin,Rmax,yyear,ttitle){
 
@@ -180,7 +182,7 @@ max <- as.Date("2017-02-28")
 map2017_2 <- MeanRainMapDat(min,max,yyear,ttitle)
 ```
 
-
+#Display Maps
 ```{r DisplayRainMaps}
 #Growing Season
 map201011G
@@ -196,9 +198,8 @@ map2017_1
 map2017_2
 ```
 
-
+# Histogram of average monthly rainfall from 2011 and 2017
 ```{r Histograms}
-#(3) Histogram of average monthly rainfall from 2011 and 2017
 #Prepare data for Histograms
 WideMean <- RainDat %>% 
   group_by(month, year, Region) %>% 
@@ -221,6 +222,7 @@ WideMean <- read.csv("./WideMean.csv")
 ```
 
 ```{r DrawHistograms}
+# Function: This will generate histogram graphs for Average Monthly rainfall by Region
 HistRain <-function(RegionNum,ttitle){
 
   WideMean$m <- factor(WideMean$m,                                    # Change ordering manually
@@ -258,7 +260,7 @@ HistRain(RegionNum,ttitle)
 
 #Have to set limits to represent same scale on y-axis
 ```
-
+# Dry spell Barchart
 ```{r MakeRainSpellFunc}
 #Creats a dataframe for each region(district) with the number of spells and the length
 MkRainSpell <-function(infile){
@@ -359,7 +361,6 @@ spell_barchart <- read.csv("./spell_barchart.csv")
 ```
 
 ```{r HistogSpell}
-
 # Grouped plot for regions in 2010-11
 spell_barchart %>% # code for Shiny app
   filter(year==2010) %>%
