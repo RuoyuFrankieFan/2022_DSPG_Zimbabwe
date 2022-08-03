@@ -1100,7 +1100,7 @@ For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))
                            withMathJax(),
                            title = strong("Summary Statistics and Correlations", align="center"),
                            p(h3("District-Level Correlation Matrices")),
-                           p("We examined the correlation between our climate indices and our measures of poverty and its socioeconomic components at the ", strong("district-level"),". The following matrices present the Pearson Correlation Coefficients of the weather indices and these poverty measures. The statistical significance can be gleaned by observing the color coding within the matrix. Overall, total rainfall in the growing season exhibits consistently signficant correlation with the poverty measures. For example, in 2011, the correlation coefficient between total rainfall and poverty was -0.295 which means that as rainfall increases the incidence of poverty decreases. The coefficient is also statistically significant at the 5 percent level."))
+                           p("We examined the correlation between our climate indices and our measures of poverty and its socioeconomic components at the ", strong("district-level"),". The following matrices present the Pearson Correlation Coefficients of the weather indices and these poverty measures. The magnitude of the coefficients can be gleaned by observing the color coding within the matrix. Also, the statistical significance can be gleaned by matching the number of asterisks(stars) below the matrix. Overall, total rainfall in the growing season exhibits consistently signficant correlation with the poverty measures. For example, in 2011, the correlation coefficient between total rainfall and poverty was -0.295 which means that as rainfall increases the incidence of poverty decreases. The coefficient is also statistically significant at the 5 percent level."))
                        ),
                        
                        fluidRow(
@@ -1896,47 +1896,6 @@ output$compo_MPI_17_m2 <- renderLeaflet({
 
 
 #Rendering the slideshows
-
-#Regression images for MPI vs precipitation-----
-# output$my_slick2 <- renderSlickR(
-#   slickR(
-#     my_images2,
-#     width = "90%"
-#   )
-# )
-# 
-# #Regression images for MPI vs EVI
-# output$my_slick3 <- renderSlickR(
-#   slickR(
-#     my_images3,
-#     width = "90%"
-#   )
-# )
-# 
-# #Regression images for MPI vs soil
-# output$my_slick4 <- renderSlickR(
-#   slickR(
-#     my_images4,
-#     width = "90%"
-#   )
-# )
-# 
-# #Images for descriptive Stats
-# output$my_slick5 <- renderSlickR(
-#   slickR(
-#     my_images5,
-#     width = "90%"
-#   )
-# )
-# 
-# #Regression images for correlation b/n MPI(components) vs climate data
-# output$my_slick_corr <- renderSlickR(
-#   slickR(
-#     my_images6,
-#     width = "90%"
-#   )
-# )
-
 #Regression images for the MPI vs Precipitation
 output$my_slick7 <- renderSlickR(
   slickR(
