@@ -21,10 +21,14 @@ citecolor: blue
 anchorcolor: blue
 toccolor: blue
 fontsize: 12pt
+
 ---
 
 ```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+    dev = "png",
+    dpi = 300)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
@@ -73,7 +77,7 @@ mydat_longg <- mydat_long %>%
          Dry = case_when(Moisture >40 & Moisture < 50~ 1,
                                   TRUE ~ 0),
          
-         ExtremelyDry = case_when(Moisture <=40 ~ 1,
+         "Extremely Dry" = case_when(Moisture <=40 ~ 1,
                                   TRUE ~ 0),
          )
 
@@ -139,9 +143,9 @@ df <- sum_g1 %>%  select(-c(newDate)) %>%
 
 #Need this step to do side-by-side histogram by region
 df2 <- reshape(data=df, idvar = "region", 
-               varying = c("Wet","Ideal","Dry","ExtremelyDry"), 
+               varying = c("Wet","Ideal","Dry","Extremely Dry"), 
                v.name=c("value"), 
-               times = c("Wet","Ideal","Dry","ExtremelyDry"),
+               times = c("Wet","Ideal","Dry","Extremely Dry"),
                new.row.names = 1:30,
                direction=("long"))
 
@@ -150,9 +154,9 @@ df2 <- reshape(data=df, idvar = "region",
      geom_bar(position="dodge", stat="identity")+ 
      labs(color="time") +
      xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
-     ggtitle("% Soil Moisture Conditions of the 2016-17 Growing Season after Planting Time") +
+     ggtitle("Growing Season 2016-17 % Soil Moisture Conditions After Planting Time") +
      guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
-     scale_fill_viridis(discrete=TRUE, direction=-1)
+     scale_fill_viridis(discrete=TRUE, direction=-1,breaks = c("Extremely Dry","Dry","Ideal","Wet"))
      #3day periods between 12/19/16 and 05/29/17 by region and Surf-soil moisture condition
    
 ```
@@ -218,14 +222,14 @@ zim_region <-rename(zim_region, region = nat_region)
      geom_sf(size = 0.15, color = "black", aes(fill = AvgPercentMoisture)) +
     xlab("Longitude") + ylab("Latitude") +
    coord_sf() +
-    scale_fill_viridis(option = "viridis", direction = -1, limits=c(0,100), breaks=c(20,40,60,80,100), labels=c("20","40", "60", "80", "100")) +
-     ggtitle("Average % Soil Moisture of The 2016-17 Growing Season after planting time") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
+    scale_fill_viridis(option = "viridis", direction = -1, limits=c(40,80), breaks=c(40,50,60,70,80), labels=c("40","50", "60", "70", "80")) +
+     ggtitle("2016-17 Growing Season Average Percent Soil Moisture After Planting Time") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
      guides(fill=guide_legend(title="Average Percent Soil Moisture (%)"))+theme_bw()
   
   
      
 ```
-Write files for shiny
+Write files for shiny (no longer necessary since shiny only uses pictures)
 ```{r}
 #write.csv(map1,"ShinyApp/data/agregion/soil/PercSoilMapPlotData.csv")
 #write.csv(df2,"ShinyApp/data/agregion/soil/PercSoilBarPlotData.csv")

@@ -1,0 +1,118 @@
+---
+title: "Untitled"
+author: "Ari L."
+date: "7/27/2022"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float:
+      collapsed: yes
+    theme: readable
+    number_sections: true
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+    number_sections: true
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(viridis)
+library(zoo)
+
+```
+
+```{r warning=FALSE}
+# Read in the data from GEE. Drop some unneccesary variables and rename the region variable. Write the dataset to a dataframe
+setwd("~/Ari/DSPG/zim/2022_DSPG_Zimbabwe")  
+mydat_long <- gather(as.data.frame(read_csv("./regional_data/PRECIP3hravg_ts_Zimb (2016-2018).csv")), Date, Precipitation, '3B42_20160101_03_7_precipitation': '3B42_20181231_00_7_precipitation') %>%
+  dplyr::select(Date, Precipitation, nat_region) %>%
+  dplyr::rename(Region = nat_region) %>%
+  separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>%
+  dplyr::select(-Pre, -useless,-useless2)
+
+sum1011_long <- mydat_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3
+  
+```
+
+
+```{r}
+#Read date string into an R Date Variable and remove date character variable from dataset.
+sum1011_long$newDate <- as.Date(sum1011_long$Date, "%Y%m%d")
+```
+
+
+
+```{r  warning=FALSE}
+# Make sure that the data is in columns for each region. This step will group by column to get the desired wide dataset.
+#Put into columns by group
+sum1011_long$yearmonth <- format(sum1011_long$newDate, "%Y%m")
+sum1011_long22 <- sum1011_long %>% group_by(yearmonth, Region) %>% summarise(monthlyPRECIP = sum(dailyPRECIP, na.rm = TRUE))
+
+
+
+
+mydat_long2 <- transform(sum1011_long22,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) %>% select(-c(Region)) %>% reshape(idvar = "yearmonth", 
+                          timevar = "ID", direction = "wide")
+
+mydat_long2$newDate <- as.yearmon(mydat_long2$yearmonth, "%Y%m") 
+mydat_long2 <- mydat_long2 %>% select(-yearmonth)
+# head(mydat_long2)
+```
+
+```{r}
+# Set axis limits c(min, max) on plot
+min <- as.yearmon("201610", "%Y%m")
+max <- as.yearmon("201705", "%Y%m")
+ 
+sum_g1 <- mydat_long2 %>% 
+  filter(between(mydat_long2$newDate, min, max)) %>% 
+  mutate(gsOrder = 1:8)
+sum_g1$newDate <- reorder(sum_g1$newDate, as.numeric(sum_g1$gsOrder))
+
+#Another plot with more regions -- add more here
+p <- ggplot(sum_g1, aes(x = newDate, y = value, color = variable, group =1)) + 
+    geom_line(aes(y = monthlyPRECIP.1, col = "Region I"), size=1.25) + 
+    geom_line(aes(y = monthlyPRECIP.2, col = "Region IIA"), size=1.25) + 
+    geom_line(aes(y = monthlyPRECIP.3, col = "Region IIB"), size=1.25) + 
+    geom_line(aes(y = monthlyPRECIP.4, col = "Region III"), size=1.25) + 
+    geom_line(aes(y = monthlyPRECIP.5, col = "Region IV"), size=1.25) + 
+    geom_line(aes(y = monthlyPRECIP.6, col = "Region V"), size=1.25) + 
+    labs(color="Agro-ecological Region") +
+    xlab("Date") + ylab("Average Rainfall (mm)") + 
+    ggtitle("Average Rainfall During the 2016-17 Growing Season") +
+    #theme(plot.title = element_text(hjust = 0.5)) + 
+  scale_color_viridis(discrete = TRUE, option = "viridis") +
+  theme(plot.caption=element_text(hjust = 1))
+  #  scale_x_date(limits = c(min, max)) + labs(caption = "3 hourly:Tropical Rainfall Measuring Mission (TRMM)")  + 
+p
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

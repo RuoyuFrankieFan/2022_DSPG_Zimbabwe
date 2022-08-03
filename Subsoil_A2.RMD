@@ -25,6 +25,9 @@ fontsize: 12pt
 
 ```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+    dev = "png",
+    dpi = 300)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
@@ -71,7 +74,7 @@ mydat_longg <- mydat_long %>%
          Dry = case_when(Moisture >10 & Moisture <15 ~ 1,
                                   TRUE ~ 0),
          
-         ExtremelyDry = case_when(Moisture <=10 ~ 1,
+         "Extremely Dry" = case_when(Moisture <=10 ~ 1,
                                   TRUE ~ 0),
          )
 
@@ -137,9 +140,9 @@ df <- sum_g1 %>%  select(-c(newDate)) %>%
 
 #Need this step to do side-by-side histogram by region
 df2 <- reshape(data=df, idvar = "region", 
-               varying = c("Wet","Ideal","Dry","ExtremelyDry"), 
+               varying = c("Wet","Ideal","Extremely Dry","Dry"), 
                v.name=c("value"), 
-               times = c("Wet","Ideal","Dry","ExtremelyDry"),
+               times = c("Wet","Ideal","Extremely Dry","Dry"),
                new.row.names = 1:30,
                direction=("long"))
 
@@ -148,9 +151,9 @@ df2 <- reshape(data=df, idvar = "region",
      geom_bar(position="dodge", stat="identity")+ 
      labs(color="time") +
      xlab("Agro-ecological Region") + ylab("Number Of 3-Day periods") + 
-     ggtitle("Soil Moisture Conditions In The Planting Time During The 2016-17 Growing Season") +
+     ggtitle("Growing Season 2016-17 Soil Moisture Conditions during Planting Time") +
      guides(fill=guide_legend(title="Soil Condition")) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global") +
-     scale_fill_viridis(discrete=TRUE, direction=-1)
+     scale_fill_viridis(discrete=TRUE, direction=-1,breaks = c("Extremely Dry","Dry","Ideal","Wet"))
      #3day periods within 30 days of 11/19/16 by region and Surf-soil moisture condition
    
 ```
@@ -177,8 +180,8 @@ p <- ggplot(mydat_long2, aes(newDate, y = value, color = variable)) +
     geom_line(aes(y = Moisture.5, col = "Region IV"), size=1.25) + 
     geom_line(aes(y = Moisture.6, col = "Region V"), size=1.25) + 
     labs(color="Agro-ecological Region") +
-    xlab("Soil Moisture: First 30 Days Of Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
-    ggtitle("Planting Time During The 2016-17 Growing Season") +
+    xlab("Surface Soil Moisture: During Planting Time") + ylab("Surface Soil Moisture Index (mm)") + 
+    ggtitle("Surface Soil Moisture During Planting in 2016-17 Growing Season") +
     theme(plot.title = element_text(hjust = 0.5)) + scale_color_viridis(discrete = TRUE, option = "viridis") +
     scale_x_date(limits = c(min, max)) + labs(caption = "3 Day: NASA-USDA Enhanced SMAP Global")  + theme(plot.caption=element_text(hjust = 1))
 p
@@ -216,13 +219,25 @@ zim_region <-rename(zim_region, region = nat_region)
      geom_sf(size = 0.15, color = "black", aes(fill = AvgSurfaceMoisture)) +
     xlab("Longitude") + ylab("Latitude") +
    coord_sf() +
-    scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,14), breaks=c(6,8,10,12,14), labels=c("6","8", "10", "12", "14")) +
-     ggtitle("Average Soil Moisture During The First 30 days Of 2016-17 Growing Season") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
+    scale_fill_viridis(option = "viridis", direction = -1, limits=c(6,16), breaks=c(6,8,10,12,14,16), labels=c("6","8", "10", "12", "14","16")) +
+     ggtitle("2016-17 Growing Season Average Surface Soil Moisture During Planting") + labs(caption = "3 day: NASA-USDA Enhanced SMAP Global") +
      guides(fill=guide_legend(title="Average Soil Moisture (mm)"))+theme_bw()
   
   
      
 ```
+Write.csvs for shiny app (no longer necessary since shiny only uses pictures)
+```{r}
+#write.csv(map1,"data/agregion/soil/SoilMapPlotData.csv")
+#write.csv(df2, "data/agregion/soil/SoilBarPlotData.csv")
+#write.csv(mydat_long2,"data/agregion/soil/SoilLinePlotData.csv")
+```
+
+
+
+
+
+
 
 # To Do: do you want to label maps with the regions? I tried to find the centroid of each region's polygon and save the x,y coordinates. This effort was not great as some regons are not-contiguous. The code I generated is commented out in case someone wants to try to fix it.
 
@@ -234,9 +249,9 @@ zim_region <-rename(zim_region, region = nat_region)
 
 # Make sure all the color schemes are the same by using the viridis package (see code above). Make sure scales are the same and the colors map across all diagrams within an indicator. Make sure all fonts/typeface are the same and clean across all indicators and all diagrams. Where do we want to put the legends? Inside the box or map -- see last year. Also needs to work with leaflet??
 
-```{r putpic10000, echo=FALSE, out.width = '50%', fig.align = 'center'}
-knitr::include_graphics(path =  "./sasonal_calendar.png")
-```
+#```{r putpic10000, echo=FALSE, out.width = '50%', fig.align = 'center'}
+#knitr::include_graphics(path =  "./sasonal_calendar.png")
+#```
 
 # Surface Soil Moisture Write-up
 

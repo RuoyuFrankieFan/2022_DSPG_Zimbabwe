@@ -6,10 +6,13 @@ output:
   html_document: default
   pdf_document: default
 ---
+
+This file makes the growing season visualizationsfor soil moisture indices
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Load packages
 ```{r}
 library(readxl)
 library(dplyr)
@@ -39,7 +42,7 @@ Rename cols to match
 zim_district <- rename(zim_district, District = NAME_2)
 ```
 
-
+format the district and join shape files to subindices
 ```{r}
 zim_district <- zim_district %>% 
   select(District)
@@ -49,13 +52,15 @@ Sub_MonthlysoilbyDis <-full_join (zim_district, sub_soil_monthly, by = "District
 Perc_MonthlysoilbyDis <-full_join (zim_district, perc_soil_monthly, by = "District")
 ```
 
-
+add indices name to data in a list for graphing w/appropriate titles in function
 ```{r}
 SSM <- list(Surface_MonthlysoilbyDis,"Surface Soil Moisture")
 SUSM <- list(Sub_MonthlysoilbyDis,"Sub-Surface Soil Moisture")
 PSM <- list(Perc_MonthlysoilbyDis,"Percent Soil Moisture")
 #listlist <-list(SSM,SUSM,PSM)
 ```
+
+Create functions to graph graphs cause there r hella
 
 ## 1. Monthly MAX maps for YearBegin  2017
 ```{r}
@@ -271,17 +276,6 @@ growgraph5(SUSM[[1]],SUSM[[2]])
 growgraph6(SUSM[[1]],SUSM[[2]])
 growgraph5(PSM[[1]],PSM[[2]])
 growgraph6(PSM[[1]],PSM[[2]])
-```
-
-
-#```{r}
-
-growgraph1(SSM[[1]],SSM[[2]])
-growgraph2(SSM[[1]],SSM[[2]])
-growgraph1(SUSM[[1]],SUSM[[2]])
-growgraph2(SUSM[[1]],SUSM[[2]])
-growgraph1(PSM[[1]],PSM[[2]])
-growgraph2(PSM[[1]],PSM[[2]])
 ```
 
 #```{r}growgraph1(Surface_MonthlysoilbyDis) 
