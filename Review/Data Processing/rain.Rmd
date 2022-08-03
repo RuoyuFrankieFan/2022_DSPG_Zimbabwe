@@ -1,0 +1,388 @@
+```{r setup, message = FALSE, warning=FALSE, fig.align='center'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Add a necessary packages 
+```{r}
+library(dplyr)
+library(moderndive)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+library(sf)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(ggplot2)
+library(viridis)
+rm(list = ls())
+```
+
+
+# Read & process the 3hr-ly precipitation data:
+```{r}
+data1011_long <- gather(as.data.frame(read_csv("PRECIP3hravg_ts_Zimb (2010-2012).csv")), Date, Precipitation, '3B42_20101120_00_7_precipitation': '3B42_20110531_21_7_precipitation') %>% #long data frame 
+  dplyr::select(Date, Precipitation, nat_region) %>% #select the following columns.
+  dplyr::rename(Region = nat_region) %>% 
+  separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_')%>%
+  dplyr::select(-Pre, -useless,-useless2) #column Date into individual columns like Date & Hour and remove unnecessary information.
+
+sum1011_long <- data1011_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE)) #Create a new column called dailyPRECIP by summing up the 3hr-ly Avg precipitation value.
+sum1011_long$dailyPRECIP <- sum1011_long$dailyPRECIP * 3 #Multiply that same column by 3 to adjust for the Average.
+sum1011_long$Rain_Dry <- ifelse(sum1011_long$dailyPRECIP < 2.95,1,0) #condition statement that evaluates if a day is dry or wet by the following threshold of 2.95mm.
+sum1011_long <- transform(sum1011_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region)))    #this is long and this is for shiny
+sum1011_long$newDate <- as.Date(sum1011_long$Date, "%Y%m%d")
+sum1011_long$month <- format(sum1011_long$newDate, "%m")
+sum1011_long$year <- 2010
+
+#Switch to wide form for later
+sum1011_long4 <- reshape(sum1011_long, idvar = "Date", #this is wide
+                           timevar = "ID", direction = "wide")
+sum1011_long4$newDate <- as.Date(sum1011_long4$Date, "%Y%m%d")
+sum1011_long4<- select(sum1011_long4,-c(Date))
+
+#Repeat for 16-17 data
+data1617_long <- gather(as.data.frame(read_csv("PRECIP3hravg_ts_Zimb (2016-2018).csv")), Date, Precipitation, '3B42_20161120_00_7_precipitation': '3B42_20170531_21_7_precipitation') %>% select(Date, Precipitation,nat_region) %>% rename(Region = nat_region) %>% separate( col=Date, into=c('useless', 'Date','Hour','useless2', "Pre"), sep='_') %>% select(-Pre, -useless,-useless2)
+sum1617_long <- data1617_long %>% group_by(Date, Region) %>% summarise(dailyPRECIP = sum(Precipitation, na.rm = TRUE))
+sum1617_long$dailyPRECIP <- sum1617_long$dailyPRECIP * 3
+sum1617_long$Rain_Dry <- ifelse(sum1617_long$dailyPRECIP < 2.95,1,0)
+sum1617_long <- transform(sum1617_long,                                 # Create ID by group
+                      ID = as.numeric(factor(Region)))    #this is long and this is for shiny
+sum1617_long$newDate <- as.Date(sum1617_long$Date, "%Y%m%d")
+sum1617_long$month <- format(sum1617_long$newDate, "%m")
+sum1617_long$year <- 2016
+
+
+sum1617_long4 <- reshape(sum1617_long, idvar = "Date", #this is wide
+                           timevar = "ID", direction = "wide")
+sum1617_long4$newDate <- as.Date(sum1617_long4$Date, "%Y%m%d")
+sum1617_long4<- select(sum1617_long4,-c(Date))
+
+RainDat <- rbind(sum1011_long,sum1617_long)
+
+
+#write.csv(RainDat,"C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/RainDat.csv", row.names = FALSE) 
+write.csv(RainDat, "./RainDat.csv", row.names = FALSE)
+
+#RainDat <- read.csv(file="C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/RainDat.csv")  #Shiny app
+RainDat <- read.csv('./RainDat.csv')
+```
+
+
+# Total Rainfall
+```{r DrawRainMaps1}
+
+SumRainMapDat <-function(Rmin,Rmax,yyear,season){
+  
+  GetSum <- data.frame(RainDat) %>% 
+  filter(RainDat$year==yyear) %>% 
+  group_by(Region) %>% 
+  filter(newDate >= Rmin & newDate <= Rmax) %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(TotalRainfall = round(sum(dailyPRECIP, na.rm = TRUE),0))     
+
+ zim_region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp") #SHAPE files Shiny app
+ zim_region <-dplyr::rename(zim_region, Region = nat_region)
+ df_list <- list(zim_region, GetSum)
+
+ #merge all data frames in list - note this is now a SHAPE file so can map
+ map <- df_list %>% reduce(full_join, by='Region')
+  
+  
+   ggplot(data = map) +
+     geom_sf(size = 0.15, color = "black", aes(fill = TotalRainfall)) +
+    xlab("Longitude") + ylab("Latitude") +
+   coord_sf() +
+    scale_fill_viridis(option = "viridis", direction = -1, limits = c(400, 1100), breaks=c(400,500,600,700,800,900,1000,1100)) +
+     ggtitle(season) + guides(fill=guide_legend(title="Rainfall (mm)"))
+}
+
+#DRAW TOTAL RAINFALL MAPS
+#Growing Season 2010-11
+yyear=2010
+season = "Total Rainfall (mm) in the Growing Season 2010-11"
+min <- as.Date("2010-11-20")
+max <- as.Date("2011-05-31")
+#year<-RainMap$year
+map201011G <- SumRainMapDat(min,max,yyear,season)
+
+
+# #Growing Season 2016-17
+yyear=2016
+season = "Total Rainfall (mm) in the Growing Season 2016-17"
+min <- as.Date("2016-11-20")
+max <- as.Date("2017-05-31")
+map201617G <- SumRainMapDat(min,max,yyear,season)
+```
+
+
+# Avgerage Rainfall
+```{r DrawRainMaps2}
+MeanRainMapDat <-function(Rmin,Rmax,yyear,ttitle){
+
+  GetMean <- data.frame(RainDat) %>% #filter through the growing season Nov-may (2010-11, 2016-17)
+  filter(RainDat$year==yyear) %>% 
+  group_by(Region) %>% 
+  filter(newDate >= Rmin & newDate <= Rmax) %>% 
+  group_by(Region)  %>% 
+  dplyr::summarize(MeanPrecipitation = round(mean(dailyPRECIP, na.rm = TRUE),0))     
+
+ zim_region <- st_read("./agro-ecological-regions/agro-ecological-regions.shp") 
+ zim_region <-dplyr::rename(zim_region, Region = nat_region)
+ df_list <- list(zim_region, GetMean)
+
+ #merge all data frames in list - note this is now a SHAPE file so we can map
+ map <- df_list %>% reduce(full_join, by='Region')
+  
+    ggplot(data = map) +
+    geom_sf(size = 0.15, color = "black", aes(fill = MeanPrecipitation)) +
+   xlab("Longitude") + ylab("Latitude") +
+  coord_sf() +
+   scale_fill_viridis(option = "viridis", direction = -1, limits = c(0, 12), breaks=c(0,2,4,6,8,10,12)) +
+    ggtitle(ttitle) + guides(fill=guide_legend(title="Rainfall (mm)"))
+}
+
+#December 2010
+yyear=2010
+ttitle = "Average Rainfall (mm) in December 2010"
+min <- as.Date("2010-12-01")
+max <- as.Date("2010-12-31")
+map2010_12 <- MeanRainMapDat(min,max,yyear,ttitle)
+
+#January 2011
+ttitle = "Average Rainfall (mm) in January 2011"
+min <- as.Date("2011-01-01")
+max <- as.Date("2011-01-31")
+map2011_1 <- MeanRainMapDat(min,max,yyear,ttitle)
+
+#February 2011
+ttitle = "Average Rainfall (mm) in February 2011"
+min <- as.Date("2011-02-01")
+max <- as.Date("2011-02-28")
+map2011_2 <- MeanRainMapDat(min,max,yyear,ttitle)
+
+
+#December 2016
+ttitle = "Average Rainfall (mm) in December 2016"
+yyear=2016
+min <- as.Date("2016-12-01")
+max <- as.Date("2016-12-31")
+map2016_12 <- MeanRainMapDat(min,max,yyear,ttitle) 
+#January 2017
+ttitle = "Average Rainfall (mm) in January 2017"
+min <- as.Date("2017-01-01")
+max <- as.Date("2017-01-31")
+map2017_1 <- MeanRainMapDat(min,max,yyear,ttitle)
+#February 2017
+ttitle = "Average Rainfall (mm) in February 2017"
+min <- as.Date("2017-02-01")
+max <- as.Date("2017-02-28")
+map2017_2 <- MeanRainMapDat(min,max,yyear,ttitle)
+```
+
+#Display Maps
+```{r DisplayRainMaps}
+#Growing Season
+map201011G
+map201617G
+
+#Monthds
+map2010_12
+map2011_1
+map2011_2
+#map2011_3
+map2016_12 
+map2017_1
+map2017_2
+```
+
+# Histogram of average monthly rainfall from 2011 and 2017
+```{r Histograms}
+#Prepare data for Histograms
+WideMean <- RainDat %>% 
+  group_by(month, year, Region) %>% 
+  summarise(monthPRECIP = sum(dailyPRECIP, na.rm = TRUE)) %>% 
+  group_by(month, Region) %>% 
+  summarise(monthPRECIP = mean(monthPRECIP, na.rm = TRUE)) 
+
+WideMean$m <- factor(WideMean$month, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Nov", "Dec"))
+WideMean <- transform(WideMean,                                 # Create ID by group
+                      ID = as.numeric(factor(Region))) 
+WideMean$Region <- factor(WideMean$Region, labels = c("I", "IIA", "IIB", "III", "IV", "V")) 
+
+
+
+#write.csv(WideMean,"C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/WideMean.csv", row.names = FALSE)
+write.csv(WideMean, "./WideMean.csv", row.names = FALSE)
+
+#WideMean <- read.csv(file="C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/WideMean.csv")  #for Shiny app
+WideMean <- read.csv("./WideMean.csv")
+```
+
+```{r DrawHistograms}
+# Function: This will generate histogram graphs for Average Monthly rainfall by Region
+HistRain <-function(RegionNum,ttitle){
+
+  WideMean$m <- factor(WideMean$m,                                    # Change ordering manually
+                     levels = c("Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"))
+WideMean %>% # code for Shiny app
+  filter(Region == RegionNum) %>% 
+ ggplot(aes(fill=m, y=round(monthPRECIP,0), x=m)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     scale_y_continuous(limits = c(0,400)) +
+     labs(color="time") +
+     xlab("Region") + ylab("Precipitation (mm)") + 
+     ggtitle(ttitle) +
+     guides(fill=guide_legend(title="Month")) +
+     scale_fill_viridis(discrete=TRUE, direction=-1)
+}
+
+RegionNum = "I"
+ttitle = "Average Monthly Rainfall In Region I"
+HistRain(RegionNum,ttitle)
+RegionNum = "IIA"
+ttitle = "Average Monthly Rainfall In Region IIA"
+HistRain(RegionNum,ttitle)
+RegionNum = "IIB"
+ttitle = "Average Monthly Rainfall In Region IIB"
+HistRain(RegionNum,ttitle)
+RegionNum = "III"
+ttitle = "Average Monthly Rainfall In Region III"
+HistRain(RegionNum,ttitle)
+RegionNum = "IV"
+ttitle = "Average Monthly Rainfall In Region IV"
+HistRain(RegionNum,ttitle)
+RegionNum = "V"
+ttitle = "Average Monthly Rainfall In Region V"
+HistRain(RegionNum,ttitle)
+
+#Have to set limits to represent same scale on y-axis
+```
+# Dry spell Barchart
+```{r MakeRainSpellFunc}
+#Creats a dataframe for each region(district) with the number of spells and the length
+MkRainSpell <-function(infile){
+   #eval(substitute(infile))
+    spell <- rle(infile)
+    spell_10to20 <- ifelse((spell$values==1) & spell$lengths >=10 & spell$lengths<=20, 1, 0)
+    spell_morethan20 <- ifelse((spell$values==1) & spell$lengths > 20, 1, 0)
+    data.frame(spell$lengths, spell$values, spell_10to20, spell_morethan20)
+}
+```
+```{r Make2010Data}
+#Apply the function to each region(district) to get rain spells and length in 2010-11
+#if district you will have Rain_Dry.1 to Rain_Dry.60 so you need a loop (see this reference
+#for iterating through a list for a shorthand to typing out 60 times: https://statisticsglobe.com/loop-through-list-in-r)) 
+
+Rain_Dry.1 <- sum1011_long4$Rain_Dry.1
+spell1011.1 <- MkRainSpell(Rain_Dry.1)
+
+Rain_Dry.2 <- sum1011_long4$Rain_Dry.2
+spell1011.2 <- MkRainSpell(Rain_Dry.2)
+
+Rain_Dry.3 <- sum1011_long4$Rain_Dry.3
+spell1011.3 <- MkRainSpell(Rain_Dry.3)
+
+Rain_Dry.4 <- sum1011_long4$Rain_Dry.4
+spell1011.4 <- MkRainSpell(Rain_Dry.4)
+
+Rain_Dry.5 <- sum1011_long4$Rain_Dry.5
+spell1011.5 <- MkRainSpell(Rain_Dry.5)
+
+Rain_Dry.6 <- sum1011_long4$Rain_Dry.6
+spell1011.6 <- MkRainSpell(Rain_Dry.6)
+
+spells <- do.call(rbind, list("1"=spell1011.1, "2"=spell1011.2, "3"=spell1011.3,
+                             "4"=spell1011.4, "5"=spell1011.5, "6"=spell1011.6))
+
+#spells <- cbind(rownames(spells), data.frame(spells, row.names=NULL))
+spells <- tibble::rownames_to_column(spells, "VALUE")
+spells$region <- as.factor(substr(spells$VALUE,1,1))
+#check that region(district) is a factor variable & group by region(district)
+class(spells$region)
+summary(spells$region)
+spells <- data_frame(spells)
+spellsg <- spells %>% group_by(region) %>% summarise(Sum10_20 = sum(spell_10to20), Sum20p=sum(spell_morethan20))
+
+# use melt function to group by region(district)
+library(reshape2)
+spells201011 <- reshape2:: melt(spellsg, id=c("region"))  
+spells201011$year <- 2010 
+```
+```{r make2016_17data}
+#Apply the function to each region(district-see above) to get rain spells and length in 2016-17
+Rain_Dry.1 <- sum1617_long4$Rain_Dry.1
+spell1011.1 <- MkRainSpell(Rain_Dry.1)
+
+Rain_Dry.2 <- sum1617_long4$Rain_Dry.2
+spell1011.2 <- MkRainSpell(Rain_Dry.2)
+
+Rain_Dry.3 <- sum1617_long4$Rain_Dry.3
+spell1011.3 <- MkRainSpell(Rain_Dry.3)
+
+Rain_Dry.4 <- sum1617_long4$Rain_Dry.4
+spell1011.4 <- MkRainSpell(Rain_Dry.4)
+
+Rain_Dry.5 <- sum1617_long4$Rain_Dry.5
+spell1011.5 <- MkRainSpell(Rain_Dry.5)
+
+Rain_Dry.6 <- sum1617_long4$Rain_Dry.6
+spell1011.6 <- MkRainSpell(Rain_Dry.6)
+
+spells <- do.call(rbind, list("1"=spell1011.1, "2"=spell1011.2, "3"=spell1011.3,
+                             "4"=spell1011.4, "5"=spell1011.5, "6"=spell1011.6))
+
+
+spells <- tibble::rownames_to_column(spells, "VALUE")
+spells$region <- as.factor(substr(spells$VALUE,1,1))
+
+#check that region(district) is a factor variable & group by region(district)
+spellsg <- spells %>% group_by(region) %>% summarise(Sum10_20 = sum(spell_10to20), Sum20p=sum(spell_morethan20))
+
+# use melt function to group by region(district)
+spells201617 <- reshape2::melt(spellsg, id=c("region"))
+spells201617$year <- 2016
+```
+```{r}
+spell_barchart <- rbind(spells201011,spells201617) #Shinyapp data - csv file is fine here
+str(spell_barchart)
+
+#Create region(district) as a factor variable and re-label
+spell_barchart$region <- factor(spell_barchart$region, labels = c("I", "IIA", "IIB", "III", "IV", "V")) #This is for Shiny & csv is fine here too
+
+
+#write.csv(spell_barchart,"C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/spell_barchart.csv", row.names = FALSE)
+write.csv(spell_barchart, "./spell_barchart.csv", row.names = FALSE)
+
+#spell_barchart <- read.csv(file="C:/Users/ecsusan/Documents/2022_DSPG_Zimbabwe/Review/Josue/data/spell_barchart.csv")  #for Shiny app
+spell_barchart <- read.csv("./spell_barchart.csv")
+```
+
+```{r HistogSpell}
+# Grouped plot for regions in 2010-11
+spell_barchart %>% # code for Shiny app
+  filter(year==2010) %>%
+ ggplot(aes(fill=variable, y=value, x=region)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     scale_y_continuous(limits = c(0,3)) +
+     xlab("Regions") + ylab("Number Of Dry Spells") + 
+    ggtitle("Number Of Dry Spells in the 2010-11 Growing Season") +
+    guides(fill=guide_legend(title="Length Of Spell")) +
+    scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
+
+# Grouped plot for regions in 2016-17
+spell_barchart %>% # code for Shiny app
+  filter(year==2016) %>%
+ ggplot(aes(fill=variable, y=value, x=region)) + 
+     geom_bar(position="dodge", stat="identity")+ 
+     labs(color="time") +
+     scale_y_continuous(limits = c(0,3)) +
+     xlab("Regions") + ylab("Number Of Dry Spells") + 
+    ggtitle("Number Of Dry Spells in the 2016-17 Growing Season") +
+    guides(fill=guide_legend(title="Length Of Spell")) +
+    scale_fill_viridis(discrete=TRUE, direction=-1,name = "Regions", labels = c("10 to 20 Days", ">20 Days")) 
+     
+```
