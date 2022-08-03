@@ -153,9 +153,6 @@ PercLineData <- read.csv("data/agregion/soil/PercSoilLinePlotData.csv")
 PercMapDataPre <-rename(PercMapDataPre, Region = "region")
 
 
-#zim_region <- st_read("data/shapefiles/agro-ecological-regions.shp")
-#zim_region <-rename(zim_region, region = nat_region)
-
 SurfMapDataTwo <- list(zim_region, SurfMapDataPre)
 SurfMapDataFin <- SurfMapDataTwo %>% reduce(full_join, by='Region')
 
@@ -178,7 +175,8 @@ Percmax <- as.Date("2017-05-29")
 
 
 
-#MPI DATA
+#MPI DATA,
+#Load MPI Data and rename ditricts to match Shapefile
 MPI <- read.csv("./data/MPI/MPI_Dataset.csv")
 MPI_2011 <- MPI[which(MPI$year=="2011"),]
 MPI_2017 <- MPI[which(MPI$year=="2017"),]
@@ -186,22 +184,17 @@ MPI_2011 <- rename(MPI_2011, District_ID="district_id")
 MPI_2017 <- rename(MPI_2017, District_ID="district_id")
 
 
-#Loading the generated Images
-my_images2 <- c("Precip Reg_Table 1.png","Precip Reg_Table 2.png","Precip Reg_Table 3.png","Precip Reg_Table 4.png")
-my_images3 <- c("EVI Reg_Table 1.png","EVI Reg_Table 2.png")
-my_images4 <- c("Soil Reg_Table 1.png","Soil Reg_Table 2.png")
-my_images5 <- c("Descriptive Statistics - 2011.png", "Descriptive Statistics - 2017.png", "Correlations - 2011.png", "Correlations - 2017.png")
-my_images6 <- c("stats_v2_2011.png", "stats_2017.png")
+#Loading the generated Images from regressions and image outputs for the image slider
 my_images7 <- c("mpi_precip1.png","mpi_precip2.png","mpi_precip3.png","mpi_precip4.png"
-                ,"mpi_precip5.png","mpi_precip6.png","mpi_precip7.png")
-my_images8 <- c("mpi_rural_precip1.png","mpi_rural_precip2.png","mpi_rural_precip3.png")
-my_images9 <- c("mpiadj_precip1.png","mpiadj_precip2.png","mpiadj_precip3.png") 
+                ,"mpi_precip5.png","mpi_precip6.png","mpi_precip7.png") #MPI vs Precipitation Regressions
+my_images8 <- c("mpi_rural_precip1.png","mpi_rural_precip2.png","mpi_rural_precip3.png") #MPI vs Precipitation Regressions (Rural analysis)
+my_images9 <- c("mpiadj_precip1.png","mpiadj_precip2.png","mpiadj_precip3.png") #educ-adjusted MPI vs Precipitation Regressions
 
 
 
 
 
-##Join data MPI and district data
+##Join data MPI and district shapefile, rename the district name to match MPI district name.
 zim_district <- rename(zim_district, District_name = "NAME_2")
 zim_district <- zim_district %>% 
   arrange(District_name) %>% 
@@ -347,18 +340,13 @@ ui <- navbarPage(title = "Zimbabwe",
                                          img(src = "remotesense.gif", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "35%"), align ="center",
                                          div(tags$caption("Figure 4: Remote Sensing"),align="center"),
                                          p(tags$small(em('Source: NASA')))),
-                                         #br(),
-                                         #p("In this project we source data for the following remote sensed data:"),
-                                         #h4(em("Selected Remote Sensed Data")),
+                                         
                                          withMathJax(),
                                          h3(strong("Enhanced Vegetation Index (EVI)")),
                                          p("Enhanced Vegetation Index (EVI) can quantify vegetation greenness and provides a scope to look at vegetation states and processes (NASA, 2019). Compared to the other index derived from the Moderate Resolution Imaging Spectroradiometer (MODIS), the normalized difference vegetation index (NDVI), EVI minimizes canopy-soil variations and improves sensitivity over high biomass regions (Didan et al., 2022). While NDVI is sensitive to chlorophyll, EVI is more responsive to structural variation in the canopy. This increased responsiveness is helpful in vegetation monitoring because 70% of Earth's terrestrial surface is made up of open canopies whose background signals can distort reflectance observations (Huete et al., 2002). EVI was developed to optimize the vegetation signal by reducing atmospheric influences and decoupling the canopy background signal. This improves sensitivity when monitoring vegetation in high biomass areas (Huete et al., 2002)."),
-                                         #br(),
-                                         #fluidRow(
-                                         #img(src = "evi_zim.png", style = "display: inline; border: 0px solid #C0C0C0; margin-left: auto; margin-right: auto;", width = "40%"), align ="center",
-                                         #div(tags$caption("Figure 3: EVI of Zimbabwe"),align="center"),
-                                         #),
+                                        
                                          br(),
+                                         
                                          withMathJax(),
                                          p("The MODIS Terra Daily EVI dataset is one of two vegetation indices produced from reflectance in the red, near-infrared, and blue wavebands, which is retrieved from the MODIS sensor aboard the Terra Satellite (Didan, Maccherone, & Frazier). The surface spectral reflectance data are corrected for atmospheric conditions like gasses, aerosols, and Rayleigh scattering (Vermote, 2015)."),
                                          
@@ -1070,7 +1058,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                                 tags$li(strong("Lack of Access to Services:"), "lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation).")
                                                 
                                               ),
-                                             # p("Max Education, Education Dropout, Chronic Illness, Lack of Health Visit, Lack of Household Assets and Lack of Access to Services."),
+                                            
                                               p("Note: for our district-level analysis, a grey-filled area with an NA means that no districts fulfill the criteria chosen. These results are presented for the incidence  (\\(M_{0}\\))."),#, gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\))."),
                                             p("In this study, we use MPI that has been calculated using \\(k=3\\) as the threshold.
 For more details on the gap (\\(M_{1}\\)), and severity of poverty (\\(M_{2}\\)), please refer to ", a(href="https://dspgtools.shinyapps.io/dspg21zimbabwe/","Using PICES Data to Visualize District Level Multidimensional Poverty in Zimbabwe",target='_blank'), ".")
@@ -1428,7 +1416,7 @@ server <- function(input, output) {
   runjs(jscode)
   
 
-#Reading Tables  for front page
+#Reading Tables for front page
 output$table <- renderTable({
     
     table <- read_excel("./data/table.xlsx")
@@ -1460,6 +1448,7 @@ output$evi_map_leaflet <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6)
 })
 
+#Comparison Of Max EVI In The Growing Seasons For 2010-11 And 2016-17
 output$my_slick_evi <- renderSlickR(
   slickR(
     my_images_evi,
@@ -1470,6 +1459,7 @@ output$my_slick_evi <- renderSlickR(
 
 
 ## PRECIPITATION OUTPUTS
+# Monthly Comparison Of Average Rainfall In The Growing Seasons For 2010-11 And 2016-17
 output$my_slick <- renderSlickR(
   slickR(
     my_images,
@@ -1479,6 +1469,7 @@ output$my_slick <- renderSlickR(
 
 
 ## SOIL MOISTURE OUTPUTS-------
+
 output$SurfMapGraph <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
@@ -1567,7 +1558,8 @@ output$PercLineGraph <- renderPlot({
 
 
 
-#MPI OUTPUTS -----
+## MPI OUTPUTS -----
+# Leaflet for MPI map for 2011
 output$MPI_map_2011 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
@@ -1598,6 +1590,7 @@ output$MPI_map_2011 <- renderLeaflet({
     hideGroup("M2")
 })
 
+# Leaflet for MPI map for 2011
 output$MPI_map_2017 <- renderLeaflet({
 
   leaflet(joined_zim17) %>% addTiles() %>%  
@@ -1624,6 +1617,8 @@ output$MPI_map_2017 <- renderLeaflet({
     hideGroup("M2")
 })
 
+
+# Leaflet for MPI components for 2011
 #M0
 output$compo_MPI_11 <- renderLeaflet({
   leaflet(joined_zim) %>% addTiles() %>%  
@@ -1753,7 +1748,7 @@ output$compo_MPI_11_m2 <- renderLeaflet({
 
 
 
-
+# Leaflet for MPI components for 2017
 output$compo_MPI_17 <- renderLeaflet({
   mypal <- colorNumeric(
     palette = "viridis",
@@ -1902,39 +1897,47 @@ output$compo_MPI_17_m2 <- renderLeaflet({
 
 #Rendering the slideshows
 
+#Regression images for MPI vs precipitation-----
+# output$my_slick2 <- renderSlickR(
+#   slickR(
+#     my_images2,
+#     width = "90%"
+#   )
+# )
+# 
+# #Regression images for MPI vs EVI
+# output$my_slick3 <- renderSlickR(
+#   slickR(
+#     my_images3,
+#     width = "90%"
+#   )
+# )
+# 
+# #Regression images for MPI vs soil
+# output$my_slick4 <- renderSlickR(
+#   slickR(
+#     my_images4,
+#     width = "90%"
+#   )
+# )
+# 
+# #Images for descriptive Stats
+# output$my_slick5 <- renderSlickR(
+#   slickR(
+#     my_images5,
+#     width = "90%"
+#   )
+# )
+# 
+# #Regression images for correlation b/n MPI(components) vs climate data
+# output$my_slick_corr <- renderSlickR(
+#   slickR(
+#     my_images6,
+#     width = "90%"
+#   )
+# )
 
-output$my_slick2 <- renderSlickR(
-  slickR(
-    my_images2,
-    width = "90%"
-  )
-)
-output$my_slick3 <- renderSlickR(
-  slickR(
-    my_images3,
-    width = "90%"
-  )
-)
-output$my_slick4 <- renderSlickR(
-  slickR(
-    my_images4,
-    width = "90%"
-  )
-)
-
-output$my_slick5 <- renderSlickR(
-  slickR(
-    my_images5,
-    width = "90%"
-  )
-)
-
-output$my_slick_corr <- renderSlickR(
-  slickR(
-    my_images6,
-    width = "90%"
-  )
-)
+#Regression images for the MPI vs Precipitation
 output$my_slick7 <- renderSlickR(
   slickR(
     my_images7,
@@ -1942,7 +1945,7 @@ output$my_slick7 <- renderSlickR(
   )
 )
 
-
+#Regression images for rural educ-adjusted MPI vs Precipitation
 output$my_slick8 <- renderSlickR(
   slickR(
     my_images8,
@@ -1951,6 +1954,7 @@ output$my_slick8 <- renderSlickR(
   )
 )
 
+#Regression images for educ-adjusted MPI vs Precipitation
 output$my_slick9 <- renderSlickR(
   slickR(
     my_images9,
