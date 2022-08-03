@@ -365,7 +365,7 @@ ui <- navbarPage(title = "Zimbabwe",
                                            withMathJax(),
                                            title = h1(strong("PICES Data")),
                                            p("The data come from two nationally representative household surveys, called the PICES, conducted by ZIMSTAT: first, from June 2011 to May 2012, and second, from January to December 2017. The PICES surveys are well suited to construct multidimensional poverty indices because they include information at the household and individual levels and are collected repeatedly. The surveys were conducted in the eight provinces of Zimbabwe and in the cities of Harare and Bulawayo. The number of usable observations (households) is 29,748 in 2011–2012 (23,843 rural and 5,905 urban) and 31,193 in 2017 (25,525 rural and 5668 urban). Survey weights and household size are employed to obtain national, provincial, and rural-urban representation. Both survey instruments are virtually identical across the two waves. They include household demographics, education, employment, healthcare, migration, housing characteristics, asset ownership, access to services, and agricultural activities."),
-                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently. The first dimension, education, consists of two variables – No Primary Education (Max Educ) and Education Dropout. The No Primary Education (Max Educ) variable refers to nobody in the household having completed primary school. The Education Dropout variable indicates whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each sub-dimension). The two health variables are also heavily weighted, with the second health dimension being the highest (2 out of 9.5; a weight of 1 for each sub-dimension). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving necessary healthcare."),
+                                           p("The multidimensional poverty index based on the Alkire-Foster method is constructed using eight poverty dimensions consisting of 14 variables relevant to identifying poverty status. Each variable has a specific weight associated with it depending on its contribution to overall poverty and how it pertains to rural and urban communities differently. The first dimension, education, consists of two variables – No Primary Education (Max Educ) and Unenrolled Child (Education Dropout). The No Primary Education (Max Educ) variable refers to nobody in the household having completed primary school. The Unenrolled Child (Education Dropout) variable indicates whether the household has a child aged 7-11 who is not enrolled in school. The education dimension receives the greatest weight in the MPI (2 out of 9.5; a weight of 1 for each sub-dimension). The two health variables are also heavily weighted, with the second health dimension being the highest (2 out of 9.5; a weight of 1 for each sub-dimension). These two variables are Chronic Illness, referring to the presence of a chronically ill individual within the household, and Lack of Health Visit, which refers to a household member who has been sick in the past 30 days without receiving necessary healthcare."),
                                            p("Unemployment, defined as a member of the household being unemployed in the last 12 months, is given a weight of 1 for urban households and 0 for rural households since unemployment is less common and is more difficult to identify in rural areas. For housing conditions, two variables are considered: lack of access to electricity and no toilet (in rural areas) or no flush toilet (for urban areas with more developed sanitation). Weights of 0.5 are given to rural residents who lack electricity and a toilet. In urban areas, where lack of electricity indicates a more significant state of deprivation, a weight of one is attributed to electricity. In contrast, the lack of a toilet retains a weight of 0.5."),
                                            p("Two variables reflect living conditions: Poor Water Source and Poor Cooking Fuel, with a weight of 0.5 for each. Rural households are considered deprived if their primary water source is an unprotected well, a river, another unprotected source, or if the water source is 1 km away or farther. In urban areas with more developed water infrastructure, deprivation is defined as not having access to piped water or communal water on-premises (which affects only a small number of households). In rural and urban areas, households are deprived if they use wood or' other' (not electricity, paraffin, gas, coal) as cooking fuel. Lack of Household Assets is given a dimension weight of 1. The stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold as follows:
 "),
@@ -1051,7 +1051,7 @@ For more details, please refer to ", a(href="https://dspgtools.shinyapps.io/dspg
                                             p("This graphic shows a map of the relevant components of MPI at the", strong("district-level"),". Our study uses ", strong("district-level")," measures of various MPI components to explore their association with the three remotely sensed indices of concern. We limit only to those components that assign an equal weight to urban and rural households. Otherwise, components with unequal weights may over-/underestimate the severity of deprivation if a district contains predominantly urban (rural) households. For example, component Lack of Land is assigned a weight of zero to urban households, so districts (such as Bulawayo) that are mostly urban will appear to be less deprived in this component than more rural districts. The components we examine in this study are:"),
                                               tags$ul(
                                                 tags$li(strong("No Primary Education (Max Education):")," nobody in the household having completed primary school"),
-                                                tags$li(strong("Education Dropout (Unenrolled Child):")," an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school."),
+                                                tags$li(strong("Unenrolled Child (Education Dropout):")," an indicator variable for whether the household has a child aged 7-11 who is not enrolled in school."),
                                                 tags$li(strong("Chronic Illness:")," the presence of a chronically ill individual within the household"),
                                                 tags$li(strong("Lack of Health Visit:"), "a household member who has been sick in the past 30 days without receiving a necessary healthcare"),
                                                 tags$li(strong("Lack of Household Assets:"), "stock of household assets is measured by a physical asset index (PAI) and an asset deprivation (D) threshold "),
@@ -1629,7 +1629,7 @@ output$compo_MPI_11 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unerolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1651,10 +1651,10 @@ output$compo_MPI_11 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim$g0_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>% 
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
@@ -1671,7 +1671,7 @@ output$compo_MPI_11_m1 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unenrolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g1_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1693,10 +1693,10 @@ output$compo_MPI_11_m1 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim$g1_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>% 
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
@@ -1714,7 +1714,7 @@ output$compo_MPI_11_m2 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unenrolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim$District_name, ":", round(joined_zim$g2_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1736,10 +1736,10 @@ output$compo_MPI_11_m2 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim$g2_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>% 
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
@@ -1763,7 +1763,7 @@ output$compo_MPI_17 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim17$g0_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unenrolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim17$g0_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g0_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1785,10 +1785,10 @@ output$compo_MPI_17 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g0_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>%
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
@@ -1811,7 +1811,7 @@ output$compo_MPI_17_m1 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim17$g1_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unenrolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim17$g1_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g1_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1833,10 +1833,10 @@ output$compo_MPI_17_m1 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g1_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>%
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
@@ -1860,7 +1860,7 @@ output$compo_MPI_17_m2 <- renderLeaflet({
     addPolygons(fillColor = ~mypal(joined_zim17$g2_edu_dropout_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_edu_dropout_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
-                                                    bringToFront = TRUE), group="Education Dropout")  %>%  
+                                                    bringToFront = TRUE), group="Unenrolled Child")  %>%  
     addPolygons(fillColor = ~mypal(joined_zim17$g2_hea_chronic_k3), weight = 1, smoothFactor = 0.5, label = paste("", joined_zim17$District_name, ":", round(joined_zim17$g2_hea_chronic_k3, digits = 3)),
                 opacity = 1.0, fillOpacity = 0.5,
                 highlightOptions = highlightOptions(color = "black", weight = 2,
@@ -1882,10 +1882,10 @@ output$compo_MPI_17_m2 <- renderLeaflet({
     setView(lat = -19.0154, lng=29.1549 , zoom =6) %>% 
     addLegend(pal = mypal,position = "bottomright",values = joined_zim17$g2_edu_max_k3,
               opacity = .6,title= paste("MPI Component Value")) %>% 
-    addLayersControl(baseGroups = c("No Primary Education","Education Dropout", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
+    addLayersControl(baseGroups = c("No Primary Education","Unenrolled Child", "Chronic Ilness","Health Visit", "Household Assets","Service Access"), 
                      options = layersControlOptions(collapsed = FALSE), position = "topright") %>%
     #hideGroup("M0")%>% 
-    hideGroup("Education Dropout")%>% 
+    hideGroup("Unenrolled Child")%>% 
     hideGroup("Chronic Ilness") %>%
     hideGroup("Health Visit") %>% 
     hideGroup("Household Assets") %>% 
