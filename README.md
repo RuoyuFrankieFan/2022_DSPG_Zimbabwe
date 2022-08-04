@@ -8,12 +8,18 @@ We use the Google Earth Engine using the Python API to get weather data. These c
 # Files
 ## Codes
 To view the code we used to process our weather indices and other data please visit:
-### Folder - Data Processing
+### Review Folder - Data Processing
 
 In this folder, you could find files used for data processing.
 - "EVI processing.Rmd" was used to aggregate daily EVI to monthly and annually data, and "EVI-further processing.Rmd" further processed the data by growing seasons in 2010-2011 and 2016-2017.
 - "Template for Data Processing.Rmd" provides guideline to reshape the csv files of remote-sensed data downloaded from Google Earth Engine.
 
+- "rain.Rmd" was used to process the precipitation data by growing seasons in 2010-2011 and 2016-2017.
+
+- "soilsurf.Rmd" was used to process the surface soil moisture data by growing seasons in 2016-2017.
+
+- "soilperc.Rmd" was used to process the precent soil moisture data by growing seasons in 2016-2017.
+##
 
 ## Data
 ### Google Earth Data
