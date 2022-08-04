@@ -47,16 +47,16 @@ For further questions, please reach out to
 # Project Team
 
 ## Graduate Fellows:
-- Leonard-Allen Quaye (Virginia Tech, Agricultural and Applied Economics);
-- Poonam Tajanpure (Virginia Tech, Biological Systems Engineering).
+- [Leonard-Allen Quaye](https://sites.google.com/vt.edu/leo-allen-quaye/home?authuser=0) (Virginia Tech, Agricultural and Applied Economics);
+- [Poonam Tajanpure](https://www.bse.vt.edu/people/grad-students/poonam-tajanpure.html) (Virginia Tech, Biological Systems Engineering).
 
 ## Undergraduate Interns:
-- Frankie Fan (Smith College & Brown University, Math and Data Science);
-- Ari Liverpool (Virginia Tech, Applied Economics Management);
-- Josue Navarrete (MiraCosta College, Computer Science).
+- [Frankie Fan](https://www.linkedin.com/in/frankie-ruoyu-fan/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BBiz9W9pbRcO00B0bou%2F2vg%3D%3D) (Smith College & Brown University, Math and Data Science);
+- [Ari Liverpool](https://www.linkedin.com/in/ari-l-12b151123/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D) (Virginia Tech, Applied Economics Management);
+- [Josue Navarrete](https://www.linkedin.com/in/josue-navarrete-36a6321b4/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B5WMwWerMTvefiu%2Fq85Z5mw%3D%3D) (MiraCosta College, Computer Science).
 
 ## Faculty & Associate Team Members:
-- Dr. Brianna Posadas (Virginia Tech, School of Plant and Environmental Sciences);
-- Dr. Susan Chen (Virginia Tech, Agricultural and Applied Economics);
-- Dr. Jeffrey Alwang (Virginia Tech, Agricultural and Applied Economics);
-- Naveen Abedin (Virginia Tech, Agricultural and Applied Economics).
+- [Dr. Brianna Posadas](https://www.linkedin.com/in/briannaposadas/) (Virginia Tech, School of Plant and Environmental Sciences);
+- [Dr. Susan Chen](https://aaec.vt.edu/people/faculty/chen-susan.html) (Virginia Tech, Agricultural and Applied Economics);
+- [Dr. Jeffrey Alwang](https://aaec.vt.edu/people/faculty/alwang-jeffrey.html) (Virginia Tech, Agricultural and Applied Economics);
+- [Naveen Abedin](https://www.linkedin.com/in/naveen-abedin-0ab1089a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BgdZR16ktRcatg1cpCMufuQ%3D%3D) (Virginia Tech, Agricultural and Applied Economics).
