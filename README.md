@@ -6,9 +6,9 @@ In this branch you could find the code for processing EVI, csv files of processe
 
 ### Folder - Data Processing
 
-In this folder, you could find files used for data processing. \
-- "EVI processing.Rmd" was used to aggregate daily EVI to monthly and annually data, and "EVI-further processing.Rmd" further processed the data by growing seasons in 2010-2011 and 2016-2017. \
-- "Template for Data Processing.Rmd" provides guideline to reshape the csv files of remote-sensed data downloaded from Google Earth Engine.\
+In this folder, you could find files used for data processing. 
+- "EVI processing.Rmd" was used to aggregate daily EVI to monthly and annually data, and "EVI-further processing.Rmd" further processed the data by growing seasons in 2010-2011 and 2016-2017. 
+- "Template for Data Processing.Rmd" provides guideline to reshape the csv files of remote-sensed data downloaded from Google Earth Engine.
 
 
 ### Folder - Data
