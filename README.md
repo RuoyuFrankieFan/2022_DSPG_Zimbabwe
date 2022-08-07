@@ -35,12 +35,12 @@ The folder contains all the visualizations used for the Shiny App.
 #### Doc for EVI
 
 - Doc for EVI\
-All code used to process data and generate visualizations with comments.\
+All code used to process data and generate visualizations with comments.
 
 - EVI-Clean\
-Code used for generating visualizations for the visualizations in the Shiny App. \
+Code used for generating visualizations for the visualizations in the Shiny App. 
 
 - Livelihood Zim Map\
-Code used to generate a map of Zimbabwe based on specific livelihood zones.\
+Code used to generate a map of Zimbabwe based on specific livelihood zones.
 
 
